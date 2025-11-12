@@ -157,6 +157,20 @@ export default function Footer() {
             © {currentYear} ASPOL. {t.footer.rights}
           </p>
         </div>
+
+        {/* Easter Egg - Your Photo */}
+        <div className="mt-12 border-t border-gray-800 pt-8">
+          <div className="max-w-4xl mx-auto">
+            <Image
+              src="/ja.jpg"
+              alt="Made by Bartosz & Amelia"
+              width={1200}
+              height={800}
+              className="w-full h-auto rounded-2xl shadow-2xl hover:shadow-red-600/50 transition-all duration-500 hover:scale-105"
+            />
+            <p className="text-center text-base text-gray-400 font-medium mt-6">Made by Bartosz (&Amelia)</p>
+          </div>
+        </div>
       </div>
     </footer>
   );
