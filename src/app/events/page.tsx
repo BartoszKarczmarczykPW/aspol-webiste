@@ -284,7 +284,7 @@ function EventsContent() {
                                 shortDescription: e.description[language as keyof typeof e.description],
                                 fullDescription: "",
                                 image: e.imageUrl,
-                                category: e.tags?.[0] || "Event",
+                                category: "Social" as "Conference" | "Social" | "Workshop" | "Cultural" | "Webinar",
                                 registrationLink: e.registrationLink,
                             }))}
                         />
