@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, HTMLAttributes } from "react";
 
-interface GlassCardProps {
+interface GlassCardProps extends HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
-  className?: string;
   enableSpotlight?: boolean;
 }
 
@@ -12,6 +11,7 @@ export default function GlassCard({
   children,
   className = "",
   enableSpotlight = true,
+  ...props
 }: GlassCardProps) {
   const divRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -41,6 +41,7 @@ export default function GlassCard({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       className={`relative overflow-hidden rounded-2xl border border-white/20 bg-white/70 backdrop-blur-md shadow-lg transition-all duration-300 hover:shadow-xl ${className}`}
+      {...props}
     >
       {/* Spotlight Effect */}
       {enableSpotlight && (
