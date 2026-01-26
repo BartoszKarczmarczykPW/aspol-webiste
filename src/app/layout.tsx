@@ -1,12 +1,22 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Lora, Mulish } from "next/font/google"; // Mulish is an excellent Avenir alternative
 import "./globals.css";
+import Providers from "@/components/providers/Providers";
+import StructuredData from "@/components/seo/StructuredData";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 
-const inter = Inter({
-  variable: "--font-inter",
+const lora = Lora({
+  variable: "--font-lora",
   subsets: ["latin"],
   display: "swap",
 });
+
+const avenir = Mulish({
+  variable: "--font-avenir",
+  subsets: ["latin"],
+  display: "swap",
+}); // Simulating Avenir with Mulish for best free alternative
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://aspol.fr'),
@@ -22,9 +32,7 @@ export const metadata: Metadata = {
   authors: [{ name: "ASPOL" }],
   creator: "ASPOL",
   publisher: "ASPOL",
-  icons: {
-    icon: "/aspollogo.png",
-  },
+
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -80,11 +88,16 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="manifest" href="/manifest.json" />
-        <link rel="icon" href="/aspollogo.png" />
-        <link rel="apple-touch-icon" href="/aspollogo.png" />
         <meta name="theme-color" content="#dc2626" />
       </head>
-      <body className={`${inter.variable} antialiased`} suppressHydrationWarning>{children}</body>
+      <body className={`${lora.variable} ${avenir.variable} antialiased`} suppressHydrationWarning>
+        <StructuredData />
+        <Providers>
+          <Header />
+          {children}
+          <Footer />
+        </Providers>
+      </body>
     </html>
   );
 }

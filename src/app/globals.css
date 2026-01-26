@@ -1,56 +1,194 @@
 @import "tailwindcss";
 
+@theme {
+  /* Brand Colors Setup */
+  --color-aspol-navy: #143D73;
+  --color-aspol-red: #900c15;
+  --color-aspol-dark: #122348;
+  --color-aspol-blue: #004AAD;
+  --color-aspol-white: #FFFFFD;
+
+  /* Overrides for standard colors to apply brand branding globally */
+  --color-red-500: #b50f1a;
+  --color-red-600: #900c15;
+  --color-red-700: #6b0910;
+
+  --color-blue-500: #1e6be6;
+  --color-blue-600: #004AAD;
+  --color-blue-700: #003882;
+  --color-blue-800: #143D73;
+  --color-blue-900: #122348;
+  --color-blue-950: #0a1429;
+
+  --color-gray-800: #1e3a5f;
+  --color-gray-900: #122348;
+  --color-gray-950: #0a152e;
+
+  --color-neutral-800: #1e3a5f;
+  --color-neutral-900: #122348;
+  --color-neutral-950: #0a152e;
+
+  /* Font configuration */
+  --font-heading: var(--font-lora), "Lora", serif;
+  /* Stack: Avenir (if available) -> Avenir Next -> Mulish (fallback) */
+  --font-sans: "Avenir", "Avenir Next", var(--font-avenir), "Mulish", sans-serif;
+  --font-inter: var(--font-sans);
+  /* Fallback mapping for existing classes */
+
+  /* Custom Animations */
+  --animate-fade-in-up: fadeInUp 0.8s ease-out forwards;
+  --animate-fade-in: fadeIn 0.6s ease-out forwards;
+  --animate-blob: blob 7s infinite;
+  --animate-ripple: ripple 0.6s ease-out;
+  --animate-scroll: scroll 40s linear infinite;
+  --animate-gradient-x: gradient-x 15s ease infinite;
+  --animate-gradient-y: gradient-y 15s ease infinite;
+  --animate-gradient-xy: gradient-xy 15s ease infinite;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #0f0f0f;
-  --font-inter: Inter, system-ui, -apple-system, sans-serif;
+  /* Semantic mappings using the brand colors */
+  --background: var(--color-aspol-white);
+  --foreground: var(--color-aspol-dark);
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: var(--font-inter);
+  font-family: var(--font-sans);
 }
 
-/* Smooth scroll behavior */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+}
+
+/* Smooth scroll behavior - Removed from html to prevent Next.js conflicts */
+/* Individual scroll animations are handled via JavaScript */
 html {
-  scroll-behavior: smooth;
   overflow-y: scroll;
 }
 
 /* Custom animations */
 @keyframes fadeInUp {
-  from {
+  0% {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(20px) scale(0.95);
+    filter: blur(10px);
   }
-  to {
+
+  100% {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
+    filter: blur(0);
   }
+}
+
+@keyframes slideInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(20px) scale(0.95);
+    filter: blur(10px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
 }
 
 @keyframes blob {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translate(0, 0) scale(1);
   }
+
   25% {
     transform: translate(20px, -50px) scale(1.1);
   }
+
   50% {
     transform: translate(-20px, 20px) scale(0.9);
   }
+
   75% {
     transform: translate(50px, 50px) scale(1.05);
+  }
+}
+
+@keyframes gradient-x {
+
+  0%,
+  100% {
+    background-size: 200% 200%;
+    background-position: left center;
+  }
+
+  50% {
+    background-size: 200% 200%;
+    background-position: right center;
+  }
+}
+
+@keyframes gradient-y {
+
+  0%,
+  100% {
+    background-size: 200% 200%;
+    background-position: top center;
+  }
+
+  50% {
+    background-size: 200% 200%;
+    background-position: bottom center;
+  }
+}
+
+@keyframes gradient-xy {
+
+  0%,
+  100% {
+    background-size: 400% 400%;
+    background-position: left center;
+  }
+
+  50% {
+    background-size: 200% 200%;
+    background-position: right center;
+  }
+}
+
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
   }
 }
 
@@ -59,34 +197,48 @@ html {
     transform: scale(0);
     opacity: 1;
   }
+
   100% {
     transform: scale(4);
     opacity: 0;
   }
 }
 
+.pause-animation {
+  animation-play-state: paused;
+}
+
 @keyframes gradient-border {
-  0%, 100% {
+
+  0%,
+  100% {
     background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
   }
 }
 
 @keyframes float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0px);
   }
+
   50% {
     transform: translateY(-10px);
   }
 }
 
 @keyframes pulse-glow {
-  0%, 100% {
+
+  0%,
+  100% {
     box-shadow: 0 0 20px rgba(220, 38, 38, 0.3);
   }
+
   50% {
     box-shadow: 0 0 40px rgba(220, 38, 38, 0.6);
   }
@@ -96,15 +248,19 @@ html {
   0% {
     left: -100%;
   }
+
   100% {
     left: 100%;
   }
 }
 
 @keyframes subtle-bounce {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-5px);
   }
@@ -114,6 +270,7 @@ html {
   0% {
     transform: translateX(-100%);
   }
+
   100% {
     transform: translateX(100%);
   }
@@ -259,6 +416,7 @@ select:focus-visible {
 
 /* Reduced Motion Support for Accessibility */
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -267,7 +425,7 @@ select:focus-visible {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-  
+
   html {
     scroll-behavior: auto;
   }
@@ -275,6 +433,7 @@ select:focus-visible {
 
 /* Mobile Optimizations */
 @media (max-width: 768px) {
+
   /* Better touch targets - minimum 44x44px */
   button,
   a,
@@ -284,34 +443,36 @@ select:focus-visible {
     min-height: 44px;
     min-width: 44px;
   }
-  
+
   /* Improved text readability */
   body {
-    font-size: 16px; /* Prevents zoom on iOS */
+    font-size: 16px;
+    /* Prevents zoom on iOS */
     -webkit-text-size-adjust: 100%;
   }
-  
+
   /* Better form inputs */
   input[type="text"],
   input[type="email"],
   input[type="tel"],
   textarea,
   select {
-    font-size: 16px; /* Prevents zoom on iOS */
+    font-size: 16px;
+    /* Prevents zoom on iOS */
     padding: 12px 16px;
   }
-  
+
   /* Prevent horizontal scroll */
   body {
     overflow-x: hidden;
   }
-  
+
   /* Better spacing for mobile */
   section {
     padding-left: 1rem;
     padding-right: 1rem;
   }
-  
+
   /* Optimize images for mobile */
   img {
     max-width: 100%;
@@ -321,6 +482,7 @@ select:focus-visible {
 
 /* Mobile-first performance optimizations */
 @media (hover: none) and (pointer: coarse) {
+
   /* Remove hover effects on touch devices */
   *:hover {
     transition-duration: 0.01ms;
@@ -329,35 +491,37 @@ select:focus-visible {
 
 /* Print Styles */
 @media print {
+
   header,
   footer,
   .no-print,
   button {
     display: none !important;
   }
-  
+
   body {
     background: white;
     color: black;
   }
-  
+
   a {
     text-decoration: underline;
     color: black;
   }
-  
+
   a::after {
     content: " (" attr(href) ")";
   }
-  
-  h2, h3 {
+
+  h2,
+  h3 {
     page-break-after: avoid;
   }
-  
+
   img {
     max-width: 100% !important;
   }
-  
+
   @page {
     margin: 2cm;
   }

@@ -1,18 +1,17 @@
 "use client";
 
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import Breadcrumb from "@/components/Breadcrumb";
+
+import Breadcrumb from "@/components/ui/navigation/Breadcrumb";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 
 export default function PrivacyPolicyPage() {
   return (
     <LanguageProvider>
       <div className="min-h-screen bg-white">
-        <Header />
+
         <main className="pt-32 pb-20 px-6">
           <div className="max-w-4xl mx-auto">
-            <Breadcrumb 
+            <Breadcrumb
               items={[
                 { label: "Home", href: "/" },
                 { label: "Privacy Policy" }
@@ -26,9 +25,9 @@ export default function PrivacyPolicyPage() {
               <section>
                 <h2 className="text-3xl font-bold text-gray-900 mb-4">1. Introduction</h2>
                 <p className="text-gray-700 leading-relaxed">
-                  ASPOL (Association des Étudiants Polonais en France) is committed to protecting your 
-                  privacy and ensuring the security of your personal data. This Privacy Policy explains 
-                  how we collect, use, store, and protect your personal information in accordance with 
+                  ASPOL (Association des Étudiants Polonais en France) is committed to protecting your
+                  privacy and ensuring the security of your personal data. This Privacy Policy explains
+                  how we collect, use, store, and protect your personal information in accordance with
                   the General Data Protection Regulation (GDPR) and French data protection laws.
                 </p>
               </section>
@@ -93,7 +92,7 @@ export default function PrivacyPolicyPage() {
               <section>
                 <h2 className="text-3xl font-bold text-gray-900 mb-4">7. Cookies</h2>
                 <p className="text-gray-700 leading-relaxed mb-4">
-                  Our website uses cookies to improve your browsing experience. Cookies are small text files 
+                  Our website uses cookies to improve your browsing experience. Cookies are small text files
                   stored on your device. We use:
                 </p>
                 <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4">
@@ -109,9 +108,9 @@ export default function PrivacyPolicyPage() {
               <section>
                 <h2 className="text-3xl font-bold text-gray-900 mb-4">8. Data Retention</h2>
                 <p className="text-gray-700 leading-relaxed">
-                  We retain your personal data only for as long as necessary to fulfill the purposes outlined 
-                  in this policy or as required by law. Membership data is retained for the duration of your 
-                  membership plus 3 years for legal compliance purposes. You may request deletion of your data 
+                  We retain your personal data only for as long as necessary to fulfill the purposes outlined
+                  in this policy or as required by law. Membership data is retained for the duration of your
+                  membership plus 3 years for legal compliance purposes. You may request deletion of your data
                   at any time.
                 </p>
               </section>
@@ -136,8 +135,8 @@ export default function PrivacyPolicyPage() {
               <section>
                 <h2 className="text-3xl font-bold text-gray-900 mb-4">10. Data Security</h2>
                 <p className="text-gray-700 leading-relaxed">
-                  We implement appropriate technical and organizational measures to protect your personal data 
-                  against unauthorized access, alteration, disclosure, or destruction. However, no method of 
+                  We implement appropriate technical and organizational measures to protect your personal data
+                  against unauthorized access, alteration, disclosure, or destruction. However, no method of
                   transmission over the internet is 100% secure.
                 </p>
               </section>
@@ -145,7 +144,7 @@ export default function PrivacyPolicyPage() {
               <section>
                 <h2 className="text-3xl font-bold text-gray-900 mb-4">11. International Transfers</h2>
                 <p className="text-gray-700 leading-relaxed">
-                  Your data is primarily stored and processed within the European Union. If we transfer data 
+                  Your data is primarily stored and processed within the European Union. If we transfer data
                   outside the EU, we ensure appropriate safeguards are in place in accordance with GDPR.
                 </p>
               </section>
@@ -153,7 +152,7 @@ export default function PrivacyPolicyPage() {
               <section>
                 <h2 className="text-3xl font-bold text-gray-900 mb-4">12. Children&apos;s Privacy</h2>
                 <p className="text-gray-700 leading-relaxed">
-                  Our services are intended for students aged 18 and over. We do not knowingly collect data 
+                  Our services are intended for students aged 18 and over. We do not knowingly collect data
                   from individuals under 18 years of age.
                 </p>
               </section>
@@ -161,8 +160,8 @@ export default function PrivacyPolicyPage() {
               <section>
                 <h2 className="text-3xl font-bold text-gray-900 mb-4">13. Changes to This Policy</h2>
                 <p className="text-gray-700 leading-relaxed">
-                  We may update this Privacy Policy from time to time. We will notify you of any significant 
-                  changes by posting the new policy on this page and updating the &quot;Last updated&quot; date. 
+                  We may update this Privacy Policy from time to time. We will notify you of any significant
+                  changes by posting the new policy on this page and updating the &quot;Last updated&quot; date.
                   We encourage you to review this policy periodically.
                 </p>
               </section>
@@ -177,7 +176,7 @@ export default function PrivacyPolicyPage() {
                   <p><strong>Address:</strong> ASPOL, Paris, France</p>
                 </div>
                 <p className="text-gray-700 leading-relaxed">
-                  If you believe your data protection rights have been violated, you have the right to lodge a 
+                  If you believe your data protection rights have been violated, you have the right to lodge a
                   complaint with the French data protection authority (CNIL):
                 </p>
                 <div className="text-gray-700 space-y-1 mt-2">
@@ -190,7 +189,7 @@ export default function PrivacyPolicyPage() {
             </div>
           </div>
         </main>
-        <Footer />
+
       </div>
     </LanguageProvider>
   );

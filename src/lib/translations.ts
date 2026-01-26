@@ -15,7 +15,12 @@ export const translations = {
         "A dynamic community bringing together Polish students to celebrate culture, build connections, and share experiences",
       joinButton: "Join ASPOL",
       contactButton: "Contact Us",
+      partnerButton: "Become a Partner",
       scrollDown: "Scroll to discover",
+    },
+    partners: {
+      title: "Trusted by Industry Leaders & Institutions",
+      cta: "Become a Partner",
     },
     about: {
       title: "About ASPOL",
@@ -150,7 +155,12 @@ export const translations = {
         "Une communauté dynamique qui rassemble les étudiants polonais pour célébrer la culture, créer des liens et partager des expériences",
       joinButton: "Rejoindre ASPOL",
       contactButton: "Nous Contacter",
+      partnerButton: "Devenir Partenaire",
       scrollDown: "Défiler pour découvrir",
+    },
+    partners: {
+      title: "Ils nous font confiance",
+      cta: "Devenir Partenaire",
     },
     about: {
       title: "À Propos d'ASPOL",
@@ -285,7 +295,12 @@ export const translations = {
         "Dynamiczna społeczność łącząca polskich studentów w celu celebrowania kultury, budowania więzi i dzielenia się doświadczeniami",
       joinButton: "Dołącz do ASPOL",
       contactButton: "Skontaktuj się",
+      partnerButton: "Zostań Partnerem",
       scrollDown: "Przewiń, aby odkryć więcej",
+    },
+    partners: {
+      title: "Zaufali nam liderzy branży i instytucje",
+      cta: "Zostań Partnerem",
     },
     about: {
       title: "O ASPOL",

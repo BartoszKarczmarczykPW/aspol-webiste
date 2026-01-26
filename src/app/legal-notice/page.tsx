@@ -1,19 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import Breadcrumb from "@/components/Breadcrumb";
+
+import Breadcrumb from "@/components/ui/navigation/Breadcrumb";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 
 export default function LegalNoticePage() {
   return (
     <LanguageProvider>
       <div className="min-h-screen bg-white">
-        <Header />
+
         <main className="pt-32 pb-20 px-6">
           <div className="max-w-4xl mx-auto">
-            <Breadcrumb 
+            <Breadcrumb
               items={[
                 { label: "Home", href: "/" },
                 { label: "Legal Notice" }
@@ -27,7 +26,7 @@ export default function LegalNoticePage() {
               <section>
                 <h2 className="text-3xl font-bold text-gray-900 mb-4">1. Website Publisher</h2>
                 <p className="text-gray-700 leading-relaxed">
-                  This website is published by ASPOL (Association des Étudiants Polonais en France), 
+                  This website is published by ASPOL (Association des Étudiants Polonais en France),
                   a registered student association under French law (loi 1901).
                 </p>
                 <div className="mt-4 space-y-2 text-gray-700">
@@ -41,7 +40,7 @@ export default function LegalNoticePage() {
               <section>
                 <h2 className="text-3xl font-bold text-gray-900 mb-4">2. Website Hosting</h2>
                 <p className="text-gray-700 leading-relaxed">
-                  This website is hosted by a third-party hosting service provider. 
+                  This website is hosted by a third-party hosting service provider.
                   For technical information regarding hosting, please contact us at contact@aspol.fr.
                 </p>
               </section>
@@ -49,13 +48,13 @@ export default function LegalNoticePage() {
               <section>
                 <h2 className="text-3xl font-bold text-gray-900 mb-4">3. Intellectual Property</h2>
                 <p className="text-gray-700 leading-relaxed mb-4">
-                  All content on this website, including but not limited to text, graphics, logos, images, 
-                  and software, is the property of ASPOL or its content suppliers and is protected by 
+                  All content on this website, including but not limited to text, graphics, logos, images,
+                  and software, is the property of ASPOL or its content suppliers and is protected by
                   French and international copyright laws.
                 </p>
                 <p className="text-gray-700 leading-relaxed">
-                  The ASPOL logo and name are trademarks of the association. Any reproduction, 
-                  modification, or distribution of website content without prior written authorization 
+                  The ASPOL logo and name are trademarks of the association. Any reproduction,
+                  modification, or distribution of website content without prior written authorization
                   is strictly prohibited.
                 </p>
               </section>
@@ -63,8 +62,8 @@ export default function LegalNoticePage() {
               <section>
                 <h2 className="text-3xl font-bold text-gray-900 mb-4">4. Personal Data</h2>
                 <p className="text-gray-700 leading-relaxed">
-                  ASPOL is committed to protecting your personal data in accordance with the GDPR 
-                  (General Data Protection Regulation) and French data protection laws. For detailed 
+                  ASPOL is committed to protecting your personal data in accordance with the GDPR
+                  (General Data Protection Regulation) and French data protection laws. For detailed
                   information about how we collect, use, and protect your data, please refer to our{" "}
                   <Link href="/privacy-policy" className="text-red-600 hover:text-red-700 underline">
                     Privacy Policy
@@ -75,8 +74,8 @@ export default function LegalNoticePage() {
               <section>
                 <h2 className="text-3xl font-bold text-gray-900 mb-4">5. Cookies</h2>
                 <p className="text-gray-700 leading-relaxed">
-                  This website uses cookies to improve user experience and analyze website traffic. 
-                  You can manage your cookie preferences through your browser settings. For more 
+                  This website uses cookies to improve user experience and analyze website traffic.
+                  You can manage your cookie preferences through your browser settings. For more
                   information, see our{" "}
                   <Link href="/privacy-policy" className="text-red-600 hover:text-red-700 underline">
                     Privacy Policy
@@ -87,12 +86,12 @@ export default function LegalNoticePage() {
               <section>
                 <h2 className="text-3xl font-bold text-gray-900 mb-4">6. Liability</h2>
                 <p className="text-gray-700 leading-relaxed mb-4">
-                  ASPOL strives to ensure the accuracy and currency of the information provided on this 
-                  website. However, ASPOL cannot be held responsible for errors, omissions, or results 
+                  ASPOL strives to ensure the accuracy and currency of the information provided on this
+                  website. However, ASPOL cannot be held responsible for errors, omissions, or results
                   obtained from the use of this information.
                 </p>
                 <p className="text-gray-700 leading-relaxed">
-                  External links on this website are provided for convenience. ASPOL is not responsible 
+                  External links on this website are provided for convenience. ASPOL is not responsible
                   for the content of external websites and does not endorse their content.
                 </p>
               </section>
@@ -100,7 +99,7 @@ export default function LegalNoticePage() {
               <section>
                 <h2 className="text-3xl font-bold text-gray-900 mb-4">7. Applicable Law</h2>
                 <p className="text-gray-700 leading-relaxed">
-                  These legal notices are governed by French law. Any dispute relating to the use of 
+                  These legal notices are governed by French law. Any dispute relating to the use of
                   this website shall be subject to the exclusive jurisdiction of French courts.
                 </p>
               </section>
@@ -124,7 +123,7 @@ export default function LegalNoticePage() {
             </div>
           </div>
         </main>
-        <Footer />
+
       </div>
     </LanguageProvider>
   );

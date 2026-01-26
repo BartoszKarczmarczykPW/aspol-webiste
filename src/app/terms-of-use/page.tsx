@@ -1,19 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import Breadcrumb from "@/components/Breadcrumb";
+
+import Breadcrumb from "@/components/ui/navigation/Breadcrumb";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 
 export default function TermsOfUsePage() {
   return (
     <LanguageProvider>
       <div className="min-h-screen bg-white">
-        <Header />
+
         <main className="pt-32 pb-20 px-6">
           <div className="max-w-4xl mx-auto">
-            <Breadcrumb 
+            <Breadcrumb
               items={[
                 { label: "Home", href: "/" },
                 { label: "Terms of Use" }
@@ -27,7 +26,7 @@ export default function TermsOfUsePage() {
               <section>
                 <h2 className="text-3xl font-bold text-gray-900 mb-4">1. Acceptance of Terms</h2>
                 <p className="text-gray-700 leading-relaxed">
-                  By accessing and using the ASPOL website (aspol.fr), you accept and agree to be bound by 
+                  By accessing and using the ASPOL website (aspol.fr), you accept and agree to be bound by
                   these Terms of Use. If you do not agree to these terms, please do not use this website.
                 </p>
               </section>
@@ -35,7 +34,7 @@ export default function TermsOfUsePage() {
               <section>
                 <h2 className="text-3xl font-bold text-gray-900 mb-4">2. Use of Website</h2>
                 <p className="text-gray-700 leading-relaxed mb-4">
-                  You agree to use this website only for lawful purposes and in a way that does not infringe 
+                  You agree to use this website only for lawful purposes and in a way that does not infringe
                   the rights of, restrict, or inhibit anyone else&apos;s use and enjoyment of the website.
                 </p>
                 <p className="text-gray-700 leading-relaxed mb-4">Prohibited uses include:</p>
@@ -66,9 +65,9 @@ export default function TermsOfUsePage() {
               <section>
                 <h2 className="text-3xl font-bold text-gray-900 mb-4">4. Intellectual Property Rights</h2>
                 <p className="text-gray-700 leading-relaxed mb-4">
-                  All content on this website, including text, graphics, logos, images, audio clips, 
-                  digital downloads, and software, is the property of ASPOL or its content suppliers 
-                  and is protected by French and international copyright, trademark, and other intellectual 
+                  All content on this website, including text, graphics, logos, images, audio clips,
+                  digital downloads, and software, is the property of ASPOL or its content suppliers
+                  and is protected by French and international copyright, trademark, and other intellectual
                   property laws.
                 </p>
                 <p className="text-gray-700 leading-relaxed mb-4">
@@ -115,7 +114,7 @@ export default function TermsOfUsePage() {
                   Your use of this website is also governed by our{" "}
                   <Link href="/privacy-policy" className="text-red-600 hover:text-red-700 underline">
                     Privacy Policy
-                  </Link>, which explains how we collect, use, and protect your personal data in accordance 
+                  </Link>, which explains how we collect, use, and protect your personal data in accordance
                   with GDPR and French data protection laws.
                 </p>
               </section>
@@ -123,8 +122,8 @@ export default function TermsOfUsePage() {
               <section>
                 <h2 className="text-3xl font-bold text-gray-900 mb-4">8. External Links</h2>
                 <p className="text-gray-700 leading-relaxed">
-                  This website may contain links to external websites. ASPOL is not responsible for the 
-                  content, privacy policies, or practices of third-party websites. We encourage you to review 
+                  This website may contain links to external websites. ASPOL is not responsible for the
+                  content, privacy policies, or practices of third-party websites. We encourage you to review
                   the terms and privacy policies of any external sites you visit.
                 </p>
               </section>
@@ -132,7 +131,7 @@ export default function TermsOfUsePage() {
               <section>
                 <h2 className="text-3xl font-bold text-gray-900 mb-4">9. Disclaimer of Warranties</h2>
                 <p className="text-gray-700 leading-relaxed mb-4">
-                  This website is provided &quot;as is&quot; without warranties of any kind, either express or implied. 
+                  This website is provided &quot;as is&quot; without warranties of any kind, either express or implied.
                   ASPOL does not warrant that:
                 </p>
                 <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4">
@@ -146,8 +145,8 @@ export default function TermsOfUsePage() {
               <section>
                 <h2 className="text-3xl font-bold text-gray-900 mb-4">10. Limitation of Liability</h2>
                 <p className="text-gray-700 leading-relaxed">
-                  To the fullest extent permitted by law, ASPOL shall not be liable for any indirect, 
-                  incidental, special, consequential, or punitive damages arising out of or related to your 
+                  To the fullest extent permitted by law, ASPOL shall not be liable for any indirect,
+                  incidental, special, consequential, or punitive damages arising out of or related to your
                   use of the website, even if advised of the possibility of such damages.
                 </p>
               </section>
@@ -155,8 +154,8 @@ export default function TermsOfUsePage() {
               <section>
                 <h2 className="text-3xl font-bold text-gray-900 mb-4">11. Indemnification</h2>
                 <p className="text-gray-700 leading-relaxed">
-                  You agree to indemnify and hold harmless ASPOL, its board members, volunteers, and partners 
-                  from any claims, damages, losses, liabilities, and expenses (including legal fees) arising 
+                  You agree to indemnify and hold harmless ASPOL, its board members, volunteers, and partners
+                  from any claims, damages, losses, liabilities, and expenses (including legal fees) arising
                   from your use of the website or violation of these Terms of Use.
                 </p>
               </section>
@@ -164,8 +163,8 @@ export default function TermsOfUsePage() {
               <section>
                 <h2 className="text-3xl font-bold text-gray-900 mb-4">12. Modifications to Terms</h2>
                 <p className="text-gray-700 leading-relaxed">
-                  ASPOL reserves the right to modify these Terms of Use at any time. Changes will be effective 
-                  immediately upon posting on this page. Your continued use of the website after changes 
+                  ASPOL reserves the right to modify these Terms of Use at any time. Changes will be effective
+                  immediately upon posting on this page. Your continued use of the website after changes
                   constitutes acceptance of the modified terms.
                 </p>
               </section>
@@ -173,8 +172,8 @@ export default function TermsOfUsePage() {
               <section>
                 <h2 className="text-3xl font-bold text-gray-900 mb-4">13. Termination</h2>
                 <p className="text-gray-700 leading-relaxed">
-                  ASPOL reserves the right to terminate or suspend your access to the website at any time, 
-                  without notice, for conduct that violates these Terms of Use or is harmful to other users, 
+                  ASPOL reserves the right to terminate or suspend your access to the website at any time,
+                  without notice, for conduct that violates these Terms of Use or is harmful to other users,
                   ASPOL, or third parties.
                 </p>
               </section>
@@ -182,7 +181,7 @@ export default function TermsOfUsePage() {
               <section>
                 <h2 className="text-3xl font-bold text-gray-900 mb-4">14. Governing Law</h2>
                 <p className="text-gray-700 leading-relaxed">
-                  These Terms of Use are governed by French law. Any disputes arising from these terms or 
+                  These Terms of Use are governed by French law. Any disputes arising from these terms or
                   your use of the website shall be subject to the exclusive jurisdiction of French courts.
                 </p>
               </section>
@@ -190,7 +189,7 @@ export default function TermsOfUsePage() {
               <section>
                 <h2 className="text-3xl font-bold text-gray-900 mb-4">15. Severability</h2>
                 <p className="text-gray-700 leading-relaxed">
-                  If any provision of these Terms of Use is found to be invalid or unenforceable, the 
+                  If any provision of these Terms of Use is found to be invalid or unenforceable, the
                   remaining provisions shall continue in full force and effect.
                 </p>
               </section>
@@ -209,14 +208,14 @@ export default function TermsOfUsePage() {
 
               <div className="mt-12 p-6 bg-gray-50 rounded-2xl">
                 <p className="text-gray-700 text-sm">
-                  <strong>Note:</strong> By using this website, you acknowledge that you have read, understood, 
+                  <strong>Note:</strong> By using this website, you acknowledge that you have read, understood,
                   and agree to be bound by these Terms of Use and our Privacy Policy.
                 </p>
               </div>
             </div>
           </div>
         </main>
-        <Footer />
+
       </div>
     </LanguageProvider>
   );

@@ -1,45 +1,49 @@
+"use client";
+
+import { motion } from "framer-motion";
+
 export default function Loading() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-white">
-      <div className="text-center">
-        {/* Animated Logo/Spinner */}
-        <div className="mb-8 flex justify-center">
-          <div className="relative w-24 h-24">
-            {/* Outer spinning ring */}
-            <div className="absolute inset-0 border-4 border-red-200 rounded-full"></div>
-            <div className="absolute inset-0 border-4 border-transparent border-t-red-600 rounded-full animate-spin"></div>
-            
-            {/* Inner pulsing circle */}
-            <div className="absolute inset-3 bg-linear-to-br from-red-600 to-red-500 rounded-full flex items-center justify-center">
-              <svg 
-                className="w-10 h-10 text-white" 
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
-              >
-                <path 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  strokeWidth={2} 
-                  d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" 
-                />
-              </svg>
-            </div>
+      <motion.div
+        initial={{ opacity: 0.5 }}
+        animate={{ opacity: 1 }}
+        transition={{
+          duration: 1.5,
+          repeat: Infinity,
+          repeatType: "reverse",
+          ease: "easeInOut"
+        }}
+        className="flex flex-col items-center gap-6"
+      >
+        {/* Elegant pulsing logo placeholder */}
+        <div className="relative w-20 h-20 flex items-center justify-center">
+          {/* Outer Glow */}
+          <motion.div
+            className="absolute inset-0 rounded-full bg-aspol-navy/5"
+            animate={{ scale: [1, 1.2, 1] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          />
+
+          {/* Core Circle */}
+          <div className="w-16 h-16 rounded-2xl bg-white border border-aspol-navy/10 shadow-xl flex items-center justify-center relative z-10 overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-tr from-aspol-navy/5 to-transparent"></div>
+
+            {/* Minimalist Accent */}
+            <motion.div
+              className="w-3 h-3 rounded-full bg-aspol-red"
+              animate={{ scale: [1, 1.5, 1], opacity: [0.8, 1, 0.8] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+            />
           </div>
         </div>
 
-        {/* Loading text */}
-        <div className="space-y-2">
-          <p className="text-xl font-semibold text-gray-900">
-            Loading...
+        <div className="space-y-2 text-center">
+          <p className="text-aspol-navy font-serif font-medium tracking-[0.2em] text-xs uppercase opacity-80">
+            Loading
           </p>
-          <div className="flex justify-center gap-1">
-            <span className="w-2 h-2 bg-red-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
-            <span className="w-2 h-2 bg-red-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
-            <span className="w-2 h-2 bg-red-600 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
-          </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }
