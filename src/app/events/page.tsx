@@ -246,11 +246,17 @@ function EventsContent() {
                                                 )}
                                                 <AddToCalendarButton
                                                     event={{
+                                                        id: event._id,
                                                         title: event.title[language as keyof typeof event.title],
                                                         date: formatDate(event.date),
                                                         time: formatTime(event.date),
                                                         location: event.location[language as keyof typeof event.location],
                                                         isoDate: event.date,
+                                                        shortDescription: event.description[language as keyof typeof event.description],
+                                                        fullDescription: '',
+                                                        image: event.imageUrl,
+                                                        category: 'Event' as any,
+                                                        registrationLink: event.registrationLink,
                                                     }}
                                                 />
                                             </div>
