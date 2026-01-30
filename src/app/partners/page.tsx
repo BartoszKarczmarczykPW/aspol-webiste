@@ -61,13 +61,13 @@ export default function PartnersPage() {
                 title: "Scope of Collaboration",
                 subtitle: "We believe in partnerships that drive real results. Our cooperation model is flexible and tailored to your business objectives.",
                 items: [
-                    "Exclusive recruitment workshops & case studies",
-                    "Keynote speaking opportunities at Paris Polish Forum",
-                    "Dedicated brand ambassadors on campus",
-                    "VIP networking events with student leaders",
-                    "Customized social media campaigns",
-                    "Scholarship & mentorship program sponsorship",
-                    "Strategic naming rights for key events"
+                    "Logo & brand visibility at Paris Polish Forum conference",
+                    "Presence in ASPOL newsletter & social media campaigns",
+                    "Speaking opportunities & dedicated panel sessions at PPF",
+                    "Direct communication with ASPOL student community (350+ members)",
+                    "Access to student CV database & career survey insights",
+                    "Co-creation of educational projects & webinars",
+                    "Exclusive industry partnership opportunities"
                 ]
             },
             demographics: {
@@ -118,13 +118,13 @@ export default function PartnersPage() {
                 title: "Périmètre de Collaboration",
                 subtitle: "Nous croyons aux partenariats qui donnent des résultats concrets. Notre modèle de coopération est flexible et adapté à vos objectifs commerciaux.",
                 items: [
-                    "Ateliers de recrutement exclusifs et études de cas",
-                    "Opportunités de prise de parole au Paris Polish Forum",
-                    "Ambassadeurs de marque dédiés sur les campus",
-                    "Événements de networking VIP avec les leaders étudiants",
-                    "Campagnes de réseaux sociaux personnalisées",
-                    "Parrainage de programmes de bourses et de mentorat",
-                    "Droits de naming stratégiques pour les événements clés"
+                    "Logo & visibilité de la marque lors de la conférence Paris Polish Forum",
+                    "Présence dans la newsletter ASPOL & campagnes sur les réseaux sociaux",
+                    "Opportunités de prise de parole & sessions de panel dédiées au PPF",
+                    "Communication directe avec la communauté étudiante ASPOL (350+ membres)",
+                    "Accès à la base de données CV étudiants & insights d'enquête carrière",
+                    "Co-création de projets éducatifs & webinaires",
+                    "Opportunités de partenariat exclusif dans l'industrie"
                 ]
             },
             demographics: {
@@ -175,13 +175,13 @@ export default function PartnersPage() {
                 title: "Zakres Współpracy",
                 subtitle: "Wierzymy w partnerstwa, które przynoszą realne wyniki. Nasz model współpracy jest elastyczny i dopasowany do Twoich celów biznesowych.",
                 items: [
-                    "Ekskluzywne warsztaty rekrutacyjne i case studies",
-                    "Wystąpienia eksperckie podczas Paris Polish Forum",
-                    "Dedykowani ambasadorzy marki na kampusach",
-                    "Networking VIP z liderami studenckimi",
-                    "Dedykowane kampanie w mediach społecznościowych",
-                    "Sponsoring programów stypendialnych i mentorskich",
-                    "Strategiczny sponsoring kluczowych wydarzeń"
+                    "Logo & widoczność marki podczas konferencji Paris Polish Forum",
+                    "Obecność w newsletterze ASPOL & kampaniach w mediach społecznościowych",
+                    "Możliwości wystąpień & dedykowane sesje panelowe na PPF",
+                    "Bezpośrednia komunikacja ze społecznością studencką ASPOL (350+ członków)",
+                    "Dostęp do bazy CV studentów & wyników ankiet zawodowych",
+                    "Współtworzenie projektów edukacyjnych & webinarów",
+                    "Ekskluzywne możliwości partnerstwa branżowego"
                 ]
             },
             demographics: {
