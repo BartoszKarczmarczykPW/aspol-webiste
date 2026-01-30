@@ -36,7 +36,7 @@ export default function PrivacyPolicyPage() {
                 <h2 className="text-3xl font-bold text-gray-900 mb-4">2. Data Controller</h2>
                 <div className="text-gray-700 leading-relaxed space-y-2">
                   <p><strong>Organization:</strong> ASPOL - Association des Étudiants Polonais en France</p>
-                  <p><strong>Email:</strong> contact@aspol.fr</p>
+                  <p><strong>Email:</strong> office@aspol.fr</p>
                   <p><strong>Address:</strong> Paris, France</p>
                 </div>
               </section>
@@ -128,7 +128,7 @@ export default function PrivacyPolicyPage() {
                   <li><strong>Right to Withdraw Consent:</strong> Withdraw consent at any time</li>
                 </ul>
                 <p className="text-gray-700 leading-relaxed mt-4">
-                  To exercise your rights, contact us at contact@aspol.fr
+                  To exercise your rights, contact us at office@aspol.fr
                 </p>
               </section>
 
@@ -172,7 +172,7 @@ export default function PrivacyPolicyPage() {
                   For questions about this Privacy Policy or to exercise your rights, contact us:
                 </p>
                 <div className="text-gray-700 space-y-2 mb-4">
-                  <p><strong>Email:</strong> contact@aspol.fr</p>
+                  <p><strong>Email:</strong> office@aspol.fr</p>
                   <p><strong>Address:</strong> ASPOL, Paris, France</p>
                 </div>
                 <p className="text-gray-700 leading-relaxed">

@@ -22,7 +22,7 @@ export default function StructuredData() {
         "contactPoint": {
             "@type": "ContactPoint",
             "contactType": "General Inquiries",
-            "email": "contact@aspol.fr",
+            "email": "office@aspol.fr",
             "availableLanguage": ["English", "French", "Polish"]
         },
         "location": {

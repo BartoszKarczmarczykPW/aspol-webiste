@@ -32,7 +32,7 @@ export default function LegalNoticePage() {
                 <div className="mt-4 space-y-2 text-gray-700">
                   <p><strong>Association Name:</strong> ASPOL - Association des Étudiants Polonais en France</p>
                   <p><strong>Headquarters:</strong> Paris, France</p>
-                  <p><strong>Email:</strong> contact@aspol.fr</p>
+                  <p><strong>Email:</strong> office@aspol.fr</p>
                   <p><strong>Website:</strong> <a href="https://aspol.fr" className="text-red-600 hover:text-red-700">aspol.fr</a></p>
                 </div>
               </section>
@@ -41,7 +41,7 @@ export default function LegalNoticePage() {
                 <h2 className="text-3xl font-bold text-gray-900 mb-4">2. Website Hosting</h2>
                 <p className="text-gray-700 leading-relaxed">
                   This website is hosted by a third-party hosting service provider.
-                  For technical information regarding hosting, please contact us at contact@aspol.fr.
+                  For technical information regarding hosting, please contact us at office@aspol.fr.
                 </p>
               </section>
 
@@ -110,7 +110,7 @@ export default function LegalNoticePage() {
                   For any questions regarding these legal notices or the website, please contact us:
                 </p>
                 <div className="mt-4 space-y-2 text-gray-700">
-                  <p><strong>Email:</strong> contact@aspol.fr</p>
+                  <p><strong>Email:</strong> office@aspol.fr</p>
                   <p><strong>Address:</strong> Paris, France</p>
                   <p><strong>Social Media:</strong></p>
                   <ul className="list-disc list-inside ml-4 space-y-1">

@@ -200,7 +200,7 @@ export default function TermsOfUsePage() {
                   For questions about these Terms of Use, please contact us:
                 </p>
                 <div className="text-gray-700 space-y-2">
-                  <p><strong>Email:</strong> contact@aspol.fr</p>
+                  <p><strong>Email:</strong> office@aspol.fr</p>
                   <p><strong>Address:</strong> ASPOL, Paris, France</p>
                   <p><strong>Website:</strong> <a href="https://aspol.fr" className="text-red-600 hover:text-red-700">aspol.fr</a></p>
                 </div>

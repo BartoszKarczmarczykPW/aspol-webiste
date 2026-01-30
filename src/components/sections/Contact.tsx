@@ -344,10 +344,10 @@ export default function Contact() {
                   <div>
                     <p className="font-semibold text-gray-900">{t.contact.info.email}</p>
                     <a
-                      href="mailto:contact@aspol.fr"
+                      href="mailto:office@aspol.fr"
                       className="text-gray-600 hover:text-red-600 transition-colors"
                     >
-                      contact@aspol.fr
+                      office@aspol.fr
                     </a>
                   </div>
                 </div>
