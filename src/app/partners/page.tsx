@@ -84,7 +84,7 @@ export default function PartnersPage() {
                 title: "Let's Build Something Together",
                 subtitle: "Each partnership is unique. Contact us to design a collaboration plan that meets your specific goals.",
                 button: "Contact Partnership Team",
-                email: "partnerships@aspol.fr"
+                email: "office@aspol.fr"
             }
         },
         fr: {
@@ -141,7 +141,7 @@ export default function PartnersPage() {
                 title: "Construisons quelque chose ensemble",
                 subtitle: "Chaque partenariat est unique. Contactez-nous pour concevoir un plan de collaboration qui répond à vos objectifs spécifiques.",
                 button: "Contacter l'équipe Partenariats",
-                email: "partnerships@aspol.fr"
+                email: "office@aspol.fr"
             }
         },
         pl: {
@@ -198,7 +198,7 @@ export default function PartnersPage() {
                 title: "Zbudujmy coś razem",
                 subtitle: "Każde partnerstwo jest wyjątkowe. Skontaktuj się z nami, aby opracować plan współpracy spełniający Twoje konkretne cele.",
                 button: "Skontaktuj się z Działem Partnerstw",
-                email: "partnerships@aspol.fr"
+                email: "office@aspol.fr"
             }
         }
     };
