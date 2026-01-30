@@ -1,256 +1,257 @@
-// src/data/blogPosts.ts
-import { BlogPost } from "@/types";
-
-export const blogPosts: Record<string, BlogPost[]> = {
-  en: [
-    {
-      id: "paris-polish-forum-vii-2025",
-      title: "Paris Polish Forum VII - Poland's EU Vision: Uniting for an Innovative Tomorrow",
-      excerpt: "Join us for the 7th edition of Paris Polish Forum on April 24-26, 2025. Explore Poland's EU Presidency priorities, green innovation, and French-Polish cooperation at Sciences Po Paris and the Polish Embassy.",
-      author: "ASPOL Team",
-      date: "March 2025",
-      category: "News",
-      readTime: "7 min read",
-      image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=400&fit=crop",
-      featured: true,
-      content: `
-        <p>The Paris Polish Forum is returning for its seventh edition with an ambitious vision that couldn't be more timely. As Poland prepares to assume the EU Council Presidency in the first half of 2025, the Association des Ã‰tudiants Polonais en France (ASPOL) brings together students, professionals, and thought leaders for three days of dialogue, networking, and innovation under the theme <strong>"Poland's EU Vision: Uniting for an Innovative Tomorrow."</strong></p>
-
-        <h3>A Milestone Event</h3>
-        <p>Since its inception in 2017 as the "Polish Business Forum at Sciences Po," the Paris Polish Forum has evolved into one of the most significant annual gatherings focused on Polish-French relations and European cooperation. What started with 140 participants has grown into a major event attracting over 250 international attendees each year, including diplomats, business leaders, academics, and students passionate about building bridges between Poland and France.</p>
-        
-        <p>The 7th edition marks a special milestoneâ€”not just as ASPOL's flagship event, but as a platform to discuss Poland's vision for Europe at a critical moment in EU history.</p>
-
-        <h3>When and Where</h3>
-        <p><strong>Dates:</strong> April 24-26, 2025</p>
-        <p><strong>Locations:</strong></p>
-        <ul>
-          <li><strong>April 24-25:</strong> Sciences Po Paris</li>
-          <li><strong>April 26:</strong> Embassy of Poland in Paris</li>
-        </ul>
-        
-        <p>The choice of venues is symbolic. Sciences Po represents academic excellence and international dialogue, while the Polish Embassy embodies diplomatic cooperation and cultural exchange both essential pillars of the Polish-French relationship.</p>
-
-        <h3>The Theme: Poland's EU Presidency and Innovation</h3>
-        <p>The 2025 forum's theme directly addresses Poland's upcoming role as the EU Council Presidency. This is not just about policyâ€”it's about vision. How can Poland and France, two nations with deep historical ties and shared European values, work together to tackle the continent's most pressing challenges?</p>
-        
-        <p>The discussions will center on three core areas:</p>
-        <ul>
-          <li><strong>Sustainability:</strong> Achieving a green and competitive Europe</li>
-          <li><strong>Innovation:</strong> Fostering technological advancement and entrepreneurship</li>
-          <li><strong>Culture:</strong> Strengthening the cultural bonds that unite European nations</li>
-        </ul>
-
-        <h3>Panel Discussion: "Towards a Green and Competitive Europe"</h3>
-        <p>The opening panel tackles one of Europe's defining challenges: how to balance environmental sustainability with economic competitiveness. The green transition is not just an environmental imperativeâ€”it's an economic opportunity that requires innovative thinking and cross-border cooperation.</p>
-        
-        <p><strong>Confirmed Panelists:</strong></p>
-        <ul>
-          <li><strong>FranÃ§ois Gemenne</strong> - Renowned climate scientist and political expert, member of the IPCC, and professor at Sciences Po Paris</li>
-          <li><strong>Romain Le Creff</strong> - Member of the Sustainable Development Office at Iliad Group</li>
-          <li><strong>Magdalena Sajdak</strong> - Polish expert on energy transition and sustainability initiatives</li>
-          <li><strong>Martyna Zastawna</strong> - Expert in innovation and green technology development</li>
-        </ul>
-
-        <h3>Why This Forum Matters</h3>
-        <p><strong>For Students:</strong> The Paris Polish Forum offers unparalleled networking opportunities. For Polish students in France and French students interested in Polish affairs, this is a chance to gain insights into career paths, build lasting connections, and contribute to meaningful discussions about Europe's future.</p>
-        
-        <p><strong>For Professionals:</strong> The forum provides a platform for identifying partnership opportunities, staying informed about EU policy directions, and expanding professional networks across borders.</p>
-        
-        <p><strong>For the Polish-French Community:</strong> This event strengthens the bonds between two nations that share a long history of cultural exchange, mutual support, and shared values.</p>
-
-        <h3>Poland's EU Presidency Context</h3>
-        <p>Poland's EU Council Presidency in the first half of 2025 represents a significant moment for the country and the entire European Union. The presidency comes at a critical time with the EU continuing its green transition, technological innovation reshaping economies, and geopolitical challenges requiring European unity.</p>
-        
-        <p>Poland's vision emphasizes:</p>
-        <ul>
-          <li>Innovation-driven growth</li>
-          <li>Sustainable development</li>
-          <li>Security and energy independence</li>
-          <li>Strengthening EU cohesion</li>
-        </ul>
-
-        <h3>How to Participate</h3>
-        <p>The Paris Polish Forum welcomes students, young professionals, academics, business leaders, and anyone interested in Polish-French relations and European affairs.</p>
-        
-        <p><strong>Registration:</strong> Details will be announced on ASPOL's official website and social media channels. Early registration is recommended as spaces are limited.</p>
-        
-        <p><strong>Stay Updated:</strong></p>
-        <ul>
-          <li>Website: <a href="https://aspol.fr" target="_blank">aspol.fr</a></li>
-          <li>Instagram: <a href="https://instagram.com/aspolska" target="_blank">@aspolska</a></li>
-        </ul>
-
-        <p><strong>Mark your calendars for April 24-26, 2025, and join ASPOL at Sciences Po Paris and the Polish Embassy for three days that could shape your understanding of European cooperation, expand your professional network, and inspire your vision for the future.</strong></p>
-      `
-    }
-  ],
-
-  fr: [
-    {
-      id: "paris-polish-forum-vii-2025",
-      title: "Paris Polish Forum VII - Vision de la Pologne pour l'UE : Unis pour un Avenir Innovant",
-      excerpt: "Rejoignez-nous pour la 7Ã¨me Ã©dition du Paris Polish Forum du 24 au 26 avril 2025. Explorez les prioritÃ©s de la PrÃ©sidence polonaise de l'UE, l'innovation verte et la coopÃ©ration franco-polonaise Ã  Sciences Po Paris et Ã  l'Ambassade de Pologne.",
-      author: "Ã‰quipe ASPOL",
-      date: "Mars 2025",
-      category: "ActualitÃ©s",
-      readTime: "7 min de lecture",
-      image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=400&fit=crop",
-      featured: true,
-      content: `
-        <p>Le Paris Polish Forum revient pour sa septiÃ¨me Ã©dition avec une vision ambitieuse qui ne pourrait Ãªtre plus opportune. Alors que la Pologne se prÃ©pare Ã  assumer la PrÃ©sidence du Conseil de l'UE au premier semestre 2025, l'Association des Ã‰tudiants Polonais en France (ASPOL) rÃ©unit Ã©tudiants, professionnels et leaders d'opinion pour trois journÃ©es de dialogue, de networking et d'innovation sous le thÃ¨me <strong>Â« Vision de la Pologne pour l'UE : Unis pour un Avenir Innovant. Â»</strong></p>
-
-        <h3>Un Ã‰vÃ©nement Phare</h3>
-        <p>Depuis sa crÃ©ation en 2017 sous le nom de "Polish Business Forum at Sciences Po", le Paris Polish Forum est devenu l'un des rassemblements annuels les plus significatifs axÃ©s sur les relations franco-polonaises et la coopÃ©ration europÃ©enne. Ce qui a commencÃ© avec 140 participants est devenu un Ã©vÃ©nement majeur attirant plus de 250 participants internationaux chaque annÃ©e.</p>
-        
-        <p>La 7Ã¨me Ã©dition marque une Ã©tape spÃ©cialeâ€”non seulement comme Ã©vÃ©nement phare d'ASPOL, mais comme plateforme pour discuter de la vision polonaise pour l'Europe Ã  un moment critique de l'histoire de l'UE.</p>
-
-        <h3>Quand et OÃ¹</h3>
-        <p><strong>Dates :</strong> 24-26 avril 2025</p>
-        <p><strong>Lieux :</strong></p>
-        <ul>
-          <li><strong>24-25 avril :</strong> Sciences Po Paris</li>
-          <li><strong>26 avril :</strong> Ambassade de Pologne Ã  Paris</li>
-        </ul>
-        
-        <p>Le choix des lieux est symbolique. Sciences Po reprÃ©sente l'excellence acadÃ©mique et le dialogue international, tandis que l'Ambassade de Pologne incarne la coopÃ©ration diplomatique et l'Ã©change culturel.</p>
-
-        <h3>Le ThÃ¨me : PrÃ©sidence Polonaise de l'UE et Innovation</h3>
-        <p>Le thÃ¨me du forum 2025 aborde directement le rÃ´le Ã  venir de la Pologne en tant que PrÃ©sidence du Conseil de l'UE. Il ne s'agit pas seulement de politiqueâ€”il s'agit de vision. Comment la Pologne et la France peuvent-elles travailler ensemble pour relever les dÃ©fis les plus pressants du continent ?</p>
-        
-        <p>Les discussions se concentreront sur trois domaines principaux :</p>
-        <ul>
-          <li><strong>DurabilitÃ© :</strong> RÃ©aliser une Europe verte et compÃ©titive</li>
-          <li><strong>Innovation :</strong> Favoriser l'avancement technologique et l'entrepreneuriat</li>
-          <li><strong>Culture :</strong> Renforcer les liens culturels qui unissent les nations europÃ©ennes</li>
-        </ul>
-
-        <h3>Table ronde : Â« Vers une Europe Verte et CompÃ©titive Â»</h3>
-        <p>Cette premiÃ¨re table ronde aborde l'un des dÃ©fis dÃ©terminants de l'Europe : comment Ã©quilibrer durabilitÃ© environnementale et compÃ©titivitÃ© Ã©conomique. La transition verte n'est pas seulement un impÃ©ratif environnementalâ€”c'est une opportunitÃ© Ã©conomique.</p>
-        
-        <p><strong>PanÃ©listes ConfirmÃ©s :</strong></p>
-        <ul>
-          <li><strong>FranÃ§ois Gemenne</strong> - Scientifique du climat renommÃ©, membre du GIEC, professeur Ã  Sciences Po Paris</li>
-          <li><strong>Romain Le Creff</strong> - Membre du Bureau du DÃ©veloppement Durable chez Iliad Group</li>
-          <li><strong>Magdalena Sajdak</strong> - Experte polonaise en transition Ã©nergÃ©tique</li>
-          <li><strong>Martyna Zastawna</strong> - Experte en innovation et technologies vertes</li>
-        </ul>
-
-        <h3>Pourquoi Ce Forum Est Important</h3>
-        <p><strong>Pour les Ã‰tudiants :</strong> Le Paris Polish Forum offre des opportunitÃ©s de networking inÃ©galÃ©es. Pour les Ã©tudiants polonais en France et les Ã©tudiants franÃ§ais intÃ©ressÃ©s par les affaires polonaises, c'est une chance unique de dÃ©velopper votre rÃ©seau et votre comprÃ©hension de l'Europe.</p>
-        
-        <p><strong>Pour les Professionnels :</strong> Le forum offre une plateforme pour identifier des opportunitÃ©s de partenariat et Ã©largir les rÃ©seaux professionnels au-delÃ  des frontiÃ¨res.</p>
-        
-        <p><strong>Pour la CommunautÃ© Franco-Polonaise :</strong> Cet Ã©vÃ©nement renforce les liens entre deux nations qui partagent une longue histoire d'Ã©changes culturels et de valeurs partagÃ©es.</p>
-
-        <h3>Le Contexte : La PrÃ©sidence Polonaise de l'UE</h3>
-        <p>La PrÃ©sidence polonaise du Conseil de l'UE au premier semestre 2025 reprÃ©sente un moment significatif. La prÃ©sidence arrive Ã  un moment critique avec l'UE poursuivant ses engagements de transition verte et l'innovation technologique redÃ©finissant les Ã©conomies.</p>
-        
-        <p>La vision de la Pologne met l'accent sur :</p>
-        <ul>
-          <li>La croissance tirÃ©e par l'innovation</li>
-          <li>Le dÃ©veloppement durable</li>
-          <li>La sÃ©curitÃ© et l'indÃ©pendance Ã©nergÃ©tique</li>
-          <li>Le renforcement de la cohÃ©sion de l'UE</li>
-        </ul>
-
-        <h3>Comment Participer</h3>
-        <p>Le Paris Polish Forum accueille les Ã©tudiants, les jeunes professionnels, les acadÃ©miques, les dirigeants d'entreprises et toute personne intÃ©ressÃ©e par les relations franco-polonaises.</p>
-        
-        <p><strong>Inscription :</strong> Les dÃ©tails seront annoncÃ©s sur le site officiel d'ASPOL et les rÃ©seaux sociaux. L'inscription anticipÃ©e est recommandÃ©e.</p>
-        
-        <p><strong>Restez InformÃ© :</strong></p>
-        <ul>
-          <li>Site web : <a href="https://aspol.fr" target="_blank">aspol.fr</a></li>
-          <li>Instagram : <a href="https://instagram.com/aspolska" target="_blank">@aspolska</a></li>
-        </ul>
-
-        <p><strong>Notez dans vos agendas les 24-26 avril 2025, et rejoignez ASPOL Ã  Sciences Po Paris et Ã  l'Ambassade de Pologne pour trois jours qui pourraient faÃ§onner votre comprÃ©hension de la coopÃ©ration europÃ©enne.</strong></p>
-      `
-    }
-  ],
-
-  pl: [
-    {
-      id: "paris-polish-forum-vii-2025",
-      title: "Paris Polish Forum VII - Wizja Polski dla UE: Zjednoczeni dla Innowacyjnego Jutra",
-      excerpt: "DoÅ‚Ä…cz do nas na 7. edycji Paris Polish Forum 24-26 kwietnia 2025. Poznaj priorytety Polskiej Prezydencji UE, zielonÄ… innowacjÄ™ i wspÃ³Å‚pracÄ™ polsko-francuskÄ… w Sciences Po Paris i Ambasadzie Polski.",
-      author: "ZespÃ³Å‚ ASPOL",
-      date: "Marzec 2025",
-      category: "AktualnoÅ›ci",
-      readTime: "7 min czytania",
-      image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=400&fit=crop",
-      featured: true,
-      content: `
-        <p>Paris Polish Forum wraca z siÃ³dmÄ… edycjÄ… i ambicyjnÄ… wizjÄ…, ktÃ³ra nie mogÅ‚aby byÄ‡ bardziej aktualna. Gdy Polska przygotowuje siÄ™ do objÄ™cia Prezydencji Rady UE w pierwszej poÅ‚owie 2025 roku, Stowarzyszenie StudentÃ³w Polskich we Francji (ASPOL) Å‚Ä…czy studentÃ³w, profesjonalistÃ³w i liderÃ³w opinii na trzy dni dialogu, networkingu i innowacji pod hasÅ‚em <strong>â€žWizja Polski dla UE: Zjednoczeni dla Innowacyjnego Jutra"</strong>.</p>
-
-        <h3>Wydarzenie Flagowe</h3>
-        <p>Od swojego powstania w 2017 roku jako "Polish Business Forum at Sciences Po", Paris Polish Forum przeksztaÅ‚ciÅ‚o siÄ™ w jedno z najwaÅ¼niejszych corocznych spotkaÅ„ skupiajÄ…cych siÄ™ na relacjach polsko-francuskich i wspÃ³Å‚pracy europejskiej. To, co zaczÄ™Å‚o siÄ™ od 140 uczestnikÃ³w, rozrosÅ‚o siÄ™ w wielkie wydarzenie przyciÄ…gajÄ…ce rocznie ponad 250 miÄ™dzynarodowych uczestnikÃ³w.</p>
-        
-        <p>SiÃ³dma edycja to szczegÃ³lny kamieÅ„ milowyâ€”nie tylko jako flagowe wydarzenie ASPOL, ale jako platforma do dyskusji o polskiej wizji Europy w krytycznym momencie historii UE.</p>
-
-        <h3>Kiedy i Gdzie</h3>
-        <p><strong>Daty:</strong> 24-26 kwietnia 2025</p>
-        <p><strong>Lokalizacje:</strong></p>
-        <ul>
-          <li><strong>24-25 kwietnia:</strong> Sciences Po Paris</li>
-          <li><strong>26 kwietnia:</strong> Ambasada Polski w ParyÅ¼u</li>
-        </ul>
-        
-        <p>WybÃ³r miejsc nie jest przypadkowy. Sciences Po reprezentuje doskonaÅ‚oÅ›Ä‡ akademickÄ… i miÄ™dzynarodowy dialog, podczas gdy Ambasada Polski uosabia wspÃ³Å‚pracÄ™ dyplomatycznÄ… i wymianÄ™ kulturalnÄ….</p>
-
-        <h3>Temat: Polska Prezydencja UE i Innowacje</h3>
-        <p>Temat forum 2025 bezpoÅ›rednio odnosi siÄ™ do nadchodzÄ…cej roli Polski jako Prezydencji Rady UE. To nie tylko kwestia politykiâ€”to kwestia wizji. Jak Polska i Francja mogÄ… wspÃ³Å‚pracowaÄ‡, aby stawiÄ‡ czoÅ‚a najpilniejszym wyzwaniom kontynentu?</p>
-        
-        <p>Dyskusje skupiÄ… siÄ™ na trzech gÅ‚Ã³wnych obszarach:</p>
-        <ul>
-          <li><strong>ZrÃ³wnowaÅ¼ony RozwÃ³j:</strong> OsiÄ…gniÄ™cie zielonej i konkurencyjnej Europy</li>
-          <li><strong>Innowacje:</strong> Wspieranie postÄ™pu technologicznego i przedsiÄ™biorczoÅ›ci</li>
-          <li><strong>Kultura:</strong> Wzmacnianie wiÄ™zi kulturowych Å‚Ä…czÄ…cych narody europejskie</li>
-        </ul>
-
-        <h3>Panel Dyskusyjny: â€žW StronÄ™ Zielonej i Konkurencyjnej Europy"</h3>
-        <p>Ten pierwszy panel podejmuje jedno z definiujÄ…cych wyzwaÅ„ Europy: jak zrÃ³wnowaÅ¼yÄ‡ zrÃ³wnowaÅ¼ony rozwÃ³j Å›rodowiskowy z konkurencyjnoÅ›ciÄ… ekonomicznÄ…. Zielona transformacja to nie tylko imperatyw Å›rodowiskowyâ€”to ekonomiczna szansa.</p>
-        
-        <p><strong>Potwierdzeni PaneliÅ›ci:</strong></p>
-        <ul>
-          <li><strong>FranÃ§ois Gemenne</strong> - Renomowany naukowiec klimatyczny, czÅ‚onek IPCC, profesor w Sciences Po Paris</li>
-          <li><strong>Romain Le Creff</strong> - CzÅ‚onek Biura ZrÃ³wnowaÅ¼onego Rozwoju w Iliad Group</li>
-          <li><strong>Magdalena Sajdak</strong> - Polska ekspertka ds. transformacji energetycznej</li>
-          <li><strong>Martyna Zastawna</strong> - Ekspertka ds. innowacji i zielonych technologii</li>
-        </ul>
-
-        <h3>Dlaczego To Forum Jest WaÅ¼ne</h3>
-        <p><strong>Dla StudentÃ³w:</strong> Paris Polish Forum oferuje niezrÃ³wnane moÅ¼liwoÅ›ci networkingu. Dla polskich studentÃ³w we Francji i francuskich studentÃ³w zainteresowanych sprawami polskimi, to szansa na rozwijanie kariery i budowanie trwaÅ‚ych relacji.</p>
-        
-        <p><strong>Dla ProfesjonalistÃ³w:</strong> Forum oferuje platformÄ™ do identyfikacji moÅ¼liwoÅ›ci partnerstwa i rozszerzania sieci kontaktÃ³w zawodowych ponad granicami.</p>
-        
-        <p><strong>Dla SpoÅ‚ecznoÅ›ci Polsko-Francuskiej:</strong> To wydarzenie wzmacnia wiÄ™zi miÄ™dzy dwoma narodami, ktÃ³re Å‚Ä…czy dÅ‚uga historia wymiany kulturalnej i wspÃ³lnych wartoÅ›ci.</p>
-
-        <h3>Kontekst: Polska Prezydencja UE</h3>
-        <p>Polska Prezydencja Rady UE w pierwszej poÅ‚owie 2025 roku reprezentuje znaczÄ…cy moment. Prezydencja nadchodzi w krytycznym momencie, gdy UE kontynuuje zobowiÄ…zania dotyczÄ…ce zielonej transformacji, a innowacje technologiczne przeksztaÅ‚cajÄ… gospodarki.</p>
-        
-        <p>Wizja Polski podkreÅ›la:</p>
-        <ul>
-          <li>Wzrost napÄ™dzany innowacjami</li>
-          <li>ZrÃ³wnowaÅ¼ony rozwÃ³j</li>
-          <li>BezpieczeÅ„stwo i niezaleÅ¼noÅ›Ä‡ energetyczna</li>
-          <li>Wzmacnianie spÃ³jnoÅ›ci UE</li>
-        </ul>
-
-        <h3>Jak WziÄ…Ä‡ UdziaÅ‚</h3>
-        <p>Paris Polish Forum wita studentÃ³w, mÅ‚odych profesjonalistÃ³w, akademikÃ³w, liderÃ³w biznesu i kaÅ¼dego zainteresowanego relacjami polsko-francuskimi.</p>
-        
-        <p><strong>Rejestracja:</strong> SzczegÃ³Å‚y zostanÄ… ogÅ‚oszone na oficjalnej stronie ASPOL i w mediach spoÅ‚ecznoÅ›ciowych. Zalecana jest wczesna rejestracja.</p>
-        
-        <p><strong>BÄ…dÅº na BieÅ¼Ä…co:</strong></p>
-        <ul>
-          <li>Strona internetowa: <a href="https://aspol.fr" target="_blank">aspol.fr</a></li>
-          <li>Instagram: <a href="https://instagram.com/aspolska" target="_blank">@aspolska</a></li>
-        </ul>
-
-        <p><strong>Zaznacz w calendarzu 24-26 kwietnia 2025 i doÅ‚Ä…cz do ASPOL w Sciences Po Paris i Ambasadzie Polski na trzy dni, ktÃ³re mogÄ… uksztaÅ‚towaÄ‡ Twoje rozumienie wspÃ³Å‚pracy europejskiej.</strong></p>
-      `
-    }
-  ],
-};
+ - / - / -   - s - r - c - / - d - a - t - a - / - b - l - o - g - P - o - s - t - s - . - t - s -  - 
+ - i - m - p - o - r - t -   - { -   - B - l - o - g - P - o - s - t -   - } -   - f - r - o - m -   - " - @ - / - t - y - p - e - s - " - ; -  - 
+ -  - 
+ - e - x - p - o - r - t -   - c - o - n - s - t -   - b - l - o - g - P - o - s - t - s - : -   - R - e - c - o - r - d - < - s - t - r - i - n - g - , -   - B - l - o - g - P - o - s - t - [ - ] - > -   - = -   - { -  - 
+ -   -   - e - n - : -   - [ -  - 
+ -   -   -   -   - { -  - 
+ -   -   -   -   -   -   - i - d - : -   - " - p - a - r - i - s - - - p - o - l - i - s - h - - - f - o - r - u - m - - - v - i - i - - - 2 - 0 - 2 - 5 - " - , -  - 
+ -   -   -   -   -   -   - t - i - t - l - e - : -   - " - P - a - r - i - s -   - P - o - l - i - s - h -   - F - o - r - u - m -   - V - I - I -   - - -   - P - o - l - a - n - d - ' - s -   - E - U -   - V - i - s - i - o - n - : -   - U - n - i - t - i - n - g -   - f - o - r -   - a - n -   - I - n - n - o - v - a - t - i - v - e -   - T - o - m - o - r - r - o - w - " - , -  - 
+ -   -   -   -   -   -   - e - x - c - e - r - p - t - : -   - " - J - o - i - n -   - u - s -   - f - o - r -   - t - h - e -   - 7 - t - h -   - e - d - i - t - i - o - n -   - o - f -   - P - a - r - i - s -   - P - o - l - i - s - h -   - F - o - r - u - m -   - o - n -   - A - p - r - i - l -   - 2 - 4 - - - 2 - 6 - , -   - 2 - 0 - 2 - 5 - . -   - E - x - p - l - o - r - e -   - P - o - l - a - n - d - ' - s -   - E - U -   - P - r - e - s - i - d - e - n - c - y -   - p - r - i - o - r - i - t - i - e - s - , -   - g - r - e - e - n -   - i - n - n - o - v - a - t - i - o - n - , -   - a - n - d -   - F - r - e - n - c - h - - - P - o - l - i - s - h -   - c - o - o - p - e - r - a - t - i - o - n -   - a - t -   - S - c - i - e - n - c - e - s -   - P - o -   - P - a - r - i - s -   - a - n - d -   - t - h - e -   - P - o - l - i - s - h -   - E - m - b - a - s - s - y - . - " - , -  - 
+ -   -   -   -   -   -   - a - u - t - h - o - r - : -   - " - A - S - P - O - L -   - T - e - a - m - " - , -  - 
+ -   -   -   -   -   -   - d - a - t - e - : -   - " - M - a - r - c - h -   - 2 - 0 - 2 - 5 - " - , -  - 
+ -   -   -   -   -   -   - c - a - t - e - g - o - r - y - : -   - " - N - e - w - s - " - , -  - 
+ -   -   -   -   -   -   - r - e - a - d - T - i - m - e - : -   - " - 7 -   - m - i - n -   - r - e - a - d - " - , -  - 
+ -   -   -   -   -   -   - i - m - a - g - e - : -   - " - h - t - t - p - s - : - / - / - i - m - a - g - e - s - . - u - n - s - p - l - a - s - h - . - c - o - m - / - p - h - o - t - o - - - 1 - 5 - 4 - 0 - 5 - 7 - 5 - 4 - 6 - 7 - 0 - 6 - 3 - - - 1 - 7 - 8 - a - 5 - 0 - c - 2 - d - f - 8 - 7 - ? - w - = - 8 - 0 - 0 - & - h - = - 4 - 0 - 0 - & - f - i - t - = - c - r - o - p - " - , -  - 
+ -   -   -   -   -   -   - f - e - a - t - u - r - e - d - : -   - t - r - u - e - , -  - 
+ -   -   -   -   -   -   - c - o - n - t - e - n - t - : -   - ` -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - T - h - e -   - P - a - r - i - s -   - P - o - l - i - s - h -   - F - o - r - u - m -   - i - s -   - r - e - t - u - r - n - i - n - g -   - f - o - r -   - i - t - s -   - s - e - v - e - n - t - h -   - e - d - i - t - i - o - n -   - w - i - t - h -   - a - n -   - a - m - b - i - t - i - o - u - s -   - v - i - s - i - o - n -   - t - h - a - t -   - c - o - u - l - d - n - ' - t -   - b - e -   - m - o - r - e -   - t - i - m - e - l - y - . -   - A - s -   - P - o - l - a - n - d -   - p - r - e - p - a - r - e - s -   - t - o -   - a - s - s - u - m - e -   - t - h - e -   - E - U -   - C - o - u - n - c - i - l -   - P - r - e - s - i - d - e - n - c - y -   - i - n -   - t - h - e -   - f - i - r - s - t -   - h - a - l - f -   - o - f -   - 2 - 0 - 2 - 5 - , -   - t - h - e -   - A - s - s - o - c - i - a - t - i - o - n -   - d - e - s -   - Ã - ‰ - t - u - d - i - a - n - t - s -   - P - o - l - o - n - a - i - s -   - e - n -   - F - r - a - n - c - e -   - ( - A - S - P - O - L - ) -   - b - r - i - n - g - s -   - t - o - g - e - t - h - e - r -   - s - t - u - d - e - n - t - s - , -   - p - r - o - f - e - s - s - i - o - n - a - l - s - , -   - a - n - d -   - t - h - o - u - g - h - t -   - l - e - a - d - e - r - s -   - f - o - r -   - t - h - r - e - e -   - d - a - y - s -   - o - f -   - d - i - a - l - o - g - u - e - , -   - n - e - t - w - o - r - k - i - n - g - , -   - a - n - d -   - i - n - n - o - v - a - t - i - o - n -   - u - n - d - e - r -   - t - h - e -   - t - h - e - m - e -   - < - s - t - r - o - n - g - > - " - P - o - l - a - n - d - ' - s -   - E - U -   - V - i - s - i - o - n - : -   - U - n - i - t - i - n - g -   - f - o - r -   - a - n -   - I - n - n - o - v - a - t - i - v - e -   - T - o - m - o - r - r - o - w - . - " - < - / - s - t - r - o - n - g - > - < - / - p - > -  - 
+ -  - 
+ -   -   -   -   -   -   -   -   - < - h - 3 - > - A -   - M - i - l - e - s - t - o - n - e -   - E - v - e - n - t - < - / - h - 3 - > -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - S - i - n - c - e -   - i - t - s -   - i - n - c - e - p - t - i - o - n -   - i - n -   - 2 - 0 - 1 - 7 -   - a - s -   - t - h - e -   - " - P - o - l - i - s - h -   - B - u - s - i - n - e - s - s -   - F - o - r - u - m -   - a - t -   - S - c - i - e - n - c - e - s -   - P - o - , - " -   - t - h - e -   - P - a - r - i - s -   - P - o - l - i - s - h -   - F - o - r - u - m -   - h - a - s -   - e - v - o - l - v - e - d -   - i - n - t - o -   - o - n - e -   - o - f -   - t - h - e -   - m - o - s - t -   - s - i - g - n - i - f - i - c - a - n - t -   - a - n - n - u - a - l -   - g - a - t - h - e - r - i - n - g - s -   - f - o - c - u - s - e - d -   - o - n -   - P - o - l - i - s - h - - - F - r - e - n - c - h -   - r - e - l - a - t - i - o - n - s -   - a - n - d -   - E - u - r - o - p - e - a - n -   - c - o - o - p - e - r - a - t - i - o - n - . -   - W - h - a - t -   - s - t - a - r - t - e - d -   - w - i - t - h -   - 1 - 4 - 0 -   - p - a - r - t - i - c - i - p - a - n - t - s -   - h - a - s -   - g - r - o - w - n -   - i - n - t - o -   - a -   - m - a - j - o - r -   - e - v - e - n - t -   - a - t - t - r - a - c - t - i - n - g -   - o - v - e - r -   - 2 - 5 - 0 -   - i - n - t - e - r - n - a - t - i - o - n - a - l -   - a - t - t - e - n - d - e - e - s -   - e - a - c - h -   - y - e - a - r - , -   - i - n - c - l - u - d - i - n - g -   - d - i - p - l - o - m - a - t - s - , -   - b - u - s - i - n - e - s - s -   - l - e - a - d - e - r - s - , -   - a - c - a - d - e - m - i - c - s - , -   - a - n - d -   - s - t - u - d - e - n - t - s -   - p - a - s - s - i - o - n - a - t - e -   - a - b - o - u - t -   - b - u - i - l - d - i - n - g -   - b - r - i - d - g - e - s -   - b - e - t - w - e - e - n -   - P - o - l - a - n - d -   - a - n - d -   - F - r - a - n - c - e - . - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - T - h - e -   - 7 - t - h -   - e - d - i - t - i - o - n -   - m - a - r - k - s -   - a -   - s - p - e - c - i - a - l -   - m - i - l - e - s - t - o - n - e - â - € - ” - n - o - t -   - j - u - s - t -   - a - s -   - A - S - P - O - L - ' - s -   - f - l - a - g - s - h - i - p -   - e - v - e - n - t - , -   - b - u - t -   - a - s -   - a -   - p - l - a - t - f - o - r - m -   - t - o -   - d - i - s - c - u - s - s -   - P - o - l - a - n - d - ' - s -   - v - i - s - i - o - n -   - f - o - r -   - E - u - r - o - p - e -   - a - t -   - a -   - c - r - i - t - i - c - a - l -   - m - o - m - e - n - t -   - i - n -   - E - U -   - h - i - s - t - o - r - y - . - < - / - p - > -  - 
+ -  - 
+ -   -   -   -   -   -   -   -   - < - h - 3 - > - W - h - e - n -   - a - n - d -   - W - h - e - r - e - < - / - h - 3 - > -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - < - s - t - r - o - n - g - > - D - a - t - e - s - : - < - / - s - t - r - o - n - g - > -   - A - p - r - i - l -   - 2 - 4 - - - 2 - 6 - , -   - 2 - 0 - 2 - 5 - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - < - s - t - r - o - n - g - > - L - o - c - a - t - i - o - n - s - : - < - / - s - t - r - o - n - g - > - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   - < - u - l - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - < - s - t - r - o - n - g - > - A - p - r - i - l -   - 2 - 4 - - - 2 - 5 - : - < - / - s - t - r - o - n - g - > -   - S - c - i - e - n - c - e - s -   - P - o -   - P - a - r - i - s - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - < - s - t - r - o - n - g - > - A - p - r - i - l -   - 2 - 6 - : - < - / - s - t - r - o - n - g - > -   - E - m - b - a - s - s - y -   - o - f -   - P - o - l - a - n - d -   - i - n -   - P - a - r - i - s - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   - < - / - u - l - > -  - 
+ -   -   -   -   -   -   -   -   -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - T - h - e -   - c - h - o - i - c - e -   - o - f -   - v - e - n - u - e - s -   - i - s -   - s - y - m - b - o - l - i - c - . -   - S - c - i - e - n - c - e - s -   - P - o -   - r - e - p - r - e - s - e - n - t - s -   - a - c - a - d - e - m - i - c -   - e - x - c - e - l - l - e - n - c - e -   - a - n - d -   - i - n - t - e - r - n - a - t - i - o - n - a - l -   - d - i - a - l - o - g - u - e - , -   - w - h - i - l - e -   - t - h - e -   - P - o - l - i - s - h -   - E - m - b - a - s - s - y -   - e - m - b - o - d - i - e - s -   - d - i - p - l - o - m - a - t - i - c -   - c - o - o - p - e - r - a - t - i - o - n -   - a - n - d -   - c - u - l - t - u - r - a - l -   - e - x - c - h - a - n - g - e -   - b - o - t - h -   - e - s - s - e - n - t - i - a - l -   - p - i - l - l - a - r - s -   - o - f -   - t - h - e -   - P - o - l - i - s - h - - - F - r - e - n - c - h -   - r - e - l - a - t - i - o - n - s - h - i - p - . - < - / - p - > -  - 
+ -  - 
+ -   -   -   -   -   -   -   -   - < - h - 3 - > - T - h - e -   - T - h - e - m - e - : -   - P - o - l - a - n - d - ' - s -   - E - U -   - P - r - e - s - i - d - e - n - c - y -   - a - n - d -   - I - n - n - o - v - a - t - i - o - n - < - / - h - 3 - > -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - T - h - e -   - 2 - 0 - 2 - 5 -   - f - o - r - u - m - ' - s -   - t - h - e - m - e -   - d - i - r - e - c - t - l - y -   - a - d - d - r - e - s - s - e - s -   - P - o - l - a - n - d - ' - s -   - u - p - c - o - m - i - n - g -   - r - o - l - e -   - a - s -   - t - h - e -   - E - U -   - C - o - u - n - c - i - l -   - P - r - e - s - i - d - e - n - c - y - . -   - T - h - i - s -   - i - s -   - n - o - t -   - j - u - s - t -   - a - b - o - u - t -   - p - o - l - i - c - y - â - € - ” - i - t - ' - s -   - a - b - o - u - t -   - v - i - s - i - o - n - . -   - H - o - w -   - c - a - n -   - P - o - l - a - n - d -   - a - n - d -   - F - r - a - n - c - e - , -   - t - w - o -   - n - a - t - i - o - n - s -   - w - i - t - h -   - d - e - e - p -   - h - i - s - t - o - r - i - c - a - l -   - t - i - e - s -   - a - n - d -   - s - h - a - r - e - d -   - E - u - r - o - p - e - a - n -   - v - a - l - u - e - s - , -   - w - o - r - k -   - t - o - g - e - t - h - e - r -   - t - o -   - t - a - c - k - l - e -   - t - h - e -   - c - o - n - t - i - n - e - n - t - ' - s -   - m - o - s - t -   - p - r - e - s - s - i - n - g -   - c - h - a - l - l - e - n - g - e - s - ? - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - T - h - e -   - d - i - s - c - u - s - s - i - o - n - s -   - w - i - l - l -   - c - e - n - t - e - r -   - o - n -   - t - h - r - e - e -   - c - o - r - e -   - a - r - e - a - s - : - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   - < - u - l - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - < - s - t - r - o - n - g - > - S - u - s - t - a - i - n - a - b - i - l - i - t - y - : - < - / - s - t - r - o - n - g - > -   - A - c - h - i - e - v - i - n - g -   - a -   - g - r - e - e - n -   - a - n - d -   - c - o - m - p - e - t - i - t - i - v - e -   - E - u - r - o - p - e - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - < - s - t - r - o - n - g - > - I - n - n - o - v - a - t - i - o - n - : - < - / - s - t - r - o - n - g - > -   - F - o - s - t - e - r - i - n - g -   - t - e - c - h - n - o - l - o - g - i - c - a - l -   - a - d - v - a - n - c - e - m - e - n - t -   - a - n - d -   - e - n - t - r - e - p - r - e - n - e - u - r - s - h - i - p - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - < - s - t - r - o - n - g - > - C - u - l - t - u - r - e - : - < - / - s - t - r - o - n - g - > -   - S - t - r - e - n - g - t - h - e - n - i - n - g -   - t - h - e -   - c - u - l - t - u - r - a - l -   - b - o - n - d - s -   - t - h - a - t -   - u - n - i - t - e -   - E - u - r - o - p - e - a - n -   - n - a - t - i - o - n - s - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   - < - / - u - l - > -  - 
+ -  - 
+ -   -   -   -   -   -   -   -   - < - h - 3 - > - P - a - n - e - l -   - D - i - s - c - u - s - s - i - o - n - : -   - " - T - o - w - a - r - d - s -   - a -   - G - r - e - e - n -   - a - n - d -   - C - o - m - p - e - t - i - t - i - v - e -   - E - u - r - o - p - e - " - < - / - h - 3 - > -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - T - h - e -   - o - p - e - n - i - n - g -   - p - a - n - e - l -   - t - a - c - k - l - e - s -   - o - n - e -   - o - f -   - E - u - r - o - p - e - ' - s -   - d - e - f - i - n - i - n - g -   - c - h - a - l - l - e - n - g - e - s - : -   - h - o - w -   - t - o -   - b - a - l - a - n - c - e -   - e - n - v - i - r - o - n - m - e - n - t - a - l -   - s - u - s - t - a - i - n - a - b - i - l - i - t - y -   - w - i - t - h -   - e - c - o - n - o - m - i - c -   - c - o - m - p - e - t - i - t - i - v - e - n - e - s - s - . -   - T - h - e -   - g - r - e - e - n -   - t - r - a - n - s - i - t - i - o - n -   - i - s -   - n - o - t -   - j - u - s - t -   - a - n -   - e - n - v - i - r - o - n - m - e - n - t - a - l -   - i - m - p - e - r - a - t - i - v - e - â - € - ” - i - t - ' - s -   - a - n -   - e - c - o - n - o - m - i - c -   - o - p - p - o - r - t - u - n - i - t - y -   - t - h - a - t -   - r - e - q - u - i - r - e - s -   - i - n - n - o - v - a - t - i - v - e -   - t - h - i - n - k - i - n - g -   - a - n - d -   - c - r - o - s - s - - - b - o - r - d - e - r -   - c - o - o - p - e - r - a - t - i - o - n - . - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - < - s - t - r - o - n - g - > - C - o - n - f - i - r - m - e - d -   - P - a - n - e - l - i - s - t - s - : - < - / - s - t - r - o - n - g - > - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   - < - u - l - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - < - s - t - r - o - n - g - > - F - r - a - n - Ã - § - o - i - s -   - G - e - m - e - n - n - e - < - / - s - t - r - o - n - g - > -   - - -   - R - e - n - o - w - n - e - d -   - c - l - i - m - a - t - e -   - s - c - i - e - n - t - i - s - t -   - a - n - d -   - p - o - l - i - t - i - c - a - l -   - e - x - p - e - r - t - , -   - m - e - m - b - e - r -   - o - f -   - t - h - e -   - I - P - C - C - , -   - a - n - d -   - p - r - o - f - e - s - s - o - r -   - a - t -   - S - c - i - e - n - c - e - s -   - P - o -   - P - a - r - i - s - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - < - s - t - r - o - n - g - > - R - o - m - a - i - n -   - L - e -   - C - r - e - f - f - < - / - s - t - r - o - n - g - > -   - - -   - M - e - m - b - e - r -   - o - f -   - t - h - e -   - S - u - s - t - a - i - n - a - b - l - e -   - D - e - v - e - l - o - p - m - e - n - t -   - O - f - f - i - c - e -   - a - t -   - I - l - i - a - d -   - G - r - o - u - p - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - < - s - t - r - o - n - g - > - M - a - g - d - a - l - e - n - a -   - S - a - j - d - a - k - < - / - s - t - r - o - n - g - > -   - - -   - P - o - l - i - s - h -   - e - x - p - e - r - t -   - o - n -   - e - n - e - r - g - y -   - t - r - a - n - s - i - t - i - o - n -   - a - n - d -   - s - u - s - t - a - i - n - a - b - i - l - i - t - y -   - i - n - i - t - i - a - t - i - v - e - s - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - < - s - t - r - o - n - g - > - M - a - r - t - y - n - a -   - Z - a - s - t - a - w - n - a - < - / - s - t - r - o - n - g - > -   - - -   - E - x - p - e - r - t -   - i - n -   - i - n - n - o - v - a - t - i - o - n -   - a - n - d -   - g - r - e - e - n -   - t - e - c - h - n - o - l - o - g - y -   - d - e - v - e - l - o - p - m - e - n - t - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   - < - / - u - l - > -  - 
+ -  - 
+ -   -   -   -   -   -   -   -   - < - h - 3 - > - W - h - y -   - T - h - i - s -   - F - o - r - u - m -   - M - a - t - t - e - r - s - < - / - h - 3 - > -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - < - s - t - r - o - n - g - > - F - o - r -   - S - t - u - d - e - n - t - s - : - < - / - s - t - r - o - n - g - > -   - T - h - e -   - P - a - r - i - s -   - P - o - l - i - s - h -   - F - o - r - u - m -   - o - f - f - e - r - s -   - u - n - p - a - r - a - l - l - e - l - e - d -   - n - e - t - w - o - r - k - i - n - g -   - o - p - p - o - r - t - u - n - i - t - i - e - s - . -   - F - o - r -   - P - o - l - i - s - h -   - s - t - u - d - e - n - t - s -   - i - n -   - F - r - a - n - c - e -   - a - n - d -   - F - r - e - n - c - h -   - s - t - u - d - e - n - t - s -   - i - n - t - e - r - e - s - t - e - d -   - i - n -   - P - o - l - i - s - h -   - a - f - f - a - i - r - s - , -   - t - h - i - s -   - i - s -   - a -   - c - h - a - n - c - e -   - t - o -   - g - a - i - n -   - i - n - s - i - g - h - t - s -   - i - n - t - o -   - c - a - r - e - e - r -   - p - a - t - h - s - , -   - b - u - i - l - d -   - l - a - s - t - i - n - g -   - c - o - n - n - e - c - t - i - o - n - s - , -   - a - n - d -   - c - o - n - t - r - i - b - u - t - e -   - t - o -   - m - e - a - n - i - n - g - f - u - l -   - d - i - s - c - u - s - s - i - o - n - s -   - a - b - o - u - t -   - E - u - r - o - p - e - ' - s -   - f - u - t - u - r - e - . - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - < - s - t - r - o - n - g - > - F - o - r -   - P - r - o - f - e - s - s - i - o - n - a - l - s - : - < - / - s - t - r - o - n - g - > -   - T - h - e -   - f - o - r - u - m -   - p - r - o - v - i - d - e - s -   - a -   - p - l - a - t - f - o - r - m -   - f - o - r -   - i - d - e - n - t - i - f - y - i - n - g -   - p - a - r - t - n - e - r - s - h - i - p -   - o - p - p - o - r - t - u - n - i - t - i - e - s - , -   - s - t - a - y - i - n - g -   - i - n - f - o - r - m - e - d -   - a - b - o - u - t -   - E - U -   - p - o - l - i - c - y -   - d - i - r - e - c - t - i - o - n - s - , -   - a - n - d -   - e - x - p - a - n - d - i - n - g -   - p - r - o - f - e - s - s - i - o - n - a - l -   - n - e - t - w - o - r - k - s -   - a - c - r - o - s - s -   - b - o - r - d - e - r - s - . - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - < - s - t - r - o - n - g - > - F - o - r -   - t - h - e -   - P - o - l - i - s - h - - - F - r - e - n - c - h -   - C - o - m - m - u - n - i - t - y - : - < - / - s - t - r - o - n - g - > -   - T - h - i - s -   - e - v - e - n - t -   - s - t - r - e - n - g - t - h - e - n - s -   - t - h - e -   - b - o - n - d - s -   - b - e - t - w - e - e - n -   - t - w - o -   - n - a - t - i - o - n - s -   - t - h - a - t -   - s - h - a - r - e -   - a -   - l - o - n - g -   - h - i - s - t - o - r - y -   - o - f -   - c - u - l - t - u - r - a - l -   - e - x - c - h - a - n - g - e - , -   - m - u - t - u - a - l -   - s - u - p - p - o - r - t - , -   - a - n - d -   - s - h - a - r - e - d -   - v - a - l - u - e - s - . - < - / - p - > -  - 
+ -  - 
+ -   -   -   -   -   -   -   -   - < - h - 3 - > - P - o - l - a - n - d - ' - s -   - E - U -   - P - r - e - s - i - d - e - n - c - y -   - C - o - n - t - e - x - t - < - / - h - 3 - > -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - P - o - l - a - n - d - ' - s -   - E - U -   - C - o - u - n - c - i - l -   - P - r - e - s - i - d - e - n - c - y -   - i - n -   - t - h - e -   - f - i - r - s - t -   - h - a - l - f -   - o - f -   - 2 - 0 - 2 - 5 -   - r - e - p - r - e - s - e - n - t - s -   - a -   - s - i - g - n - i - f - i - c - a - n - t -   - m - o - m - e - n - t -   - f - o - r -   - t - h - e -   - c - o - u - n - t - r - y -   - a - n - d -   - t - h - e -   - e - n - t - i - r - e -   - E - u - r - o - p - e - a - n -   - U - n - i - o - n - . -   - T - h - e -   - p - r - e - s - i - d - e - n - c - y -   - c - o - m - e - s -   - a - t -   - a -   - c - r - i - t - i - c - a - l -   - t - i - m - e -   - w - i - t - h -   - t - h - e -   - E - U -   - c - o - n - t - i - n - u - i - n - g -   - i - t - s -   - g - r - e - e - n -   - t - r - a - n - s - i - t - i - o - n - , -   - t - e - c - h - n - o - l - o - g - i - c - a - l -   - i - n - n - o - v - a - t - i - o - n -   - r - e - s - h - a - p - i - n - g -   - e - c - o - n - o - m - i - e - s - , -   - a - n - d -   - g - e - o - p - o - l - i - t - i - c - a - l -   - c - h - a - l - l - e - n - g - e - s -   - r - e - q - u - i - r - i - n - g -   - E - u - r - o - p - e - a - n -   - u - n - i - t - y - . - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - P - o - l - a - n - d - ' - s -   - v - i - s - i - o - n -   - e - m - p - h - a - s - i - z - e - s - : - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   - < - u - l - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - I - n - n - o - v - a - t - i - o - n - - - d - r - i - v - e - n -   - g - r - o - w - t - h - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - S - u - s - t - a - i - n - a - b - l - e -   - d - e - v - e - l - o - p - m - e - n - t - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - S - e - c - u - r - i - t - y -   - a - n - d -   - e - n - e - r - g - y -   - i - n - d - e - p - e - n - d - e - n - c - e - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - S - t - r - e - n - g - t - h - e - n - i - n - g -   - E - U -   - c - o - h - e - s - i - o - n - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   - < - / - u - l - > -  - 
+ -  - 
+ -   -   -   -   -   -   -   -   - < - h - 3 - > - H - o - w -   - t - o -   - P - a - r - t - i - c - i - p - a - t - e - < - / - h - 3 - > -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - T - h - e -   - P - a - r - i - s -   - P - o - l - i - s - h -   - F - o - r - u - m -   - w - e - l - c - o - m - e - s -   - s - t - u - d - e - n - t - s - , -   - y - o - u - n - g -   - p - r - o - f - e - s - s - i - o - n - a - l - s - , -   - a - c - a - d - e - m - i - c - s - , -   - b - u - s - i - n - e - s - s -   - l - e - a - d - e - r - s - , -   - a - n - d -   - a - n - y - o - n - e -   - i - n - t - e - r - e - s - t - e - d -   - i - n -   - P - o - l - i - s - h - - - F - r - e - n - c - h -   - r - e - l - a - t - i - o - n - s -   - a - n - d -   - E - u - r - o - p - e - a - n -   - a - f - f - a - i - r - s - . - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - < - s - t - r - o - n - g - > - R - e - g - i - s - t - r - a - t - i - o - n - : - < - / - s - t - r - o - n - g - > -   - D - e - t - a - i - l - s -   - w - i - l - l -   - b - e -   - a - n - n - o - u - n - c - e - d -   - o - n -   - A - S - P - O - L - ' - s -   - o - f - f - i - c - i - a - l -   - w - e - b - s - i - t - e -   - a - n - d -   - s - o - c - i - a - l -   - m - e - d - i - a -   - c - h - a - n - n - e - l - s - . -   - E - a - r - l - y -   - r - e - g - i - s - t - r - a - t - i - o - n -   - i - s -   - r - e - c - o - m - m - e - n - d - e - d -   - a - s -   - s - p - a - c - e - s -   - a - r - e -   - l - i - m - i - t - e - d - . - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - < - s - t - r - o - n - g - > - S - t - a - y -   - U - p - d - a - t - e - d - : - < - / - s - t - r - o - n - g - > - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   - < - u - l - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - W - e - b - s - i - t - e - : -   - < - a -   - h - r - e - f - = - " - h - t - t - p - s - : - / - / - a - s - p - o - l - . - f - r - " -   - t - a - r - g - e - t - = - " - _ - b - l - a - n - k - " - > - a - s - p - o - l - . - f - r - < - / - a - > - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - I - n - s - t - a - g - r - a - m - : -   - < - a -   - h - r - e - f - = - " - h - t - t - p - s - : - / - / - i - n - s - t - a - g - r - a - m - . - c - o - m - / - a - s - p - o - l - s - k - a - " -   - t - a - r - g - e - t - = - " - _ - b - l - a - n - k - " - > - @ - a - s - p - o - l - s - k - a - < - / - a - > - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   - < - / - u - l - > -  - 
+ -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - < - s - t - r - o - n - g - > - M - a - r - k -   - y - o - u - r -   - c - a - l - e - n - d - a - r - s -   - f - o - r -   - A - p - r - i - l -   - 2 - 4 - - - 2 - 6 - , -   - 2 - 0 - 2 - 5 - , -   - a - n - d -   - j - o - i - n -   - A - S - P - O - L -   - a - t -   - S - c - i - e - n - c - e - s -   - P - o -   - P - a - r - i - s -   - a - n - d -   - t - h - e -   - P - o - l - i - s - h -   - E - m - b - a - s - s - y -   - f - o - r -   - t - h - r - e - e -   - d - a - y - s -   - t - h - a - t -   - c - o - u - l - d -   - s - h - a - p - e -   - y - o - u - r -   - u - n - d - e - r - s - t - a - n - d - i - n - g -   - o - f -   - E - u - r - o - p - e - a - n -   - c - o - o - p - e - r - a - t - i - o - n - , -   - e - x - p - a - n - d -   - y - o - u - r -   - p - r - o - f - e - s - s - i - o - n - a - l -   - n - e - t - w - o - r - k - , -   - a - n - d -   - i - n - s - p - i - r - e -   - y - o - u - r -   - v - i - s - i - o - n -   - f - o - r -   - t - h - e -   - f - u - t - u - r - e - . - < - / - s - t - r - o - n - g - > - < - / - p - > -  - 
+ -   -   -   -   -   -   - ` -  - 
+ -   -   -   -   - } -  - 
+ -   -   - ] - , -  - 
+ -  - 
+ -   -   - f - r - : -   - [ -  - 
+ -   -   -   -   - { -  - 
+ -   -   -   -   -   -   - i - d - : -   - " - p - a - r - i - s - - - p - o - l - i - s - h - - - f - o - r - u - m - - - v - i - i - - - 2 - 0 - 2 - 5 - " - , -  - 
+ -   -   -   -   -   -   - t - i - t - l - e - : -   - " - P - a - r - i - s -   - P - o - l - i - s - h -   - F - o - r - u - m -   - V - I - I -   - - -   - V - i - s - i - o - n -   - d - e -   - l - a -   - P - o - l - o - g - n - e -   - p - o - u - r -   - l - ' - U - E -   - : -   - U - n - i - s -   - p - o - u - r -   - u - n -   - A - v - e - n - i - r -   - I - n - n - o - v - a - n - t - " - , -  - 
+ -   -   -   -   -   -   - e - x - c - e - r - p - t - : -   - " - R - e - j - o - i - g - n - e - z - - - n - o - u - s -   - p - o - u - r -   - l - a -   - 7 - Ã - ¨ - m - e -   - Ã - © - d - i - t - i - o - n -   - d - u -   - P - a - r - i - s -   - P - o - l - i - s - h -   - F - o - r - u - m -   - d - u -   - 2 - 4 -   - a - u -   - 2 - 6 -   - a - v - r - i - l -   - 2 - 0 - 2 - 5 - . -   - E - x - p - l - o - r - e - z -   - l - e - s -   - p - r - i - o - r - i - t - Ã - © - s -   - d - e -   - l - a -   - P - r - Ã - © - s - i - d - e - n - c - e -   - p - o - l - o - n - a - i - s - e -   - d - e -   - l - ' - U - E - , -   - l - ' - i - n - n - o - v - a - t - i - o - n -   - v - e - r - t - e -   - e - t -   - l - a -   - c - o - o - p - Ã - © - r - a - t - i - o - n -   - f - r - a - n - c - o - - - p - o - l - o - n - a - i - s - e -   - Ã -   -   - S - c - i - e - n - c - e - s -   - P - o -   - P - a - r - i - s -   - e - t -   - Ã -   -   - l - ' - A - m - b - a - s - s - a - d - e -   - d - e -   - P - o - l - o - g - n - e - . - " - , -  - 
+ -   -   -   -   -   -   - a - u - t - h - o - r - : -   - " - Ã - ‰ - q - u - i - p - e -   - A - S - P - O - L - " - , -  - 
+ -   -   -   -   -   -   - d - a - t - e - : -   - " - M - a - r - s -   - 2 - 0 - 2 - 5 - " - , -  - 
+ -   -   -   -   -   -   - c - a - t - e - g - o - r - y - : -   - " - A - c - t - u - a - l - i - t - Ã - © - s - " - , -  - 
+ -   -   -   -   -   -   - r - e - a - d - T - i - m - e - : -   - " - 7 -   - m - i - n -   - d - e -   - l - e - c - t - u - r - e - " - , -  - 
+ -   -   -   -   -   -   - i - m - a - g - e - : -   - " - h - t - t - p - s - : - / - / - i - m - a - g - e - s - . - u - n - s - p - l - a - s - h - . - c - o - m - / - p - h - o - t - o - - - 1 - 5 - 4 - 0 - 5 - 7 - 5 - 4 - 6 - 7 - 0 - 6 - 3 - - - 1 - 7 - 8 - a - 5 - 0 - c - 2 - d - f - 8 - 7 - ? - w - = - 8 - 0 - 0 - & - h - = - 4 - 0 - 0 - & - f - i - t - = - c - r - o - p - " - , -  - 
+ -   -   -   -   -   -   - f - e - a - t - u - r - e - d - : -   - t - r - u - e - , -  - 
+ -   -   -   -   -   -   - c - o - n - t - e - n - t - : -   - ` -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - L - e -   - P - a - r - i - s -   - P - o - l - i - s - h -   - F - o - r - u - m -   - r - e - v - i - e - n - t -   - p - o - u - r -   - s - a -   - s - e - p - t - i - Ã - ¨ - m - e -   - Ã - © - d - i - t - i - o - n -   - a - v - e - c -   - u - n - e -   - v - i - s - i - o - n -   - a - m - b - i - t - i - e - u - s - e -   - q - u - i -   - n - e -   - p - o - u - r - r - a - i - t -   - Ã - ª - t - r - e -   - p - l - u - s -   - o - p - p - o - r - t - u - n - e - . -   - A - l - o - r - s -   - q - u - e -   - l - a -   - P - o - l - o - g - n - e -   - s - e -   - p - r - Ã - © - p - a - r - e -   - Ã -   -   - a - s - s - u - m - e - r -   - l - a -   - P - r - Ã - © - s - i - d - e - n - c - e -   - d - u -   - C - o - n - s - e - i - l -   - d - e -   - l - ' - U - E -   - a - u -   - p - r - e - m - i - e - r -   - s - e - m - e - s - t - r - e -   - 2 - 0 - 2 - 5 - , -   - l - ' - A - s - s - o - c - i - a - t - i - o - n -   - d - e - s -   - Ã - ‰ - t - u - d - i - a - n - t - s -   - P - o - l - o - n - a - i - s -   - e - n -   - F - r - a - n - c - e -   - ( - A - S - P - O - L - ) -   - r - Ã - © - u - n - i - t -   - Ã - © - t - u - d - i - a - n - t - s - , -   - p - r - o - f - e - s - s - i - o - n - n - e - l - s -   - e - t -   - l - e - a - d - e - r - s -   - d - ' - o - p - i - n - i - o - n -   - p - o - u - r -   - t - r - o - i - s -   - j - o - u - r - n - Ã - © - e - s -   - d - e -   - d - i - a - l - o - g - u - e - , -   - d - e -   - n - e - t - w - o - r - k - i - n - g -   - e - t -   - d - ' - i - n - n - o - v - a - t - i - o - n -   - s - o - u - s -   - l - e -   - t - h - Ã - ¨ - m - e -   - < - s - t - r - o - n - g - > - Â - « -   - V - i - s - i - o - n -   - d - e -   - l - a -   - P - o - l - o - g - n - e -   - p - o - u - r -   - l - ' - U - E -   - : -   - U - n - i - s -   - p - o - u - r -   - u - n -   - A - v - e - n - i - r -   - I - n - n - o - v - a - n - t - . -   - Â - » - < - / - s - t - r - o - n - g - > - < - / - p - > -  - 
+ -  - 
+ -   -   -   -   -   -   -   -   - < - h - 3 - > - U - n -   - Ã - ‰ - v - Ã - © - n - e - m - e - n - t -   - P - h - a - r - e - < - / - h - 3 - > -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - D - e - p - u - i - s -   - s - a -   - c - r - Ã - © - a - t - i - o - n -   - e - n -   - 2 - 0 - 1 - 7 -   - s - o - u - s -   - l - e -   - n - o - m -   - d - e -   - " - P - o - l - i - s - h -   - B - u - s - i - n - e - s - s -   - F - o - r - u - m -   - a - t -   - S - c - i - e - n - c - e - s -   - P - o - " - , -   - l - e -   - P - a - r - i - s -   - P - o - l - i - s - h -   - F - o - r - u - m -   - e - s - t -   - d - e - v - e - n - u -   - l - ' - u - n -   - d - e - s -   - r - a - s - s - e - m - b - l - e - m - e - n - t - s -   - a - n - n - u - e - l - s -   - l - e - s -   - p - l - u - s -   - s - i - g - n - i - f - i - c - a - t - i - f - s -   - a - x - Ã - © - s -   - s - u - r -   - l - e - s -   - r - e - l - a - t - i - o - n - s -   - f - r - a - n - c - o - - - p - o - l - o - n - a - i - s - e - s -   - e - t -   - l - a -   - c - o - o - p - Ã - © - r - a - t - i - o - n -   - e - u - r - o - p - Ã - © - e - n - n - e - . -   - C - e -   - q - u - i -   - a -   - c - o - m - m - e - n - c - Ã - © -   - a - v - e - c -   - 1 - 4 - 0 -   - p - a - r - t - i - c - i - p - a - n - t - s -   - e - s - t -   - d - e - v - e - n - u -   - u - n -   - Ã - © - v - Ã - © - n - e - m - e - n - t -   - m - a - j - e - u - r -   - a - t - t - i - r - a - n - t -   - p - l - u - s -   - d - e -   - 2 - 5 - 0 -   - p - a - r - t - i - c - i - p - a - n - t - s -   - i - n - t - e - r - n - a - t - i - o - n - a - u - x -   - c - h - a - q - u - e -   - a - n - n - Ã - © - e - . - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - L - a -   - 7 - Ã - ¨ - m - e -   - Ã - © - d - i - t - i - o - n -   - m - a - r - q - u - e -   - u - n - e -   - Ã - © - t - a - p - e -   - s - p - Ã - © - c - i - a - l - e - â - € - ” - n - o - n -   - s - e - u - l - e - m - e - n - t -   - c - o - m - m - e -   - Ã - © - v - Ã - © - n - e - m - e - n - t -   - p - h - a - r - e -   - d - ' - A - S - P - O - L - , -   - m - a - i - s -   - c - o - m - m - e -   - p - l - a - t - e - f - o - r - m - e -   - p - o - u - r -   - d - i - s - c - u - t - e - r -   - d - e -   - l - a -   - v - i - s - i - o - n -   - p - o - l - o - n - a - i - s - e -   - p - o - u - r -   - l - ' - E - u - r - o - p - e -   - Ã -   -   - u - n -   - m - o - m - e - n - t -   - c - r - i - t - i - q - u - e -   - d - e -   - l - ' - h - i - s - t - o - i - r - e -   - d - e -   - l - ' - U - E - . - < - / - p - > -  - 
+ -  - 
+ -   -   -   -   -   -   -   -   - < - h - 3 - > - Q - u - a - n - d -   - e - t -   - O - Ã - ¹ - < - / - h - 3 - > -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - < - s - t - r - o - n - g - > - D - a - t - e - s -   - : - < - / - s - t - r - o - n - g - > -   - 2 - 4 - - - 2 - 6 -   - a - v - r - i - l -   - 2 - 0 - 2 - 5 - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - < - s - t - r - o - n - g - > - L - i - e - u - x -   - : - < - / - s - t - r - o - n - g - > - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   - < - u - l - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - < - s - t - r - o - n - g - > - 2 - 4 - - - 2 - 5 -   - a - v - r - i - l -   - : - < - / - s - t - r - o - n - g - > -   - S - c - i - e - n - c - e - s -   - P - o -   - P - a - r - i - s - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - < - s - t - r - o - n - g - > - 2 - 6 -   - a - v - r - i - l -   - : - < - / - s - t - r - o - n - g - > -   - A - m - b - a - s - s - a - d - e -   - d - e -   - P - o - l - o - g - n - e -   - Ã -   -   - P - a - r - i - s - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   - < - / - u - l - > -  - 
+ -   -   -   -   -   -   -   -   -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - L - e -   - c - h - o - i - x -   - d - e - s -   - l - i - e - u - x -   - e - s - t -   - s - y - m - b - o - l - i - q - u - e - . -   - S - c - i - e - n - c - e - s -   - P - o -   - r - e - p - r - Ã - © - s - e - n - t - e -   - l - ' - e - x - c - e - l - l - e - n - c - e -   - a - c - a - d - Ã - © - m - i - q - u - e -   - e - t -   - l - e -   - d - i - a - l - o - g - u - e -   - i - n - t - e - r - n - a - t - i - o - n - a - l - , -   - t - a - n - d - i - s -   - q - u - e -   - l - ' - A - m - b - a - s - s - a - d - e -   - d - e -   - P - o - l - o - g - n - e -   - i - n - c - a - r - n - e -   - l - a -   - c - o - o - p - Ã - © - r - a - t - i - o - n -   - d - i - p - l - o - m - a - t - i - q - u - e -   - e - t -   - l - ' - Ã - © - c - h - a - n - g - e -   - c - u - l - t - u - r - e - l - . - < - / - p - > -  - 
+ -  - 
+ -   -   -   -   -   -   -   -   - < - h - 3 - > - L - e -   - T - h - Ã - ¨ - m - e -   - : -   - P - r - Ã - © - s - i - d - e - n - c - e -   - P - o - l - o - n - a - i - s - e -   - d - e -   - l - ' - U - E -   - e - t -   - I - n - n - o - v - a - t - i - o - n - < - / - h - 3 - > -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - L - e -   - t - h - Ã - ¨ - m - e -   - d - u -   - f - o - r - u - m -   - 2 - 0 - 2 - 5 -   - a - b - o - r - d - e -   - d - i - r - e - c - t - e - m - e - n - t -   - l - e -   - r - Ã - ´ - l - e -   - Ã -   -   - v - e - n - i - r -   - d - e -   - l - a -   - P - o - l - o - g - n - e -   - e - n -   - t - a - n - t -   - q - u - e -   - P - r - Ã - © - s - i - d - e - n - c - e -   - d - u -   - C - o - n - s - e - i - l -   - d - e -   - l - ' - U - E - . -   - I - l -   - n - e -   - s - ' - a - g - i - t -   - p - a - s -   - s - e - u - l - e - m - e - n - t -   - d - e -   - p - o - l - i - t - i - q - u - e - â - € - ” - i - l -   - s - ' - a - g - i - t -   - d - e -   - v - i - s - i - o - n - . -   - C - o - m - m - e - n - t -   - l - a -   - P - o - l - o - g - n - e -   - e - t -   - l - a -   - F - r - a - n - c - e -   - p - e - u - v - e - n - t - - - e - l - l - e - s -   - t - r - a - v - a - i - l - l - e - r -   - e - n - s - e - m - b - l - e -   - p - o - u - r -   - r - e - l - e - v - e - r -   - l - e - s -   - d - Ã - © - f - i - s -   - l - e - s -   - p - l - u - s -   - p - r - e - s - s - a - n - t - s -   - d - u -   - c - o - n - t - i - n - e - n - t -   - ? - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - L - e - s -   - d - i - s - c - u - s - s - i - o - n - s -   - s - e -   - c - o - n - c - e - n - t - r - e - r - o - n - t -   - s - u - r -   - t - r - o - i - s -   - d - o - m - a - i - n - e - s -   - p - r - i - n - c - i - p - a - u - x -   - : - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   - < - u - l - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - < - s - t - r - o - n - g - > - D - u - r - a - b - i - l - i - t - Ã - © -   - : - < - / - s - t - r - o - n - g - > -   - R - Ã - © - a - l - i - s - e - r -   - u - n - e -   - E - u - r - o - p - e -   - v - e - r - t - e -   - e - t -   - c - o - m - p - Ã - © - t - i - t - i - v - e - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - < - s - t - r - o - n - g - > - I - n - n - o - v - a - t - i - o - n -   - : - < - / - s - t - r - o - n - g - > -   - F - a - v - o - r - i - s - e - r -   - l - ' - a - v - a - n - c - e - m - e - n - t -   - t - e - c - h - n - o - l - o - g - i - q - u - e -   - e - t -   - l - ' - e - n - t - r - e - p - r - e - n - e - u - r - i - a - t - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - < - s - t - r - o - n - g - > - C - u - l - t - u - r - e -   - : - < - / - s - t - r - o - n - g - > -   - R - e - n - f - o - r - c - e - r -   - l - e - s -   - l - i - e - n - s -   - c - u - l - t - u - r - e - l - s -   - q - u - i -   - u - n - i - s - s - e - n - t -   - l - e - s -   - n - a - t - i - o - n - s -   - e - u - r - o - p - Ã - © - e - n - n - e - s - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   - < - / - u - l - > -  - 
+ -  - 
+ -   -   -   -   -   -   -   -   - < - h - 3 - > - T - a - b - l - e -   - r - o - n - d - e -   - : -   - Â - « -   - V - e - r - s -   - u - n - e -   - E - u - r - o - p - e -   - V - e - r - t - e -   - e - t -   - C - o - m - p - Ã - © - t - i - t - i - v - e -   - Â - » - < - / - h - 3 - > -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - C - e - t - t - e -   - p - r - e - m - i - Ã - ¨ - r - e -   - t - a - b - l - e -   - r - o - n - d - e -   - a - b - o - r - d - e -   - l - ' - u - n -   - d - e - s -   - d - Ã - © - f - i - s -   - d - Ã - © - t - e - r - m - i - n - a - n - t - s -   - d - e -   - l - ' - E - u - r - o - p - e -   - : -   - c - o - m - m - e - n - t -   - Ã - © - q - u - i - l - i - b - r - e - r -   - d - u - r - a - b - i - l - i - t - Ã - © -   - e - n - v - i - r - o - n - n - e - m - e - n - t - a - l - e -   - e - t -   - c - o - m - p - Ã - © - t - i - t - i - v - i - t - Ã - © -   - Ã - © - c - o - n - o - m - i - q - u - e - . -   - L - a -   - t - r - a - n - s - i - t - i - o - n -   - v - e - r - t - e -   - n - ' - e - s - t -   - p - a - s -   - s - e - u - l - e - m - e - n - t -   - u - n -   - i - m - p - Ã - © - r - a - t - i - f -   - e - n - v - i - r - o - n - n - e - m - e - n - t - a - l - â - € - ” - c - ' - e - s - t -   - u - n - e -   - o - p - p - o - r - t - u - n - i - t - Ã - © -   - Ã - © - c - o - n - o - m - i - q - u - e - . - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - < - s - t - r - o - n - g - > - P - a - n - Ã - © - l - i - s - t - e - s -   - C - o - n - f - i - r - m - Ã - © - s -   - : - < - / - s - t - r - o - n - g - > - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   - < - u - l - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - < - s - t - r - o - n - g - > - F - r - a - n - Ã - § - o - i - s -   - G - e - m - e - n - n - e - < - / - s - t - r - o - n - g - > -   - - -   - S - c - i - e - n - t - i - f - i - q - u - e -   - d - u -   - c - l - i - m - a - t -   - r - e - n - o - m - m - Ã - © - , -   - m - e - m - b - r - e -   - d - u -   - G - I - E - C - , -   - p - r - o - f - e - s - s - e - u - r -   - Ã -   -   - S - c - i - e - n - c - e - s -   - P - o -   - P - a - r - i - s - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - < - s - t - r - o - n - g - > - R - o - m - a - i - n -   - L - e -   - C - r - e - f - f - < - / - s - t - r - o - n - g - > -   - - -   - M - e - m - b - r - e -   - d - u -   - B - u - r - e - a - u -   - d - u -   - D - Ã - © - v - e - l - o - p - p - e - m - e - n - t -   - D - u - r - a - b - l - e -   - c - h - e - z -   - I - l - i - a - d -   - G - r - o - u - p - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - < - s - t - r - o - n - g - > - M - a - g - d - a - l - e - n - a -   - S - a - j - d - a - k - < - / - s - t - r - o - n - g - > -   - - -   - E - x - p - e - r - t - e -   - p - o - l - o - n - a - i - s - e -   - e - n -   - t - r - a - n - s - i - t - i - o - n -   - Ã - © - n - e - r - g - Ã - © - t - i - q - u - e - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - < - s - t - r - o - n - g - > - M - a - r - t - y - n - a -   - Z - a - s - t - a - w - n - a - < - / - s - t - r - o - n - g - > -   - - -   - E - x - p - e - r - t - e -   - e - n -   - i - n - n - o - v - a - t - i - o - n -   - e - t -   - t - e - c - h - n - o - l - o - g - i - e - s -   - v - e - r - t - e - s - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   - < - / - u - l - > -  - 
+ -  - 
+ -   -   -   -   -   -   -   -   - < - h - 3 - > - P - o - u - r - q - u - o - i -   - C - e -   - F - o - r - u - m -   - E - s - t -   - I - m - p - o - r - t - a - n - t - < - / - h - 3 - > -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - < - s - t - r - o - n - g - > - P - o - u - r -   - l - e - s -   - Ã - ‰ - t - u - d - i - a - n - t - s -   - : - < - / - s - t - r - o - n - g - > -   - L - e -   - P - a - r - i - s -   - P - o - l - i - s - h -   - F - o - r - u - m -   - o - f - f - r - e -   - d - e - s -   - o - p - p - o - r - t - u - n - i - t - Ã - © - s -   - d - e -   - n - e - t - w - o - r - k - i - n - g -   - i - n - Ã - © - g - a - l - Ã - © - e - s - . -   - P - o - u - r -   - l - e - s -   - Ã - © - t - u - d - i - a - n - t - s -   - p - o - l - o - n - a - i - s -   - e - n -   - F - r - a - n - c - e -   - e - t -   - l - e - s -   - Ã - © - t - u - d - i - a - n - t - s -   - f - r - a - n - Ã - § - a - i - s -   - i - n - t - Ã - © - r - e - s - s - Ã - © - s -   - p - a - r -   - l - e - s -   - a - f - f - a - i - r - e - s -   - p - o - l - o - n - a - i - s - e - s - , -   - c - ' - e - s - t -   - u - n - e -   - c - h - a - n - c - e -   - u - n - i - q - u - e -   - d - e -   - d - Ã - © - v - e - l - o - p - p - e - r -   - v - o - t - r - e -   - r - Ã - © - s - e - a - u -   - e - t -   - v - o - t - r - e -   - c - o - m - p - r - Ã - © - h - e - n - s - i - o - n -   - d - e -   - l - ' - E - u - r - o - p - e - . - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - < - s - t - r - o - n - g - > - P - o - u - r -   - l - e - s -   - P - r - o - f - e - s - s - i - o - n - n - e - l - s -   - : - < - / - s - t - r - o - n - g - > -   - L - e -   - f - o - r - u - m -   - o - f - f - r - e -   - u - n - e -   - p - l - a - t - e - f - o - r - m - e -   - p - o - u - r -   - i - d - e - n - t - i - f - i - e - r -   - d - e - s -   - o - p - p - o - r - t - u - n - i - t - Ã - © - s -   - d - e -   - p - a - r - t - e - n - a - r - i - a - t -   - e - t -   - Ã - © - l - a - r - g - i - r -   - l - e - s -   - r - Ã - © - s - e - a - u - x -   - p - r - o - f - e - s - s - i - o - n - n - e - l - s -   - a - u - - - d - e - l - Ã -   -   - d - e - s -   - f - r - o - n - t - i - Ã - ¨ - r - e - s - . - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - < - s - t - r - o - n - g - > - P - o - u - r -   - l - a -   - C - o - m - m - u - n - a - u - t - Ã - © -   - F - r - a - n - c - o - - - P - o - l - o - n - a - i - s - e -   - : - < - / - s - t - r - o - n - g - > -   - C - e - t -   - Ã - © - v - Ã - © - n - e - m - e - n - t -   - r - e - n - f - o - r - c - e -   - l - e - s -   - l - i - e - n - s -   - e - n - t - r - e -   - d - e - u - x -   - n - a - t - i - o - n - s -   - q - u - i -   - p - a - r - t - a - g - e - n - t -   - u - n - e -   - l - o - n - g - u - e -   - h - i - s - t - o - i - r - e -   - d - ' - Ã - © - c - h - a - n - g - e - s -   - c - u - l - t - u - r - e - l - s -   - e - t -   - d - e -   - v - a - l - e - u - r - s -   - p - a - r - t - a - g - Ã - © - e - s - . - < - / - p - > -  - 
+ -  - 
+ -   -   -   -   -   -   -   -   - < - h - 3 - > - L - e -   - C - o - n - t - e - x - t - e -   - : -   - L - a -   - P - r - Ã - © - s - i - d - e - n - c - e -   - P - o - l - o - n - a - i - s - e -   - d - e -   - l - ' - U - E - < - / - h - 3 - > -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - L - a -   - P - r - Ã - © - s - i - d - e - n - c - e -   - p - o - l - o - n - a - i - s - e -   - d - u -   - C - o - n - s - e - i - l -   - d - e -   - l - ' - U - E -   - a - u -   - p - r - e - m - i - e - r -   - s - e - m - e - s - t - r - e -   - 2 - 0 - 2 - 5 -   - r - e - p - r - Ã - © - s - e - n - t - e -   - u - n -   - m - o - m - e - n - t -   - s - i - g - n - i - f - i - c - a - t - i - f - . -   - L - a -   - p - r - Ã - © - s - i - d - e - n - c - e -   - a - r - r - i - v - e -   - Ã -   -   - u - n -   - m - o - m - e - n - t -   - c - r - i - t - i - q - u - e -   - a - v - e - c -   - l - ' - U - E -   - p - o - u - r - s - u - i - v - a - n - t -   - s - e - s -   - e - n - g - a - g - e - m - e - n - t - s -   - d - e -   - t - r - a - n - s - i - t - i - o - n -   - v - e - r - t - e -   - e - t -   - l - ' - i - n - n - o - v - a - t - i - o - n -   - t - e - c - h - n - o - l - o - g - i - q - u - e -   - r - e - d - Ã - © - f - i - n - i - s - s - a - n - t -   - l - e - s -   - Ã - © - c - o - n - o - m - i - e - s - . - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - L - a -   - v - i - s - i - o - n -   - d - e -   - l - a -   - P - o - l - o - g - n - e -   - m - e - t -   - l - ' - a - c - c - e - n - t -   - s - u - r -   - : - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   - < - u - l - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - L - a -   - c - r - o - i - s - s - a - n - c - e -   - t - i - r - Ã - © - e -   - p - a - r -   - l - ' - i - n - n - o - v - a - t - i - o - n - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - L - e -   - d - Ã - © - v - e - l - o - p - p - e - m - e - n - t -   - d - u - r - a - b - l - e - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - L - a -   - s - Ã - © - c - u - r - i - t - Ã - © -   - e - t -   - l - ' - i - n - d - Ã - © - p - e - n - d - a - n - c - e -   - Ã - © - n - e - r - g - Ã - © - t - i - q - u - e - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - L - e -   - r - e - n - f - o - r - c - e - m - e - n - t -   - d - e -   - l - a -   - c - o - h - Ã - © - s - i - o - n -   - d - e -   - l - ' - U - E - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   - < - / - u - l - > -  - 
+ -  - 
+ -   -   -   -   -   -   -   -   - < - h - 3 - > - C - o - m - m - e - n - t -   - P - a - r - t - i - c - i - p - e - r - < - / - h - 3 - > -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - L - e -   - P - a - r - i - s -   - P - o - l - i - s - h -   - F - o - r - u - m -   - a - c - c - u - e - i - l - l - e -   - l - e - s -   - Ã - © - t - u - d - i - a - n - t - s - , -   - l - e - s -   - j - e - u - n - e - s -   - p - r - o - f - e - s - s - i - o - n - n - e - l - s - , -   - l - e - s -   - a - c - a - d - Ã - © - m - i - q - u - e - s - , -   - l - e - s -   - d - i - r - i - g - e - a - n - t - s -   - d - ' - e - n - t - r - e - p - r - i - s - e - s -   - e - t -   - t - o - u - t - e -   - p - e - r - s - o - n - n - e -   - i - n - t - Ã - © - r - e - s - s - Ã - © - e -   - p - a - r -   - l - e - s -   - r - e - l - a - t - i - o - n - s -   - f - r - a - n - c - o - - - p - o - l - o - n - a - i - s - e - s - . - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - < - s - t - r - o - n - g - > - I - n - s - c - r - i - p - t - i - o - n -   - : - < - / - s - t - r - o - n - g - > -   - L - e - s -   - d - Ã - © - t - a - i - l - s -   - s - e - r - o - n - t -   - a - n - n - o - n - c - Ã - © - s -   - s - u - r -   - l - e -   - s - i - t - e -   - o - f - f - i - c - i - e - l -   - d - ' - A - S - P - O - L -   - e - t -   - l - e - s -   - r - Ã - © - s - e - a - u - x -   - s - o - c - i - a - u - x - . -   - L - ' - i - n - s - c - r - i - p - t - i - o - n -   - a - n - t - i - c - i - p - Ã - © - e -   - e - s - t -   - r - e - c - o - m - m - a - n - d - Ã - © - e - . - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - < - s - t - r - o - n - g - > - R - e - s - t - e - z -   - I - n - f - o - r - m - Ã - © -   - : - < - / - s - t - r - o - n - g - > - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   - < - u - l - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - S - i - t - e -   - w - e - b -   - : -   - < - a -   - h - r - e - f - = - " - h - t - t - p - s - : - / - / - a - s - p - o - l - . - f - r - " -   - t - a - r - g - e - t - = - " - _ - b - l - a - n - k - " - > - a - s - p - o - l - . - f - r - < - / - a - > - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - I - n - s - t - a - g - r - a - m -   - : -   - < - a -   - h - r - e - f - = - " - h - t - t - p - s - : - / - / - i - n - s - t - a - g - r - a - m - . - c - o - m - / - a - s - p - o - l - s - k - a - " -   - t - a - r - g - e - t - = - " - _ - b - l - a - n - k - " - > - @ - a - s - p - o - l - s - k - a - < - / - a - > - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   - < - / - u - l - > -  - 
+ -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - < - s - t - r - o - n - g - > - N - o - t - e - z -   - d - a - n - s -   - v - o - s -   - a - g - e - n - d - a - s -   - l - e - s -   - 2 - 4 - - - 2 - 6 -   - a - v - r - i - l -   - 2 - 0 - 2 - 5 - , -   - e - t -   - r - e - j - o - i - g - n - e - z -   - A - S - P - O - L -   - Ã -   -   - S - c - i - e - n - c - e - s -   - P - o -   - P - a - r - i - s -   - e - t -   - Ã -   -   - l - ' - A - m - b - a - s - s - a - d - e -   - d - e -   - P - o - l - o - g - n - e -   - p - o - u - r -   - t - r - o - i - s -   - j - o - u - r - s -   - q - u - i -   - p - o - u - r - r - a - i - e - n - t -   - f - a - Ã - § - o - n - n - e - r -   - v - o - t - r - e -   - c - o - m - p - r - Ã - © - h - e - n - s - i - o - n -   - d - e -   - l - a -   - c - o - o - p - Ã - © - r - a - t - i - o - n -   - e - u - r - o - p - Ã - © - e - n - n - e - . - < - / - s - t - r - o - n - g - > - < - / - p - > -  - 
+ -   -   -   -   -   -   - ` -  - 
+ -   -   -   -   - } -  - 
+ -   -   - ] - , -  - 
+ -  - 
+ -   -   - p - l - : -   - [ -  - 
+ -   -   -   -   - { -  - 
+ -   -   -   -   -   -   - i - d - : -   - " - p - a - r - i - s - - - p - o - l - i - s - h - - - f - o - r - u - m - - - v - i - i - - - 2 - 0 - 2 - 5 - " - , -  - 
+ -   -   -   -   -   -   - t - i - t - l - e - : -   - " - P - a - r - i - s -   - P - o - l - i - s - h -   - F - o - r - u - m -   - V - I - I -   - - -   - W - i - z - j - a -   - P - o - l - s - k - i -   - d - l - a -   - U - E - : -   - Z - j - e - d - n - o - c - z - e - n - i -   - d - l - a -   - I - n - n - o - w - a - c - y - j - n - e - g - o -   - J - u - t - r - a - " - , -  - 
+ -   -   -   -   -   -   - e - x - c - e - r - p - t - : -   - " - D - o - Å - ‚ - Ä - … - c - z -   - d - o -   - n - a - s -   - n - a -   - 7 - . -   - e - d - y - c - j - i -   - P - a - r - i - s -   - P - o - l - i - s - h -   - F - o - r - u - m -   - 2 - 4 - - - 2 - 6 -   - k - w - i - e - t - n - i - a -   - 2 - 0 - 2 - 5 - . -   - P - o - z - n - a - j -   - p - r - i - o - r - y - t - e - t - y -   - P - o - l - s - k - i - e - j -   - P - r - e - z - y - d - e - n - c - j - i -   - U - E - , -   - z - i - e - l - o - n - Ä - … -   - i - n - n - o - w - a - c - j - Ä - ™ -   - i -   - w - s - p - Ã - ³ - Å - ‚ - p - r - a - c - Ä - ™ -   - p - o - l - s - k - o - - - f - r - a - n - c - u - s - k - Ä - … -   - w -   - S - c - i - e - n - c - e - s -   - P - o -   - P - a - r - i - s -   - i -   - A - m - b - a - s - a - d - z - i - e -   - P - o - l - s - k - i - . - " - , -  - 
+ -   -   -   -   -   -   - a - u - t - h - o - r - : -   - " - Z - e - s - p - Ã - ³ - Å - ‚ -   - A - S - P - O - L - " - , -  - 
+ -   -   -   -   -   -   - d - a - t - e - : -   - " - M - a - r - z - e - c -   - 2 - 0 - 2 - 5 - " - , -  - 
+ -   -   -   -   -   -   - c - a - t - e - g - o - r - y - : -   - " - A - k - t - u - a - l - n - o - Å - › - c - i - " - , -  - 
+ -   -   -   -   -   -   - r - e - a - d - T - i - m - e - : -   - " - 7 -   - m - i - n -   - c - z - y - t - a - n - i - a - " - , -  - 
+ -   -   -   -   -   -   - i - m - a - g - e - : -   - " - h - t - t - p - s - : - / - / - i - m - a - g - e - s - . - u - n - s - p - l - a - s - h - . - c - o - m - / - p - h - o - t - o - - - 1 - 5 - 4 - 0 - 5 - 7 - 5 - 4 - 6 - 7 - 0 - 6 - 3 - - - 1 - 7 - 8 - a - 5 - 0 - c - 2 - d - f - 8 - 7 - ? - w - = - 8 - 0 - 0 - & - h - = - 4 - 0 - 0 - & - f - i - t - = - c - r - o - p - " - , -  - 
+ -   -   -   -   -   -   - f - e - a - t - u - r - e - d - : -   - t - r - u - e - , -  - 
+ -   -   -   -   -   -   - c - o - n - t - e - n - t - : -   - ` -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - P - a - r - i - s -   - P - o - l - i - s - h -   - F - o - r - u - m -   - w - r - a - c - a -   - z -   - s - i - Ã - ³ - d - m - Ä - … -   - e - d - y - c - j - Ä - … -   - i -   - a - m - b - i - c - y - j - n - Ä - … -   - w - i - z - j - Ä - … - , -   - k - t - Ã - ³ - r - a -   - n - i - e -   - m - o - g - Å - ‚ - a - b - y -   - b - y - Ä - ‡ -   - b - a - r - d - z - i - e - j -   - a - k - t - u - a - l - n - a - . -   - G - d - y -   - P - o - l - s - k - a -   - p - r - z - y - g - o - t - o - w - u - j - e -   - s - i - Ä - ™ -   - d - o -   - o - b - j - Ä - ™ - c - i - a -   - P - r - e - z - y - d - e - n - c - j - i -   - R - a - d - y -   - U - E -   - w -   - p - i - e - r - w - s - z - e - j -   - p - o - Å - ‚ - o - w - i - e -   - 2 - 0 - 2 - 5 -   - r - o - k - u - , -   - S - t - o - w - a - r - z - y - s - z - e - n - i - e -   - S - t - u - d - e - n - t - Ã - ³ - w -   - P - o - l - s - k - i - c - h -   - w - e -   - F - r - a - n - c - j - i -   - ( - A - S - P - O - L - ) -   - Å - ‚ - Ä - … - c - z - y -   - s - t - u - d - e - n - t - Ã - ³ - w - , -   - p - r - o - f - e - s - j - o - n - a - l - i - s - t - Ã - ³ - w -   - i -   - l - i - d - e - r - Ã - ³ - w -   - o - p - i - n - i - i -   - n - a -   - t - r - z - y -   - d - n - i -   - d - i - a - l - o - g - u - , -   - n - e - t - w - o - r - k - i - n - g - u -   - i -   - i - n - n - o - w - a - c - j - i -   - p - o - d -   - h - a - s - Å - ‚ - e - m -   - < - s - t - r - o - n - g - > - â - € - ž - W - i - z - j - a -   - P - o - l - s - k - i -   - d - l - a -   - U - E - : -   - Z - j - e - d - n - o - c - z - e - n - i -   - d - l - a -   - I - n - n - o - w - a - c - y - j - n - e - g - o -   - J - u - t - r - a - " - < - / - s - t - r - o - n - g - > - . - < - / - p - > -  - 
+ -  - 
+ -   -   -   -   -   -   -   -   - < - h - 3 - > - W - y - d - a - r - z - e - n - i - e -   - F - l - a - g - o - w - e - < - / - h - 3 - > -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - O - d -   - s - w - o - j - e - g - o -   - p - o - w - s - t - a - n - i - a -   - w -   - 2 - 0 - 1 - 7 -   - r - o - k - u -   - j - a - k - o -   - " - P - o - l - i - s - h -   - B - u - s - i - n - e - s - s -   - F - o - r - u - m -   - a - t -   - S - c - i - e - n - c - e - s -   - P - o - " - , -   - P - a - r - i - s -   - P - o - l - i - s - h -   - F - o - r - u - m -   - p - r - z - e - k - s - z - t - a - Å - ‚ - c - i - Å - ‚ - o -   - s - i - Ä - ™ -   - w -   - j - e - d - n - o -   - z -   - n - a - j - w - a - Å - ¼ - n - i - e - j - s - z - y - c - h -   - c - o - r - o - c - z - n - y - c - h -   - s - p - o - t - k - a - Å - „ -   - s - k - u - p - i - a - j - Ä - … - c - y - c - h -   - s - i - Ä - ™ -   - n - a -   - r - e - l - a - c - j - a - c - h -   - p - o - l - s - k - o - - - f - r - a - n - c - u - s - k - i - c - h -   - i -   - w - s - p - Ã - ³ - Å - ‚ - p - r - a - c - y -   - e - u - r - o - p - e - j - s - k - i - e - j - . -   - T - o - , -   - c - o -   - z - a - c - z - Ä - ™ - Å - ‚ - o -   - s - i - Ä - ™ -   - o - d -   - 1 - 4 - 0 -   - u - c - z - e - s - t - n - i - k - Ã - ³ - w - , -   - r - o - z - r - o - s - Å - ‚ - o -   - s - i - Ä - ™ -   - w -   - w - i - e - l - k - i - e -   - w - y - d - a - r - z - e - n - i - e -   - p - r - z - y - c - i - Ä - … - g - a - j - Ä - … - c - e -   - r - o - c - z - n - i - e -   - p - o - n - a - d -   - 2 - 5 - 0 -   - m - i - Ä - ™ - d - z - y - n - a - r - o - d - o - w - y - c - h -   - u - c - z - e - s - t - n - i - k - Ã - ³ - w - . - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - S - i - Ã - ³ - d - m - a -   - e - d - y - c - j - a -   - t - o -   - s - z - c - z - e - g - Ã - ³ - l - n - y -   - k - a - m - i - e - Å - „ -   - m - i - l - o - w - y - â - € - ” - n - i - e -   - t - y - l - k - o -   - j - a - k - o -   - f - l - a - g - o - w - e -   - w - y - d - a - r - z - e - n - i - e -   - A - S - P - O - L - , -   - a - l - e -   - j - a - k - o -   - p - l - a - t - f - o - r - m - a -   - d - o -   - d - y - s - k - u - s - j - i -   - o -   - p - o - l - s - k - i - e - j -   - w - i - z - j - i -   - E - u - r - o - p - y -   - w -   - k - r - y - t - y - c - z - n - y - m -   - m - o - m - e - n - c - i - e -   - h - i - s - t - o - r - i - i -   - U - E - . - < - / - p - > -  - 
+ -  - 
+ -   -   -   -   -   -   -   -   - < - h - 3 - > - K - i - e - d - y -   - i -   - G - d - z - i - e - < - / - h - 3 - > -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - < - s - t - r - o - n - g - > - D - a - t - y - : - < - / - s - t - r - o - n - g - > -   - 2 - 4 - - - 2 - 6 -   - k - w - i - e - t - n - i - a -   - 2 - 0 - 2 - 5 - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - < - s - t - r - o - n - g - > - L - o - k - a - l - i - z - a - c - j - e - : - < - / - s - t - r - o - n - g - > - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   - < - u - l - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - < - s - t - r - o - n - g - > - 2 - 4 - - - 2 - 5 -   - k - w - i - e - t - n - i - a - : - < - / - s - t - r - o - n - g - > -   - S - c - i - e - n - c - e - s -   - P - o -   - P - a - r - i - s - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - < - s - t - r - o - n - g - > - 2 - 6 -   - k - w - i - e - t - n - i - a - : - < - / - s - t - r - o - n - g - > -   - A - m - b - a - s - a - d - a -   - P - o - l - s - k - i -   - w -   - P - a - r - y - Å - ¼ - u - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   - < - / - u - l - > -  - 
+ -   -   -   -   -   -   -   -   -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - W - y - b - Ã - ³ - r -   - m - i - e - j - s - c -   - n - i - e -   - j - e - s - t -   - p - r - z - y - p - a - d - k - o - w - y - . -   - S - c - i - e - n - c - e - s -   - P - o -   - r - e - p - r - e - z - e - n - t - u - j - e -   - d - o - s - k - o - n - a - Å - ‚ - o - Å - › - Ä - ‡ -   - a - k - a - d - e - m - i - c - k - Ä - … -   - i -   - m - i - Ä - ™ - d - z - y - n - a - r - o - d - o - w - y -   - d - i - a - l - o - g - , -   - p - o - d - c - z - a - s -   - g - d - y -   - A - m - b - a - s - a - d - a -   - P - o - l - s - k - i -   - u - o - s - a - b - i - a -   - w - s - p - Ã - ³ - Å - ‚ - p - r - a - c - Ä - ™ -   - d - y - p - l - o - m - a - t - y - c - z - n - Ä - … -   - i -   - w - y - m - i - a - n - Ä - ™ -   - k - u - l - t - u - r - a - l - n - Ä - … - . - < - / - p - > -  - 
+ -  - 
+ -   -   -   -   -   -   -   -   - < - h - 3 - > - T - e - m - a - t - : -   - P - o - l - s - k - a -   - P - r - e - z - y - d - e - n - c - j - a -   - U - E -   - i -   - I - n - n - o - w - a - c - j - e - < - / - h - 3 - > -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - T - e - m - a - t -   - f - o - r - u - m -   - 2 - 0 - 2 - 5 -   - b - e - z - p - o - Å - › - r - e - d - n - i - o -   - o - d - n - o - s - i -   - s - i - Ä - ™ -   - d - o -   - n - a - d - c - h - o - d - z - Ä - … - c - e - j -   - r - o - l - i -   - P - o - l - s - k - i -   - j - a - k - o -   - P - r - e - z - y - d - e - n - c - j - i -   - R - a - d - y -   - U - E - . -   - T - o -   - n - i - e -   - t - y - l - k - o -   - k - w - e - s - t - i - a -   - p - o - l - i - t - y - k - i - â - € - ” - t - o -   - k - w - e - s - t - i - a -   - w - i - z - j - i - . -   - J - a - k -   - P - o - l - s - k - a -   - i -   - F - r - a - n - c - j - a -   - m - o - g - Ä - … -   - w - s - p - Ã - ³ - Å - ‚ - p - r - a - c - o - w - a - Ä - ‡ - , -   - a - b - y -   - s - t - a - w - i - Ä - ‡ -   - c - z - o - Å - ‚ - a -   - n - a - j - p - i - l - n - i - e - j - s - z - y - m -   - w - y - z - w - a - n - i - o - m -   - k - o - n - t - y - n - e - n - t - u - ? - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - D - y - s - k - u - s - j - e -   - s - k - u - p - i - Ä - … -   - s - i - Ä - ™ -   - n - a -   - t - r - z - e - c - h -   - g - Å - ‚ - Ã - ³ - w - n - y - c - h -   - o - b - s - z - a - r - a - c - h - : - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   - < - u - l - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - < - s - t - r - o - n - g - > - Z - r - Ã - ³ - w - n - o - w - a - Å - ¼ - o - n - y -   - R - o - z - w - Ã - ³ - j - : - < - / - s - t - r - o - n - g - > -   - O - s - i - Ä - … - g - n - i - Ä - ™ - c - i - e -   - z - i - e - l - o - n - e - j -   - i -   - k - o - n - k - u - r - e - n - c - y - j - n - e - j -   - E - u - r - o - p - y - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - < - s - t - r - o - n - g - > - I - n - n - o - w - a - c - j - e - : - < - / - s - t - r - o - n - g - > -   - W - s - p - i - e - r - a - n - i - e -   - p - o - s - t - Ä - ™ - p - u -   - t - e - c - h - n - o - l - o - g - i - c - z - n - e - g - o -   - i -   - p - r - z - e - d - s - i - Ä - ™ - b - i - o - r - c - z - o - Å - › - c - i - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - < - s - t - r - o - n - g - > - K - u - l - t - u - r - a - : - < - / - s - t - r - o - n - g - > -   - W - z - m - a - c - n - i - a - n - i - e -   - w - i - Ä - ™ - z - i -   - k - u - l - t - u - r - o - w - y - c - h -   - Å - ‚ - Ä - … - c - z - Ä - … - c - y - c - h -   - n - a - r - o - d - y -   - e - u - r - o - p - e - j - s - k - i - e - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   - < - / - u - l - > -  - 
+ -  - 
+ -   -   -   -   -   -   -   -   - < - h - 3 - > - P - a - n - e - l -   - D - y - s - k - u - s - y - j - n - y - : -   - â - € - ž - W -   - S - t - r - o - n - Ä - ™ -   - Z - i - e - l - o - n - e - j -   - i -   - K - o - n - k - u - r - e - n - c - y - j - n - e - j -   - E - u - r - o - p - y - " - < - / - h - 3 - > -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - T - e - n -   - p - i - e - r - w - s - z - y -   - p - a - n - e - l -   - p - o - d - e - j - m - u - j - e -   - j - e - d - n - o -   - z -   - d - e - f - i - n - i - u - j - Ä - … - c - y - c - h -   - w - y - z - w - a - Å - „ -   - E - u - r - o - p - y - : -   - j - a - k -   - z - r - Ã - ³ - w - n - o - w - a - Å - ¼ - y - Ä - ‡ -   - z - r - Ã - ³ - w - n - o - w - a - Å - ¼ - o - n - y -   - r - o - z - w - Ã - ³ - j -   - Å - › - r - o - d - o - w - i - s - k - o - w - y -   - z -   - k - o - n - k - u - r - e - n - c - y - j - n - o - Å - › - c - i - Ä - … -   - e - k - o - n - o - m - i - c - z - n - Ä - … - . -   - Z - i - e - l - o - n - a -   - t - r - a - n - s - f - o - r - m - a - c - j - a -   - t - o -   - n - i - e -   - t - y - l - k - o -   - i - m - p - e - r - a - t - y - w -   - Å - › - r - o - d - o - w - i - s - k - o - w - y - â - € - ” - t - o -   - e - k - o - n - o - m - i - c - z - n - a -   - s - z - a - n - s - a - . - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - < - s - t - r - o - n - g - > - P - o - t - w - i - e - r - d - z - e - n - i -   - P - a - n - e - l - i - Å - › - c - i - : - < - / - s - t - r - o - n - g - > - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   - < - u - l - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - < - s - t - r - o - n - g - > - F - r - a - n - Ã - § - o - i - s -   - G - e - m - e - n - n - e - < - / - s - t - r - o - n - g - > -   - - -   - R - e - n - o - m - o - w - a - n - y -   - n - a - u - k - o - w - i - e - c -   - k - l - i - m - a - t - y - c - z - n - y - , -   - c - z - Å - ‚ - o - n - e - k -   - I - P - C - C - , -   - p - r - o - f - e - s - o - r -   - w -   - S - c - i - e - n - c - e - s -   - P - o -   - P - a - r - i - s - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - < - s - t - r - o - n - g - > - R - o - m - a - i - n -   - L - e -   - C - r - e - f - f - < - / - s - t - r - o - n - g - > -   - - -   - C - z - Å - ‚ - o - n - e - k -   - B - i - u - r - a -   - Z - r - Ã - ³ - w - n - o - w - a - Å - ¼ - o - n - e - g - o -   - R - o - z - w - o - j - u -   - w -   - I - l - i - a - d -   - G - r - o - u - p - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - < - s - t - r - o - n - g - > - M - a - g - d - a - l - e - n - a -   - S - a - j - d - a - k - < - / - s - t - r - o - n - g - > -   - - -   - P - o - l - s - k - a -   - e - k - s - p - e - r - t - k - a -   - d - s - . -   - t - r - a - n - s - f - o - r - m - a - c - j - i -   - e - n - e - r - g - e - t - y - c - z - n - e - j - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - < - s - t - r - o - n - g - > - M - a - r - t - y - n - a -   - Z - a - s - t - a - w - n - a - < - / - s - t - r - o - n - g - > -   - - -   - E - k - s - p - e - r - t - k - a -   - d - s - . -   - i - n - n - o - w - a - c - j - i -   - i -   - z - i - e - l - o - n - y - c - h -   - t - e - c - h - n - o - l - o - g - i - i - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   - < - / - u - l - > -  - 
+ -  - 
+ -   -   -   -   -   -   -   -   - < - h - 3 - > - D - l - a - c - z - e - g - o -   - T - o -   - F - o - r - u - m -   - J - e - s - t -   - W - a - Å - ¼ - n - e - < - / - h - 3 - > -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - < - s - t - r - o - n - g - > - D - l - a -   - S - t - u - d - e - n - t - Ã - ³ - w - : - < - / - s - t - r - o - n - g - > -   - P - a - r - i - s -   - P - o - l - i - s - h -   - F - o - r - u - m -   - o - f - e - r - u - j - e -   - n - i - e - z - r - Ã - ³ - w - n - a - n - e -   - m - o - Å - ¼ - l - i - w - o - Å - › - c - i -   - n - e - t - w - o - r - k - i - n - g - u - . -   - D - l - a -   - p - o - l - s - k - i - c - h -   - s - t - u - d - e - n - t - Ã - ³ - w -   - w - e -   - F - r - a - n - c - j - i -   - i -   - f - r - a - n - c - u - s - k - i - c - h -   - s - t - u - d - e - n - t - Ã - ³ - w -   - z - a - i - n - t - e - r - e - s - o - w - a - n - y - c - h -   - s - p - r - a - w - a - m - i -   - p - o - l - s - k - i - m - i - , -   - t - o -   - s - z - a - n - s - a -   - n - a -   - r - o - z - w - i - j - a - n - i - e -   - k - a - r - i - e - r - y -   - i -   - b - u - d - o - w - a - n - i - e -   - t - r - w - a - Å - ‚ - y - c - h -   - r - e - l - a - c - j - i - . - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - < - s - t - r - o - n - g - > - D - l - a -   - P - r - o - f - e - s - j - o - n - a - l - i - s - t - Ã - ³ - w - : - < - / - s - t - r - o - n - g - > -   - F - o - r - u - m -   - o - f - e - r - u - j - e -   - p - l - a - t - f - o - r - m - Ä - ™ -   - d - o -   - i - d - e - n - t - y - f - i - k - a - c - j - i -   - m - o - Å - ¼ - l - i - w - o - Å - › - c - i -   - p - a - r - t - n - e - r - s - t - w - a -   - i -   - r - o - z - s - z - e - r - z - a - n - i - a -   - s - i - e - c - i -   - k - o - n - t - a - k - t - Ã - ³ - w -   - z - a - w - o - d - o - w - y - c - h -   - p - o - n - a - d -   - g - r - a - n - i - c - a - m - i - . - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - < - s - t - r - o - n - g - > - D - l - a -   - S - p - o - Å - ‚ - e - c - z - n - o - Å - › - c - i -   - P - o - l - s - k - o - - - F - r - a - n - c - u - s - k - i - e - j - : - < - / - s - t - r - o - n - g - > -   - T - o -   - w - y - d - a - r - z - e - n - i - e -   - w - z - m - a - c - n - i - a -   - w - i - Ä - ™ - z - i -   - m - i - Ä - ™ - d - z - y -   - d - w - o - m - a -   - n - a - r - o - d - a - m - i - , -   - k - t - Ã - ³ - r - e -   - Å - ‚ - Ä - … - c - z - y -   - d - Å - ‚ - u - g - a -   - h - i - s - t - o - r - i - a -   - w - y - m - i - a - n - y -   - k - u - l - t - u - r - a - l - n - e - j -   - i -   - w - s - p - Ã - ³ - l - n - y - c - h -   - w - a - r - t - o - Å - › - c - i - . - < - / - p - > -  - 
+ -  - 
+ -   -   -   -   -   -   -   -   - < - h - 3 - > - K - o - n - t - e - k - s - t - : -   - P - o - l - s - k - a -   - P - r - e - z - y - d - e - n - c - j - a -   - U - E - < - / - h - 3 - > -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - P - o - l - s - k - a -   - P - r - e - z - y - d - e - n - c - j - a -   - R - a - d - y -   - U - E -   - w -   - p - i - e - r - w - s - z - e - j -   - p - o - Å - ‚ - o - w - i - e -   - 2 - 0 - 2 - 5 -   - r - o - k - u -   - r - e - p - r - e - z - e - n - t - u - j - e -   - z - n - a - c - z - Ä - … - c - y -   - m - o - m - e - n - t - . -   - P - r - e - z - y - d - e - n - c - j - a -   - n - a - d - c - h - o - d - z - i -   - w -   - k - r - y - t - y - c - z - n - y - m -   - m - o - m - e - n - c - i - e - , -   - g - d - y -   - U - E -   - k - o - n - t - y - n - u - u - j - e -   - z - o - b - o - w - i - Ä - … - z - a - n - i - a -   - d - o - t - y - c - z - Ä - … - c - e -   - z - i - e - l - o - n - e - j -   - t - r - a - n - s - f - o - r - m - a - c - j - i - , -   - a -   - i - n - n - o - w - a - c - j - e -   - t - e - c - h - n - o - l - o - g - i - c - z - n - e -   - p - r - z - e - k - s - z - t - a - Å - ‚ - c - a - j - Ä - … -   - g - o - s - p - o - d - a - r - k - i - . - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - W - i - z - j - a -   - P - o - l - s - k - i -   - p - o - d - k - r - e - Å - › - l - a - : - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   - < - u - l - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - W - z - r - o - s - t -   - n - a - p - Ä - ™ - d - z - a - n - y -   - i - n - n - o - w - a - c - j - a - m - i - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - Z - r - Ã - ³ - w - n - o - w - a - Å - ¼ - o - n - y -   - r - o - z - w - Ã - ³ - j - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - B - e - z - p - i - e - c - z - e - Å - „ - s - t - w - o -   - i -   - n - i - e - z - a - l - e - Å - ¼ - n - o - Å - › - Ä - ‡ -   - e - n - e - r - g - e - t - y - c - z - n - a - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - W - z - m - a - c - n - i - a - n - i - e -   - s - p - Ã - ³ - j - n - o - Å - › - c - i -   - U - E - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   - < - / - u - l - > -  - 
+ -  - 
+ -   -   -   -   -   -   -   -   - < - h - 3 - > - J - a - k -   - W - z - i - Ä - … - Ä - ‡ -   - U - d - z - i - a - Å - ‚ - < - / - h - 3 - > -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - P - a - r - i - s -   - P - o - l - i - s - h -   - F - o - r - u - m -   - w - i - t - a -   - s - t - u - d - e - n - t - Ã - ³ - w - , -   - m - Å - ‚ - o - d - y - c - h -   - p - r - o - f - e - s - j - o - n - a - l - i - s - t - Ã - ³ - w - , -   - a - k - a - d - e - m - i - k - Ã - ³ - w - , -   - l - i - d - e - r - Ã - ³ - w -   - b - i - z - n - e - s - u -   - i -   - k - a - Å - ¼ - d - e - g - o -   - z - a - i - n - t - e - r - e - s - o - w - a - n - e - g - o -   - r - e - l - a - c - j - a - m - i -   - p - o - l - s - k - o - - - f - r - a - n - c - u - s - k - i - m - i - . - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - < - s - t - r - o - n - g - > - R - e - j - e - s - t - r - a - c - j - a - : - < - / - s - t - r - o - n - g - > -   - S - z - c - z - e - g - Ã - ³ - Å - ‚ - y -   - z - o - s - t - a - n - Ä - … -   - o - g - Å - ‚ - o - s - z - o - n - e -   - n - a -   - o - f - i - c - j - a - l - n - e - j -   - s - t - r - o - n - i - e -   - A - S - P - O - L -   - i -   - w -   - m - e - d - i - a - c - h -   - s - p - o - Å - ‚ - e - c - z - n - o - Å - › - c - i - o - w - y - c - h - . -   - Z - a - l - e - c - a - n - a -   - j - e - s - t -   - w - c - z - e - s - n - a -   - r - e - j - e - s - t - r - a - c - j - a - . - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - < - s - t - r - o - n - g - > - B - Ä - … - d - Å - º -   - n - a -   - B - i - e - Å - ¼ - Ä - … - c - o - : - < - / - s - t - r - o - n - g - > - < - / - p - > -  - 
+ -   -   -   -   -   -   -   -   - < - u - l - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - S - t - r - o - n - a -   - i - n - t - e - r - n - e - t - o - w - a - : -   - < - a -   - h - r - e - f - = - " - h - t - t - p - s - : - / - / - a - s - p - o - l - . - f - r - " -   - t - a - r - g - e - t - = - " - _ - b - l - a - n - k - " - > - a - s - p - o - l - . - f - r - < - / - a - > - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   -   -   - < - l - i - > - I - n - s - t - a - g - r - a - m - : -   - < - a -   - h - r - e - f - = - " - h - t - t - p - s - : - / - / - i - n - s - t - a - g - r - a - m - . - c - o - m - / - a - s - p - o - l - s - k - a - " -   - t - a - r - g - e - t - = - " - _ - b - l - a - n - k - " - > - @ - a - s - p - o - l - s - k - a - < - / - a - > - < - / - l - i - > -  - 
+ -   -   -   -   -   -   -   -   - < - / - u - l - > -  - 
+ -  - 
+ -   -   -   -   -   -   -   -   - < - p - > - < - s - t - r - o - n - g - > - Z - a - z - n - a - c - z -   - w -   - c - a - l - e - n - d - a - r - z - u -   - 2 - 4 - - - 2 - 6 -   - k - w - i - e - t - n - i - a -   - 2 - 0 - 2 - 5 -   - i -   - d - o - Å - ‚ - Ä - … - c - z -   - d - o -   - A - S - P - O - L -   - w -   - S - c - i - e - n - c - e - s -   - P - o -   - P - a - r - i - s -   - i -   - A - m - b - a - s - a - d - z - i - e -   - P - o - l - s - k - i -   - n - a -   - t - r - z - y -   - d - n - i - , -   - k - t - Ã - ³ - r - e -   - m - o - g - Ä - … -   - u - k - s - z - t - a - Å - ‚ - t - o - w - a - Ä - ‡ -   - T - w - o - j - e -   - r - o - z - u - m - i - e - n - i - e -   - w - s - p - Ã - ³ - Å - ‚ - p - r - a - c - y -   - e - u - r - o - p - e - j - s - k - i - e - j - . - < - / - s - t - r - o - n - g - > - < - / - p - > -  - 
+ -   -   -   -   -   -   - ` -  - 
+ -   -   -   -   - } -  - 
+ -   -   - ] - , -  - 
+ - } - ; -  - 
+ - 

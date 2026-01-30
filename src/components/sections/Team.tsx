@@ -79,22 +79,10 @@ const Team = memo(function Team() {
       linkedin: "https://www.linkedin.com/in/aleksandra-izabela-koby%C5%82ecka/",
     },
     {
-      name: "Marta Mrygoń",
+      name: "Wiktor Dżaman",
       role: t.team.communications,
-      photo: "/MartaMrygon.jpg",
-      linkedin: "https://www.linkedin.com/in/marta-mrygo%C5%84-5b92472a5/",
-    },
-    {
-      name: "Weronika Sadownik",
-      role: t.team.socialMedia,
-      photo: "/WeronikaSadownik.jpg",
-      linkedin: "https://www.linkedin.com/in/weronika-sadownik-b6719b258/",
-    },
-    {
-      name: "Julianna Ramatowska",
-      role: t.team.graphicDesign,
-      photo: "/JuliannaRamatowska.jpg",
-      linkedin: "https://www.linkedin.com/in/julianna-ramatowska-2bb251329/",
+      photo: "/WiktorDzaman.jpg",
+      linkedin: "https://www.linkedin.com/in/wiktor-dzaman/",
     },
     {
       name: "Marianna Maciąg",
@@ -109,9 +97,39 @@ const Team = memo(function Team() {
       linkedin: "https://www.linkedin.com/in/eliza-freret-a4627028a/",
     },
     {
+      name: "Julianna Ramatowska",
+      role: t.team.graphicDesign,
+      photo: "/JuliannaRamatowska.jpg",
+      linkedin: "https://www.linkedin.com/in/julianna-ramatowska-2bb251329/",
+    },
+    {
       name: "Alicja Łukasik",
       role: t.team.operations,
       photo: "/AlicjaLukasik.png",
+      linkedin: null,
+    },
+    {
+      name: "Bartosz Karczmarczyk",
+      role: t.team.webDevelopment,
+      photo: "/BartoszKarczmarczyk.jpg",
+      linkedin: "https://www.linkedin.com/in/bartosz-karczmarczyk-4a747432b/",
+    },
+    {
+      name: "Wojciech Wiejak",
+      role: t.team.partnershipCoordinator,
+      photo: "/WojciechWiejak.jpg",
+      linkedin: "https://www.linkedin.com/in/wojciech-wiejak-212a89177/",
+    },
+    {
+      name: "Weronika Sadownik",
+      role: t.team.socialMedia,
+      photo: "/WeronikaSadownik.jpg",
+      linkedin: "https://www.linkedin.com/in/weronika-sadownik-b6719b258/",
+    },
+    {
+      name: "Aleksandra Borecka",
+      role: t.team.graphicDesignTeam,
+      photo: "/AleksandraBorecka.jpg",
       linkedin: null,
     },
   ];

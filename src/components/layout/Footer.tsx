@@ -30,7 +30,7 @@ export default function Footer() {
               </div>
             </Link>
             <p className="text-gray-400 text-sm leading-relaxed mb-6">
-              Building a prosperous future through Polish-French cooperation since 2017.
+              Building a prosperous future through Polish-French cooperation since 2016.
             </p>
           </div>
 

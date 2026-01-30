@@ -86,7 +86,7 @@ export default function Newsletter() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder={text.placeholder}
               disabled={status === "loading"}
-              className="flex-1 px-6 py-4 rounded-full text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white disabled:opacity-50"
+              className="flex-1 px-6 py-4 rounded-full text-gray-900 placeholder-gray-400 bg-white shadow-lg focus:outline-none focus:ring-4 focus:ring-white/50 focus:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed border-2 border-transparent hover:border-white/20"
               required
             />
             <button

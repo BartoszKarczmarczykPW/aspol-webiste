@@ -13,7 +13,7 @@ export default function StructuredData() {
         "logo": "https://aspol.fr/aspollogo.png",
         "image": "https://aspol.fr/og-image.svg",
         "description": "ASPOL is the leading association of Polish students in France, fostering community, networking, and cultural exchange through events, mentorship programs, and the annual Paris Polish Forum.",
-        "foundingDate": "2017",
+        "foundingDate": "2016",
         "sameAs": [
             "https://www.instagram.com/aspolska",
             "https://www.linkedin.com/company/aspol",

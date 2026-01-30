@@ -30,7 +30,7 @@ const Testimonials = memo(function Testimonials() {
       {
         name: "Anna W.",
         role: "Sorbonne University Student",
-        text: "The Paris Polish Forum organized by ASPOL opened doors I never knew existed. It's more than an association—it's a community that truly cares.",
+        text: "The Paris Polish Forum organized by ASPOL opened doors I never knew existed. It's more than an association - it's a community that truly cares.",
         year: "2024",
       },
       {
@@ -68,7 +68,7 @@ const Testimonials = memo(function Testimonials() {
       {
         name: "Anna W.",
         role: "Étudiante à l'Université Sorbonne",
-        text: "Le Paris Polish Forum organisé par ASPOL a ouvert des portes dont je ne connaissais pas l'existence. C'est plus qu'une association—c'est une communauté qui se soucie vraiment.",
+        text: "Le Paris Polish Forum organisé par ASPOL a ouvert des portes dont je ne connaissais pas l'existence. C'est plus qu'une association - c'est une communauté qui se soucie vraiment.",
         year: "2024",
       },
       {
@@ -106,7 +106,7 @@ const Testimonials = memo(function Testimonials() {
       {
         name: "Anna W.",
         role: "Studentka Sorbonne",
-        text: "Paris Polish Forum organizowane przez ASPOL otworzył drzwi, o których istnieniu nie wiedziałam. To więcej niż stowarzyszenie—to społeczność, która naprawdę dba.",
+        text: "Paris Polish Forum organizowane przez ASPOL otworzył drzwi, o których istnieniu nie wiedziałam. To więcej niż stowarzyszenie - to społeczność, która naprawdę dba.",
         year: "2024",
       },
       {

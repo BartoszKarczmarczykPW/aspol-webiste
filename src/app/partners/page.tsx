@@ -64,9 +64,10 @@ export default function PartnersPage() {
                     "Logo & brand visibility at Paris Polish Forum conference",
                     "Presence in ASPOL newsletter & social media campaigns",
                     "Speaking opportunities & dedicated panel sessions at PPF",
-                    "Direct communication with ASPOL student community (350+ members)",
+                    "Direct communication with ASPOL student community",
                     "Access to student CV database & career survey insights",
                     "Co-creation of educational projects & webinars",
+                    "Promotional materials in conference packages",
                     "Exclusive industry partnership opportunities"
                 ]
             },
@@ -121,9 +122,10 @@ export default function PartnersPage() {
                     "Logo & visibilité de la marque lors de la conférence Paris Polish Forum",
                     "Présence dans la newsletter ASPOL & campagnes sur les réseaux sociaux",
                     "Opportunités de prise de parole & sessions de panel dédiées au PPF",
-                    "Communication directe avec la communauté étudiante ASPOL (350+ membres)",
+                    "Communication directe avec la communauté étudiante ASPOL",
                     "Accès à la base de données CV étudiants & insights d'enquête carrière",
                     "Co-création de projets éducatifs & webinaires",
+                    "Matériels promotionnels dans les paquets de conférence",
                     "Opportunités de partenariat exclusif dans l'industrie"
                 ]
             },
@@ -178,9 +180,10 @@ export default function PartnersPage() {
                     "Logo & widoczność marki podczas konferencji Paris Polish Forum",
                     "Obecność w newsletterze ASPOL & kampaniach w mediach społecznościowych",
                     "Możliwości wystąpień & dedykowane sesje panelowe na PPF",
-                    "Bezpośrednia komunikacja ze społecznością studencką ASPOL (350+ członków)",
+                    "Bezpośrednia komunikacja ze społecznością studencką ASPOL",
                     "Dostęp do bazy CV studentów & wyników ankiet zawodowych",
                     "Współtworzenie projektów edukacyjnych & webinarów",
+                    "Materiały promocyjne w paczkach konferencyjnych",
                     "Ekskluzywne możliwości partnerstwa branżowego"
                 ]
             },

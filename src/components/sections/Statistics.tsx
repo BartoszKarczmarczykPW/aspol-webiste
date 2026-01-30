@@ -87,10 +87,10 @@ const Statistics = memo(function Statistics() {
 
         <div className="relative z-10 py-12 sm:py-16 px-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 divide-y sm:divide-y-0 sm:divide-x divide-white/10">
-            <StatItem end={150} label={currentStats.members} suffix="+" />
-            <StatItem end={20} label={currentStats.events} suffix="+" />
-            <StatItem end={7} label={currentStats.forums} suffix="" />
-            <StatItem end={8} label={currentStats.years} suffix="" />
+            <StatItem end={350} label={currentStats.members} suffix="+" />
+            <StatItem end={25} label={currentStats.events} suffix="+" />
+            <StatItem end={10} label={currentStats.forums} suffix="" />
+            <StatItem end={10} label={currentStats.years} suffix="" />
           </div>
         </div>
       </div>

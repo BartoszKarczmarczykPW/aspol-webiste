@@ -28,7 +28,7 @@ export default function Hero() {
           <div className="fade-in-element opacity-0 mb-8 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-aspol-navy/5 border border-aspol-navy/10">
             <span className="w-2 h-2 rounded-full bg-aspol-red animate-pulse"></span>
             <span className="text-sm font-semibold tracking-wide text-aspol-navy uppercase">
-              Est. 2017 &bull; Paris, France
+              Est. 2016 &bull; Paris, France
             </span>
           </div>
 
