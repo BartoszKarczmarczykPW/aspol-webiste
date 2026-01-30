@@ -1,5 +1,6 @@
 "use client";
 
+import HackerText from "../ui/HackerText";
 import { memo } from 'react';
 
 import Image from "next/image";
@@ -199,7 +200,11 @@ const Team = memo(function Team() {
                   />
                 </div>
                 <h3 className="text-2xl font-bold mb-2 text-gray-900 group-hover:text-red-700 transition-colors">
-                  {member.name}
+                  {member.name === "Bartosz Karczmarczyk" ? (
+                    <HackerText text={member.name} />
+                  ) : (
+                    member.name
+                  )}
                 </h3>
                 <p className="text-red-600 font-medium mb-3 text-sm tracking-wide uppercase">
                   {member.role}
