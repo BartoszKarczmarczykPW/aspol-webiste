@@ -1,15 +1,15 @@
 import { createClient } from '@sanity/client'
 
 export const client = createClient({
-    projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'YOUR_PROJECT_ID',
-    dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
-    apiVersion: '2024-01-01',
-    useCdn: true, // Set to false if statically generating pages, using ISR or tag-based revalidation
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'zbjtve1x',
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+  apiVersion: '2024-01-01',
+  useCdn: true, // Set to false if statically generating pages, using ISR or tag-based revalidation
 })
 
 // Helper function to get events
 export async function getEvents() {
-    return client.fetch(`*[_type == "event"] | order(date desc) {
+  return client.fetch(`*[_type == "event"] | order(date desc) {
     _id,
     title,
     slug,
@@ -25,7 +25,7 @@ export async function getEvents() {
 
 // Helper function to get blog posts
 export async function getPosts() {
-    return client.fetch(`*[_type == "post"] | order(publishedAt desc) {
+  return client.fetch(`*[_type == "post"] | order(publishedAt desc) {
     _id,
     title,
     slug,
@@ -41,7 +41,7 @@ export async function getPosts() {
 
 // Helper function to get single event by slug
 export async function getEventBySlug(slug: string) {
-    return client.fetch(`*[_type == "event" && slug.current == $slug][0] {
+  return client.fetch(`*[_type == "event" && slug.current == $slug][0] {
     _id,
     title,
     slug,
@@ -57,7 +57,7 @@ export async function getEventBySlug(slug: string) {
 
 // Helper function to get single post by slug
 export async function getPostBySlug(slug: string) {
-    return client.fetch(`*[_type == "post" && slug.current == $slug][0] {
+  return client.fetch(`*[_type == "post" && slug.current == $slug][0] {
     _id,
     title,
     slug,
