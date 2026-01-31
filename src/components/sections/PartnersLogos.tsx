@@ -35,7 +35,7 @@ export default function PartnersLogos() {
                 target="_blank"
                 rel="noopener noreferrer"
                 key={`${partner.name}-${index}`}
-                className="mx-8 md:mx-12 relative w-32 h-16 md:w-40 md:h-20 opacity-70 transition-all duration-300 hover:opacity-100 hover:scale-105 block"
+                className="mx-4 sm:mx-8 md:mx-12 relative w-28 h-14 sm:w-32 sm:h-16 md:w-40 md:h-20 opacity-90 md:opacity-70 transition-all duration-300 md:hover:opacity-100 md:hover:scale-105 block"
               >
                 <Image
                   src={partner.logo}

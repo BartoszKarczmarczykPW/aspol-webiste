@@ -6,6 +6,7 @@ export const translations = {
       events: "Events",
       blog: "Blog",
       contact: "Contact",
+      partners: "Partners",
       join: "Join Us",
     },
     hero: {
@@ -28,6 +29,7 @@ export const translations = {
         "We aspire to contribute to building the most prosperous common future between Poland and France",
       description:
         "We work with the Polish and French communities to foster mutual understanding and more opportunities for co-operation through our Paris Polish Forum conferences and other initiatives, such as the mentoring programme for Polish students aspiring to study in France or regular student community meet-ups in Paris.",
+      pathwayButton: "Pathway to French Universities",
       features: [
         {
           icon: "🎓",
@@ -150,7 +152,8 @@ export const translations = {
       events: "Événements",
       blog: "Blog",
       contact: "Contact",
-      join: "Nous Rejoindre",
+      partners: "Partenaires",
+      join: "Rejoignez-nous",
     },
     hero: {
       welcome: "Bienvenue à",
@@ -172,6 +175,7 @@ export const translations = {
         "Nous aspirons à contribuer à la construction d'un avenir commun le plus prospère entre la Pologne et la France",
       description:
         "Nous travaillons avec les communautés polonaise et française pour favoriser la compréhension mutuelle et davantage d'opportunités de coopération à travers nos conférences Paris Polish Forum et d'autres initiatives, comme le programme de mentorat pour les étudiants polonais souhaitant étudier en France ou les rencontres régulières de la communauté étudiante à Paris.",
+      pathwayButton: "Parcours vers les Universités Françaises",
       features: [
         {
           icon: "🎓",
@@ -294,7 +298,8 @@ export const translations = {
       events: "Wydarzenia",
       blog: "Blog",
       contact: "Kontakt",
-      join: "Dołącz do Nas",
+      partners: "Partnerzy",
+      join: "Dołącz do nas",
     },
     hero: {
       welcome: "Witamy w",
@@ -316,6 +321,7 @@ export const translations = {
         "Aspirujemy do budowania jak najbardziej pomyślnej wspólnej przyszłości między Polską a Francją",
       description:
         "Pracujemy ze społecznościami polską i francuską, aby wspierać wzajemne zrozumienie i więcej możliwości współpracy poprzez nasze konferencje Paris Polish Forum oraz inne inicjatywy, takie jak program mentorski dla polskich studentów pragnących studiować we Francji lub regularne spotkania społeczności studenckiej w Paryżu.",
+      pathwayButton: "Ścieżka do Francuskich Uniwersytetów",
       features: [
         {
           icon: "🎓",

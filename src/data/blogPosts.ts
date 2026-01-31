@@ -103,7 +103,7 @@ export const blogPosts: Record<string, BlogPost[]> = {
         <h3>Un Événement Phare</h3>
         <p>Depuis sa création en 2017 sous le nom de "Polish Business Forum at Sciences Po", le Paris Polish Forum est devenu l'un des rassemblements annuels les plus significatifs axés sur les relations franco-polonaises et la coopération européenne. Ce qui a commencé avec 140 participants est devenu un événement majeur attirant plus de 250 participants internationaux chaque année.</p>
         
-        <p>La 7ème édition marque une étape spéciale — non seulement comme événement phare d'ASPOL, mais comme plateforme pour discuter de la vision polonaise pour l'Europe à un moment critique de l'histoire de l'UE.</p>
+        <p>La 7ème édition marque une étape spéciale - non seulement comme événement phare d'ASPOL, mais comme plateforme pour discuter de la vision polonaise pour l'Europe à un moment critique de l'histoire de l'UE.</p>
 
         <h3>Quand et Où</h3>
         <p><strong>Dates :</strong> 24-26 avril 2025</p>
@@ -116,7 +116,7 @@ export const blogPosts: Record<string, BlogPost[]> = {
         <p>Le choix des lieux est symbolique. Sciences Po représente l'excellence académique et le dialogue international, tandis que l'Ambassade de Pologne incarne la coopération diplomatique et l'échange culturel.</p>
 
         <h3>Le Thème : Présidence Polonaise de l'UE et Innovation</h3>
-        <p>Le thème du forum 2025 aborde directement le rôle à venir de la Pologne en tant que Présidence du Conseil de l'UE. Il ne s'agit pas seulement de politique — il s'agit de vision. Comment la Pologne et la France peuvent-elles travailler ensemble pour relever les défis les plus pressants du continent ?</p>
+        <p>Le thème du forum 2025 aborde directement le rôle à venir de la Pologne en tant que Présidence du Conseil de l'UE. Il ne s'agit pas seulement de politique - il s'agit de vision. Comment la Pologne et la France peuvent-elles travailler ensemble pour relever les défis les plus pressants du continent ?</p>
         
         <p>Les discussions se concentreront sur trois domaines principaux :</p>
         <ul>
@@ -126,7 +126,7 @@ export const blogPosts: Record<string, BlogPost[]> = {
         </ul>
 
         <h3>Table ronde : « Vers une Europe Verte et Compétitive »</h3>
-        <p>Cette première table ronde aborde l'un des défis déterminants de l'Europe : comment équilibrer durabilité environnementale et compétitivité économique. La transition verte n'est pas seulement un impératif environnemental — c'est une opportunité économique.</p>
+        <p>Cette première table ronde aborde l'un des défis déterminants de l'Europe : comment équilibrer durabilité environnementale et compétitivité économique. La transition verte n'est pas seulement un impératif environnemental - c'est une opportunité économique.</p>
         
         <p><strong>Panélistes Confirmés :</strong></p>
         <ul>
@@ -187,7 +187,7 @@ export const blogPosts: Record<string, BlogPost[]> = {
         <h3>Wydarzenie Flagowe</h3>
         <p>Od swojego powstania w 2017 roku jako "Polish Business Forum at Sciences Po", Paris Polish Forum przekształciło się w jedno z najważniejszych corocznych spotkań skupiających się na relacjach polsko-francuskich i współpracy europejskiej. To, co zaczęło się od 140 uczestników, rozrosło się w wielkie wydarzenie przyciągające rocznie ponad 250 międzynarodowych uczestników.</p>
         
-        <p>Siódma edycja to szczególny kamień milowy — nie tylko jako flagowe wydarzenie ASPOL, ale jako platforma do dyskusji o polskiej wizji Europy w krytycznym momencie historii UE.</p>
+        <p>Siódma edycja to szczególny kamień milowy - nie tylko jako flagowe wydarzenie ASPOL, ale jako platforma do dyskusji o polskiej wizji Europy w krytycznym momencie historii UE.</p>
 
         <h3>Kiedy i Gdzie</h3>
         <p><strong>Daty:</strong> 24-26 kwietnia 2025</p>
@@ -200,7 +200,7 @@ export const blogPosts: Record<string, BlogPost[]> = {
         <p>Wybór miejsc nie jest przypadkowy. Sciences Po reprezentuje doskonałość akademicką i międzynarodowy dialog, podczas gdy Ambasada Polski uosabia współpracę dyplomatyczną i wymianę kulturalną.</p>
 
         <h3>Temat: Polska Prezydencja UE i Innowacje</h3>
-        <p>Temat forum 2025 bezpośrednio odnosi się do nadchodzącej roli Polski jako Prezydencji Rady UE. To nie tylko kwestia polityki — to kwestia wizji. Jak Polska i Francja mogą współpracować, aby stawić czoła najpilniejszym wyzwaniom kontynentu?</p>
+        <p>Temat forum 2025 bezpośrednio odnosi się do nadchodzącej roli Polski jako Prezydencji Rady UE. To nie tylko kwestia polityki - to kwestia wizji. Jak Polska i Francja mogą współpracować, aby stawić czoła najpilniejszym wyzwaniom kontynentu?</p>
         
         <p>Dyskusje skupią się na trzech głównych obszarach:</p>
         <ul>
@@ -210,7 +210,7 @@ export const blogPosts: Record<string, BlogPost[]> = {
         </ul>
 
         <h3>Panel Dyskusyjny: „W Stronę Zielonej i Konkurencyjnej Europy”</h3>
-        <p>Ten pierwszy panel podejmuje jedno z definiujących wyzwań Europy: jak zrównoważyć zrównoważony rozwój środowiskowy z konkurencyjnością ekonomiczną. Zielona transformacja to nie tylko imperatyw środowiskowy — to ekonomiczna szansa.</p>
+        <p>Ten pierwszy panel podejmuje jedno z definiujących wyzwań Europy: jak zrównoważyć zrównoważony rozwój środowiskowy z konkurencyjnością ekonomiczną. Zielona transformacja to nie tylko imperatyw środowiskowy - to ekonomiczna szansa.</p>
         
         <p><strong>Potwierdzeni Paneliści:</strong></p>
         <ul>

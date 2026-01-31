@@ -31,6 +31,7 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ['lucide-react', 'framer-motion'],
   },
+  poweredByHeader: false, // Security: Hide X-Powered-By header
   async headers() {
     return [
       {
@@ -58,11 +59,19 @@ const nextConfig: NextConfig = {
           },
           {
             key: 'Referrer-Policy',
-            value: 'origin-when-cross-origin'
+            value: 'strict-origin-when-cross-origin'
           },
           {
             key: 'Permissions-Policy',
-            value: 'camera=(), microphone=(), geolocation=()'
+            value: 'camera=(), microphone=(), geolocation=(), browsing-topics=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()'
+          },
+          {
+            key: 'Content-Security-Policy',
+            value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' *.google-analytics.com *.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data: https://images.unsplash.com https://cdn.sanity.io; font-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; form-action 'self';"
+          },
+          {
+            key: 'X-Permitted-Cross-Domain-Policies',
+            value: 'none'
           }
         ],
       },

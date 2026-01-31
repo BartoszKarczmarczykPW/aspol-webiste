@@ -84,6 +84,12 @@ export default function Header() {
               {t.nav.blog || "Blog"}
             </Link>
             <Link
+              href="/partners"
+              className="text-sm font-semibold text-aspol-navy hover:text-aspol-red transition-colors tracking-wide"
+            >
+              {t.nav.partners || "Partners"}
+            </Link>
+            <Link
               href="/#contact"
               className="text-sm font-semibold text-aspol-navy hover:text-aspol-red transition-colors tracking-wide"
             >
@@ -206,6 +212,13 @@ export default function Header() {
                 onClick={closeMobileMenu}
               >
                 {t.nav.blog || "Blog"}
+              </Link>
+              <Link
+                href="/partners"
+                className="text-base font-medium text-gray-700 hover:text-red-600 hover:bg-gray-50 transition-colors px-4 py-3 rounded-lg touch-manipulation active:bg-gray-100"
+                onClick={closeMobileMenu}
+              >
+                {t.nav.partners || "Partners"}
               </Link>
               <Link
                 href="/#contact"
