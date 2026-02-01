@@ -206,6 +206,7 @@ const Team = memo(function Team() {
       role: member.role,
       photoUrl: member.photo,
       linkedin: member.linkedin,
+      lqip: undefined,
     }));
 
   return (
