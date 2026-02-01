@@ -19,8 +19,8 @@ type RateLimitEntry = {
 
 const rateLimitStore = new Map<string, RateLimitEntry>();
 
-const getClientIp = () => {
-    const requestHeaders = headers();
+const getClientIp = async () => {
+    const requestHeaders = await headers();
     const forwarded = requestHeaders.get("x-forwarded-for");
     if (forwarded) {
         return forwarded.split(",")[0]?.trim() || "unknown";
@@ -120,7 +120,7 @@ export async function sendContactEmail(prevState: ContactState, formData: FormDa
         };
     }
 
-    const clientIp = getClientIp();
+    const clientIp = await getClientIp();
     const rateLimitKey = `${clientIp}:${validatedFields.data.email.toLowerCase()}`;
     if (isRateLimited(rateLimitKey)) {
         return {
