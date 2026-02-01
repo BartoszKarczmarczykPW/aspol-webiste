@@ -1,217 +1,221 @@
 "use client";
 
-
-import SmoothBackground from "@/components/ui/effects/SmoothBackground";
-import RippleButton from "@/components/ui/RippleButton";
-import SpotlightCard from "@/components/ui/cards/SpotlightCard";
-import ConstellationPoints from "@/components/ui/effects/ConstellationPoints";
-import { GraduationIcon } from "@/components/icons/GraduationIcon";
-import { GlobeIcon } from "@/components/icons/GlobeIcon";
+import Image from "next/image";
 import Link from "next/link";
-
+import { ArrowRight, ExternalLink, Rocket, School } from "lucide-react";
+import ConstellationPoints from "@/components/ui/effects/ConstellationPoints";
 
 const universities = [
     { name: "Sciences Po", url: "/pathway/sciences-po", logo: "/images/logos/sciences-po.png" },
-    { name: "École Polytechnique", url: "/pathway/cole-polytechnique", logo: "/images/logos/polytechnique.png" },
+    { name: "École Polytechnique", url: "/pathway/ecole-polytechnique", logo: "/images/logos/polytechnique.png" },
     { name: "ESSEC Business School", url: "/pathway/essec", logo: "/images/logos/essec.png" },
     { name: "HEC Paris", url: "/pathway/hec-paris", logo: "/images/logos/hec.png" },
-    { name: "École Normale Supérieure", url: "/pathway/cole-normale-suprieure", logo: "/images/logos/ens.png" },
+    { name: "École Normale Supérieure", url: "/pathway/ecole-normale-superieure", logo: "/images/logos/ens.png" },
     { name: "ESCP Business School", url: "/pathway/escp-paris", logo: "/images/logos/escp.png" },
-    { name: "Université Paris-Saclay", url: "/pathway/universit-paris-saclay", logo: "/images/logos/saclay.png" },
+    { name: "Université Paris-Saclay", url: "/pathway/universite-paris-saclay", logo: "/images/logos/saclay.png" },
     { name: "INSEAD", url: "/pathway/insead", logo: "/images/logos/insead.png" },
-    { name: "Panthéon-Assas University", url: "/pathway/panthon-assas", logo: "/images/logos/assas.png" },
+    { name: "Panthéon-Assas University", url: "/pathway/pantheon-assas", logo: "/images/logos/assas.png" },
 ];
 
 export default function PathwayPage() {
     return (
-        <main className="min-h-screen bg-white">
-
-
+        <main className="min-h-screen bg-gray-50">
             {/* Hero Section */}
-            <section className="relative pt-32 pb-24 md:pt-40 md:pb-32 px-6 min-h-[60vh] flex items-center justify-center overflow-hidden bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-50 via-white to-white">
+            <section className="relative min-h-[75vh] flex items-center bg-aspol-navy overflow-hidden">
                 {/* Animated Background */}
-                <div className="absolute inset-0 z-0 opacity-30 pointer-events-none">
-                    <ConstellationPoints color="15, 23, 42" /> {/* aspol-navy rgb */}
+                <div className="absolute inset-0 opacity-30">
+                    <ConstellationPoints color="255, 255, 255" />
                 </div>
 
-                {/* Overlay for text readability */}
-                <div className="absolute inset-0 bg-linear-to-b from-transparent via-white/40 to-white pointer-events-none z-0" />
+                {/* Gradient Overlays */}
+                <div className="absolute inset-0 pointer-events-none">
+                    <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(220,38,38,0.15),transparent)]" />
+                </div>
 
-                <div className="max-w-5xl mx-auto text-center relative z-10 transition-opacity duration-700 ease-out">
-                    <span className="inline-block px-4 py-1.5 mb-8 text-xs font-bold tracking-widest text-aspol-navy uppercase bg-white/90 backdrop-blur-md rounded-full border border-aspol-navy/10 shadow-sm ring-1 ring-aspol-navy/5">
-                        Education & Mentoring
-                    </span>
-                    <h1 className="text-5xl xs:text-6xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-aspol-dark mb-8 tracking-tight leading-[1.1] drop-shadow-sm">
-                        Pathway to <span className="text-aspol-red">French Universities</span>
-                    </h1>
-                    <p className="text-xl md:text-2xl text-aspol-navy/80 max-w-3xl mx-auto leading-relaxed font-light">
-                        ASPOL connects dreams with reality. We empower Polish students to pursue their academic future in France through mentorship and guidance.
-                    </p>
+                <div className="relative max-w-6xl mx-auto px-6 py-28">
+                    <div className="max-w-3xl">
+                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full text-white/70 text-sm font-medium mb-8">
+                            <span className="w-2 h-2 bg-aspol-red rounded-full" />
+                            Edukacja & Mentoring
+                        </div>
+
+                        <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-[1.1]">
+                            Studiuj na{" "}
+                            <span className="text-aspol-red">topowych</span>{" "}
+                            francuskich uczelniach
+                        </h1>
+
+                        <p className="text-xl md:text-2xl text-white/50 mb-10 max-w-xl">
+                            Przewodniki napisane przez studentów. Dla studentów.
+                        </p>
+
+                        <div className="flex flex-wrap gap-4">
+                            <a
+                                href="#universities"
+                                className="inline-flex items-center gap-2 px-7 py-4 bg-aspol-red text-white font-bold rounded-xl hover:bg-aspol-red/90 transition-colors text-lg"
+                            >
+                                Wybierz uczelnię
+                                <ArrowRight className="w-5 h-5" />
+                            </a>
+                            <Link
+                                href="/#contact"
+                                className="inline-flex items-center gap-2 px-7 py-4 bg-white/10 text-white font-semibold rounded-xl hover:bg-white/20 transition-colors text-lg"
+                            >
+                                Kontakt z mentorem
+                            </Link>
+                        </div>
+                    </div>
                 </div>
             </section>
 
-            {/* University Guide Section */}
-            <section className="py-24 px-6 md:px-12 bg-gradient-to-b from-white via-gray-50/50 to-white relative z-10">
-                <div className="max-w-7xl mx-auto">
-                    <div className="text-center mb-20">
-                        <h2 className="text-3xl md:text-5xl font-bold text-aspol-dark mb-6 tracking-tight">French University Guide</h2>
-                        <p className="text-xl text-aspol-navy/80 max-w-2xl mx-auto font-light leading-relaxed">
-                            Explore undergraduate and graduate study options at France's most prestigious institutions. Curated by our students.
+            {/* Campus France Info */}
+            <section className="py-12 px-6 bg-white border-b border-gray-100">
+                <div className="max-w-6xl mx-auto">
+                    <div className="flex flex-col sm:flex-row items-center gap-6">
+                        <div className="w-20 h-20 bg-gray-50 rounded-xl p-4 flex items-center justify-center shrink-0 border border-gray-100">
+                            <Image
+                                src="/images/logos/campus-france.png"
+                                alt="Campus France"
+                                width={56}
+                                height={56}
+                                className="max-w-full max-h-full object-contain"
+                            />
+                        </div>
+                        <div className="text-center sm:text-left flex-1">
+                            <h3 className="text-lg font-bold text-aspol-navy mb-1">
+                                Zaczynasz przygodę ze studiami we Francji?
+                            </h3>
+                            <p className="text-gray-600">
+                                <span className="font-semibold text-aspol-red">Campus France</span> to oficjalna agencja rządowa
+                                – Twoje pierwsze źródło informacji o rekrutacji i stypendiach.{" "}
+                                <a
+                                    href="https://www.pologne.campusfrance.org/pl"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="font-semibold text-aspol-navy hover:text-aspol-red transition-colors inline-flex items-center gap-1"
+                                >
+                                    Odwiedź ich stronę
+                                    <ExternalLink className="w-4 h-4" />
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Universities Section */}
+            <section id="universities" className="py-20 px-6 bg-white scroll-mt-20">
+                <div className="max-w-6xl mx-auto">
+                    <div className="mb-12">
+                        <h2 className="text-3xl md:text-4xl font-bold text-aspol-navy mb-3">
+                            Przewodniki po uczelniach
+                        </h2>
+                        <p className="text-gray-500 text-lg">
+                            Kliknij, aby poznać szczegóły rekrutacji i programy studiów.
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                         {universities.map((uni, index) => (
                             <Link
                                 key={index}
                                 href={uni.url}
-                                className="group block relative"
+                                className="group flex items-center gap-5 p-5 bg-gray-50 rounded-2xl hover:bg-white hover:shadow-lg border border-transparent hover:border-gray-200 transition-all"
                             >
-                                <SpotlightCard className="h-full bg-white border border-gray-100/50 rounded-2xl shadow-sm hover:shadow-xl hover:shadow-aspol-navy/5 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">
-                                    <div className="p-8 flex flex-col items-center justify-center text-center h-[320px] relative z-10">
-
-                                        {/* Logo Container with enhanced hover effect */}
-                                        <div className="w-full h-32 flex items-center justify-center mb-8 relative grayscale group-hover:grayscale-0 transition-all duration-500 opacity-80 group-hover:opacity-100 group-hover:scale-105">
-                                            {/* Using standard img tag to avoid domain config issues with external URLs */}
-                                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                                            <img
-                                                src={uni.logo}
-                                                alt={`${uni.name} Logo`}
-                                                className="max-w-[80%] max-h-full object-contain filter drop-shadow-sm"
-                                            />
-                                        </div>
-
-                                        <h3 className="text-xl font-bold text-gray-800 group-hover:text-aspol-red transition-colors duration-300 mb-3 px-4 leading-tight">
-                                            {uni.name}
-                                        </h3>
-
-                                        {/* Hidden "call to action" that appears on hover */}
-                                        <div className="mt-2 h-6 flex items-center justify-center overflow-hidden">
-                                            <span className="text-sm font-medium text-aspol-red flex items-center gap-1 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 delay-75">
-                                                View Guide <span className="text-xs transition-transform group-hover:translate-x-0.5">→</span>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    {/* Decorative background blur */}
-                                    <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-aspol-red/5 rounded-full blur-2xl group-hover:bg-aspol-red/10 transition-colors duration-500 pointer-events-none" />
-                                </SpotlightCard>
+                                <div className="w-16 h-16 bg-white rounded-xl p-3 flex items-center justify-center shrink-0 border border-gray-100 group-hover:border-gray-200 transition-colors">
+                                    <Image
+                                        src={uni.logo}
+                                        alt={uni.name}
+                                        width={48}
+                                        height={48}
+                                        className="max-w-full max-h-full object-contain opacity-70 group-hover:opacity-100 transition-opacity"
+                                    />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                    <h3 className="font-bold text-gray-900 group-hover:text-aspol-navy transition-colors text-base md:text-lg">
+                                        {uni.name}
+                                    </h3>
+                                    <span className="text-sm text-gray-400 group-hover:text-aspol-red transition-colors flex items-center gap-1">
+                                        Zobacz przewodnik
+                                        <ArrowRight className="w-4 h-4" />
+                                    </span>
+                                </div>
                             </Link>
                         ))}
                     </div>
+                </div>
+            </section>
 
-                    {/* Campus France Partnership - Improved Design */}
-                    <div className="mt-24 bg-white p-8 md:p-12 lg:p-16 rounded-[2rem] border border-gray-100 shadow-md hover:shadow-lg transition-shadow duration-300 max-w-5xl mx-auto flex flex-col-reverse md:flex-row items-center gap-10 md:gap-16 relative overflow-hidden group">
-                        {/* Subtle background decoration */}
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-blue-50/50 rounded-bl-full -z-0 opacity-50 group-hover:opacity-100 transition-opacity duration-500" />
+            {/* Services Section */}
+            <section className="py-20 px-6 bg-gray-50">
+                <div className="max-w-6xl mx-auto">
+                    <div className="mb-12">
+                        <h2 className="text-3xl md:text-4xl font-bold text-aspol-navy mb-3">
+                            Nasze wsparcie
+                        </h2>
+                        <p className="text-gray-500 text-lg">
+                            Bezpłatna pomoc dla licealistów planujących studia we Francji.
+                        </p>
+                    </div>
 
-                        <div className="flex-1 text-center md:text-left relative z-10">
-                            <span className="text-aspol-blue font-bold text-sm tracking-wider uppercase mb-2 block">Official Partner</span>
-                            <h3 className="text-3xl md:text-4xl font-bold text-aspol-navy mb-5 tracking-tight">Partnered with Campus France</h3>
-                            <p className="text-gray-600 mb-8 text-lg leading-relaxed max-w-xl mx-auto md:mx-0">
-                                We are proud to verify our information and collaborate directly with <strong>Campus France Pologne</strong>, a French government agency dedicated to promoting higher education and international mobility.
+                    <div className="grid md:grid-cols-2 gap-6">
+                        {/* Mentoring */}
+                        <div className="bg-aspol-navy rounded-3xl p-8 md:p-10">
+                            <div className="w-14 h-14 bg-white/10 rounded-xl flex items-center justify-center mb-6">
+                                <Rocket className="w-7 h-7 text-white" />
+                            </div>
+                            <h3 className="text-2xl md:text-3xl font-bold text-white mb-3">Program Mentoringowy</h3>
+                            <p className="text-white/60 text-lg mb-6 leading-relaxed">
+                                Wsparcie od studentów, którzy przeszli przez rekrutację. Pomoc z dokumentami i adaptacją.
                             </p>
-                            <RippleButton
-                                href="https://www.pologne.campusfrance.org/pl"
-                                target="_blank"
-                                className="px-8 py-3.5 bg-white text-aspol-navy border-2 border-aspol-navy font-semibold rounded-xl hover:bg-aspol-navy hover:text-white transition-all shadow-sm hover:shadow-md inline-flex items-center gap-2 group/btn"
+                            <Link
+                                href="/#contact"
+                                className="inline-flex items-center gap-2 px-6 py-3.5 bg-white text-aspol-navy font-bold rounded-xl hover:bg-gray-100 transition-colors"
                             >
-                                Visit Campus France Pologne
-                            </RippleButton>
+                                Dołącz do programu
+                                <ArrowRight className="w-5 h-5" />
+                            </Link>
                         </div>
-                        <div className="w-full md:w-5/12 flex justify-center md:justify-end shrink-0 relative z-10">
-                            <div className="w-64 md:w-80 h-auto relative flex items-center justify-center p-6 bg-white rounded-2xl shadow-sm border border-gray-50 group-hover:scale-[1.02] transition-transform duration-500">
-                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img
-                                    src="/images/logos/campus-france.png"
-                                    alt="Campus France Pologne"
-                                    className="max-w-full h-auto object-contain drop-shadow-sm"
-                                />
+
+                        {/* School Visits */}
+                        <div className="bg-white rounded-3xl p-8 md:p-10 border border-gray-200">
+                            <div className="w-14 h-14 bg-aspol-navy/5 rounded-xl flex items-center justify-center mb-6">
+                                <School className="w-7 h-7 text-aspol-navy" />
                             </div>
+                            <h3 className="text-2xl md:text-3xl font-bold text-aspol-navy mb-3">Prezentacje w liceach</h3>
+                            <p className="text-gray-600 text-lg mb-6 leading-relaxed">
+                                Przyjeżdżamy do Twojej szkoły! Opowiadamy o studiach we Francji i odpowiadamy na pytania.
+                            </p>
+                            <Link
+                                href="/#contact"
+                                className="inline-flex items-center gap-2 px-6 py-3.5 bg-aspol-navy text-white font-bold rounded-xl hover:bg-aspol-navy/90 transition-colors"
+                            >
+                                Zaproś nas
+                                <ArrowRight className="w-5 h-5" />
+                            </Link>
                         </div>
                     </div>
-
                 </div>
             </section>
 
-            {/* Main Content (Mentoring & Visits) */}
-            <section className="py-24 px-6 md:px-12 bg-white relative overflow-hidden">
-                <div className="max-w-7xl mx-auto space-y-32">
-
-                    {/* Mentoring Section */}
-                    <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
-                        <div className="space-y-8 order-2 md:order-1">
-                            <div className="inline-flex items-center justify-center w-16 h-16 bg-red-50 text-aspol-red rounded-2xl mb-2 shadow-sm border border-red-100/50">
-                                <GraduationIcon className="w-8 h-8" />
-                            </div>
-                            <h2 className="text-4xl md:text-5xl font-bold text-aspol-dark tracking-tight">Mentoring Program</h2>
-                            <div className="space-y-6 text-lg text-gray-600 leading-relaxed font-light">
-                                <p>
-                                    We offer a <strong>free, comprehensive mentoring program</strong> for high school students in Poland. We connect ambitious students directly with undergraduates and graduates from various French universities.
-                                </p>
-                                <p>
-                                    Our mentors provide personalized guidance on:
-                                </p>
-                                <ul className="list-disc pl-5 mt-2 space-y-1 marker:text-aspol-red">
-                                    <li>Choosing the right course and university</li>
-                                    <li>Navigating the complex application process (Parcoursup & specific portals)</li>
-                                    <li>Preparing for student life in France</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div className="relative h-[400px] lg:h-[500px] rounded-[2.5rem] overflow-hidden shadow-2xl bg-gray-100 group order-1 md:order-2 border-4 border-white ring-1 ring-gray-100">
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
-                                src="/images/mentoring.jpg"
-                                alt="Mentoring Program"
-                                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
-                            />
-                            <div className="absolute inset-0 bg-linear-to-t from-black/30 to-transparent opacity-60 mix-blend-multiply pointer-events-none" />
-                        </div>
-                    </div>
-
-                    {/* School Visits Section */}
-                    <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
-                        <div className="relative h-[400px] lg:h-[500px] rounded-[2.5rem] overflow-hidden shadow-2xl bg-gray-100 group border-4 border-white ring-1 ring-gray-100">
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
-                                src="/images/highschool.jpg"
-                                alt="School Presentations"
-                                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
-                            />
-                            <div className="absolute inset-0 bg-linear-to-t from-black/30 to-transparent opacity-60 mix-blend-multiply pointer-events-none" />
-                        </div>
-                        <div className="space-y-8">
-                            <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-50 text-aspol-blue rounded-2xl mb-2 shadow-sm border border-blue-100/50">
-                                <GlobeIcon className="w-8 h-8" />
-                            </div>
-                            <h2 className="text-4xl md:text-5xl font-bold text-aspol-dark tracking-tight">School Presentations</h2>
-                            <div className="space-y-6 text-lg text-gray-600 leading-relaxed font-light">
-                                <p>
-                                    ASPOL actively promotes educational opportunities in France by organizing <strong>interactive presentations</strong> at Polish high schools.
-                                </p>
-                                <p>
-                                    We conduct sessions both online and in-person to broaden awareness of study opportunities, scholarships, and career paths available in France.
-                                </p>
-                                <p className="font-medium text-aspol-navy/80 italic border-l-4 border-aspol-blue pl-4 py-1 bg-aspol-blue/5 rounded-r-lg">
-                                    "Bringing the French university experience directly to your classroom."
-                                </p>
-                            </div>
-                            <div className="pt-4">
-                                <Link
-                                    href="/#contact"
-                                    className="inline-flex items-center text-aspol-red font-bold hover:text-aspol-red/80 text-lg group bg-aspol-red/5 px-6 py-3 rounded-xl transition-colors hover:bg-aspol-red/10 border border-aspol-red/10 hover:border-aspol-red/20"
-                                >
-                                    Arrange a Visit
-                                    <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
-                                </Link>
-                            </div>
-                        </div>
-                    </div>
-
+            {/* Final CTA */}
+            <section className="py-20 px-6 bg-white border-t border-gray-100">
+                <div className="max-w-3xl mx-auto text-center">
+                    <h2 className="text-3xl md:text-4xl font-bold text-aspol-navy mb-4">
+                        Masz pytania?
+                    </h2>
+                    <p className="text-gray-500 text-lg mb-8">
+                        Napisz do nas – chętnie pomożemy!
+                    </p>
+                    <Link
+                        href="/#contact"
+                        className="inline-flex items-center gap-2 px-8 py-4 bg-aspol-navy text-white font-bold rounded-xl hover:bg-aspol-navy/90 transition-colors text-lg"
+                    >
+                        Skontaktuj się
+                        <ArrowRight className="w-5 h-5" />
+                    </Link>
                 </div>
             </section>
-
-
         </main>
     );
 }

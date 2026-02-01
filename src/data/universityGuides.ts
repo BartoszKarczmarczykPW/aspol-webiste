@@ -40,15 +40,15 @@ Studenci, którzy nie ukończyli francuskiego liceum, aplikują za pomocą specj
 2. Wyniki podczas trzech ostatnich lat nauki : należy podać oceny z 3 ostatnich lat oraz uzupełnić sekcję o aktywnościach i zainteresowaniach, gdzie przedstawimy działania niezwiązane ściśle z nauką
 3. Eseje : należy napisać w sumie cztery eseje; trzy dotyczące motywacji oraz pracę na jeden z pięciu podanych na stronie uczelni tematów
 
-Należy również podać nasze dane osobowe oraz podać dwa kampusy, na które chcemy aplikować. Istnieje możliwość dołączenia listów rekomendacyjnych od nauczycieli oraz dodatkowych certyfikatów (np. językowych). Możemy napisać naszą aplikację po angielsku lub po francusku. Na sam koniec tego etapu trzeba zapłacić 100 euro bezzwrotnej opłaty aplikacyjnej.
+Należy również podać nasze dane osobowe oraz podać dwa kampusy, na które chcemy aplikować. Istnieje możliwość dołączenia listów rekomendacyjnych od nauczycieli oraz dodatkowych certyfikatów (np. językowych). Możemy napisać naszą aplikację po angielsku lub po francusku. Na sam koniec tego etapu trzeba zapłacić bezzwrotną opłatę aplikacyjną.
 Jeśli uzyskamy odpowiednią ilość punktów w pierwszym etapie, otrzymamy zaproszenie na rozmowę, która również oceniana jest na 20 punktów.
 
 [Strona admissions](https://www.sciencespo.fr/admissions/en.html)
 [Aplikuj](https://admission.sciencespo.fr/applicants/procedure)
 `
     },
-    "cole-polytechnique": {
-        slug: "cole-polytechnique",
+    "ecole-polytechnique": {
+        slug: "ecole-polytechnique",
         name: "École Polytechnique",
         logo: "/images/logos/polytechnique.png",
         content: `
@@ -69,7 +69,7 @@ Proces składa się z dwóch etapów:
 1. Ocena kwalifikowalności na podstawie przesłanych dokumentów.
 2. Rozmowa kwalifikacyjna (online) z zakresu matematyki oraz ogólna, sprawdzająca motywację i profil kandydata.
 
-**Czesne:** ok. 15 000 - 19 000 EUR rocznie (zależy od roku i statusu studenta).
+**Czesne:** Szczegóły dotyczące czesnego dostępne są na stronie uczelni.
 
 [Strona Bachelor](https://programmes.polytechnique.edu/bachelor/bachelor-of-science)
 [Aplikuj](https://candidatures-bachelor.polytechnique.fr/candidatures/index.php)
@@ -94,10 +94,10 @@ Proces rekrutacyjny na tę uczelnię odbywa się przede wszystkim przez specjaln
 [Aplikuj](https://essec.myapply.online/login?ReturnUrl=%2F)
 
 ### Rejestracja administracyjna:
-Procedura rejestracji administracyjnej odbywa się przed każdym rokiem akademickim. Obowiązkowa jest opłata na życie studenckie (CVEC - ok. 100€).
+Procedura rejestracji administracyjnej odbywa się przed każdym rokiem akademickim. Obowiązkowa jest opłata na życie studenckie (CVEC).
 
 ### Czesne roczne:
-Czesne na tej uczelni wynosi obecnie 15800€ dla studentów z Unii Europejskiej. Jednakże, ta kwota może być zmniejszona w przypadku dostania oferty na studia z wyróżnieniem.
+Czesne na tej uczelni jest zależne od statusu studenta. Ta kwota może być zmniejszona w przypadku dostania oferty na studia z wyróżnieniem.
 
 ### Kalendarz i zapisy na zajęcia:
 Studia licencjackie trwają cztery lata i każdy rok obejmuje dwa semestry. Zazwyczaj rok akademicki trwa od połowy września do połowy maja. Co około półtorej miesiąca występują tygodniowe przerwy od zajęć, a na święta Bożego Narodzenia przypadają dwa tygodnie wolnego. Pomiędzy pierwszym a drugim rokiem studiów każdy student musi odbyć trzymiesięczny staż. Pomiędzy drugim a trzecim rokiem studiów każdy student musi odbyć miesięczny wolontariat. Na trzecim roku, każdy student wybiera większość przedmiotów według swoich zainteresowań.
@@ -134,8 +134,8 @@ Po selekcji dokumentów następuje etap rozmowy kwalifikacyjnej.
 [Programy Master](https://www.hec.edu/en/master-s-programs)
 `
     },
-    "cole-normale-suprieure": {
-        slug: "cole-normale-suprieure",
+    "ecole-normale-superieure": {
+        slug: "ecole-normale-superieure",
         name: "École Normale Supérieure",
         logo: "/images/logos/ens.png",
         content: `
@@ -188,8 +188,8 @@ Programy po angielsku dostępne zarówno na poziomie Licencjatu, jak i Magistra:
 [Aplikuj](https://aurion.escpeurope.eu/faces/Login.xhtml)
 `
     },
-    "universit-paris-saclay": {
-        slug: "universit-paris-saclay",
+    "universite-paris-saclay": {
+        slug: "universite-paris-saclay",
         name: "Université Paris-Saclay",
         logo: "/images/logos/saclay.png",
         content: `
@@ -207,7 +207,7 @@ Programy po angielsku dostępne zarówno na poziomie Licencjatu, jak i Magistra:
 - Jest częścią projektu Paris-Saclay, który jest kampusem akademickim i biznesowym intensywnie prowadzącym badania naukowe, rozwijanym na Plateau de Saclay pod Paryżem i jest głównym ośrodkiem szkolenia i badań w ramach klastra technologicznego Paris-Saclay.
 - Uniwersytet integruje kilka wiodących francuskich grandes écoles, wiodących wydziałów, szkół wyższych i ośrodków badawczych, które są częścią najlepszych światowych organizacji badawczych w różnych dziedzinach.
 
-**Czesne roczne:** 170-243€
+**Czesne roczne:** Niskie opłaty charakterystyczne dla uniwersytetów publicznych.
 
 [Strona admission](https://www.universite-paris-saclay.fr/en/admissions/international-students)
 [Aplikuj na magistra](https://www.universite-paris-saclay.fr/en/admission/apply-master-programmes)
@@ -240,8 +240,8 @@ Tylko studia na poziomie magisterskim:
 [Aplikuj](https://formulaires.polytechnique.fr/candidatures/home/)
 `
     },
-    "panthon-assas": {
-        slug: "panthon-assas",
+    "pantheon-assas": {
+        slug: "pantheon-assas",
         name: "Panthéon-Assas University",
         logo: "/images/logos/assas.png",
         content: `
