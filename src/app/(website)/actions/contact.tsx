@@ -3,8 +3,9 @@
 import { z } from "zod";
 import { Resend } from "resend";
 import { ContactEmailTemplate } from "@/components/emails/ContactEmailTemplate";
-
-const resend = new Resend(process.env.RESEND_API_KEY);
+import { ContactConfirmationTemplate } from "@/components/emails/ContactConfirmationTemplate";
+import { createClient } from "@sanity/client";
+import { apiVersion, dataset, projectId } from "@/sanity/env";
 
 const ContactSchema = z.object({
     name: z.string().min(2, "Name must be at least 2 characters"),
@@ -47,13 +48,24 @@ export async function sendContactEmail(prevState: ContactState, formData: FormDa
         };
     }
 
+    if (!process.env.RESEND_FROM_EMAIL) {
+        console.error("RESEND_FROM_EMAIL is missing");
+        return {
+            success: false,
+            errors: {
+                _form: ["Email sender is not configured. Please contact support."]
+            }
+        };
+    }
+
     try {
+        const resend = new Resend(process.env.RESEND_API_KEY);
         const { name, email, message } = validatedFields.data;
 
         // Send email using Resend
         const { data, error } = await resend.emails.send({
-            from: 'ASPOL Website <onboarding@resend.dev>', // Use onboarding domain for testing
-            to: [process.env.ADMIN_EMAIL || 'bartosz.karczmarczyk@sciencespo.fr'], // Deliver to admin
+            from: process.env.RESEND_FROM_EMAIL,
+            to: [process.env.ADMIN_EMAIL || 'aspolwebsitehosting@gmail.com'], // Deliver to admin
             replyTo: email, // Allow replying directly to the sender
             subject: `New Contact Form Submission from ${name}`,
             react: <ContactEmailTemplate name={name} email={email} message={message} />,
@@ -67,6 +79,39 @@ export async function sendContactEmail(prevState: ContactState, formData: FormDa
                     _form: [error.message]
                 }
             };
+        }
+
+        try {
+            await resend.emails.send({
+                from: process.env.RESEND_FROM_EMAIL,
+                to: [email],
+                subject: "Thanks for contacting ASPOL",
+                react: <ContactConfirmationTemplate name={name} />,
+            });
+        } catch (confirmError) {
+            console.error("Resend Confirmation Error:", confirmError);
+        }
+
+        if (process.env.SANITY_WRITE_TOKEN) {
+            try {
+                const writeClient = createClient({
+                    projectId,
+                    dataset,
+                    apiVersion,
+                    token: process.env.SANITY_WRITE_TOKEN,
+                    useCdn: false,
+                });
+
+                await writeClient.create({
+                    _type: "contactMessage",
+                    name,
+                    email,
+                    message,
+                    createdAt: new Date().toISOString(),
+                });
+            } catch (sanityError) {
+                console.error("Sanity Log Error:", sanityError);
+            }
         }
 
         return {

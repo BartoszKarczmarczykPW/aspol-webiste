@@ -5,6 +5,7 @@ import { memo } from 'react';
 import { useState, useEffect, useRef } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Testimonial } from "@/types";
+import { getTestimonials } from "@/lib/sanity";
 
 const Testimonials = memo(function Testimonials() {
   const { language } = useLanguage();
@@ -12,6 +13,7 @@ const Testimonials = memo(function Testimonials() {
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const touchStartX = useRef<number>(0);
   const touchEndX = useRef<number>(0);
+  const [cmsTestimonials, setCmsTestimonials] = useState<Testimonial[] | null>(null);
 
   const testimonials: Record<string, Testimonial[]> = {
     en: [
@@ -130,7 +132,39 @@ const Testimonials = memo(function Testimonials() {
     ],
   };
 
-  const currentTestimonials = testimonials[language] || testimonials.en;
+  const currentTestimonials = cmsTestimonials || testimonials[language] || testimonials.en;
+
+  useEffect(() => {
+    let mounted = true;
+    async function loadTestimonials() {
+      try {
+        const data = await getTestimonials();
+        if (!mounted) return;
+        if (Array.isArray(data) && data.length > 0) {
+          const mapped = data.map((item: {
+            name: string;
+            role?: { en?: string; fr?: string; pl?: string };
+            text?: { en?: string; fr?: string; pl?: string };
+            year?: string;
+          }) => ({
+            name: item.name,
+            role: item.role?.[language] || item.role?.en || "",
+            text: item.text?.[language] || item.text?.en || "",
+            year: item.year || "",
+          }));
+          setCmsTestimonials(mapped);
+        } else {
+          setCmsTestimonials(null);
+        }
+      } catch (error) {
+        if (mounted) setCmsTestimonials(null);
+      }
+    }
+    loadTestimonials();
+    return () => {
+      mounted = false;
+    };
+  }, [language]);
 
   useEffect(() => {
     if (!isAutoPlaying) return;
@@ -204,7 +238,7 @@ const Testimonials = memo(function Testimonials() {
           onTouchEnd={handleTouchEnd}
         >
           {/* Testimonial Card */}
-          <div className="bg-gray-50 rounded-3xl p-8 md:p-12 shadow-lg min-h-[300px] flex flex-col justify-between touch-pan-y transition-all duration-300 hover:shadow-xl">
+          <div className="bg-gray-50 rounded-3xl p-8 md:p-12 shadow-lg min-h-75 flex flex-col justify-between touch-pan-y transition-all duration-300 hover:shadow-xl">
             <div>
               <svg className="w-12 h-12 text-red-600 mb-6" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />

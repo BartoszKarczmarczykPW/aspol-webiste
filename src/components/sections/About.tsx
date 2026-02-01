@@ -1,11 +1,11 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import SpotlightCard from "@/components/ui/cards/SpotlightCard"; // Import SpotlightCard
-import RippleButton from "@/components/ui/RippleButton";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import Link from "next/link";
+import { getAboutSection } from "@/lib/sanity";
 import { GraduationIcon } from "@/components/icons/GraduationIcon";
 import { UsersIcon } from "@/components/icons/UsersIcon";
 import { RocketIcon } from "@/components/icons/RocketIcon";
@@ -13,9 +13,39 @@ import { GlobeIcon } from "@/components/icons/GlobeIcon";
 
 export default function About() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const [aboutData, setAboutData] = useState<null | {
+    eyebrow?: { en?: string; fr?: string; pl?: string };
+    title?: { en?: string; fr?: string; pl?: string };
+    subtitle?: { en?: string; fr?: string; pl?: string };
+    description?: { en?: string; fr?: string; pl?: string };
+    features?: Array<{
+      icon?: string;
+      order?: number;
+      link?: string;
+      title?: { en?: string; fr?: string; pl?: string };
+      description?: { en?: string; fr?: string; pl?: string };
+    }>;
+  }>(null);
 
   useScrollAnimation(sectionRef);
+
+  useEffect(() => {
+    let mounted = true;
+    async function loadAbout() {
+      try {
+        const data = await getAboutSection();
+        if (!mounted) return;
+        if (data) setAboutData(data);
+      } catch (error) {
+        if (mounted) setAboutData(null);
+      }
+    }
+    loadAbout();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   return (
     <section id="about" ref={sectionRef} className="relative py-16 sm:py-20 px-4 sm:px-6 bg-transparent overflow-hidden">
@@ -24,16 +54,16 @@ export default function About() {
         {/* Section Header */}
         <div className="text-center mb-16 sm:mb-20 fade-in-element opacity-0">
           <span className="inline-block px-4 py-1.5 mb-4 text-xs font-semibold tracking-wider text-aspol-navy uppercase bg-aspol-navy/5 rounded-full border border-aspol-navy/10 backdrop-blur-sm">
-            Our Mission
+            {aboutData?.eyebrow?.[language] || "Our Mission"}
           </span>
           <h2 className="text-4xl sm:text-5xl font-bold text-aspol-dark mb-6 sm:mb-8 px-2 tracking-tight">
-            {t.about.title}
+            {aboutData?.title?.[language] || t.about.title}
           </h2>
           <p className="text-lg sm:text-xl text-aspol-navy/80 max-w-3xl mx-auto mb-3 sm:mb-4 px-2 font-medium">
-            {t.about.subtitle}
+            {aboutData?.subtitle?.[language] || t.about.subtitle}
           </p>
           <p className="text-base sm:text-lg text-gray-700 max-w-4xl mx-auto leading-relaxed px-2">
-            {t.about.description}
+            {aboutData?.description?.[language] || t.about.description}
           </p>
 
 
@@ -41,11 +71,25 @@ export default function About() {
 
         {/* Features Layout */}
         <div className="space-y-8">
-          {/* Main Feature: Pathway to French Universities */}
-          {t.about.features.length > 0 && (() => {
-            const pathwayFeature = t.about.features[0];
+          {(() => {
+            const fallbackFeatures = t.about.features.map((feature) => ({
+              icon: feature.icon,
+              title: { en: feature.title, fr: feature.title, pl: feature.title },
+              description: { en: feature.description, fr: feature.description, pl: feature.description },
+            }));
+            const features = aboutData?.features?.length
+              ? [...aboutData.features].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+              : fallbackFeatures;
+
+            const pathwayFeature = features[0];
+            if (!pathwayFeature) return null;
+
+            const title = pathwayFeature.title?.[language] || pathwayFeature.title?.en || "";
+            const description = pathwayFeature.description?.[language] || pathwayFeature.description?.en || "";
+            const link = pathwayFeature.link || "/pathway";
+
             return (
-              <Link href="/pathway" className="block group">
+              <Link href={link} className="block group">
                 <SpotlightCard className="fade-in-element opacity-0 p-1 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 relative overflow-hidden border-2 border-aspol-red/10 hover:border-aspol-red/30">
                   <div className="flex flex-col md:flex-row items-center p-6 md:p-8 gap-6 md:gap-8 h-full relative">
                     {/* Icon */}
@@ -56,10 +100,10 @@ export default function About() {
                     {/* Content */}
                     <div className="text-center md:text-left flex-1">
                       <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-2 group-hover:text-aspol-red transition-colors">
-                        {pathwayFeature.title}
+                        {title}
                       </h3>
                       <p className="text-sm md:text-base text-gray-600 leading-relaxed max-w-2xl">
-                        {pathwayFeature.description}
+                        {description}
                       </p>
                       <div className="mt-3 inline-flex items-center text-aspol-red font-bold text-base group-hover:translate-x-2 transition-transform">
                         {t.about.pathwayButton || "Learn More"} <span className="ml-2 text-lg">→</span>
@@ -78,7 +122,13 @@ export default function About() {
 
           {/* Secondary Features Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {t.about.features.slice(1).map((feature, index) => {
+            {(aboutData?.features?.length
+              ? [...aboutData.features].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)).slice(1)
+              : t.about.features.slice(1).map((feature) => ({
+                icon: feature.icon,
+                title: { en: feature.title, fr: feature.title, pl: feature.title },
+                description: { en: feature.description, fr: feature.description, pl: feature.description },
+              }))).map((feature, index) => {
               const icons = [
                 <UsersIcon key="1" className="w-12 h-12" />,
                 <RocketIcon key="2" className="w-12 h-12" />,
@@ -96,10 +146,10 @@ export default function About() {
                       {icons[index]}
                     </div>
                     <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 sm:mb-3 relative z-10 group-hover:text-red-700 transition-colors">
-                      {feature.title}
+                      {feature.title?.[language] || feature.title?.en || ""}
                     </h3>
                     <p className="text-sm sm:text-base text-gray-600 leading-relaxed relative z-10">
-                      {feature.description}
+                      {feature.description?.[language] || feature.description?.en || ""}
                     </p>
                   </div>
                 </SpotlightCard>

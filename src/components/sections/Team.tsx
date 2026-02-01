@@ -5,13 +5,15 @@ import { memo } from 'react';
 
 import Image from "next/image";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { MouseEvent } from "react";
 import { useInView } from "@/hooks/useInView";
 import { TeamMember } from "@/types";
+import { getTeamMembers } from "@/lib/sanity";
+import { urlFor } from "@/sanity/lib/image";
 
 const Team = memo(function Team() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
   const isVisible = useInView(sectionRef);
 
@@ -48,18 +50,18 @@ const Team = memo(function Team() {
     }));
   };
 
-  const boardMembers: TeamMember[] = [
-    {
-      name: "Kacper Pabisz",
-      role: t.team.coPresident,
-      photo: "/KacperPabisz.jpg",
-      linkedin: "https://www.linkedin.com/in/kacperpabisz02/",
-    },
+  const fallbackBoardMembers: TeamMember[] = [
     {
       name: "Zofia Gostkowska",
       role: t.team.coPresident,
       photo: "/ZosiaGostkowska.jpg",
       linkedin: "https://www.linkedin.com/in/zofia-gostkowska-688b4b1a0/",
+    },
+    {
+      name: "Kacper Pabisz",
+      role: t.team.coPresident,
+      photo: "/KacperPabisz.jpg",
+      linkedin: "https://www.linkedin.com/in/kacperpabisz02/",
     },
     {
       name: "Amelia Ogiela",
@@ -68,16 +70,16 @@ const Team = memo(function Team() {
       linkedin: "https://www.linkedin.com/in/amelia-zofia-ogiela/",
     },
     {
-      name: "Klara Winiarczyk",
-      role: t.team.communityAmbassador,
-      photo: "/KlaraWiniarczyk.jpg",
-      linkedin: "https://www.linkedin.com/in/klarawiniarczyk/",
+      name: "Wojciech Wiejak",
+      role: t.team.partnershipCoordinator,
+      photo: "/WojciechWiejak.jpg",
+      linkedin: "https://www.linkedin.com/in/wojciech-wiejak-212a89177/",
     },
     {
-      name: "Aleksandra Kobyłecka",
-      role: t.team.mentorship,
-      photo: "/AleksandraKobylecka.jpg",
-      linkedin: "https://www.linkedin.com/in/aleksandra-izabela-koby%C5%82ecka/",
+      name: "Marianna Maciąg",
+      role: t.team.finance,
+      photo: "/MariannaMaciag.jpg",
+      linkedin: "https://www.linkedin.com/in/marianna-maci%C4%85g-93285632b/",
     },
     {
       name: "Wiktor Dżaman",
@@ -86,10 +88,22 @@ const Team = memo(function Team() {
       linkedin: "https://www.linkedin.com/in/wiktor-dzaman/",
     },
     {
-      name: "Marianna Maciąg",
-      role: t.team.finance,
-      photo: "/MariannaMaciag.jpg",
-      linkedin: "https://www.linkedin.com/in/marianna-maci%C4%85g-93285632b/",
+      name: "Aleksandra Kobyłecka",
+      role: t.team.mentorship,
+      photo: "/AleksandraKobylecka.jpg",
+      linkedin: "https://www.linkedin.com/in/aleksandra-izabela-koby%C5%82ecka/",
+    },
+    {
+      name: "Klara Winiarczyk",
+      role: t.team.communityAmbassador,
+      photo: "/KlaraWiniarczyk.jpg",
+      linkedin: "https://www.linkedin.com/in/klarawiniarczyk/",
+    },
+    {
+      name: "Alicja Łukasik",
+      role: t.team.operations,
+      photo: "/AlicjaLukasik.png",
+      linkedin: null,
     },
     {
       name: "Eliza Freret",
@@ -104,22 +118,10 @@ const Team = memo(function Team() {
       linkedin: "https://www.linkedin.com/in/julianna-ramatowska-2bb251329/",
     },
     {
-      name: "Alicja Łukasik",
-      role: t.team.operations,
-      photo: "/AlicjaLukasik.png",
+      name: "Aleksandra Borecka",
+      role: t.team.graphicDesignTeam,
+      photo: "/AleksandraBorecka.jpg",
       linkedin: null,
-    },
-    {
-      name: "Bartosz Karczmarczyk",
-      role: t.team.webDevelopment,
-      photo: "/BartoszKarczmarczyk.jpg",
-      linkedin: "https://www.linkedin.com/in/bartosz-karczmarczyk-4a747432b/",
-    },
-    {
-      name: "Wojciech Wiejak",
-      role: t.team.partnershipCoordinator,
-      photo: "/WojciechWiejak.jpg",
-      linkedin: "https://www.linkedin.com/in/wojciech-wiejak-212a89177/",
     },
     {
       name: "Weronika Sadownik",
@@ -128,12 +130,83 @@ const Team = memo(function Team() {
       linkedin: "https://www.linkedin.com/in/weronika-sadownik-b6719b258/",
     },
     {
-      name: "Aleksandra Borecka",
-      role: t.team.graphicDesignTeam,
-      photo: "/AleksandraBorecka.jpg",
-      linkedin: null,
+      name: "Bartosz Karczmarczyk",
+      role: t.team.webDevelopment,
+      photo: "/BartoszKarczmarczyk.jpg",
+      linkedin: "https://www.linkedin.com/in/bartosz-karczmarczyk-4a747432b/",
     },
   ];
+
+  const legacyPhotoMap: Record<string, string> = {
+    "Kacper Pabisz": "/KacperPabisz.jpg",
+    "Zofia Gostkowska": "/ZosiaGostkowska.jpg",
+    "Amelia Ogiela": "/AmeliaOgiela.jpg",
+    "Klara Winiarczyk": "/KlaraWiniarczyk.jpg",
+    "Aleksandra Kobyłecka": "/AleksandraKobylecka.jpg",
+    "Wiktor Dżaman": "/WiktorDzaman.jpg",
+    "Marianna Maciąg": "/MariannaMaciag.jpg",
+    "Eliza Freret": "/ElizaFreret.jpg",
+    "Julianna Ramatowska": "/JuliannaRamatowska.jpg",
+    "Alicja Łukasik": "/AlicjaLukasik.png",
+    "Bartosz Karczmarczyk": "/BartoszKarczmarczyk.jpg",
+    "Wojciech Wiejak": "/WojciechWiejak.jpg",
+    "Weronika Sadownik": "/WeronikaSadownik.jpg",
+    "Aleksandra Borecka": "/AleksandraBorecka.jpg",
+  };
+
+  const [boardMembers, setBoardMembers] = useState<
+    Array<{
+      name: string;
+      role: string;
+      photoUrl: string;
+      linkedin: string | null;
+      lqip?: string;
+    }>
+  >([]);
+
+  useEffect(() => {
+    let mounted = true;
+    async function loadTeam() {
+      try {
+        const data = await getTeamMembers();
+        if (!mounted) return;
+        if (Array.isArray(data) && data.length > 0) {
+          const mapped = data.map((member: {
+            name: string;
+            role?: { en?: string; fr?: string; pl?: string };
+            linkedin?: string | null;
+            photo?: { asset?: { metadata?: { lqip?: string } } };
+          }) => ({
+            name: member.name,
+            role: member.role?.[language] || member.role?.en || "",
+            linkedin: member.linkedin || null,
+            photoUrl: member.photo
+              ? urlFor(member.photo).width(320).height(320).fit("crop").url()
+              : legacyPhotoMap[member.name] || "/default-avatar.svg",
+            lqip: member.photo?.asset?.metadata?.lqip,
+          }));
+          setBoardMembers(mapped);
+        } else {
+          setBoardMembers([]);
+        }
+      } catch (error) {
+        if (mounted) setBoardMembers([]);
+      }
+    }
+    loadTeam();
+    return () => {
+      mounted = false;
+    };
+  }, [language]);
+
+  const membersToRender = boardMembers.length > 0
+    ? boardMembers
+    : fallbackBoardMembers.map((member) => ({
+      name: member.name,
+      role: member.role,
+      photoUrl: member.photo,
+      linkedin: member.linkedin,
+    }));
 
   return (
     <section
@@ -168,7 +241,7 @@ const Team = memo(function Team() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {boardMembers.map((member, index) => (
+          {membersToRender.map((member, index) => (
             <div
               key={index}
               className={`bg-white rounded-3xl p-8 shadow-lg hover:shadow-xl transition-all duration-500 border border-gray-100/50 ${isVisible
@@ -186,12 +259,14 @@ const Team = memo(function Team() {
                 <div className="relative w-32 h-32 sm:w-40 sm:h-40 mb-6 group">
                   <div className="absolute inset-0 bg-linear-to-br from-red-100 to-blue-100 rounded-full rotate-6 scale-95 group-hover:rotate-12 transition-transform duration-500"></div>
                   <Image
-                    src={member.photo}
+                    src={member.photoUrl}
                     alt={`${member.name}, ${member.role} of ASPOL`}
                     fill
                     className="rounded-full object-cover relative z-10 border-4 border-white shadow-sm"
                     sizes="(max-width: 640px) 128px, 160px"
                     loading="lazy"
+                    placeholder={member.lqip ? "blur" : "empty"}
+                    blurDataURL={member.lqip}
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
                       target.src = '/default-avatar.svg';

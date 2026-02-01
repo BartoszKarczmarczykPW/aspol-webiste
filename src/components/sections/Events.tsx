@@ -1,11 +1,12 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import SpotlightCard from "@/components/ui/cards/SpotlightCard";
 import SocialShare from "@/components/ui/SocialShare";
 import { useInView } from "@/hooks/useInView";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+import { getInitiatives } from "@/lib/sanity";
 
 // Inline Icons to prevent import errors
 const ForumIcon = ({ className }: { className?: string }) => (
@@ -29,27 +30,71 @@ const UsersIcon = ({ className }: { className?: string }) => (
 export default function Events() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const isVisible = useInView(sectionRef);
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const [initiativesData, setInitiativesData] = useState<
+    Array<{
+      featured?: boolean;
+      icon?: string;
+      title?: { en?: string; fr?: string; pl?: string };
+      badge?: { en?: string; fr?: string; pl?: string };
+      description?: { en?: string; fr?: string; pl?: string };
+    }>
+  >([]);
 
   useScrollAnimation(sectionRef);
 
-  const initiatives = [
-    {
-      icon: <ForumIcon className="w-8 h-8" />,
-      data: t.events.parisforum,
-    },
-    {
-      icon: <MentoringIcon className="w-8 h-8" />,
-      data: t.events.mentoring,
-    },
-    {
-      icon: <UsersIcon className="w-8 h-8" />,
-      data: t.events.community,
-    },
+  useEffect(() => {
+    let mounted = true;
+    async function loadInitiatives() {
+      try {
+        const data = await getInitiatives();
+        if (!mounted) return;
+        if (Array.isArray(data)) setInitiativesData(data);
+      } catch (error) {
+        if (mounted) setInitiativesData([]);
+      }
+    }
+    loadInitiatives();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const fallbackInitiatives = [
+    { icon: 'forum', data: t.events.parisforum },
+    { icon: 'mentoring', data: t.events.mentoring },
+    { icon: 'community', data: t.events.community },
   ];
 
-  const featured = initiatives[0];
-  const secondary = initiatives.slice(1);
+  const initiatives = (initiativesData.length
+    ? initiativesData.map((item) => ({
+      icon: item.icon || 'forum',
+      data: {
+        title: item.title?.[language] || item.title?.en || '',
+        badge: item.badge?.[language] || item.badge?.en || '',
+        description: item.description?.[language] || item.description?.en || '',
+      },
+      featured: item.featured,
+    }))
+    : fallbackInitiatives.map((item) => ({
+      icon: item.icon,
+      data: item.data,
+      featured: item.icon === 'forum',
+    })))
+    .map((item) => ({
+      ...item,
+      iconNode:
+        item.icon === 'mentoring' ? <MentoringIcon className="w-8 h-8" /> :
+        item.icon === 'community' ? <UsersIcon className="w-8 h-8" /> :
+        <ForumIcon className="w-8 h-8" />,
+      iconNodeSmall:
+        item.icon === 'mentoring' ? <MentoringIcon className="w-6 h-6" /> :
+        item.icon === 'community' ? <UsersIcon className="w-6 h-6" /> :
+        <ForumIcon className="w-6 h-6" />,
+    }));
+
+  const featured = initiatives.find((item) => item.featured) || initiatives[0];
+  const secondary = initiatives.filter((item) => item !== featured);
 
   return (
     <section
@@ -85,7 +130,7 @@ export default function Events() {
             <div className="flex flex-col h-full p-7 sm:p-8 rounded-2xl bg-white">
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-red-600 to-red-500 text-white flex items-center justify-center shadow-md transition-transform duration-300 group-hover:scale-105">
-                  {featured.icon}
+                  {featured.iconNode}
                 </div>
                 <span className="inline-flex items-center px-3 py-1.5 bg-red-50 text-red-700 text-xs font-bold tracking-wider uppercase rounded-full transition-colors duration-300 group-hover:bg-red-100">
                   {featured.data.badge}
@@ -119,7 +164,7 @@ export default function Events() {
               >
                 <div className="flex flex-col sm:flex-row sm:items-center gap-6 p-6 sm:p-7 rounded-2xl bg-white">
                   <div className="w-12 h-12 rounded-xl bg-aspol-navy text-white flex items-center justify-center shrink-0 shadow-sm transition-all duration-300 group-hover:bg-aspol-red group-hover:scale-105">
-                    {initiative.icon}
+                    {initiative.iconNodeSmall}
                   </div>
 
                   <div className="flex-1">

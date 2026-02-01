@@ -3,8 +3,9 @@
 import { z } from "zod";
 import { Resend } from "resend";
 import { NewsletterEmailTemplate } from "@/components/emails/NewsletterEmailTemplate";
-
-const resend = new Resend(process.env.RESEND_API_KEY);
+import { NewsletterConfirmationTemplate } from "@/components/emails/NewsletterConfirmationTemplate";
+import { createClient } from "@sanity/client";
+import { apiVersion, dataset, projectId } from "@/sanity/env";
 
 const NewsletterSchema = z.object({
     email: z.string().email("Please enter a valid email address"),
@@ -41,13 +42,24 @@ export async function subscribeToNewsletter(prevState: NewsletterState, formData
         };
     }
 
+    if (!process.env.RESEND_FROM_EMAIL) {
+        console.error("RESEND_FROM_EMAIL is missing");
+        return {
+            success: false,
+            errors: {
+                _form: ["Email sender is not configured. Please contact support."]
+            }
+        };
+    }
+
     try {
+        const resend = new Resend(process.env.RESEND_API_KEY);
         const { email } = validatedFields.data;
 
         // Send notification email to Admin
         const { data, error } = await resend.emails.send({
-            from: 'ASPOL Newsletter <onboarding@resend.dev>',
-            to: [process.env.ADMIN_EMAIL || 'ketrabczyk@gmail.com'],
+            from: process.env.RESEND_FROM_EMAIL,
+            to: [process.env.ADMIN_EMAIL || 'aspolwebsitehosting@gmail.com'],
             subject: `New Newsletter Subscriber: ${email}`,
             react: <NewsletterEmailTemplate email={email} />,
         });
@@ -62,9 +74,36 @@ export async function subscribeToNewsletter(prevState: NewsletterState, formData
             };
         }
 
-        // TODO: In a real app, you would also add the email to a database (e.g. Supabase, MongoDB)
-        // or a marketing platform (e.g. Mailchimp, Resend Audiences).
-        // For now, we just notify the admin.
+        try {
+            await resend.emails.send({
+                from: process.env.RESEND_FROM_EMAIL,
+                to: [email],
+                subject: "You’re subscribed to ASPOL updates",
+                react: <NewsletterConfirmationTemplate />,
+            });
+        } catch (confirmError) {
+            console.error("Resend Confirmation Error:", confirmError);
+        }
+
+        if (process.env.SANITY_WRITE_TOKEN) {
+            try {
+                const writeClient = createClient({
+                    projectId,
+                    dataset,
+                    apiVersion,
+                    token: process.env.SANITY_WRITE_TOKEN,
+                    useCdn: false,
+                });
+
+                await writeClient.create({
+                    _type: "newsletterSignup",
+                    email,
+                    createdAt: new Date().toISOString(),
+                });
+            } catch (sanityError) {
+                console.error("Sanity Log Error:", sanityError);
+            }
+        }
 
         return {
             success: true,

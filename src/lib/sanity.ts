@@ -113,3 +113,60 @@ export async function getStatistics() {
     }
   }`)
 }
+
+// Home About section (singleton)
+export async function getAboutSection() {
+  return client.fetch(`*[_type == "aboutSection"] | order(_updatedAt desc)[0] {
+    eyebrow { en, fr, pl },
+    title { en, fr, pl },
+    subtitle { en, fr, pl },
+    description { en, fr, pl },
+    features[] {
+      icon,
+      order,
+      link,
+      title { en, fr, pl },
+      description { en, fr, pl }
+    }
+  }`)
+}
+
+// Home initiatives
+export async function getInitiatives() {
+  return client.fetch(`*[_type == "initiative" && status == "active"] | order(order asc, title.en asc) {
+    _id,
+    featured,
+    icon,
+    title { en, fr, pl },
+    badge { en, fr, pl },
+    description { en, fr, pl }
+  }`)
+}
+
+// Team members
+export async function getTeamMembers() {
+  return client.fetch(`*[_type == "teamMember" && status == "active"] | order(order asc, name asc) {
+    _id,
+    name,
+    role { en, fr, pl },
+    linkedin,
+    photo {
+      asset->{
+        _id,
+        url,
+        metadata { lqip, dimensions { width, height } }
+      }
+    }
+  }`)
+}
+
+// Testimonials
+export async function getTestimonials() {
+  return client.fetch(`*[_type == "testimonial" && status == "active"] | order(order asc, name asc) {
+    _id,
+    name,
+    role { en, fr, pl },
+    text { en, fr, pl },
+    year
+  }`)
+}
