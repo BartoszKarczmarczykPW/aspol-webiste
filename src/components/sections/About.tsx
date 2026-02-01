@@ -95,7 +95,13 @@ export default function About() {
 
             const title = pathwayFeature.title?.[language] || pathwayFeature.title?.en || "";
             const description = pathwayFeature.description?.[language] || pathwayFeature.description?.en || "";
-            const link = pathwayFeature.link || "/pathway";
+            const rawLink = pathwayFeature.link;
+            const link =
+              rawLink === "/" ||
+              rawLink === "https://aspol.fr" ||
+              rawLink === "https://www.aspol.fr"
+                ? "/pathway"
+                : rawLink || "/pathway";
 
             return (
               <Link href={link} className="block group">
