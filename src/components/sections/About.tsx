@@ -96,12 +96,22 @@ export default function About() {
             const title = pathwayFeature.title?.[language] || pathwayFeature.title?.en || "";
             const description = pathwayFeature.description?.[language] || pathwayFeature.description?.en || "";
             const rawLink = pathwayFeature.link;
-            const link =
-              rawLink === "/" ||
-              rawLink === "https://aspol.fr" ||
-              rawLink === "https://www.aspol.fr"
-                ? "/pathway"
-                : rawLink || "/pathway";
+            const normalizeLink = (value?: string) => {
+              if (!value) return "/pathway";
+              if (value === "/" || value === "https://aspol.fr" || value === "https://www.aspol.fr") {
+                return "/pathway";
+              }
+              if (value.startsWith("http")) {
+                try {
+                  const url = new URL(value);
+                  return url.pathname || "/pathway";
+                } catch {
+                  return "/pathway";
+                }
+              }
+              return value;
+            };
+            const link = normalizeLink(rawLink);
 
             return (
               <Link href={link} className="block group">
