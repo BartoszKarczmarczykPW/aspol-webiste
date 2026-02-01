@@ -14,6 +14,7 @@ export default function SocialShare({
   description = "Join the community of Polish students in France"
 }: SocialShareProps) {
   const [copied, setCopied] = useState(false);
+  const [copyError, setCopyError] = useState<string | null>(null);
 
   const encodedUrl = encodeURIComponent(url);
   const encodedTitle = encodeURIComponent(title);
@@ -31,9 +32,11 @@ export default function SocialShare({
     try {
       await navigator.clipboard.writeText(url);
       setCopied(true);
+      setCopyError(null);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      console.error('Failed to copy:', err);
+      setCopyError("Unable to copy link");
+      setTimeout(() => setCopyError(null), 2000);
     }
   };
 
@@ -44,6 +47,9 @@ export default function SocialShare({
   return (
     <div className="flex items-center gap-2">
       <span className="text-sm text-gray-600 font-medium mr-2">Share:</span>
+      <span className="sr-only" role="status" aria-live="polite" aria-atomic="true">
+        {copied ? "Link copied" : copyError ? "Copy failed" : ""}
+      </span>
       
       {/* Facebook */}
       <button

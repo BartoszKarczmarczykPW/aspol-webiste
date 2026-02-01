@@ -33,7 +33,6 @@ export default function Newsletter() {
         setTimeout(() => setStatus("idle"), 5000);
       }
     } catch (error) {
-      console.error(error);
       setStatus("error");
       setTimeout(() => setStatus("idle"), 5000);
     }
@@ -78,7 +77,7 @@ export default function Newsletter() {
           {text.description}
         </p>
 
-        <form onSubmit={handleSubmit} className="max-w-md mx-auto">
+        <form onSubmit={handleSubmit} className="max-w-md mx-auto" aria-busy={status === "loading"}>
           <div className="flex flex-col sm:flex-row gap-3">
             <input
               type="email"
@@ -86,6 +85,10 @@ export default function Newsletter() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder={text.placeholder}
               disabled={status === "loading"}
+              inputMode="email"
+              autoComplete="email"
+              maxLength={254}
+              aria-label={text.placeholder}
               className="flex-1 px-6 py-4 rounded-full text-gray-900 placeholder-gray-400 bg-white shadow-lg focus:outline-none focus:ring-4 focus:ring-white/50 focus:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed border-2 border-transparent hover:border-white/20"
               required
             />
@@ -108,7 +111,7 @@ export default function Newsletter() {
           </div>
 
           {status === "success" && (
-            <p className="mt-4 text-white font-medium flex items-center justify-center">
+            <p className="mt-4 text-white font-medium flex items-center justify-center" role="status" aria-live="polite" aria-atomic="true">
               <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>
@@ -117,7 +120,7 @@ export default function Newsletter() {
           )}
 
           {status === "error" && (
-            <p className="mt-4 text-white font-medium">
+            <p className="mt-4 text-white font-medium" role="alert" aria-live="assertive" aria-atomic="true">
               {text.error}
             </p>
           )}

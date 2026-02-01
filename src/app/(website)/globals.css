@@ -114,6 +114,10 @@ html {
   overflow-y: scroll;
 }
 
+:where(section[id], div[id]) {
+  scroll-margin-top: clamp(72px, 10vh, 96px);
+}
+
 /* Custom animations */
 @keyframes fadeInUp {
   0% {
@@ -149,6 +153,23 @@ html {
 
 .animate-slide-in-right {
   animation: slideInRight 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate-fade-in-up,
+  .animate-slide-in-right,
+  .animate-fade-in {
+    animation: none !important;
+  }
 }
 
 @keyframes fadeIn {

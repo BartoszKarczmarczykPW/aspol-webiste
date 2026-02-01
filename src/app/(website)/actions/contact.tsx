@@ -1,11 +1,55 @@
 "use server";
 
 import { z } from "zod";
+import { headers } from "next/headers";
 import { Resend } from "resend";
 import { ContactEmailTemplate } from "@/components/emails/ContactEmailTemplate";
 import { ContactConfirmationTemplate } from "@/components/emails/ContactConfirmationTemplate";
 import { createClient } from "@sanity/client";
 import { apiVersion, dataset, projectId } from "@/sanity/env";
+
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
+const RATE_LIMIT_MAX = 3;
+const MIN_FORM_FILL_MS = 2000;
+
+type RateLimitEntry = {
+    count: number;
+    resetAt: number;
+};
+
+const rateLimitStore = new Map<string, RateLimitEntry>();
+
+const getClientIp = () => {
+    const requestHeaders = headers();
+    const forwarded = requestHeaders.get("x-forwarded-for");
+    if (forwarded) {
+        return forwarded.split(",")[0]?.trim() || "unknown";
+    }
+    return (
+        requestHeaders.get("x-real-ip") ||
+        requestHeaders.get("cf-connecting-ip") ||
+        requestHeaders.get("true-client-ip") ||
+        "unknown"
+    );
+};
+
+const isRateLimited = (key: string) => {
+    const now = Date.now();
+    const entry = rateLimitStore.get(key);
+
+    if (!entry || now > entry.resetAt) {
+        rateLimitStore.set(key, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+        return false;
+    }
+
+    if (entry.count >= RATE_LIMIT_MAX) {
+        return true;
+    }
+
+    entry.count += 1;
+    rateLimitStore.set(key, entry);
+    return false;
+};
 
 const ContactSchema = z.object({
     name: z.string().min(2, "Name must be at least 2 characters"),
@@ -24,6 +68,24 @@ export type ContactState = {
 };
 
 export async function sendContactEmail(prevState: ContactState, formData: FormData): Promise<ContactState> {
+    const honeypot = String(formData.get("company") || "").trim();
+    if (honeypot) {
+        return { success: true, errors: {} };
+    }
+
+    const formStartRaw = Number(formData.get("formStart") || 0);
+    if (Number.isFinite(formStartRaw) && formStartRaw > 0) {
+        const elapsed = Date.now() - formStartRaw;
+        if (elapsed < MIN_FORM_FILL_MS) {
+            return {
+                success: false,
+                errors: {
+                    _form: ["Please wait a moment before submitting."]
+                }
+            };
+        }
+    }
+
     const validatedFields = ContactSchema.safeParse({
         name: formData.get("name"),
         email: formData.get("email"),
@@ -54,6 +116,17 @@ export async function sendContactEmail(prevState: ContactState, formData: FormDa
             success: false,
             errors: {
                 _form: ["Email sender is not configured. Please contact support."]
+            }
+        };
+    }
+
+    const clientIp = getClientIp();
+    const rateLimitKey = `${clientIp}:${validatedFields.data.email.toLowerCase()}`;
+    if (isRateLimited(rateLimitKey)) {
+        return {
+            success: false,
+            errors: {
+                _form: ["Too many requests. Please try again in a few minutes."]
             }
         };
     }

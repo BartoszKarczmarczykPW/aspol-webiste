@@ -7,16 +7,19 @@ import { sendContactEmail } from "@/app/(website)/actions/contact";
 export default function Contact() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const { t } = useLanguage();
+  const formStartRef = useRef<number>(Date.now());
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     message: "",
   });
+  const [trapField, setTrapField] = useState("");
   const [errors, setErrors] = useState({
     name: "",
     email: "",
     message: "",
   });
+  const [formError, setFormError] = useState<string | null>(null);
   const [touched, setTouched] = useState({
     name: false,
     email: false,
@@ -106,6 +109,7 @@ export default function Contact() {
 
     setIsSubmitting(true);
     setSubmitStatus(null);
+    setFormError(null);
 
     try {
       // Create FormData for the server action
@@ -113,26 +117,27 @@ export default function Contact() {
       data.append("name", formData.name);
       data.append("email", formData.email);
       data.append("message", formData.message);
+      data.append("company", trapField);
+      data.append("formStart", String(formStartRef.current));
 
       const result = await sendContactEmail({}, data);
 
-      console.log("Server action result:", JSON.stringify(result, null, 2));
-
       if (result.success) {
-        console.log("Form submitted successfully");
         setSubmitStatus("success");
         setFormData({ name: "", email: "", message: "" });
         setErrors({ name: "", email: "", message: "" });
         setTouched({ name: false, email: false, message: false });
+        setTrapField("");
+        formStartRef.current = Date.now();
 
         setTimeout(() => setSubmitStatus(null), 5000);
       } else {
-        console.error("Server validation errors:", JSON.stringify(result.errors, null, 2));
+        setFormError(result.errors?._form?.[0] || "Please try again later.");
         setSubmitStatus("error");
         setTimeout(() => setSubmitStatus(null), 5000);
       }
     } catch (error) {
-      console.error("Submission error:", error);
+      setFormError("Please try again later.");
       setSubmitStatus("error");
       setTimeout(() => setSubmitStatus(null), 5000);
     } finally {
@@ -188,7 +193,7 @@ export default function Contact() {
           {/* Contact Form */}
           <div className="fade-in-element opacity-0">
             {submitStatus === "success" && (
-              <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-start">
+              <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-start" role="status" aria-live="polite" aria-atomic="true">
                 <svg className="w-5 h-5 text-green-600 mr-3 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
@@ -200,18 +205,30 @@ export default function Contact() {
             )}
 
             {submitStatus === "error" && (
-              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start">
+              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start" role="alert" aria-live="assertive" aria-atomic="true">
                 <svg className="w-5 h-5 text-red-600 mr-3 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
                 </svg>
                 <div>
                   <p className="font-medium text-red-800">Something went wrong</p>
-                  <p className="text-sm text-red-700 mt-1">Please try again later.</p>
+                  <p className="text-sm text-red-700 mt-1">{formError || "Please try again later."}</p>
                 </div>
               </div>
             )}
 
             <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="sr-only" aria-hidden="true">
+                <label htmlFor="company">Company</label>
+                <input
+                  type="text"
+                  id="company"
+                  name="company"
+                  value={trapField}
+                  onChange={(e) => setTrapField(e.target.value)}
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+              </div>
               <div>
                 <label
                   htmlFor="name"
@@ -227,6 +244,9 @@ export default function Contact() {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   disabled={isSubmitting}
+                  minLength={2}
+                  maxLength={120}
+                  autoComplete="name"
                   aria-label={t.contact.form.name}
                   aria-required="true"
                   aria-invalid={errors.name ? "true" : "false"}
@@ -255,6 +275,7 @@ export default function Contact() {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   disabled={isSubmitting}
+                  maxLength={254}
                   inputMode="email"
                   autoComplete="email"
                   aria-label={t.contact.form.email}
@@ -285,6 +306,9 @@ export default function Contact() {
                   onBlur={handleBlur}
                   disabled={isSubmitting}
                   rows={6}
+                  minLength={10}
+                  maxLength={1000}
+                  autoComplete="off"
                   aria-label={t.contact.form.message}
                   aria-required="true"
                   aria-invalid={errors.message ? "true" : "false"}
@@ -315,6 +339,9 @@ export default function Contact() {
                   t.contact.form.submit
                 )}
               </button>
+              <p className="text-xs text-gray-400 text-center">
+                Protected against automated spam.
+              </p>
             </form>
           </div>
 
@@ -396,6 +423,7 @@ export default function Contact() {
                         href="https://www.facebook.com/aspologne"
                         target="_blank"
                         rel="noopener noreferrer"
+                        aria-label="Facebook - ASPOL"
                         className="text-gray-600 hover:text-red-600 transition-all duration-200 hover:translate-x-1 inline-flex items-center gap-2 group"
                       >
                         <svg className="w-4 h-4 shrink-0 group-hover:scale-110 transition-transform duration-200" fill="currentColor" viewBox="0 0 24 24">
@@ -407,6 +435,7 @@ export default function Contact() {
                         href="https://www.instagram.com/aspolska/"
                         target="_blank"
                         rel="noopener noreferrer"
+                        aria-label="Instagram - ASPOL"
                         className="text-gray-600 hover:text-red-600 transition-all duration-200 hover:translate-x-1 inline-flex items-center gap-2 group"
                       >
                         <svg className="w-4 h-4 shrink-0 group-hover:scale-110 transition-transform duration-200" fill="currentColor" viewBox="0 0 24 24">
@@ -418,6 +447,7 @@ export default function Contact() {
                         href="https://www.linkedin.com/company/aspolscpo/"
                         target="_blank"
                         rel="noopener noreferrer"
+                        aria-label="LinkedIn - ASPOL"
                         className="text-gray-600 hover:text-red-600 transition-all duration-200 hover:translate-x-1 inline-flex items-center gap-2 group"
                       >
                         <svg className="w-4 h-4 shrink-0 group-hover:scale-110 transition-transform duration-200" fill="currentColor" viewBox="0 0 24 24">
