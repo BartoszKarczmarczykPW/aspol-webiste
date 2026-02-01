@@ -14,8 +14,18 @@ interface AddToCalendarButtonProps {
 export default function AddToCalendarButton({ event, className = "", label = "Add to Calendar", variant = "default" }: AddToCalendarButtonProps) {
     // Helpers to generate links
     const getGoogleCalendarLink = () => {
-        const start = event.isoDate.replace(/-/g, "") + "T180000Z";
-        const end = event.isoDate.replace(/-/g, "") + "T200000Z";
+        const date = new Date(event.isoDate);
+
+        // Format date to YYYYMMDDTHHmmSSZ
+        const formatDate = (d: Date) => {
+            return d.toISOString().replace(/[-:]/g, "").split('.')[0] + "Z";
+        };
+
+        const start = formatDate(date);
+
+        // Default duration 2 hours
+        const endDate = new Date(date.getTime() + 2 * 60 * 60 * 1000);
+        const end = formatDate(endDate);
 
         const text = encodeURIComponent(event.title);
         const details = encodeURIComponent(event.shortDescription);

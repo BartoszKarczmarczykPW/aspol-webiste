@@ -10,7 +10,7 @@ interface CalendarWidgetProps {
 }
 
 export default function CalendarWidget({ events, className = "" }: CalendarWidgetProps) {
-    const [currentDate, setCurrentDate] = useState(new Date(2026, 2)); // Start in March 2026 for demo purposes as data is in 2026
+    const [currentDate, setCurrentDate] = useState(new Date());
 
     const daysInMonth = (year: number, month: number) => new Date(year, month + 1, 0).getDate();
     const firstDayOfMonth = (year: number, month: number) => new Date(year, month, 1).getDay();
@@ -47,7 +47,7 @@ export default function CalendarWidget({ events, className = "" }: CalendarWidge
         // Days of month
         for (let d = 1; d <= days; d++) {
             const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-            const hasEvent = events.some(e => e.isoDate === dateStr);
+            const hasEvent = events.some(e => e.isoDate && e.isoDate.startsWith(dateStr));
             const isToday = new Date().toISOString().split('T')[0] === dateStr;
 
             dayElements.push(
