@@ -6,6 +6,7 @@ import { useState, useEffect, useRef } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useInView } from "@/hooks/useInView";
 import { StatItemProps } from "@/types";
+import { getStatistics } from "@/lib/sanity";
 
 function StatItem({ end, label, suffix = "", duration = 2000 }: StatItemProps) {
   const [count, setCount] = useState(0);
@@ -52,7 +53,7 @@ function StatItem({ end, label, suffix = "", duration = 2000 }: StatItemProps) {
 const Statistics = memo(function Statistics() {
   const { language } = useLanguage();
 
-  const stats = {
+  const fallbackLabels = {
     en: {
       members: "Active Members",
       events: "Annual Events",
@@ -73,7 +74,84 @@ const Statistics = memo(function Statistics() {
     },
   };
 
-  const currentStats = stats[language] || stats.en;
+  const currentLabels = fallbackLabels[language] || fallbackLabels.en;
+
+  const fallbackItems = [
+    {
+      value: 350,
+      suffix: "+",
+      label: {
+        en: fallbackLabels.en.members,
+        fr: fallbackLabels.fr.members,
+        pl: fallbackLabels.pl.members,
+      },
+    },
+    {
+      value: 25,
+      suffix: "+",
+      label: {
+        en: fallbackLabels.en.events,
+        fr: fallbackLabels.fr.events,
+        pl: fallbackLabels.pl.events,
+      },
+    },
+    {
+      value: 10,
+      suffix: "",
+      label: {
+        en: fallbackLabels.en.forums,
+        fr: fallbackLabels.fr.forums,
+        pl: fallbackLabels.pl.forums,
+      },
+    },
+    {
+      value: 10,
+      suffix: "",
+      label: {
+        en: fallbackLabels.en.years,
+        fr: fallbackLabels.fr.years,
+        pl: fallbackLabels.pl.years,
+      },
+    },
+  ];
+
+  const [items, setItems] = useState<
+    Array<{
+      value: number;
+      suffix?: string;
+      order?: number;
+      label?: { en?: string; fr?: string; pl?: string };
+    }>
+  >([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let mounted = true;
+    async function loadStats() {
+      try {
+        const data = await getStatistics();
+        if (!mounted) return;
+        if (data?.items?.length) {
+          setItems(
+            [...data.items].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+          );
+        } else {
+          setItems([]);
+        }
+      } catch (error) {
+        if (mounted) setItems([]);
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    }
+
+    loadStats();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const resolvedItems = !loading && items.length > 0 ? items : null;
 
   return (
     <section className="py-16 px-6 bg-aspol-white">
@@ -87,10 +165,26 @@ const Statistics = memo(function Statistics() {
 
         <div className="relative z-10 py-12 sm:py-16 px-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 divide-y sm:divide-y-0 sm:divide-x divide-white/10">
-            <StatItem end={350} label={currentStats.members} suffix="+" />
-            <StatItem end={25} label={currentStats.events} suffix="+" />
-            <StatItem end={10} label={currentStats.forums} suffix="" />
-            <StatItem end={10} label={currentStats.years} suffix="" />
+            {(resolvedItems || fallbackItems).map((item, index) => {
+              const label = item.label
+                ? item.label[language] || item.label.en || ""
+                : index === 0
+                  ? currentLabels.members
+                  : index === 1
+                    ? currentLabels.events
+                    : index === 2
+                      ? currentLabels.forums
+                      : currentLabels.years;
+
+              return (
+                <StatItem
+                  key={`stat-${index}`}
+                  end={item.value}
+                  label={label}
+                  suffix={item.suffix || ""}
+                />
+              );
+            })}
           </div>
         </div>
       </div>

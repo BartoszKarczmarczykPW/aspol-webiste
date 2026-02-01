@@ -1,4 +1,4 @@
-import { defineType, defineField } from 'sanity'
+import { defineType, defineField, defineArrayMember } from 'sanity'
 
 export default defineType({
     name: 'post',
@@ -74,6 +74,76 @@ export default defineType({
                 },
             ],
             validation: (Rule) => Rule.required(),
+        }),
+        defineField({
+            name: 'sponsors',
+            title: 'Sponsors',
+            type: 'array',
+            of: [
+                defineArrayMember({
+                    name: 'sponsor',
+                    title: 'Sponsor',
+                    type: 'object',
+                    fields: [
+                        defineField({
+                            name: 'name',
+                            title: 'Name',
+                            type: 'string',
+                            validation: (Rule) => Rule.required(),
+                        }),
+                        defineField({
+                            name: 'website',
+                            title: 'Website',
+                            type: 'url',
+                            validation: (Rule) => Rule.uri({ scheme: ['http', 'https'] }),
+                        }),
+                        defineField({
+                            name: 'logo',
+                            title: 'Logo',
+                            type: 'image',
+                            options: { hotspot: true },
+                        }),
+                    ],
+                    preview: {
+                        select: { title: 'name', media: 'logo' },
+                    },
+                }),
+            ],
+        }),
+        defineField({
+            name: 'partners',
+            title: 'Partners',
+            type: 'array',
+            of: [
+                defineArrayMember({
+                    name: 'partner',
+                    title: 'Partner',
+                    type: 'object',
+                    fields: [
+                        defineField({
+                            name: 'name',
+                            title: 'Name',
+                            type: 'string',
+                            validation: (Rule) => Rule.required(),
+                        }),
+                        defineField({
+                            name: 'website',
+                            title: 'Website',
+                            type: 'url',
+                            validation: (Rule) => Rule.uri({ scheme: ['http', 'https'] }),
+                        }),
+                        defineField({
+                            name: 'logo',
+                            title: 'Logo',
+                            type: 'image',
+                            options: { hotspot: true },
+                        }),
+                    ],
+                    preview: {
+                        select: { title: 'name', media: 'logo' },
+                    },
+                }),
+            ],
         }),
         defineField({
             name: 'featuredImage',

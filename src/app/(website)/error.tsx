@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Error({
   error,
@@ -11,6 +12,7 @@ export default function Error({
   reset: () => void;
 }) {
   const [mounted] = useState(true);
+  const { t } = useLanguage();
 
   useEffect(() => {
     console.error('Error:', error);
@@ -40,13 +42,13 @@ export default function Error({
 
         {/* Message */}
         <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-          Oops! Something went wrong
+          {t.error.title}
         </h1>
         <p className="text-xl text-gray-600 mb-2 max-w-md mx-auto">
-          We&apos;re sorry, but something unexpected happened.
+          {t.error.message}
         </p>
         <p className="text-sm text-gray-500 mb-8 max-w-md mx-auto">
-          Our team has been notified and we&apos;re working on it.
+          {t.error.note}
         </p>
 
         {/* Error Details (development only) */}
@@ -69,20 +71,20 @@ export default function Error({
             onClick={reset}
             className="px-8 py-4 bg-red-600 text-white text-lg font-semibold rounded-full hover:bg-red-700 transition-all duration-200 hover:scale-105 shadow-lg hover:shadow-xl"
           >
-            Try Again
+            {t.error.tryAgain}
           </button>
           <Link
             href="/"
             className="px-8 py-4 bg-white text-gray-900 text-lg font-semibold rounded-full border-2 border-gray-300 hover:border-red-600 hover:text-red-600 transition-all duration-200"
           >
-            Back to Home
+            {t.error.backHome}
           </Link>
         </div>
 
         {/* Contact Support */}
         <div className="mt-12 pt-8 border-t border-gray-200">
           <p className="text-sm text-gray-500 mb-2">
-            Need help? Get in touch with us
+            {t.error.help}
           </p>
           <a
             href="mailto:office@aspol.fr"

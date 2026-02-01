@@ -48,7 +48,7 @@ export default function RippleButton({
     }, 600);
   };
 
-  const baseClassName = `relative overflow-hidden ${className}`;
+  const baseClassName = `relative overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-aspol-red/50 focus-visible:ring-offset-2 focus-visible:ring-offset-white active:scale-[0.98] transition-transform ${className}`;
 
   if (href) {
     return (

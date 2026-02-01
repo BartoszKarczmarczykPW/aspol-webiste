@@ -1,26 +1,57 @@
 "use client";
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { ArrowLeft, ExternalLink, CheckCircle2, XCircle, Building2, BookOpen } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Components } from 'react-markdown';
 import { UniversityGuide } from '@/data/universityGuides';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface UniversityGuideContentProps {
     guide: UniversityGuide;
 }
 
 export default function UniversityGuideContent({ guide }: UniversityGuideContentProps) {
+    const { language, t } = useLanguage();
+    const localizedContent = guide.content[language] || guide.content.en || guide.content.pl;
+
+    const slugify = (value: string) => value
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9\s-]/g, '')
+        .trim()
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-');
+
+    const tocItems = useMemo(() => {
+        const lines = localizedContent.split('\n');
+        return lines
+            .map((line) => {
+                const match = /^(#{2,3})\s+(.+)$/.exec(line.trim());
+                if (!match) return null;
+                const level = match[1].length;
+                const text = match[2].trim();
+                if (text.includes('✅') || text.includes('❌')) return null;
+                return { level, text, id: slugify(text) };
+            })
+            .filter((item): item is { level: number; text: string; id: string } => Boolean(item));
+    }, [localizedContent]);
+
     const components: Components = {
         h1: () => null,
-        h2: ({ children }) => (
-            <h2 className="text-xl font-bold text-aspol-navy mt-10 mb-4 flex items-center gap-3">
-                <span className="w-1 h-6 bg-aspol-red rounded-full" />
-                {children}
-            </h2>
-        ),
+        h2: ({ children }) => {
+            const text = String(children);
+            const id = slugify(text);
+            return (
+                <h2 id={id} className="text-2xl md:text-3xl font-bold text-aspol-navy mt-12 mb-5 flex items-center gap-3 border-b border-gray-100 pb-3 scroll-mt-24">
+                    <span className="w-1.5 h-7 bg-aspol-red rounded-full" />
+                    {children}
+                </h2>
+            );
+        },
         h3: ({ children }) => {
             const text = String(children);
             // Handle language availability badges
@@ -37,14 +68,15 @@ export default function UniversityGuideContent({ guide }: UniversityGuideContent
                     </span>
                 );
             }
+            const id = slugify(text);
             return (
-                <h3 className="text-lg font-semibold text-aspol-navy mt-8 mb-3">
+                <h3 id={id} className="text-xl font-semibold text-aspol-navy mt-8 mb-3 scroll-mt-24">
                     {children}
                 </h3>
             );
         },
         ul: ({ children }) => (
-            <ul className="space-y-2 my-4">
+            <ul className="space-y-3 my-5">
                 {children}
             </ul>
         ),
@@ -69,14 +101,14 @@ export default function UniversityGuideContent({ guide }: UniversityGuideContent
             }
 
             return (
-                <li className="flex items-start gap-2.5 text-gray-600 text-[15px] leading-relaxed">
-                    <span className="mt-2 w-1 h-1 rounded-full bg-aspol-navy/40 shrink-0" />
+                <li className="flex items-start gap-3 text-gray-700 text-base leading-relaxed">
+                    <span className="mt-2 w-1.5 h-1.5 rounded-full bg-aspol-navy/50 shrink-0" />
                     <span className="flex-1">{children}</span>
                 </li>
             );
         },
         ol: ({ children }) => (
-            <ol className="space-y-2 my-4 list-decimal list-inside marker:text-aspol-navy marker:font-medium">
+            <ol className="space-y-3 my-5 list-decimal list-inside marker:text-aspol-navy marker:font-semibold">
                 {children}
             </ol>
         ),
@@ -153,7 +185,7 @@ export default function UniversityGuideContent({ guide }: UniversityGuideContent
             }
 
             return (
-                <p className="text-gray-600 text-[15px] leading-relaxed mb-3">
+                <p className="text-gray-700 text-base leading-7 mb-4">
                     {children}
                 </p>
             );
@@ -162,7 +194,7 @@ export default function UniversityGuideContent({ guide }: UniversityGuideContent
             <strong className="font-semibold text-aspol-navy">{children}</strong>
         ),
         blockquote: ({ children }) => (
-            <blockquote className="border-l-2 border-aspol-red/50 pl-4 my-6 text-gray-500 italic">
+            <blockquote className="border-l-4 border-aspol-red/50 pl-5 my-8 text-gray-600 italic bg-red-50/40 py-3 rounded-r-lg">
                 {children}
             </blockquote>
         ),
@@ -178,13 +210,13 @@ export default function UniversityGuideContent({ guide }: UniversityGuideContent
                         className="inline-flex items-center gap-2 text-gray-500 hover:text-aspol-navy transition-colors text-sm"
                     >
                         <ArrowLeft className="w-4 h-4" />
-                        <span>Powrót do Pathway</span>
+                        <span>{t.pathway.guideBack}</span>
                     </Link>
                 </div>
             </header>
 
             {/* Hero Section */}
-            <section className="border-b border-gray-100 bg-gradient-to-b from-gray-50/50 to-white">
+            <section className="border-b border-gray-100 bg-linear-to-b from-gray-50/50 to-white">
                 <div className="max-w-4xl mx-auto px-6 py-12 md:py-16">
                     <div className="flex flex-col md:flex-row items-start gap-6 md:gap-10">
                         {/* Logo */}
@@ -206,12 +238,12 @@ export default function UniversityGuideContent({ guide }: UniversityGuideContent
                             <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500">
                                 <span className="flex items-center gap-1.5">
                                     <Building2 className="w-4 h-4" />
-                                    Francja
+                                    {t.pathway.guideCountry}
                                 </span>
                                 <span className="w-1 h-1 rounded-full bg-gray-300" />
                                 <span className="flex items-center gap-1.5">
                                     <BookOpen className="w-4 h-4" />
-                                    Przewodnik uczelniany
+                                    {t.pathway.guideType}
                                 </span>
                             </div>
                         </div>
@@ -234,18 +266,18 @@ export default function UniversityGuideContent({ guide }: UniversityGuideContent
                         </div>
                         <div className="flex-1">
                             <p className="text-gray-700 text-sm">
-                                <span className="font-semibold text-aspol-navy">💡 Pro tip:</span>{" "}
-                                Przed aplikacją sprawdź najnowsze wymagania rekrutacyjne na stronie uczelni oraz na{" "}
+                                <span className="font-semibold text-aspol-navy">{t.pathway.guideTipLabel}</span>{" "}
+                                {t.pathway.guideTipBody}{" "}
                                 <a
                                     href="https://www.pologne.campusfrance.org/pl"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="font-semibold text-aspol-navy hover:text-aspol-red transition-colors inline-flex items-center gap-1"
                                 >
-                                    Campus France Pologne
+                                    {t.pathway.guideTipLink}
                                     <ExternalLink className="w-3 h-3" />
                                 </a>
-                                {" "}– oficjalnym portalu o studiach we Francji.
+                                {" "}{t.pathway.guideTipSuffix}
                             </p>
                         </div>
                     </div>
@@ -254,25 +286,45 @@ export default function UniversityGuideContent({ guide }: UniversityGuideContent
 
             {/* Content */}
             <article className="max-w-4xl mx-auto px-6 py-10 md:py-14">
-                <div className="prose-custom">
-                    <ReactMarkdown components={components}>{guide.content}</ReactMarkdown>
+                {tocItems.length > 0 && (
+                    <div className="mb-8 rounded-2xl border border-gray-100 bg-gray-50/70 p-5 md:p-6">
+                        <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-500 mb-3">
+                            {t.pathway.guideTocTitle}
+                        </h3>
+                        <ul className="space-y-2">
+                            {tocItems.map((item) => (
+                                <li key={item.id} className={item.level === 3 ? "ml-4" : undefined}>
+                                    <a
+                                        href={`#${item.id}`}
+                                        className="text-aspol-navy hover:text-aspol-red transition-colors text-sm md:text-base"
+                                    >
+                                        {item.text}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+
+                <div className="prose-custom bg-white rounded-3xl border border-gray-100 shadow-sm p-6 md:p-10">
+                    <ReactMarkdown components={components}>{localizedContent}</ReactMarkdown>
                 </div>
 
                 {/* Bottom CTA */}
-                <div className="mt-16 pt-10 border-t border-gray-100">
+                <div className="mt-14 pt-10 border-t border-gray-100">
                     <div className="bg-aspol-navy rounded-2xl p-8 md:p-10 text-white relative overflow-hidden">
                         <div className="relative z-10">
                             <h3 className="text-xl md:text-2xl font-bold mb-3">
-                                Potrzebujesz pomocy z aplikacją?
+                                {t.pathway.guideCtaTitle}
                             </h3>
                             <p className="text-white/70 text-sm md:text-base mb-6 max-w-lg">
-                                Nasi mentorzy to aktualni studenci {guide.name}. Mogą Ci pomóc przejść przez proces aplikacyjny i podzielić się swoimi doświadczeniami.
+                                {t.pathway.guideCtaBody.replace("{university}", guide.name)}
                             </p>
                             <Link
                                 href="/#contact"
                                 className="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-aspol-navy font-semibold rounded-lg hover:bg-gray-100 transition-colors text-sm"
                             >
-                                Skontaktuj się z nami
+                                {t.pathway.guideCtaButton}
                             </Link>
                         </div>
                         {/* Decorative */}
@@ -287,7 +339,7 @@ export default function UniversityGuideContent({ guide }: UniversityGuideContent
                         className="inline-flex items-center gap-2 text-gray-500 hover:text-aspol-navy transition-colors text-sm"
                     >
                         <ArrowLeft className="w-4 h-4" />
-                        <span>Zobacz wszystkie uczelnie</span>
+                        <span>{t.pathway.guideBackAll}</span>
                     </Link>
                 </div>
             </article>

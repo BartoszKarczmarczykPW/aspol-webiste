@@ -2,9 +2,11 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function NotFound() {
   const [mounted, setMounted] = useState(false);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const timer = setTimeout(() => setMounted(true), 10);
@@ -39,10 +41,10 @@ export default function NotFound() {
 
         {/* Content */}
         <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-          Page Not Found
+          {t.notFound.title}
         </h2>
         <p className="text-base sm:text-lg text-gray-600 mb-8 leading-relaxed px-4">
-          Oops! The page you&apos;re looking for doesn&apos;t exist. It might have been moved or deleted.
+          {t.notFound.description}
         </p>
 
         {/* Navigation Options */}
@@ -51,45 +53,45 @@ export default function NotFound() {
             href="/"
             className="w-full sm:w-auto px-8 py-4 bg-red-600 text-white text-lg font-semibold rounded-full hover:bg-red-700 transition-all duration-200 hover:scale-105 shadow-lg hover:shadow-xl touch-manipulation active:scale-95"
           >
-            Go to Homepage
+            {t.notFound.homeCta}
           </Link>
           <Link
             href="/blog"
             className="w-full sm:w-auto px-8 py-4 bg-white text-gray-900 text-lg font-semibold rounded-full border-2 border-gray-300 hover:border-red-600 hover:text-red-600 transition-all duration-200 touch-manipulation active:scale-95"
           >
-            Visit Blog
+            {t.notFound.blogCta}
           </Link>
         </div>
 
         {/* Helpful Links */}
         <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 sm:p-8 shadow-xl mx-4">
           <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4">
-            Looking for something specific?
+            {t.notFound.helperTitle}
           </h3>
           <div className="grid grid-cols-2 gap-3 text-sm sm:text-base">
             <Link
               href="/#about"
               className="text-gray-600 hover:text-red-600 transition-colors font-medium py-2 hover:bg-red-50 rounded-lg"
             >
-              About Us
+              {t.notFound.links.about}
             </Link>
             <Link
               href="/#team"
               className="text-gray-600 hover:text-red-600 transition-colors font-medium py-2 hover:bg-red-50 rounded-lg"
             >
-              Our Team
+              {t.notFound.links.team}
             </Link>
             <Link
               href="/#events"
               className="text-gray-600 hover:text-red-600 transition-colors font-medium py-2 hover:bg-red-50 rounded-lg"
             >
-              Events
+              {t.notFound.links.events}
             </Link>
             <Link
               href="/#contact"
               className="text-gray-600 hover:text-red-600 transition-colors font-medium py-2 hover:bg-red-50 rounded-lg"
             >
-              Contact
+              {t.notFound.links.contact}
             </Link>
           </div>
         </div>

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getEvents } from "@/lib/sanity";
 import { Calendar, MapPin, Clock, ArrowRight, ChevronDown, ChevronUp } from "lucide-react";
@@ -9,7 +10,7 @@ import AddToCalendarButton from "@/components/events/AddToCalendarButton";
 import CalendarWidget from "@/components/events/CalendarWidget";
 import SmoothBackground from "@/components/ui/effects/SmoothBackground";
 import RippleButton from "@/components/ui/RippleButton";
-// Removed ChevronDownIcon import as it's not critical if I use lucide-react's ChevronDown, but keeping style consistency
+// Removed ChevronDownIcon import as not critical
 import { ChevronDownIcon } from "@/components/icons/ChevronDownIcon";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
@@ -51,78 +52,95 @@ function EventCard({ event, t, formatDate, formatTime, language }: {
 }) {
     const [isExpanded, setIsExpanded] = useState(false);
 
+    // Extract day and month for the Date Box
+    const dateObj = new Date(event.date);
+    const day = dateObj.getDate();
+    const month = dateObj.toLocaleDateString(language === 'fr' ? 'fr-FR' : language === 'pl' ? 'pl-PL' : 'en-US', { month: 'short' });
+
     return (
-        <article className="group bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden h-full flex flex-col">
+        <article className="group bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-500 overflow-hidden h-full flex flex-col relative">
             {/* Event Image */}
-            <div className="relative h-56 overflow-hidden">
+            <div className="relative aspect-16/10 overflow-hidden bg-gray-100">
                 <Image
                     src={event.imageUrl || "/placeholder-event.jpg"}
                     alt={event.title[language as keyof typeof event.title]}
                     fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60"></div>
 
-                <div className="absolute bottom-4 left-4 right-4">
-                    <div className="flex gap-2 mb-2">
-                        {event.featured && (
-                            <span className="bg-aspol-red/90 backdrop-blur-md text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm">
-                                {t.featured}
-                            </span>
-                        )}
-                        <span className="bg-white/90 backdrop-blur-md text-aspol-navy px-3 py-1 rounded-full text-xs font-bold shadow-sm flex items-center gap-1">
-                            <Calendar className="w-3 h-3" />
-                            {formatDate(event.date)}
+                {/* Soft Overlay */}
+                <div className="absolute inset-0 bg-linear-to-t from-black/40 via-black/10 to-transparent opacity-70" />
+
+                {/* Featured Badge */}
+                {event.featured && (
+                    <div className="absolute top-4 right-4 z-10">
+                        <span className="bg-aspol-red text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg shadow-aspol-red/20">
+                            {t.featured}
                         </span>
                     </div>
-                    <h3 className="text-xl font-bold text-white leading-tight drop-shadow-md">
-                        {event.title[language as keyof typeof event.title]}
-                    </h3>
+                )}
+
+                {/* Date Box */}
+                <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-md rounded-xl p-2.5 text-center min-w-14 shadow-md shadow-black/10 group-hover:scale-105 transition-transform duration-300">
+                    <span className="block text-xl font-bold text-aspol-navy leading-none">{day}</span>
+                    <span className="block text-[0.65rem] font-bold uppercase tracking-widest text-aspol-red mt-0.5">{month}</span>
                 </div>
             </div>
 
             {/* Event Content */}
-            <div className="p-6 flex flex-col flex-grow">
-                <div className="flex items-center gap-4 text-gray-500 text-sm mb-4 border-b border-gray-100 pb-4">
-                    <div className="flex items-center">
-                        <Clock className="w-4 h-4 mr-1.5 text-aspol-red" />
-                        {formatTime(event.date)}
+            <div className="p-6 flex flex-col grow bg-white relative">
+                <h3 className="text-2xl font-bold text-gray-900 leading-tight mb-3 font-serif group-hover:text-aspol-navy transition-colors">
+                    {event.title[language as keyof typeof event.title]}
+                </h3>
+
+                {/* Metadata Row */}
+                <div className="flex flex-wrap items-center gap-4 text-gray-500 text-sm mb-5">
+                    <div className="flex items-center gap-2">
+                        <Clock className="w-4 h-4 text-aspol-red" />
+                        <span className="font-medium text-gray-600">{formatTime(event.date)}</span>
                     </div>
-                    <div className="flex items-center">
-                        <MapPin className="w-4 h-4 mr-1.5 text-aspol-red" />
-                        {event.location[language as keyof typeof event.location]}
+                    <div className="flex items-center gap-2">
+                        <MapPin className="w-4 h-4 text-aspol-red" />
+                        <span className="font-medium text-gray-600">{event.location[language as keyof typeof event.location]}</span>
                     </div>
                 </div>
 
-                <div className="flex-grow mb-6 relative">
-                    <p className={`text-gray-600 text-sm leading-relaxed ${isExpanded ? '' : 'line-clamp-3'}`}>
+                {/* Description - Expandable */}
+                <div className="grow mb-6 relative">
+                    <p className={`text-gray-600 text-[0.95rem] leading-relaxed transition-all duration-300 ${isExpanded ? '' : 'line-clamp-3'}`}>
                         {event.description[language as keyof typeof event.description]}
                     </p>
                     <button
                         onClick={() => setIsExpanded(!isExpanded)}
-                        className="text-aspol-red text-xs font-bold uppercase tracking-wider mt-2 inline-flex items-center gap-1 hover:underline focus:outline-none"
+                        className="group/btn text-aspol-navy text-xs font-bold uppercase tracking-wider mt-3 inline-flex items-center gap-1.5 hover:text-aspol-red transition-colors focus:outline-none"
                     >
                         {isExpanded ? (
                             <>
                                 {t.showLess}
-                                <ChevronUp className="w-4 h-4" />
+                                <ChevronUp className="w-3.5 h-3.5" />
                             </>
                         ) : (
-                            <>{t.readMore} <ChevronDown className="w-4 h-4" /></>
+                            <>
+                                {t.readMore}
+                                <div className="w-4 h-4 rounded-full bg-aspol-navy/5 flex items-center justify-center group-hover/btn:bg-aspol-red/10 transition-colors">
+                                    <ChevronDown className="w-3 h-3 group-hover/btn:text-aspol-red transition-colors" />
+                                </div>
+                            </>
                         )}
                     </button>
                 </div>
 
-                <div className="flex gap-3 mt-auto pt-4 border-t border-gray-50">
+                {/* Action Buttons */}
+                <div className="flex gap-3 mt-auto pt-4 border-t border-gray-100">
                     {event.registrationLink && (
                         <a
                             href={event.registrationLink}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex-1 px-4 py-2.5 bg-aspol-navy text-white text-center rounded-lg hover:bg-opacity-90 transition-all font-medium text-sm flex items-center justify-center gap-2 group/btn"
+                            className="flex-1 px-4 py-3 bg-aspol-navy text-white text-center rounded-xl hover:bg-aspol-red hover:shadow-lg hover:shadow-aspol-red/25 transition-all duration-300 font-semibold text-sm flex items-center justify-center gap-2 group/btn"
                         >
                             {t.register}
-                            <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" />
+                            <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
                         </a>
                     )}
                     <AddToCalendarButton
@@ -139,10 +157,99 @@ function EventCard({ event, t, formatDate, formatTime, language }: {
                             category: 'Event' as any,
                             registrationLink: event.registrationLink,
                         }}
-                        className="px-3 border border-gray-200 hover:border-aspol-navy hover:bg-aspol-navy/5 text-aspol-navy rounded-lg"
+                        className="px-4 border border-gray-200 hover:border-aspol-navy hover:bg-aspol-navy/5 text-aspol-navy rounded-xl transition-colors"
                         variant="outline"
                         label=""
                     />
+                </div>
+            </div>
+        </article>
+    );
+}
+
+function FeaturedEventCard({ event, t, formatDate, formatTime, language }: {
+    event: SanityEvent;
+    t: any;
+    formatDate: (d: string) => string;
+    formatTime: (d: string) => string;
+    language: string;
+}) {
+    return (
+        <article className="group bg-white rounded-3xl border border-gray-100 shadow-md hover:shadow-xl transition-all duration-500 overflow-hidden">
+            <div className="grid md:grid-cols-5 gap-0">
+                <div className="relative md:col-span-2 aspect-16/10 md:aspect-auto md:min-h-65 overflow-hidden bg-gray-100">
+                    <Image
+                        src={event.imageUrl || "/placeholder-event.jpg"}
+                        alt={event.title[language as keyof typeof event.title]}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-700"
+                    />
+                    <div className="absolute inset-0 bg-linear-to-t from-black/50 via-black/10 to-transparent opacity-80" />
+                    <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-md rounded-xl p-2.5 text-center min-w-14 shadow-md shadow-black/10 group-hover:scale-105 transition-transform duration-300">
+                        <span className="block text-xl font-bold text-aspol-navy leading-none">
+                            {new Date(event.date).getDate()}
+                        </span>
+                        <span className="block text-[0.65rem] font-bold uppercase tracking-widest text-aspol-red mt-0.5">
+                            {new Date(event.date).toLocaleDateString(language === "fr" ? "fr-FR" : language === "pl" ? "pl-PL" : "en-US", { month: "short" })}
+                        </span>
+                    </div>
+                </div>
+                <div className="md:col-span-3 p-6 sm:p-8 flex flex-col">
+                    <div className="flex items-center gap-3 mb-3">
+                        <span className="inline-flex items-center px-3 py-1 bg-red-50 text-red-700 text-xs font-bold tracking-wider uppercase rounded-full">
+                            {t.featured}
+                        </span>
+                        <span className="text-xs text-gray-500 font-semibold uppercase tracking-widest">
+                            {formatDate(event.date)}
+                        </span>
+                    </div>
+                    <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 font-serif group-hover:text-aspol-navy transition-colors">
+                        {event.title[language as keyof typeof event.title]}
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed mb-5 line-clamp-3">
+                        {event.description[language as keyof typeof event.description]}
+                    </p>
+                    <div className="flex flex-wrap items-center gap-4 text-gray-500 text-sm mb-6">
+                        <div className="flex items-center gap-2">
+                            <Clock className="w-4 h-4 text-aspol-red" />
+                            <span className="font-medium text-gray-600">{formatTime(event.date)}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <MapPin className="w-4 h-4 text-aspol-red" />
+                            <span className="font-medium text-gray-600">{event.location[language as keyof typeof event.location]}</span>
+                        </div>
+                    </div>
+                    <div className="flex gap-3 mt-auto">
+                        {event.registrationLink && (
+                            <a
+                                href={event.registrationLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="px-5 py-3 bg-aspol-navy text-white rounded-xl hover:bg-aspol-red transition-all duration-300 font-semibold text-sm inline-flex items-center gap-2"
+                            >
+                                {t.register}
+                                <ArrowRight className="w-4 h-4" />
+                            </a>
+                        )}
+                        <AddToCalendarButton
+                            event={{
+                                id: event._id,
+                                title: event.title[language as keyof typeof event.title],
+                                date: formatDate(event.date),
+                                time: formatTime(event.date),
+                                location: event.location[language as keyof typeof event.location],
+                                isoDate: event.date,
+                                shortDescription: event.description[language as keyof typeof event.description],
+                                fullDescription: "",
+                                image: event.imageUrl,
+                                category: "Event" as any,
+                                registrationLink: event.registrationLink,
+                            }}
+                            className="px-4 border border-gray-200 hover:border-aspol-navy hover:bg-aspol-navy/5 text-aspol-navy rounded-xl transition-colors"
+                            variant="outline"
+                            label=""
+                        />
+                    </div>
                 </div>
             </div>
         </article>
@@ -178,10 +285,10 @@ function EventsContent() {
             subtitle: "Curated experiences for the Polish community in France.",
             upcoming: "Upcoming",
             past: "Archive",
-            featured: "Featured Event",
+            featured: "Featured",
             readMore: "Read More",
             showLess: "Show Less",
-            register: "Register Now",
+            register: "Register",
             empty: "No upcoming events scheduled at the moment.",
             loading: "Loading events...",
             scrollDown: "Scroll Down",
@@ -191,7 +298,7 @@ function EventsContent() {
             subtitle: "Des expériences sélectionnées pour la communauté polonaise en France.",
             upcoming: "À venir",
             past: "Archives",
-            featured: "Événement à la une",
+            featured: "À la une",
             readMore: "Lire la suite",
             showLess: "Voir moins",
             register: "S'inscrire",
@@ -204,7 +311,7 @@ function EventsContent() {
             subtitle: "Wyjątkowe doświadczenia dla polskiej społeczności we Francji.",
             upcoming: "Nadchodzące",
             past: "Archiwum",
-            featured: "Wyróżnione Wydarzenie",
+            featured: "Wyróżnione",
             readMore: "Czytaj więcej",
             showLess: "Pokaż mniej",
             register: "Zarejestruj się",
@@ -230,6 +337,9 @@ function EventsContent() {
         return filter === "upcoming" ? dateA - dateB : dateB - dateA;
     });
 
+    const featuredEvents = sortedEvents.filter((event) => event.featured);
+    const regularEvents = sortedEvents.filter((event) => !event.featured);
+
     // Format date for display
     const formatDate = (dateString: string) => {
         const date = new Date(dateString);
@@ -254,21 +364,22 @@ function EventsContent() {
     };
 
     return (
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen bg-gray-50/30">
 
             {/* Hero Section - Unique Events Style but matching system */}
             <section
                 ref={heroRef}
-                className="relative min-h-[50vh] flex items-center justify-center px-4 sm:px-6 pt-32 pb-16 overflow-hidden"
+                className="relative min-h-[58vh] flex items-center justify-center px-4 sm:px-6 pt-32 pb-16 overflow-hidden bg-linear-to-b from-white via-white to-gray-50"
             >
                 {/* Smooth Animated Background */}
                 <SmoothBackground />
 
                 <div className="max-w-7xl mx-auto relative z-10 w-full">
-                    <div className="flex flex-col items-center text-center">
+                    <div className="grid lg:grid-cols-12 gap-8 items-center">
+                        <div className="lg:col-span-7 flex flex-col items-start text-left">
 
                         {/* Badge */}
-                        <div className="fade-in-element opacity-0 mb-6 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-aspol-navy/5 border border-aspol-navy/10">
+                        <div className="fade-in-element opacity-0 mb-6 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 border border-aspol-navy/10 shadow-sm">
                             <span className="w-2 h-2 rounded-full bg-aspol-red animate-pulse"></span>
                             <span className="text-xs font-semibold tracking-wide text-aspol-navy uppercase">
                                 ASPOL Events
@@ -277,7 +388,7 @@ function EventsContent() {
 
                         {/* Main heading */}
                         <div className="fade-in-element opacity-0 mb-6">
-                            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-aspol-navy mb-4">
+                            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-aspol-dark mb-4 font-serif">
                                 {t.title}
                             </h1>
                         </div>
@@ -290,50 +401,92 @@ function EventsContent() {
                         </div>
 
                         {/* Scroll Down Indicator - Simpler version */}
-                        <div className="fade-in-element opacity-0 mt-8 pt-4" style={{ animationDelay: "0.3s" }}>
-                            <button onClick={scrollToEvents} className="flex flex-col items-center gap-3 cursor-pointer group">
+                        <div className="fade-in-element opacity-0 mt-4" style={{ animationDelay: "0.3s" }}>
+                            <button onClick={scrollToEvents} className="flex items-center gap-3 cursor-pointer group">
                                 <span className="text-xs font-semibold uppercase tracking-widest text-aspol-navy/40 group-hover:text-aspol-red transition-colors">{t.scrollDown}</span>
                                 <ChevronDownIcon className="w-5 h-5 text-aspol-red animate-bounce" />
                             </button>
                         </div>
                     </div>
+
+                    <div className="lg:col-span-5">
+                        <div className="fade-in-element opacity-0 rounded-3xl border border-gray-100 bg-white p-6 sm:p-7 shadow-sm">
+                            <span className="text-xs font-semibold uppercase tracking-widest text-aspol-red block mb-3">
+                                Community first
+                            </span>
+                            <h3 className="text-2xl font-bold text-aspol-navy mb-3 font-serif">
+                                Poznaj ASPOL na żywo
+                            </h3>
+                            <p className="text-gray-600 mb-6 leading-relaxed">
+                                Spotkania, warsztaty i konferencje tworzone przez studentów. Zapisz się na najbliższe wydarzenie lub skontaktuj się z nami.
+                            </p>
+                            <div className="flex flex-wrap gap-3">
+                                <button
+                                    onClick={scrollToEvents}
+                                    className="inline-flex items-center gap-2 px-5 py-3 bg-aspol-navy text-white rounded-xl hover:bg-aspol-red transition-colors text-sm font-semibold"
+                                >
+                                    Zobacz wydarzenia
+                                    <ArrowRight className="w-4 h-4" />
+                                </button>
+                                <Link
+                                    href="/#contact"
+                                    className="inline-flex items-center gap-2 px-5 py-3 border border-gray-200 text-aspol-navy rounded-xl hover:border-aspol-navy hover:bg-aspol-navy/5 transition-colors text-sm font-semibold"
+                                >
+                                    Skontaktuj się
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </div>
             </section>
 
             {/* Filter Tabs - Modernized */}
-            <section id="events-grid" className="py-8 px-6 sticky top-0 z-10 bg-white/95 backdrop-blur-sm transition-all border-b border-gray-100">
-                <div className="max-w-7xl mx-auto flex justify-center gap-2 p-1 bg-gray-50 rounded-full shadow-inner border border-gray-200/50 w-fit">
+            <section id="events-grid" className="py-6 px-6 sticky top-0 z-10 bg-white/95 backdrop-blur-md transition-all border-b border-gray-100/60">
+                <div className="max-w-7xl mx-auto flex justify-center">
+                    <div className="flex gap-2 p-1.5 bg-gray-100/60 rounded-full border border-gray-200/60 w-fit shadow-sm">
                     <button
                         onClick={() => setFilter("upcoming")}
-                        className={`px-6 py-2 rounded-full font-medium text-sm transition-all duration-300 ${filter === "upcoming"
-                            ? "bg-aspol-red text-white shadow-md"
-                            : "text-gray-500 hover:bg-white hover:text-gray-900"
+                        className={`px-6 py-2 rounded-full font-bold text-sm transition-all duration-300 ${filter === "upcoming"
+                            ? "bg-white text-aspol-red shadow-sm"
+                            : "text-gray-500 hover:bg-white/50 hover:text-gray-900"
                             }`}
                     >
                         {t.upcoming}
                     </button>
                     <button
                         onClick={() => setFilter("past")}
-                        className={`px-6 py-2 rounded-full font-medium text-sm transition-all duration-300 ${filter === "past"
-                            ? "bg-aspol-navy text-white shadow-md"
-                            : "text-gray-500 hover:bg-white hover:text-gray-900"
+                        className={`px-6 py-2 rounded-full font-bold text-sm transition-all duration-300 ${filter === "past"
+                            ? "bg-white text-aspol-navy shadow-sm"
+                            : "text-gray-500 hover:bg-white/50 hover:text-gray-900"
                             }`}
                     >
                         {t.past}
                     </button>
+                    </div>
                 </div>
             </section>
 
             {/* Events Grid */}
-            <section className="py-24 px-6 bg-gray-50/50">
+            <section className="py-20 px-6 bg-gray-50/30">
                 <div className="max-w-7xl mx-auto">
+                    <div className="mb-10 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+                        <div>
+                            <span className="text-xs font-semibold uppercase tracking-widest text-aspol-red block mb-2">
+                                {filter === "upcoming" ? t.upcoming : t.past}
+                            </span>
+                            <h2 className="text-3xl md:text-4xl font-bold text-aspol-navy font-serif">
+                                {t.title}
+                            </h2>
+                        </div>
+                    </div>
                     {loading ? (
                         <div className="text-center py-32">
                             <div className="inline-block animate-spin rounded-full h-10 w-10 border-b-2 border-aspol-red"></div>
                             <p className="mt-4 text-sm font-medium text-gray-500 tracking-wide uppercase">{t.loading}</p>
                         </div>
                     ) : sortedEvents.length === 0 ? (
-                        <div className="text-center py-32 bg-white rounded-3xl border border-dashed border-gray-300">
+                        <div className="text-center py-24 bg-white rounded-3xl border border-dashed border-gray-300/60">
                             <div className="bg-gray-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                                 <Calendar className="h-8 w-8 text-gray-400" />
                             </div>
@@ -341,46 +494,66 @@ function EventsContent() {
                             <p className="text-gray-500 mt-1">Check back later for updates.</p>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {sortedEvents.map((event, index) => (
-                                <div key={event._id} className="animate-fade-in-up" style={{ animationDelay: `${index * 0.1}s` }}>
-                                    <EventCard
-                                        event={event}
-                                        t={t}
-                                        formatDate={formatDate}
-                                        formatTime={formatTime}
-                                        language={language}
-                                    />
+                        <>
+                            {filter === "upcoming" && featuredEvents.length > 0 && (
+                                <div className="mb-10 grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                    {featuredEvents.map((event, index) => (
+                                        <div key={event._id} className="animate-fade-in-up" style={{ animationDelay: `${index * 0.1}s` }}>
+                                            <FeaturedEventCard
+                                                event={event}
+                                                t={t}
+                                                formatDate={formatDate}
+                                                formatTime={formatTime}
+                                                language={language}
+                                            />
+                                        </div>
+                                    ))}
                                 </div>
-                            ))}
-                        </div>
+                            )}
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                {regularEvents.map((event, index) => (
+                                    <div key={event._id} className="animate-fade-in-up" style={{ animationDelay: `${index * 0.1}s` }}>
+                                        <EventCard
+                                            event={event}
+                                            t={t}
+                                            formatDate={formatDate}
+                                            formatTime={formatTime}
+                                            language={language}
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                        </>
                     )}
                 </div>
             </section>
 
             {/* Calendar Widget - Improved integration */}
             {filter === "upcoming" && (
-                <section className="py-20 px-6 bg-white border-t border-gray-100 relative overflow-hidden">
+                <section className="py-20 px-6 bg-white border-t border-gray-100/50 relative overflow-hidden">
                     <div className="max-w-5xl mx-auto relative z-10">
                         <div className="text-center mb-12">
                             <span className="text-aspol-red font-bold uppercase tracking-widest text-xs mb-2 block">Planned</span>
-                            <h2 className="text-3xl font-bold text-aspol-navy">Month View</h2>
+                            <h2 className="text-3xl font-bold text-aspol-navy font-serif">Month View</h2>
                         </div>
-                        <CalendarWidget
-                            events={sortedEvents.map((e) => ({
-                                id: e._id,
-                                title: e.title[language as keyof typeof e.title],
-                                date: formatDate(e.date),
-                                isoDate: e.date,
-                                time: formatTime(e.date),
-                                location: e.location[language as keyof typeof e.location],
-                                shortDescription: e.description[language as keyof typeof e.description],
-                                fullDescription: "",
-                                image: e.imageUrl,
-                                category: "Social" as "Conference" | "Social" | "Workshop" | "Cultural" | "Webinar",
-                                registrationLink: e.registrationLink,
-                            }))}
-                        />
+                        <div className="rounded-3xl border border-gray-100 shadow-sm p-2 bg-white">
+                            <CalendarWidget
+                                events={sortedEvents.map((e) => ({
+                                    id: e._id,
+                                    title: e.title[language as keyof typeof e.title],
+                                    date: formatDate(e.date),
+                                    isoDate: e.date,
+                                    time: formatTime(e.date),
+                                    location: e.location[language as keyof typeof e.location],
+                                    shortDescription: e.description[language as keyof typeof e.description],
+                                    fullDescription: "",
+                                    image: e.imageUrl,
+                                    category: "Social" as "Conference" | "Social" | "Workshop" | "Cultural" | "Webinar",
+                                    registrationLink: e.registrationLink,
+                                }))}
+                            />
+                        </div>
                     </div>
                 </section>
             )}

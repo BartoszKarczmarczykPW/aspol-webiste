@@ -19,7 +19,7 @@ const avenir = Mulish({
 }); // Simulating Avenir with Mulish for best free alternative
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://aspol-webiste.vercel.app'),
+  metadataBase: new URL('https://aspol.fr'),
   title: {
     default: "ASPOL - Association des Étudiants Polonais en France",
     template: "%s | ASPOL",
@@ -93,8 +93,11 @@ export default function RootLayout({
       <body className={`${lora.variable} ${avenir.variable} antialiased`} suppressHydrationWarning>
         <StructuredData />
         <Providers>
+          <a href="#main-content" className="skip-link">Skip to content</a>
           <Header />
-          {children}
+          <div id="main-content">
+            {children}
+          </div>
           <Footer />
         </Providers>
       </body>

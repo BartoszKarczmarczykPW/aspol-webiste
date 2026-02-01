@@ -5,7 +5,7 @@ export const client = createClient({
   projectId,
   dataset,
   apiVersion,
-  useCdn: true, // Set to false if statically generating pages, using ISR or tag-based revalidation
+  useCdn: false, // Ensure newly published content shows immediately
 })
 
 // Helper function to get events
@@ -68,6 +68,48 @@ export async function getPostBySlug(slug: string) {
     content,
     "imageUrl": featuredImage.asset->url,
     tags,
-    featured
+    featured,
+    sponsors[] {
+      _key,
+      name,
+      website,
+      "logoUrl": logo.asset->url
+    },
+    partners[] {
+      _key,
+      name,
+      website,
+      "logoUrl": logo.asset->url
+    }
   }`, { slug })
+}
+
+// Helper function to get partners for carousel
+export async function getPartners() {
+  return client.fetch(`*[_type == "partner" && status == "active"] | order(order asc, name asc) {
+    _id,
+    name,
+    website,
+    logoPath,
+    logo {
+      asset->{
+        _id,
+        url,
+        metadata { lqip, dimensions { width, height } }
+      }
+    },
+    order
+  }`)
+}
+
+// Helper function to get site statistics (singleton)
+export async function getStatistics() {
+  return client.fetch(`*[_type == "statistics"] | order(_updatedAt desc)[0] {
+    items[] {
+      value,
+      suffix,
+      order,
+      label { en, fr, pl }
+    }
+  }`)
 }

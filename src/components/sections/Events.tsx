@@ -2,9 +2,10 @@
 
 import { useRef } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import GlassCard from "@/components/ui/cards/GlassCard";
+import SpotlightCard from "@/components/ui/cards/SpotlightCard";
 import SocialShare from "@/components/ui/SocialShare";
 import { useInView } from "@/hooks/useInView";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 // Inline Icons to prevent import errors
 const ForumIcon = ({ className }: { className?: string }) => (
@@ -30,6 +31,8 @@ export default function Events() {
   const isVisible = useInView(sectionRef);
   const { t } = useLanguage();
 
+  useScrollAnimation(sectionRef);
+
   const initiatives = [
     {
       icon: <ForumIcon className="w-8 h-8" />,
@@ -45,20 +48,22 @@ export default function Events() {
     },
   ];
 
+  const featured = initiatives[0];
+  const secondary = initiatives.slice(1);
+
   return (
     <section
       id="events"
       ref={sectionRef}
-      className="relative py-16 sm:py-24 px-6 bg-gray-50 overflow-hidden border-t border-gray-100"
+      className="relative py-16 sm:py-24 px-6 bg-aspol-white overflow-hidden border-t border-gray-100"
     >
-      {/* Background Pattern - Consistent Grid */}
-      <div className="absolute inset-0 pointer-events-none opacity-[0.03]">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#122348_1px,transparent_1px),linear-gradient(to_bottom,#122348_1px,transparent_1px)] bg-size-[40px_40px]"></div>
-      </div>
+      {/* Background accents */}
+      <div className="absolute -top-40 right-0 h-80 w-80 rounded-full bg-red-500/10 blur-3xl"></div>
+      <div className="absolute -bottom-40 left-0 h-80 w-80 rounded-full bg-blue-500/10 blur-3xl"></div>
 
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Section Header */}
-        <div className={`text-center mb-16 sm:mb-20 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+        <div className={`text-center mb-14 sm:mb-20 transition-all duration-1000 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}>
           <span className="inline-block py-1 px-3 rounded-full bg-aspol-navy/5 border border-aspol-navy/10 text-aspol-navy text-xs font-bold tracking-widest uppercase mb-4">
             Networking & Growth
           </span>
@@ -70,52 +75,82 @@ export default function Events() {
           </p>
         </div>
 
-        {/* Initiatives Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {initiatives.map((initiative, index) => (
-            <GlassCard
-              key={index}
-              className={`p-8 h-full group hover:-translate-y-2 transition-transform duration-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-                }`}
-            >
-              <div className="relative z-10 flex flex-col items-center text-center h-full">
-                {/* Icon Container with Glow */}
-                <div className="relative mb-8">
-                  <div className="relative w-16 h-16 bg-aspol-white rounded-lg flex items-center justify-center text-aspol-navy group-hover:bg-aspol-red group-hover:text-white transition-all duration-300 shadow-sm border border-gray-100 group-hover:border-transparent group-hover:-translate-y-1">
+        {/* Initiatives Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          {/* Featured Initiative */}
+          <SpotlightCard
+            className={`lg:col-span-5 border-aspol-navy/10 bg-white/80 p-1 shadow-lg transition-all duration-500 fade-in-element opacity-0 group ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
+            spotlightColor="rgba(15, 23, 42, 0.08)"
+          >
+            <div className="flex flex-col h-full p-7 sm:p-8 rounded-2xl bg-white">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-red-600 to-red-500 text-white flex items-center justify-center shadow-md transition-transform duration-300 group-hover:scale-105">
+                  {featured.icon}
+                </div>
+                <span className="inline-flex items-center px-3 py-1.5 bg-red-50 text-red-700 text-xs font-bold tracking-wider uppercase rounded-full transition-colors duration-300 group-hover:bg-red-100">
+                  {featured.data.badge}
+                </span>
+              </div>
+
+              <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 transition-colors duration-300 group-hover:text-aspol-red">
+                {featured.data.title}
+              </h3>
+              <p className="text-gray-600 leading-relaxed text-base sm:text-lg mb-8">
+                {featured.data.description}
+              </p>
+
+              <div className="mt-auto pt-6 border-t border-gray-100 flex justify-start">
+                <SocialShare
+                  url={`https://aspol.fr/events#${featured.data.title.toLowerCase().replace(/\s+/g, "-")}`}
+                  title={`${featured.data.title} - ASPOL`}
+                  description={featured.data.description}
+                />
+              </div>
+            </div>
+          </SpotlightCard>
+
+          {/* Secondary Initiatives */}
+          <div className="lg:col-span-7 space-y-6">
+            {secondary.map((initiative, index) => (
+              <SpotlightCard
+                key={index}
+                className={`border-gray-100 bg-white/80 p-1 shadow-md transition-all duration-500 hover:-translate-y-1 fade-in-element opacity-0 group ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
+                spotlightColor="rgba(220, 38, 38, 0.12)"
+              >
+                <div className="flex flex-col sm:flex-row sm:items-center gap-6 p-6 sm:p-7 rounded-2xl bg-white">
+                  <div className="w-12 h-12 rounded-xl bg-aspol-navy text-white flex items-center justify-center shrink-0 shadow-sm transition-all duration-300 group-hover:bg-aspol-red group-hover:scale-105">
                     {initiative.icon}
                   </div>
+
+                  <div className="flex-1">
+                    <div className="flex flex-wrap items-center gap-3 mb-2">
+                      <h3 className="text-xl sm:text-2xl font-semibold text-gray-900 transition-colors duration-300 group-hover:text-aspol-red">
+                        {initiative.data.title}
+                      </h3>
+                      <span className="inline-flex items-center px-3 py-1 bg-gray-100 text-gray-600 text-xs font-bold tracking-wider uppercase rounded-full transition-colors duration-300 group-hover:bg-red-50 group-hover:text-red-600">
+                        {initiative.data.badge}
+                      </span>
+                    </div>
+                    <p className="text-gray-600 leading-relaxed">
+                      {initiative.data.description}
+                    </p>
+                  </div>
+
+                  <div className="sm:pl-4 sm:border-l sm:border-gray-100">
+                    <SocialShare
+                      url={`https://aspol.fr/events#${initiative.data.title.toLowerCase().replace(/\s+/g, "-")}`}
+                      title={`${initiative.data.title} - ASPOL`}
+                      description={initiative.data.description}
+                    />
+                  </div>
                 </div>
-
-                {/* Title */}
-                <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-red-700 transition-colors">
-                  {initiative.data.title}
-                </h3>
-
-                {/* Description */}
-                <p className="text-gray-600 leading-relaxed mb-6 grow">
-                  {initiative.data.description}
-                </p>
-
-                {/* Badge */}
-                <span className="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-600 text-xs font-bold tracking-wider uppercase rounded-full group-hover:bg-red-50 group-hover:text-red-600 transition-colors">
-                  {initiative.data.badge}
-                </span>
-
-                {/* Social Share */}
-                <div className="mt-8 pt-8 w-full border-t border-gray-100 group-hover:border-red-50 transition-colors flex justify-center">
-                  <SocialShare
-                    url={`https://aspol.fr/events#${initiative.data.title.toLowerCase().replace(/\s+/g, '-')}`}
-                    title={`${initiative.data.title} - ASPOL`}
-                    description={initiative.data.description}
-                  />
-                </div>
-              </div>
-            </GlassCard>
-          ))}
+              </SpotlightCard>
+            ))}
+          </div>
         </div>
 
         {/* Bottom CTA */}
-        <div className={`text-center mt-16 transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
+        <div className={`text-center mt-14 sm:mt-16 transition-all duration-1000 delay-500 ${isVisible ? "opacity-100" : "opacity-0"}`}>
           <p className="text-gray-600 mb-6 text-lg">
             {t.events.cta}
           </p>

@@ -7,13 +7,24 @@
  * https://github.com/sanity-io/next-sanity
  */
 
-import { NextStudio } from 'next-sanity/studio'
+"use client"
+
+import { Studio } from 'sanity'
 import config from '../../../../sanity.config'
 
 export const dynamic = 'force-static'
 
-export { metadata, viewport } from 'next-sanity/studio'
+if (typeof window !== 'undefined' && !(window as { __sanityDisableTransitionPatched?: boolean }).__sanityDisableTransitionPatched) {
+  const originalError = console.error
+  console.error = (...args) => {
+    const message = typeof args[0] === 'string' ? args[0] : ''
+    if (message.includes('disableTransition')) return
+    originalError(...args)
+  }
+
+  ;(window as { __sanityDisableTransitionPatched?: boolean }).__sanityDisableTransitionPatched = true
+}
 
 export default function StudioPage() {
-  return <NextStudio config={config} />
+  return <Studio config={config} />
 }

@@ -25,7 +25,6 @@ export default function Footer() {
                   fill
                   sizes="128px"
                   className="object-contain brightness-0 invert"
-                  priority
                 />
               </div>
             </Link>
@@ -135,7 +134,7 @@ export default function Footer() {
                 href="https://www.facebook.com/aspologne"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-11 h-11 sm:w-10 sm:h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-red-600 transition-colors touch-manipulation active:scale-95"
+                className="w-11 h-11 sm:w-10 sm:h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-red-600 transition-colors touch-manipulation active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-aspol-red/60 focus-visible:ring-offset-2 focus-visible:ring-offset-aspol-dark"
                 aria-label="Facebook"
               >
                 <FacebookIcon className="w-5 h-5" />
@@ -144,7 +143,7 @@ export default function Footer() {
                 href="https://www.instagram.com/aspolska/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-11 h-11 sm:w-10 sm:h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-red-600 transition-colors touch-manipulation active:scale-95"
+                className="w-11 h-11 sm:w-10 sm:h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-red-600 transition-colors touch-manipulation active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-aspol-red/60 focus-visible:ring-offset-2 focus-visible:ring-offset-aspol-dark"
                 aria-label="Instagram"
               >
                 <InstagramIcon className="w-5 h-5" />
@@ -153,7 +152,7 @@ export default function Footer() {
                 href="https://www.linkedin.com/company/aspolscpo/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-11 h-11 sm:w-10 sm:h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-red-600 transition-colors touch-manipulation active:scale-95"
+                className="w-11 h-11 sm:w-10 sm:h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-red-600 transition-colors touch-manipulation active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-aspol-red/60 focus-visible:ring-offset-2 focus-visible:ring-offset-aspol-dark"
                 aria-label="LinkedIn"
               >
                 <LinkedInIcon className="w-5 h-5" />

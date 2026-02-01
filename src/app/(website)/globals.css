@@ -58,6 +58,47 @@ body {
   font-family: var(--font-sans);
 }
 
+/* Skip link for keyboard users */
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: 0;
+  z-index: 1000;
+  background: #ffffff;
+  color: #900c15;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  font-weight: 600;
+}
+
+.skip-link:focus-visible {
+  left: 1rem;
+  top: 1rem;
+}
+
+/* Focus-visible for nav links */
+:where(header a, nav a, footer a):focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.35);
+  border-radius: 0.375rem;
+}
+
+/* CTA micro-interactions & accessible focus */
+:where(a, button)[class*="rounded"] {
+  transition: transform 150ms ease, box-shadow 150ms ease, filter 150ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:where(a, button)[class*="rounded"]:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.35);
+}
+
+:where(a, button)[class*="rounded"]:active {
+  transform: translateY(1px) scale(0.98);
+}
+
 h1,
 h2,
 h3,

@@ -147,7 +147,7 @@ const Team = memo(function Team() {
       </div>
 
       {/* Ambient Depth Blobs - Professional & Subtle */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-aspol-navy/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+      <div className="absolute top-0 right-0 w-125 h-125 bg-aspol-navy/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
 
       <div className="max-w-7xl mx-auto relative z-10">
         <div
@@ -191,8 +191,7 @@ const Team = memo(function Team() {
                     fill
                     className="rounded-full object-cover relative z-10 border-4 border-white shadow-sm"
                     sizes="(max-width: 640px) 128px, 160px"
-                    loading={index < 4 ? "eager" : "lazy"}
-                    priority={index < 4}
+                    loading="lazy"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
                       target.src = '/default-avatar.svg';

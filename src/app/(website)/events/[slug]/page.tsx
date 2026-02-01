@@ -3,11 +3,10 @@
 import { use } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { notFound, useRouter } from "next/navigation";
 import { ArrowLeft, Calendar, MapPin, Clock, Share2, Tag } from "lucide-react";
 
 import { eventsData } from "@/data/eventsData";
-import { useLanguage, LanguageProvider } from "@/contexts/LanguageContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import RippleButton from "@/components/ui/RippleButton";
 import AddToCalendarButton from "@/components/events/AddToCalendarButton";
 import EventMap from "@/components/events/EventMap";
@@ -19,13 +18,71 @@ interface PageProps {
 
 function EventDetailContent({ slug }: { slug: string }) {
     const { language } = useLanguage();
-    const router = useRouter();
-
     const t = {
-        en: { back: "Back to Events", register: "Register Now", share: "Share", desc: "About this event", details: "Event Details", location: "Location" },
-        fr: { back: "Retour aux événements", register: "S'inscrire", share: "Partager", desc: "À propos de cet événement", details: "Détails de l'événement", location: "Lieu" },
-        pl: { back: "Powrót do wydarzeń", register: "Zarejestruj się", share: "Udostępnij", desc: "O wydarzeniu", details: "Szczegóły wydarzenia", location: "Lokalizacja" }
-    }[language as 'en' | 'fr' | 'pl'] || { back: "Back", register: "Register", share: "Share", desc: "About", details: "Details", location: "Location" };
+        en: {
+            back: "Back to Events",
+            register: "Register Now",
+            share: "Share",
+            desc: "About this event",
+            details: "Event Details",
+            location: "Location",
+            notFoundTitle: "Event Not Found",
+            notFoundCta: "Return to Events",
+            dateLabel: "Date",
+            timeLabel: "Time",
+            locationLabel: "Location",
+            registrationClosed: "Registration Closed",
+            addToCalendar: "Add to Calendar",
+            tba: "TBA",
+        },
+        fr: {
+            back: "Retour aux événements",
+            register: "S'inscrire",
+            share: "Partager",
+            desc: "À propos de cet événement",
+            details: "Détails de l'événement",
+            location: "Lieu",
+            notFoundTitle: "Événement introuvable",
+            notFoundCta: "Retour aux événements",
+            dateLabel: "Date",
+            timeLabel: "Heure",
+            locationLabel: "Lieu",
+            registrationClosed: "Inscriptions fermées",
+            addToCalendar: "Ajouter au calendrier",
+            tba: "À confirmer",
+        },
+        pl: {
+            back: "Powrót do wydarzeń",
+            register: "Zarejestruj się",
+            share: "Udostępnij",
+            desc: "O wydarzeniu",
+            details: "Szczegóły wydarzenia",
+            location: "Lokalizacja",
+            notFoundTitle: "Nie znaleziono wydarzenia",
+            notFoundCta: "Wróć do wydarzeń",
+            dateLabel: "Data",
+            timeLabel: "Godzina",
+            locationLabel: "Lokalizacja",
+            registrationClosed: "Rejestracja zamknięta",
+            addToCalendar: "Dodaj do kalendarza",
+            tba: "Do ustalenia",
+        }
+    }[language as 'en' | 'fr' | 'pl'] || {
+        back: "Back",
+        register: "Register",
+        share: "Share",
+        desc: "About",
+        details: "Details",
+        location: "Location",
+        notFoundTitle: "Event Not Found",
+        notFoundCta: "Return to Events",
+        dateLabel: "Date",
+        timeLabel: "Time",
+        locationLabel: "Location",
+        registrationClosed: "Registration Closed",
+        addToCalendar: "Add to Calendar",
+        tba: "TBA",
+    };
 
     const events = eventsData[language as keyof typeof eventsData] || eventsData.en;
     const event = events.find((e) => e.id === slug);
@@ -34,8 +91,8 @@ function EventDetailContent({ slug }: { slug: string }) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gray-50">
                 <div className="text-center">
-                    <h1 className="text-4xl font-bold text-gray-900 mb-4">Event Not Found</h1>
-                    <Link href="/events" className="text-aspol-red font-bold hover:underline">Return to Events</Link>
+                    <h1 className="text-4xl font-bold text-gray-900 mb-4">{t.notFoundTitle}</h1>
+                    <Link href="/events" className="text-aspol-red font-bold hover:underline">{t.notFoundCta}</Link>
                 </div>
             </div>
         );
@@ -47,7 +104,7 @@ function EventDetailContent({ slug }: { slug: string }) {
 
             <main className="pt-24 pb-20">
                 {/* HERO SECTION */}
-                <section className="relative h-[60vh] min-h-[500px] w-full overflow-hidden">
+                <section className="relative h-[60vh] min-h-125 w-full overflow-hidden">
                     <Image
                         src={event.image}
                         alt={event.title}
@@ -55,7 +112,7 @@ function EventDetailContent({ slug }: { slug: string }) {
                         className="object-cover"
                         priority
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-aspol-navy/90 via-aspol-navy/50 to-transparent" />
+                    <div className="absolute inset-0 bg-linear-to-t from-aspol-navy/90 via-aspol-navy/50 to-transparent" />
 
                     <div className="absolute bottom-0 left-0 w-full p-6 sm:p-12 pb-16 z-20">
                         <div className="max-w-7xl mx-auto">
@@ -134,7 +191,7 @@ function EventDetailContent({ slug }: { slug: string }) {
                                                 <Calendar size={18} />
                                             </div>
                                             <div>
-                                                <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Date</p>
+                                                <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">{t.dateLabel}</p>
                                                 <p className="font-semibold text-gray-900">{event.date}</p>
                                             </div>
                                         </div>
@@ -144,8 +201,8 @@ function EventDetailContent({ slug }: { slug: string }) {
                                                 <Clock size={18} />
                                             </div>
                                             <div>
-                                                <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Time</p>
-                                                <p className="font-semibold text-gray-900">{event.time || "TBA"}</p>
+                                                <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">{t.timeLabel}</p>
+                                                <p className="font-semibold text-gray-900">{event.time || t.tba}</p>
                                             </div>
                                         </div>
 
@@ -154,7 +211,7 @@ function EventDetailContent({ slug }: { slug: string }) {
                                                 <MapPin size={18} />
                                             </div>
                                             <div>
-                                                <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Location</p>
+                                                <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">{t.locationLabel}</p>
                                                 <p className="font-semibold text-gray-900">{event.location}</p>
                                             </div>
                                         </div>
@@ -170,14 +227,14 @@ function EventDetailContent({ slug }: { slug: string }) {
                                             </RippleButton>
                                         ) : (
                                             <button disabled className="w-full py-4 bg-gray-100 text-gray-400 font-bold rounded-xl cursor-not-allowed">
-                                                Registration Closed
+                                                {t.registrationClosed}
                                             </button>
                                         )}
 
                                         <AddToCalendarButton
                                             event={event}
                                             className="w-full"
-                                            label="Add to Calendar"
+                                            label={t.addToCalendar}
                                         />
                                     </div>
                                 </div>
@@ -204,9 +261,5 @@ function EventDetailContent({ slug }: { slug: string }) {
 
 export default function EventPage({ params }: PageProps) {
     const resolvedParams = use(params);
-    return (
-        <LanguageProvider>
-            <EventDetailContent slug={resolvedParams.slug} />
-        </LanguageProvider>
-    );
+    return <EventDetailContent slug={resolvedParams.slug} />;
 }

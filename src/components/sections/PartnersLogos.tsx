@@ -1,21 +1,74 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { getPartners } from "@/lib/sanity";
+import { urlFor } from "@/sanity/lib/image";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function PartnersLogos() {
   const { t } = useLanguage();
+  const [partners, setPartners] = useState<
+    Array<{ name: string; logoUrl: string; url: string; lqip?: string }>
+  >([]);
+  const [loading, setLoading] = useState(true);
 
-  const partners = [
-    { name: "Campus France", logo: "/partners/campus-france.png", url: "https://www.campusfrance.org/" },
-    { name: "Sciences Po Paris", logo: "/partners/sciences-po.png", url: "https://www.sciencespo.fr/" },
-    { name: "Polish Embassy in Paris", logo: "/partners/polish-embassy.png", url: "https://www.gov.pl/web/france" },
-    { name: "Boston Consulting Group", logo: "/partners/bcg.png", url: "https://www.bcg.com/" },
-    { name: "Société Générale", logo: "/partners/societe-generale.png", url: "https://www.societegenerale.com/" },
-    { name: "Publicis Groupe", logo: "/partners/publicis.png", url: "https://www.publicisgroupe.com/" },
-    { name: "La French Tech", logo: "/partners/la-french-tech.png", url: "https://lafrenchtech.com/" },
+  const fallbackPartners = [
+    { name: "Campus France", logoUrl: "/partners/campus-france.png", url: "https://www.campusfrance.org/" },
+    { name: "Sciences Po Paris", logoUrl: "/partners/sciences-po.png", url: "https://www.sciencespo.fr/" },
+    { name: "Polish Embassy in Paris", logoUrl: "/partners/polish-embassy.png", url: "https://www.gov.pl/web/france" },
+    { name: "Boston Consulting Group", logoUrl: "/partners/bcg.png", url: "https://www.bcg.com/" },
+    { name: "Société Générale", logoUrl: "/partners/societe-generale.png", url: "https://www.societegenerale.com/" },
+    { name: "Publicis Groupe", logoUrl: "/partners/publicis.png", url: "https://www.publicisgroupe.com/" },
+    { name: "La French Tech", logoUrl: "/partners/la-french-tech.png", url: "https://lafrenchtech.com/" },
   ];
+
+  useEffect(() => {
+    let mounted = true;
+    async function loadPartners() {
+      try {
+        const data = await getPartners();
+        if (!mounted) return;
+        if (Array.isArray(data) && data.length > 0) {
+          setPartners(
+            data
+              .map(
+                (item: {
+                  name: string;
+                  website: string;
+                  logo?: { asset?: { metadata?: { lqip?: string } } };
+                  logoPath?: string;
+                }) => {
+                  const logoUrl = item.logo?.asset
+                    ? urlFor(item.logo).width(320).height(160).fit("max").url()
+                    : item.logoPath || "";
+
+                  return {
+                    name: item.name,
+                    url: item.website,
+                    logoUrl,
+                    lqip: item.logo?.asset?.metadata?.lqip,
+                  };
+                }
+              )
+              .filter((item) => item.logoUrl)
+          );
+        } else {
+          setPartners(fallbackPartners);
+        }
+      } catch (error) {
+        if (mounted) setPartners(fallbackPartners);
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    }
+
+    loadPartners();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   // Duplicate the array to ensure seamless scrolling logic (we need enough width)
   const infinitePartners = [...partners, ...partners, ...partners, ...partners];
@@ -29,7 +82,7 @@ export default function PartnersLogos() {
 
         <div className="relative w-full mask-[linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] mb-8">
           <div className="flex w-max items-center animate-scroll hover:pause-animation">
-            {infinitePartners.map((partner, index) => (
+            {(!loading ? infinitePartners : fallbackPartners).map((partner, index) => (
               <a
                 href={partner.url}
                 target="_blank"
@@ -38,12 +91,15 @@ export default function PartnersLogos() {
                 className="mx-4 sm:mx-8 md:mx-12 relative w-28 h-14 sm:w-32 sm:h-16 md:w-40 md:h-20 opacity-90 md:opacity-70 transition-all duration-300 md:hover:opacity-100 md:hover:scale-105 block"
               >
                 <Image
-                  src={partner.logo}
+                  src={partner.logoUrl}
                   alt={`${partner.name} - Official ASPOL Partner supporting Polish students in France`}
                   fill
+                  loading="lazy"
                   sizes="(max-width: 768px) 128px, 160px"
                   className="object-contain mix-blend-multiply grayscale hover:grayscale-0"
                   style={{ filter: 'contrast(0.95) brightness(1.1)' }}
+                  placeholder={partner.lqip ? "blur" : "empty"}
+                  blurDataURL={partner.lqip}
                 />
               </a>
             ))}
