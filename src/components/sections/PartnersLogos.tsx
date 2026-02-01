@@ -9,12 +9,10 @@ import Link from "next/link";
 
 export default function PartnersLogos() {
   const { t } = useLanguage();
-  const [partners, setPartners] = useState<
-    Array<{ name: string; logoUrl: string; url: string; lqip?: string }>
-  >([]);
+  const [partners, setPartners] = useState<Array<{ name: string; logoUrl: string; url: string; lqip?: string }>>([]);
   const [loading, setLoading] = useState(true);
 
-  const fallbackPartners = [
+  const fallbackPartners: Array<{ name: string; logoUrl: string; url: string; lqip?: string }> = [
     { name: "Campus France", logoUrl: "/partners/campus-france.png", url: "https://www.campusfrance.org/" },
     { name: "Sciences Po Paris", logoUrl: "/partners/sciences-po.png", url: "https://www.sciencespo.fr/" },
     { name: "Polish Embassy in Paris", logoUrl: "/partners/polish-embassy.png", url: "https://www.gov.pl/web/france" },
