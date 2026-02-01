@@ -3,7 +3,7 @@ import { blogPosts } from '@/data/blogPosts';
 import { eventsData } from '@/data/eventsData';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://aspol.fr';
+  const baseUrl = 'https://aspol-webiste.vercel.app';
 
   // Static routes
   const routes = [

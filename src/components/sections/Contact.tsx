@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { sendContactEmail } from "@/app/actions/contact";
+import { sendContactEmail } from "@/app/(website)/actions/contact";
 
 export default function Contact() {
   const sectionRef = useRef<HTMLDivElement>(null);

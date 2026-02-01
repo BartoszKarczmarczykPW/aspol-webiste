@@ -19,7 +19,7 @@ const avenir = Mulish({
 }); // Simulating Avenir with Mulish for best free alternative
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://aspol.fr'),
+  metadataBase: new URL('https://aspol-webiste.vercel.app'),
   title: {
     default: "ASPOL - Association des Étudiants Polonais en France",
     template: "%s | ASPOL",

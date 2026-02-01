@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { subscribeToNewsletter } from "@/app/actions/newsletter";
+import { subscribeToNewsletter } from "@/app/(website)/actions/newsletter";
 
 export default function Newsletter() {
   const { language } = useLanguage();
