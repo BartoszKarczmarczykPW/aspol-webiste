@@ -72,12 +72,21 @@ export default function About() {
         {/* Features Layout */}
         <div className="space-y-8">
           {(() => {
-            const fallbackFeatures = t.about.features.map((feature) => ({
+            type AboutFeature = {
+              icon?: string;
+              order?: number;
+              link?: string;
+              title?: { en?: string; fr?: string; pl?: string };
+              description?: { en?: string; fr?: string; pl?: string };
+            };
+
+            const fallbackFeatures: AboutFeature[] = t.about.features.map((feature) => ({
               icon: feature.icon,
               title: { en: feature.title, fr: feature.title, pl: feature.title },
               description: { en: feature.description, fr: feature.description, pl: feature.description },
             }));
-            const features = aboutData?.features?.length
+
+            const features: AboutFeature[] = aboutData?.features?.length
               ? [...aboutData.features].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
               : fallbackFeatures;
 
