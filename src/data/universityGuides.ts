@@ -60,7 +60,7 @@ Jeśli uzyskamy odpowiednią ilość punktów w pierwszym etapie, otrzymamy zapr
 - Founded in 1872
 - Grande École status
 - 14,000 students (4,000 undergraduates; 10,000 master’s and doctoral students)
-- Three‑year multidisciplinary bachelor with options in English — three tracks and a wide range of courses (2+1 or 2+2; exchange or dual degree; first two years at Sciences Po)
+- Three‑year multidisciplinary bachelor with options in English - three tracks and a wide range of courses (2+1 or 2+2; exchange or dual degree; first two years at Sciences Po)
 - 7 regional campuses with different regional specializations: Paris, Reims, Menton, Le Havre, Dijon, Nancy, Poitiers
 - Undergraduate dual‑degree programs with top universities: University of California – Berkeley, Columbia University, University College London, Hong Kong University, Freie Universität Berlin, Keio University (Japan), National University of Singapore, University of British Columbia (Canada), University of Sydney
 - BASC: dual degree in sciences and humanities/social sciences
@@ -77,7 +77,7 @@ Jeśli uzyskamy odpowiednią ilość punktów w pierwszym etapie, otrzymamy zapr
 Students who did not complete French high school apply through the university’s dedicated portal. The first stage typically runs from November to April (varies by year). You can earn 20 points in each of three categories:
 1. Matura (high‑school leaving exam) grades (if not available yet, provide predicted grades and/or mock exam results). No specific subjects are required.
 2. Grades from the last three years of school, plus activities and interests (non‑academic achievements).
-3. Essays: four essays total — three about motivation and one on a topic chosen from the five provided by the university.
+3. Essays: four essays total - three about motivation and one on a topic chosen from the five provided by the university.
 
 You must also provide personal details and choose two campuses you want to apply to. Recommendation letters and additional certificates (e.g., language) can be included. You may apply in English or French. At the end of this stage, a non‑refundable application fee is required. If you achieve the required score in stage one, you will be invited to an interview, also scored out of 20.
 
@@ -93,7 +93,7 @@ You must also provide personal details and choose two campuses you want to apply
 - Fondée en 1872
 - Statut Grande École
 - 14 000 étudiants (4 000 en licence ; 10 000 en master et doctorat)
-- Licence pluridisciplinaire de trois ans avec options en anglais — trois parcours et un large choix de cours (2+1 ou 2+2 ; échange ou double diplôme ; deux premières années à Sciences Po)
+- Licence pluridisciplinaire de trois ans avec options en anglais - trois parcours et un large choix de cours (2+1 ou 2+2 ; échange ou double diplôme ; deux premières années à Sciences Po)
 - 7 campus régionaux spécialisés : Paris, Reims, Menton, Le Havre, Dijon, Nancy, Poitiers
 - Doubles diplômes de licence avec des universités de premier plan : University of California – Berkeley, Columbia University, University College London, Hong Kong University, Freie Universität Berlin, Keio University (Japon), National University of Singapore, University of British Columbia (Canada), University of Sydney
 - BASC : double diplôme sciences et humanités/sciences sociales
@@ -110,7 +110,7 @@ You must also provide personal details and choose two campuses you want to apply
 Les étudiants n’ayant pas effectué leur lycée en France postulent via le portail dédié de l’université. La première étape se déroule généralement de novembre à avril (selon l’année). Elle comporte 20 points par catégorie :
 1. Notes du baccalauréat (si non disponibles, fournir les notes prévisionnelles et/ou les résultats d’examens blancs). Aucun sujet spécifique n’est requis.
 2. Notes des trois dernières années et activités/intérêts (réalisations non strictement académiques).
-3. Essais : quatre essais au total — trois sur la motivation et un sur un sujet proposé par l’université.
+3. Essais : quatre essais au total - trois sur la motivation et un sur un sujet proposé par l’université.
 
 Il faut aussi fournir ses données personnelles et choisir deux campus. Des lettres de recommandation et des certificats supplémentaires (par ex. linguistiques) peuvent être ajoutés. La candidature peut être rédigée en anglais ou en français. À la fin de cette étape, des frais de candidature non remboursables sont requis. En cas de score suffisant, vous serez invité à un entretien noté sur 20.
 
@@ -468,7 +468,7 @@ English‑taught programs available at both bachelor and master levels:
 - [Bachelor in Management (BSc)](https://escp.eu/programmes/bachelor)
 - [Master in Management](https://escp.eu/programmes/master-in-management)
 
-**6 campuses** — Berlin, London, Madrid, Paris, Turin, Warsaw. You can combine cities (e.g., one year in Paris, one year in London).
+**6 campuses** - Berlin, London, Madrid, Paris, Turin, Warsaw. You can combine cities (e.g., one year in Paris, one year in London).
 - The bachelor’s program lasts 3 years in 3 different cities.
 
 [University website](https://escp.eu/)
@@ -492,7 +492,7 @@ Programmes en anglais disponibles en licence et en master :
 - [Bachelor in Management (BSc)](https://escp.eu/programmes/bachelor)
 - [Master in Management](https://escp.eu/programmes/master-in-management)
 
-**6 campus** — Berlin, Londres, Madrid, Paris, Turin, Varsovie. Possibilité de combiner les villes (ex. une année à Paris, une année à Londres).
+**6 campus** - Berlin, Londres, Madrid, Paris, Turin, Varsovie. Possibilité de combiner les villes (ex. une année à Paris, une année à Londres).
 - La licence dure 3 ans dans 3 villes différentes.
 
 [Site de l’université](https://escp.eu/)
