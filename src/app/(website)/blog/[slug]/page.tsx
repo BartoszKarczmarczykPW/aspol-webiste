@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useEffect, useMemo, useState } from "react";
+import React, { use, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, Calendar, User, Clock } from "lucide-react";
@@ -30,13 +30,25 @@ interface SanityPost {
     partners?: { _key?: string; name: string; website?: string; logoUrl?: string }[];
 }
 
+const withLineBreaks = (children: React.ReactNode) =>
+    React.Children.map(children, (child) => {
+        if (typeof child !== "string") return child;
+        const parts = child.split("\n");
+        return parts.map((part, index) => (
+            <React.Fragment key={`${part}-${index}`}>
+                {part}
+                {index < parts.length - 1 ? <br /> : null}
+            </React.Fragment>
+        ));
+    });
+
 const portableTextComponents: PortableTextComponents = {
     block: {
-        h2: ({ children }) => <h2>{children}</h2>,
-        h3: ({ children }) => <h3>{children}</h3>,
-        h4: ({ children }) => <h4>{children}</h4>,
-        blockquote: ({ children }) => <blockquote>{children}</blockquote>,
-        normal: ({ children }) => <p>{children}</p>,
+        h2: ({ children }) => <h2>{withLineBreaks(children)}</h2>,
+        h3: ({ children }) => <h3>{withLineBreaks(children)}</h3>,
+        h4: ({ children }) => <h4>{withLineBreaks(children)}</h4>,
+        blockquote: ({ children }) => <blockquote>{withLineBreaks(children)}</blockquote>,
+        normal: ({ children }) => <p>{withLineBreaks(children)}</p>,
     },
     list: {
         bullet: ({ children }) => <ul>{children}</ul>,
