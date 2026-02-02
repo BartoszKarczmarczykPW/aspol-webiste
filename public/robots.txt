@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /private/
+Disallow: /studio/
+
+Sitemap: https://aspol.fr/sitemap.xml

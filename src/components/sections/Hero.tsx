@@ -1,11 +1,16 @@
 "use client";
 
 import { useRef } from "react";
+import dynamic from "next/dynamic";
 import { useLanguage } from "@/contexts/LanguageContext";
 import RippleButton from "@/components/ui/RippleButton";
-import SmoothBackground from "@/components/ui/effects/SmoothBackground";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { ChevronDownIcon } from "@/components/icons/ChevronDownIcon";
+
+const SmoothBackground = dynamic(
+  () => import("@/components/ui/effects/SmoothBackground"),
+  { ssr: false }
+);
 
 export default function Hero() {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -16,7 +21,7 @@ export default function Hero() {
   return (
     <section
       ref={heroRef}
-      className="relative min-h-[100svh] sm:min-h-[90vh] flex items-center justify-center px-4 sm:px-6 pt-32 sm:pt-32 pb-16 sm:pb-20 overflow-hidden"
+      className="relative min-h-svh sm:min-h-[90vh] flex items-center justify-center px-4 sm:px-6 pt-32 sm:pt-32 pb-16 sm:pb-20 overflow-hidden"
     >
       {/* Smooth Animated Background */}
       <SmoothBackground />
@@ -35,6 +40,7 @@ export default function Hero() {
           {/* Main heading */}
           <div className="fade-in-element opacity-0 mb-6 sm:mb-8">
             <h1 className="text-5xl xs:text-6xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight text-aspol-dark mb-4">
+              <span className="sr-only">{t.hero.subtitle}</span>
               <span className="block leading-tight">{t.hero.welcome}</span>
               <span className="block text-aspol-red">
                 ASPOL
