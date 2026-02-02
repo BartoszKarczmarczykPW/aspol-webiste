@@ -198,6 +198,12 @@ export default defineType({
             of: [{ type: 'string' }],
         }),
         defineField({
+            name: 'upcoming',
+            title: 'Upcoming Tag',
+            type: 'boolean',
+            initialValue: false,
+        }),
+        defineField({
             name: 'featured',
             title: 'Featured Post',
             type: 'boolean',

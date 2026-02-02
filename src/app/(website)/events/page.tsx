@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { getEvents } from "@/lib/sanity";
+import { getEventCountdown, getEvents } from "@/lib/sanity";
 import { Calendar, MapPin, Clock, ArrowRight, ChevronDown, ChevronUp } from "lucide-react";
 import AddToCalendarButton from "@/components/events/AddToCalendarButton";
 import CalendarWidget from "@/components/events/CalendarWidget";
@@ -40,6 +40,17 @@ interface SanityEvent {
     registrationLink?: string;
     tags?: string[];
     featured?: boolean;
+}
+
+interface EventCountdownConfig {
+    _id: string;
+    title: string;
+    label: { en: string; fr: string; pl: string };
+    targetDate: string;
+    liveLabel?: { en: string; fr: string; pl: string };
+    completedMessage?: { en: string; fr: string; pl: string };
+    isActive?: boolean;
+    showLiveBadge?: boolean;
 }
 
 // Event Card Component
@@ -94,7 +105,7 @@ function EventCard({ event, t, formatDate, formatTime, language }: {
                 </h3>
 
                 {/* Metadata Row */}
-                <div className="flex flex-wrap items-center gap-4 text-gray-500 text-sm mb-5">
+                <div className="flex flex-col items-start gap-2 text-gray-500 text-sm mb-5">
                     <div className="flex items-center gap-2">
                         <Clock className="w-4 h-4 text-aspol-red" />
                         <span className="font-medium text-gray-600">{formatTime(event.date)}</span>
@@ -209,7 +220,7 @@ function FeaturedEventCard({ event, t, formatDate, formatTime, language }: {
                     <p className="text-gray-600 leading-relaxed mb-5 line-clamp-3">
                         {event.description[language as keyof typeof event.description]}
                     </p>
-                    <div className="flex flex-wrap items-center gap-4 text-gray-500 text-sm mb-6">
+                    <div className="flex flex-col items-start gap-2 text-gray-500 text-sm mb-6">
                         <div className="flex items-center gap-2">
                             <Clock className="w-4 h-4 text-aspol-red" />
                             <span className="font-medium text-gray-600">{formatTime(event.date)}</span>
@@ -261,6 +272,7 @@ function EventsContent() {
     const [filter, setFilter] = useState<"upcoming" | "past">("upcoming");
     const [events, setEvents] = useState<SanityEvent[]>([]);
     const [loading, setLoading] = useState(true);
+    const [countdownConfig, setCountdownConfig] = useState<EventCountdownConfig | null>(null);
 
     const heroRef = useRef<HTMLDivElement>(null);
     useScrollAnimation(heroRef);
@@ -268,8 +280,12 @@ function EventsContent() {
     useEffect(() => {
         async function fetchEvents() {
             try {
-                const data = await getEvents();
-                setEvents(data);
+                const [eventsData, countdownData] = await Promise.all([
+                    getEvents(),
+                    getEventCountdown(),
+                ]);
+                setEvents(eventsData);
+                setCountdownConfig(countdownData || null);
             } catch (error) {
                 console.error("Error fetching events:", error);
             } finally {
@@ -278,6 +294,37 @@ function EventsContent() {
         }
         fetchEvents();
     }, []);
+
+    const countdownTargetTimestamp = useMemo(() => {
+        if (countdownConfig?.targetDate) {
+            return new Date(countdownConfig.targetDate).getTime();
+        }
+        return new Date("2026-04-25T00:00:00+02:00").getTime();
+    }, [countdownConfig?.targetDate]);
+
+    const getCountdown = (targetTimestamp: number) => {
+        const now = new Date();
+        const diff = targetTimestamp - now.getTime();
+        if (diff <= 0) {
+            return { done: true, days: 0, hours: 0, minutes: 0 };
+        }
+        const totalMinutes = Math.floor(diff / 60000);
+        const days = Math.floor(totalMinutes / 1440);
+        const hours = Math.floor((totalMinutes % 1440) / 60);
+        const minutes = totalMinutes % 60;
+        return { done: false, days, hours, minutes };
+    };
+
+    const [ppfCountdown, setPpfCountdown] = useState(() => getCountdown(countdownTargetTimestamp));
+
+    useEffect(() => {
+        setPpfCountdown(getCountdown(countdownTargetTimestamp));
+        const id = setInterval(() => {
+            setPpfCountdown(getCountdown(countdownTargetTimestamp));
+        }, 60000);
+        return () => clearInterval(id);
+    }, [countdownTargetTimestamp]);
+
 
     const labels = {
         en: {
@@ -410,30 +457,97 @@ function EventsContent() {
                     </div>
 
                     <div className="lg:col-span-5">
-                        <div className="fade-in-element opacity-0 rounded-3xl border border-gray-100 bg-white p-6 sm:p-7 shadow-sm">
-                            <span className="text-xs font-semibold uppercase tracking-widest text-aspol-red block mb-3">
-                                Community first
-                            </span>
-                            <h3 className="text-2xl font-bold text-aspol-navy mb-3 font-serif">
-                                Poznaj ASPOL na żywo
-                            </h3>
-                            <p className="text-gray-600 mb-6 leading-relaxed">
-                                Spotkania, warsztaty i konferencje tworzone przez studentów. Zapisz się na najbliższe wydarzenie lub skontaktuj się z nami.
-                            </p>
-                            <div className="flex flex-wrap gap-3">
-                                <button
-                                    onClick={scrollToEvents}
-                                    className="inline-flex items-center gap-2 px-5 py-3 bg-aspol-navy text-white rounded-xl hover:bg-aspol-red transition-colors text-sm font-semibold"
-                                >
-                                    Zobacz wydarzenia
-                                    <ArrowRight className="w-4 h-4" />
-                                </button>
-                                <Link
-                                    href="/#contact"
-                                    className="inline-flex items-center gap-2 px-5 py-3 border border-gray-200 text-aspol-navy rounded-xl hover:border-aspol-navy hover:bg-aspol-navy/5 transition-colors text-sm font-semibold"
-                                >
-                                    Skontaktuj się
-                                </Link>
+                        <div className="fade-in-element opacity-0 relative rounded-3xl border border-white/60 bg-white/90 p-6 sm:p-7 shadow-[0_24px_60px_-30px_rgba(15,23,42,0.45)] backdrop-blur-sm overflow-hidden">
+                            <div className="absolute -top-20 -right-16 h-48 w-48 rounded-full bg-aspol-red/10 blur-3xl" />
+                            <div className="absolute -bottom-24 -left-16 h-56 w-56 rounded-full bg-aspol-navy/10 blur-3xl" />
+
+                            <div className="relative">
+                                <span className="inline-flex items-center gap-2 rounded-full bg-aspol-navy/5 px-3 py-1 text-[0.65rem] font-bold uppercase tracking-widest text-aspol-navy mb-4">
+                                    <span className="h-1.5 w-1.5 rounded-full bg-aspol-red" />
+                                    Community first
+                                </span>
+                                <h3 className="text-2xl sm:text-3xl font-bold text-aspol-navy mb-3 font-serif">
+                                    Poznaj ASPOL na żywo
+                                </h3>
+                                <p className="text-gray-600 mb-6 leading-relaxed">
+                                    Spotkania, warsztaty i konferencje tworzone przez studentów. Zapisz się na najbliższe wydarzenie lub skontaktuj się z nami.
+                                </p>
+
+                                {countdownConfig?.isActive !== false && (
+                                    <div className="mb-6 rounded-2xl border border-aspol-navy/10 bg-white/70 p-4 sm:p-5 shadow-sm">
+                                        <div className="flex items-center justify-between gap-3 mb-4">
+                                            <div>
+                                                <p className="text-[0.7rem] font-semibold uppercase tracking-widest text-aspol-navy/60">
+                                                    {countdownConfig?.label?.[language as keyof EventCountdownConfig["label"]] ||
+                                                        (language === "fr"
+                                                            ? "Compte à rebours vers PPF X 2026"
+                                                            : language === "en"
+                                                                ? "Countdown to PPF X 2026"
+                                                                : "Odliczanie do PPF X 2026")}
+                                                </p>
+                                                <p className="text-sm font-semibold text-aspol-navy">
+                                                    {new Date(countdownTargetTimestamp).toLocaleDateString(
+                                                        language === "fr" ? "fr-FR" : language === "pl" ? "pl-PL" : "en-US",
+                                                        { day: "2-digit", month: "2-digit", year: "numeric" }
+                                                    )}
+                                                </p>
+                                            </div>
+                                            {countdownConfig?.showLiveBadge !== false && (
+                                                <span className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-[0.65rem] font-bold uppercase tracking-widest text-aspol-red shadow-sm">
+                                                    <span className="h-1.5 w-1.5 rounded-full bg-aspol-red animate-pulse" />
+                                                    {countdownConfig?.liveLabel?.[language as keyof EventCountdownConfig["label"]] || "Live"}
+                                                </span>
+                                            )}
+                                        </div>
+                                        {ppfCountdown.done ? (
+                                            <div className="rounded-xl bg-white/80 px-4 py-3 text-sm font-semibold text-aspol-navy text-center shadow-sm">
+                                                {countdownConfig?.completedMessage?.[language as keyof EventCountdownConfig["label"]] ||
+                                                    (language === "fr"
+                                                        ? "On commence aujourd’hui !"
+                                                        : language === "en"
+                                                            ? "We start today!"
+                                                            : "Startujemy dziś!")}
+                                            </div>
+                                        ) : (
+                                            <div className="grid grid-cols-3 gap-3 text-center">
+                                                <div className="rounded-2xl bg-white px-3 py-3 shadow-sm border border-gray-100">
+                                                    <div className="text-2xl font-bold text-aspol-navy leading-none">{ppfCountdown.days}</div>
+                                                    <div className="text-[0.65rem] uppercase tracking-widest text-gray-500 mt-1">
+                                                        {language === "fr" ? "jours" : language === "en" ? "days" : "dni"}
+                                                    </div>
+                                                </div>
+                                                <div className="rounded-2xl bg-white px-3 py-3 shadow-sm border border-gray-100">
+                                                    <div className="text-2xl font-bold text-aspol-navy leading-none">{ppfCountdown.hours}</div>
+                                                    <div className="text-[0.65rem] uppercase tracking-widest text-gray-500 mt-1">
+                                                        {language === "fr" ? "h" : language === "en" ? "hrs" : "godz."}
+                                                    </div>
+                                                </div>
+                                                <div className="rounded-2xl bg-white px-3 py-3 shadow-sm border border-gray-100">
+                                                    <div className="text-2xl font-bold text-aspol-navy leading-none">{ppfCountdown.minutes}</div>
+                                                    <div className="text-[0.65rem] uppercase tracking-widest text-gray-500 mt-1">
+                                                        {language === "fr" ? "min" : language === "en" ? "min" : "min"}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+
+                                <div className="flex flex-wrap gap-3">
+                                    <button
+                                        onClick={scrollToEvents}
+                                        className="inline-flex items-center gap-2 px-5 py-3 bg-aspol-navy text-white rounded-xl hover:bg-aspol-red transition-colors text-sm font-semibold shadow-sm"
+                                    >
+                                        Zobacz wydarzenia
+                                        <ArrowRight className="w-4 h-4" />
+                                    </button>
+                                    <Link
+                                        href="/#contact"
+                                        className="inline-flex items-center gap-2 px-5 py-3 border border-gray-200 text-aspol-navy rounded-xl hover:border-aspol-navy hover:bg-aspol-navy/5 transition-colors text-sm font-semibold"
+                                    >
+                                        Skontaktuj się
+                                    </Link>
+                                </div>
                             </div>
                         </div>
                     </div>

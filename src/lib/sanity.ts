@@ -24,6 +24,20 @@ export async function getEvents() {
   }`)
 }
 
+// Helper function to get event countdown (singleton-ish)
+export async function getEventCountdown() {
+  return client.fetch(`*[_type == "eventCountdown" && isActive == true] | order(_updatedAt desc)[0] {
+    _id,
+    title,
+    label,
+    targetDate,
+    liveLabel,
+    completedMessage,
+    isActive,
+    showLiveBadge
+  }`)
+}
+
 // Helper function to get blog posts
 export async function getPosts() {
   return client.fetch(`*[_type == "post"] | order(publishedAt desc) {
@@ -36,6 +50,7 @@ export async function getPosts() {
     content,
     "imageUrl": featuredImage.asset->url,
     tags,
+    upcoming,
     featured
   }`)
 }

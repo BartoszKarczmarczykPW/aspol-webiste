@@ -78,7 +78,7 @@ function BlogPostContent({ slug }: { slug: string }) {
 
     const t = {
         en: {
-            back: "Back to Blog",
+            back: "Back to Polish Paris Forum",
             share: "Share Article",
             readTime: "Read Time",
             published: "Published",
@@ -87,10 +87,10 @@ function BlogPostContent({ slug }: { slug: string }) {
             partners: "Partners",
             visit: "Visit website",
             notFoundTitle: "Article Not Found",
-            notFoundCta: "Return to Blog",
+            notFoundCta: "Return to Polish Paris Forum",
         },
         fr: {
-            back: "Retour au Blog",
+            back: "Retour au Polish Paris Forum",
             share: "Partager l'article",
             readTime: "Temps de lecture",
             published: "Publié le",
@@ -99,10 +99,10 @@ function BlogPostContent({ slug }: { slug: string }) {
             partners: "Partenaires",
             visit: "Visiter le site",
             notFoundTitle: "Article introuvable",
-            notFoundCta: "Retour au blog",
+            notFoundCta: "Retour au Polish Paris Forum",
         },
         pl: {
-            back: "Powrót do Bloga",
+            back: "Powrót do Polish Paris Forum",
             share: "Udostępnij artykuł",
             readTime: "Czas czytania",
             published: "Opublikowano",
@@ -111,7 +111,7 @@ function BlogPostContent({ slug }: { slug: string }) {
             partners: "Partnerzy",
             visit: "Odwiedź stronę",
             notFoundTitle: "Nie znaleziono artykułu",
-            notFoundCta: "Wróć do bloga",
+            notFoundCta: "Wróć do Polish Paris Forum",
         },
     }[language as "en" | "fr" | "pl"] || {
         back: "Back",

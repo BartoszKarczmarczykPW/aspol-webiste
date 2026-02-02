@@ -20,6 +20,12 @@ export const structure: StructureResolver = (S) =>
       S.listItem()
         .title('Statistics')
         .child(S.documentTypeList('statistics').title('Statistics')),
+      S.listItem()
+        .title('Events')
+        .child(S.documentTypeList('event').title('Events')),
+      S.listItem()
+        .title('Event Countdown')
+        .child(S.documentTypeList('eventCountdown').title('Event Countdown')),
       S.divider(),
       S.listItem()
         .title('Partners')
@@ -41,6 +47,8 @@ export const structure: StructureResolver = (S) =>
           item.getId() !== 'initiative' &&
           item.getId() !== 'testimonial' &&
           item.getId() !== 'contactMessage' &&
-          item.getId() !== 'newsletterSignup'
+          item.getId() !== 'newsletterSignup' &&
+          item.getId() !== 'event' &&
+          item.getId() !== 'eventCountdown'
       ),
     ])

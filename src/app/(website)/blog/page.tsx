@@ -32,6 +32,7 @@ interface SanityPost {
     imageUrl: string;
     tags?: string[];
     featured?: boolean;
+    upcoming?: boolean;
 }
 
 function BlogContent() {
@@ -56,29 +57,32 @@ function BlogContent() {
 
     const labels = {
         en: {
-            title: "Blog & News",
-            subtitle: "Insights, updates, and stories from the ASPOL community.",
+            title: "Polish Paris Forum",
+            subtitle: "Conference news, highlights, and insights from the Polish Paris Forum.",
             all: "All Posts",
             readMore: "Read Article",
             featured: "Featured Story",
+            upcoming: "Upcoming",
             empty: "No posts found for this category.",
             loading: "Loading posts...",
         },
         fr: {
-            title: "Blog & Actualités",
-            subtitle: "Idées, mises à jour et histoires de la communauté ASPOL.",
+            title: "Polish Paris Forum",
+            subtitle: "Actualités, temps forts et analyses de la conférence Polish Paris Forum.",
             all: "Tous les articles",
             readMore: "Lire l'article",
             featured: "À la une",
+            upcoming: "À venir",
             empty: "Aucun article trouvé pour cette catégorie.",
             loading: "Chargement des articles...",
         },
         pl: {
-            title: "Blog i Aktualności",
-            subtitle: "Spostrzeżenia, aktualizacje i historie społeczności ASPOL.",
+            title: "Polish Paris Forum",
+            subtitle: "Aktualności, relacje i wnioski z konferencji Polish Paris Forum.",
             all: "Wszystkie wpisy",
             readMore: "Czytaj artykuł",
             featured: "Wyróżniony artykuł",
+            upcoming: "Nadchodzące",
             empty: "Nie znaleziono wpisów dla tej kategorii.",
             loading: "Ładowanie wpisów...",
         },
@@ -195,8 +199,17 @@ function BlogContent() {
                                                 fill
                                                 className="object-cover"
                                             />
-                                            <div className="absolute top-4 left-4 bg-aspol-red text-white px-4 py-2 rounded-full text-sm font-semibold">
-                                                {t.featured}
+                                            <div className="absolute top-4 left-4 flex flex-wrap gap-2">
+                                                {featuredPost.featured && (
+                                                    <span className="bg-aspol-red text-white px-4 py-2 rounded-full text-sm font-semibold">
+                                                        {t.featured}
+                                                    </span>
+                                                )}
+                                                {featuredPost.upcoming && (
+                                                    <span className="bg-aspol-navy text-white px-4 py-2 rounded-full text-sm font-semibold">
+                                                        {t.upcoming}
+                                                    </span>
+                                                )}
                                             </div>
                                         </div>
 
@@ -268,6 +281,13 @@ function BlogContent() {
 
                                                 {/* Post Content */}
                                                 <div className="p-6">
+                                                    {post.upcoming && (
+                                                        <div className="mb-3">
+                                                            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-aspol-navy/10 text-aspol-navy">
+                                                                {t.upcoming}
+                                                            </span>
+                                                        </div>
+                                                    )}
                                                     <div className="flex items-center gap-4 text-xs text-gray-500 mb-3">
                                                         <div className="flex items-center gap-1">
                                                             <User className="w-3 h-3" />
