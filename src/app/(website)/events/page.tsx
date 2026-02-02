@@ -339,6 +339,11 @@ function EventsContent() {
             empty: "No upcoming events scheduled at the moment.",
             loading: "Loading events...",
             scrollDown: "Scroll Down",
+            heroBadge: "Community first",
+            heroCardTitle: "Meet ASPOL live",
+            heroCardDescription: "Meetups, workshops, and conferences created by students. Register for the next event or contact us.",
+            heroCardCtaPrimary: "View events",
+            heroCardCtaSecondary: "Contact us",
         },
         fr: {
             title: "Calendrier des Événements",
@@ -352,6 +357,11 @@ function EventsContent() {
             empty: "Aucun événement prévu pour le moment.",
             loading: "Chargement des événements...",
             scrollDown: "Défiler vers le bas",
+            heroBadge: "La communauté d'abord",
+            heroCardTitle: "Rencontrez ASPOL en direct",
+            heroCardDescription: "Rencontres, ateliers et conférences créés par des étudiants. Inscrivez-vous au prochain événement ou contactez-nous.",
+            heroCardCtaPrimary: "Voir les événements",
+            heroCardCtaSecondary: "Contactez-nous",
         },
         pl: {
             title: "Kalendarz Wydarzeń",
@@ -365,6 +375,11 @@ function EventsContent() {
             empty: "Brak zaplanowanych wydarzeń w tym momencie.",
             loading: "Ładowanie wydarzeń...",
             scrollDown: "Przewiń w dół",
+            heroBadge: "Społeczność przede wszystkim",
+            heroCardTitle: "Poznaj ASPOL na żywo",
+            heroCardDescription: "Spotkania, warsztaty i konferencje tworzone przez studentów. Zapisz się na najbliższe wydarzenie lub skontaktuj się z nami.",
+            heroCardCtaPrimary: "Zobacz wydarzenia",
+            heroCardCtaSecondary: "Skontaktuj się",
         },
     };
 
@@ -464,13 +479,13 @@ function EventsContent() {
                             <div className="relative">
                                 <span className="inline-flex items-center gap-2 rounded-full bg-aspol-navy/5 px-3 py-1 text-[0.65rem] font-bold uppercase tracking-widest text-aspol-navy mb-4">
                                     <span className="h-1.5 w-1.5 rounded-full bg-aspol-red" />
-                                    Community first
+                                    {t.heroBadge}
                                 </span>
                                 <h3 className="text-2xl sm:text-3xl font-bold text-aspol-navy mb-3 font-serif">
-                                    Poznaj ASPOL na żywo
+                                    {t.heroCardTitle}
                                 </h3>
                                 <p className="text-gray-600 mb-6 leading-relaxed">
-                                    Spotkania, warsztaty i konferencje tworzone przez studentów. Zapisz się na najbliższe wydarzenie lub skontaktuj się z nami.
+                                    {t.heroCardDescription}
                                 </p>
 
                                 {countdownConfig?.isActive !== false && (
@@ -538,14 +553,14 @@ function EventsContent() {
                                         onClick={scrollToEvents}
                                         className="inline-flex items-center gap-2 px-5 py-3 bg-aspol-navy text-white rounded-xl hover:bg-aspol-red transition-colors text-sm font-semibold shadow-sm"
                                     >
-                                        Zobacz wydarzenia
+                                        {t.heroCardCtaPrimary}
                                         <ArrowRight className="w-4 h-4" />
                                     </button>
                                     <Link
                                         href="/#contact"
                                         className="inline-flex items-center gap-2 px-5 py-3 border border-gray-200 text-aspol-navy rounded-xl hover:border-aspol-navy hover:bg-aspol-navy/5 transition-colors text-sm font-semibold"
                                     >
-                                        Skontaktuj się
+                                        {t.heroCardCtaSecondary}
                                     </Link>
                                 </div>
                             </div>
