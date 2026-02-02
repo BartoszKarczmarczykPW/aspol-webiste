@@ -4,6 +4,7 @@ import { use, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, Calendar, User, Clock } from "lucide-react";
+import { PortableText, type PortableTextComponents } from "@portabletext/react";
 
 import { getPostBySlug } from "@/lib/sanity";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -29,21 +30,34 @@ interface SanityPost {
     partners?: { _key?: string; name: string; website?: string; logoUrl?: string }[];
 }
 
-function renderPortableText(blocks: any[]) {
-    if (!Array.isArray(blocks)) return null;
-
-    return blocks.map((block) => {
-        if (block?._type !== "block") return null;
-        const text = (block.children || [])
-            .map((child: any) => child.text)
-            .join("");
-        return (
-            <p key={block._key || text.slice(0, 20)}>
-                {text}
-            </p>
-        );
-    });
-}
+const portableTextComponents: PortableTextComponents = {
+    block: {
+        h2: ({ children }) => <h2>{children}</h2>,
+        h3: ({ children }) => <h3>{children}</h3>,
+        h4: ({ children }) => <h4>{children}</h4>,
+        blockquote: ({ children }) => <blockquote>{children}</blockquote>,
+        normal: ({ children }) => <p>{children}</p>,
+    },
+    list: {
+        bullet: ({ children }) => <ul>{children}</ul>,
+        number: ({ children }) => <ol>{children}</ol>,
+    },
+    listItem: {
+        bullet: ({ children }) => <li>{children}</li>,
+        number: ({ children }) => <li>{children}</li>,
+    },
+    marks: {
+        link: ({ value, children }) => {
+            const href = value?.href || "";
+            const isExternal = /^https?:\/\//.test(href);
+            return (
+                <a href={href} target={isExternal ? "_blank" : undefined} rel={isExternal ? "noopener noreferrer" : undefined}>
+                    {children}
+                </a>
+            );
+        },
+    },
+};
 
 function BlogPostContent({ slug }: { slug: string }) {
     const { language } = useLanguage();
@@ -218,7 +232,7 @@ function BlogPostContent({ slug }: { slug: string }) {
                         prose-a:text-aspol-red prose-a:no-underline hover:prose-a:underline
                         prose-img:rounded-xl prose-img:shadow-lg
                         text-gray-600 leading-relaxed mb-16">
-                        {renderPortableText(localizedContent)}
+                        <PortableText value={localizedContent} components={portableTextComponents} />
                     </div>
 
                     {(post.sponsors?.length || post.partners?.length) && (
