@@ -1,5 +1,42 @@
 import { defineType, defineField, defineArrayMember } from 'sanity'
 
+const richTextBlock = defineArrayMember({
+    type: 'block',
+    styles: [
+        { title: 'Normal', value: 'normal' },
+        { title: 'Heading 2', value: 'h2' },
+        { title: 'Heading 3', value: 'h3' },
+        { title: 'Heading 4', value: 'h4' },
+        { title: 'Quote', value: 'blockquote' },
+    ],
+    lists: [
+        { title: 'Bullet', value: 'bullet' },
+        { title: 'Numbered', value: 'number' },
+    ],
+    marks: {
+        decorators: [
+            { title: 'Strong', value: 'strong' },
+            { title: 'Emphasis', value: 'em' },
+            { title: 'Underline', value: 'underline' },
+        ],
+        annotations: [
+            defineArrayMember({
+                name: 'link',
+                title: 'Link',
+                type: 'object',
+                fields: [
+                    defineField({
+                        name: 'href',
+                        title: 'URL',
+                        type: 'url',
+                        validation: (Rule) => Rule.uri({ scheme: ['http', 'https', 'mailto'] }),
+                    }),
+                ],
+            }),
+        ],
+    },
+})
+
 export default defineType({
     name: 'post',
     title: 'Blog Post',
@@ -58,19 +95,19 @@ export default defineType({
                     name: 'en',
                     title: 'English',
                     type: 'array',
-                    of: [{ type: 'block' }],
+                    of: [richTextBlock],
                 },
                 {
                     name: 'fr',
                     title: 'French',
                     type: 'array',
-                    of: [{ type: 'block' }],
+                    of: [richTextBlock],
                 },
                 {
                     name: 'pl',
                     title: 'Polish',
                     type: 'array',
-                    of: [{ type: 'block' }],
+                    of: [richTextBlock],
                 },
             ],
             validation: (Rule) => Rule.required(),
