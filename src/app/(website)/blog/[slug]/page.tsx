@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, Calendar, User, Clock } from "lucide-react";
 import { PortableText, type PortableTextComponents } from "@portabletext/react";
+import type { TypedObject } from "@portabletext/types";
 
 import { getPostBySlug } from "@/lib/sanity";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -22,7 +23,7 @@ interface SanityPost {
     author: string;
     publishedAt: string;
     excerpt: { en: string; fr: string; pl: string };
-    content: { en: unknown[]; fr: unknown[]; pl: unknown[] };
+    content: { en: TypedObject[]; fr: TypedObject[]; pl: TypedObject[] };
     imageUrl: string;
     tags?: string[];
     featured?: boolean;
