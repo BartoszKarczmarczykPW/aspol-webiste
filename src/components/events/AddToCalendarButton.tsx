@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { Calendar as CalendarIcon, Check } from "lucide-react";
+import React from "react";
+import { Calendar as CalendarIcon } from "lucide-react";
 import { Event } from "@/types";
 
 interface AddToCalendarButtonProps {

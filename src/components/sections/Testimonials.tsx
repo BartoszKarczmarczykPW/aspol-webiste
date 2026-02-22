@@ -156,7 +156,7 @@ const Testimonials = memo(function Testimonials() {
         } else {
           setCmsTestimonials(null);
         }
-      } catch (error) {
+      } catch {
         if (mounted) setCmsTestimonials(null);
       }
     }

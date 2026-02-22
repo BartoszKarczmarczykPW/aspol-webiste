@@ -6,6 +6,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { FacebookIcon } from "@/components/icons/FacebookIcon";
 import { InstagramIcon } from "@/components/icons/InstagramIcon";
 import { LinkedInIcon } from "@/components/icons/LinkedInIcon";
+import { trackEvent } from "@/lib/analytics";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -75,6 +76,7 @@ export default function Footer() {
                   href="https://docs.google.com/forms/d/e/1FAIpQLSebv4I-YbT98Y732JaGTqTfxDYpeGQAxUHybgzntkyai_VEwg/viewform"
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => trackEvent("join_click", { source: "footer" })}
                   className="group inline-flex items-center text-gray-400 hover:text-white transition-colors"
                 >
                   <span className="relative">
@@ -134,6 +136,7 @@ export default function Footer() {
                 href="https://www.facebook.com/aspologne"
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackEvent("social_click", { platform: "facebook", source: "footer" })}
                 className="w-11 h-11 sm:w-10 sm:h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-red-600 transition-colors touch-manipulation active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-aspol-red/60 focus-visible:ring-offset-2 focus-visible:ring-offset-aspol-dark"
                 aria-label="Facebook"
               >
@@ -143,6 +146,7 @@ export default function Footer() {
                 href="https://www.instagram.com/aspolska/"
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackEvent("social_click", { platform: "instagram", source: "footer" })}
                 className="w-11 h-11 sm:w-10 sm:h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-red-600 transition-colors touch-manipulation active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-aspol-red/60 focus-visible:ring-offset-2 focus-visible:ring-offset-aspol-dark"
                 aria-label="Instagram"
               >
@@ -152,6 +156,7 @@ export default function Footer() {
                 href="https://www.linkedin.com/company/aspolscpo/"
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackEvent("social_click", { platform: "linkedin", source: "footer" })}
                 className="w-11 h-11 sm:w-10 sm:h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-red-600 transition-colors touch-manipulation active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-aspol-red/60 focus-visible:ring-offset-2 focus-visible:ring-offset-aspol-dark"
                 aria-label="LinkedIn"
               >

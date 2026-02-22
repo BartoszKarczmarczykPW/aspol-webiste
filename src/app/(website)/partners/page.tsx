@@ -3,10 +3,10 @@
 import { useEffect, useRef } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import GlassCard from "@/components/ui/cards/GlassCard";
-import { ArrowRight, CheckCircle2, Users, Building2, Globe, TrendingUp, Handshake, Briefcase } from "lucide-react";
+import { ArrowRight, CheckCircle2, Users, Building2, Globe, TrendingUp, Handshake } from "lucide-react";
 
 export default function PartnersPage() {
-    const { language, t } = useLanguage();
+    const { language } = useLanguage();
     const sectionRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {

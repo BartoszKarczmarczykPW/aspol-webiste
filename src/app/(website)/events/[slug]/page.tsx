@@ -3,7 +3,7 @@
 import { use } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, Calendar, MapPin, Clock, Share2, Tag } from "lucide-react";
+import { ArrowLeft, Calendar, MapPin, Clock, Share2 } from "lucide-react";
 
 import { eventsData } from "@/data/eventsData";
 import { useLanguage } from "@/contexts/LanguageContext";

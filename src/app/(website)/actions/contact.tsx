@@ -136,7 +136,7 @@ export async function sendContactEmail(prevState: ContactState, formData: FormDa
         const { name, email, message } = validatedFields.data;
 
         // Send email using Resend
-        const { data, error } = await resend.emails.send({
+        const { error } = await resend.emails.send({
             from: process.env.RESEND_FROM_EMAIL,
             to: [process.env.ADMIN_EMAIL || 'aspolwebsitehosting@gmail.com'], // Deliver to admin
             replyTo: email, // Allow replying directly to the sender

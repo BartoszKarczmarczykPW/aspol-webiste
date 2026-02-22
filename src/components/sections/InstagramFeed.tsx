@@ -52,7 +52,7 @@ const instagramPosts = [
 ];
 
 export default function InstagramFeed() {
-    const { t } = useLanguage();
+    const { language } = useLanguage();
 
     const content = {
         en: {
@@ -75,9 +75,7 @@ export default function InstagramFeed() {
         },
     };
 
-    // Get current language from localStorage or default to 'pl'
-    const currentLang = (typeof window !== 'undefined' ? localStorage.getItem('language') : 'pl') || 'pl';
-    const locale = currentLang as "en" | "fr" | "pl";
+    const locale = language as "en" | "fr" | "pl";
     const c = content[locale];
 
     return (

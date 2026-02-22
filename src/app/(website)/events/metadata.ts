@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
+import { getAlternates } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Events",
   description: "Discover upcoming ASPOL events, meetups, and initiatives across France.",
-  alternates: {
-    canonical: "/events",
-  },
+  alternates: getAlternates("/events"),
   openGraph: {
     title: "Events | ASPOL",
     description: "Discover upcoming ASPOL events, meetups, and initiatives across France.",

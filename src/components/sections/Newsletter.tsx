@@ -1,15 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { subscribeToNewsletter } from "@/app/(website)/actions/newsletter";
+import { trackEvent } from "@/lib/analytics";
 
 export default function Newsletter() {
   const { language } = useLanguage();
   const [email, setEmail] = useState("");
+  const [trapField, setTrapField] = useState("");
+  const formStartRef = useRef<number>(0);
   // We use simple state for status to keep the UI responsive, 
   // but call the server action in the background.
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+
+  useEffect(() => {
+    formStartRef.current = Date.now();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,18 +28,25 @@ export default function Newsletter() {
     try {
       const formData = new FormData();
       formData.append("email", email);
+      formData.append("company", trapField);
+      formData.append("formStart", String(formStartRef.current));
 
       const result = await subscribeToNewsletter({}, formData);
 
       if (result.success) {
+        trackEvent("newsletter_subscribe_success", { language });
         setStatus("success");
         setEmail("");
+        setTrapField("");
+        formStartRef.current = Date.now();
         setTimeout(() => setStatus("idle"), 5000);
       } else {
+        trackEvent("newsletter_subscribe_error", { language });
         setStatus("error");
         setTimeout(() => setStatus("idle"), 5000);
       }
-    } catch (error) {
+    } catch {
+      trackEvent("newsletter_subscribe_error", { language });
       setStatus("error");
       setTimeout(() => setStatus("idle"), 5000);
     }
@@ -78,6 +92,18 @@ export default function Newsletter() {
         </p>
 
         <form onSubmit={handleSubmit} className="max-w-md mx-auto" aria-busy={status === "loading"}>
+          <div className="sr-only" aria-hidden="true">
+            <label htmlFor="newsletter-company">Company</label>
+            <input
+              type="text"
+              id="newsletter-company"
+              name="company"
+              value={trapField}
+              onChange={(e) => setTrapField(e.target.value)}
+              tabIndex={-1}
+              autoComplete="off"
+            />
+          </div>
           <div className="flex flex-col sm:flex-row gap-3">
             <input
               type="email"

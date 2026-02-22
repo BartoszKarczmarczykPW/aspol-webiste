@@ -7,20 +7,20 @@ import { urlFor } from "@/sanity/lib/image";
 import Image from "next/image";
 import Link from "next/link";
 
+const fallbackPartners: Array<{ name: string; logoUrl: string; url: string; lqip?: string }> = [
+  { name: "Campus France", logoUrl: "/partners/campus-france.png", url: "https://www.campusfrance.org/" },
+  { name: "Sciences Po Paris", logoUrl: "/partners/sciences-po.png", url: "https://www.sciencespo.fr/" },
+  { name: "Polish Embassy in Paris", logoUrl: "/partners/polish-embassy.png", url: "https://www.gov.pl/web/france" },
+  { name: "Boston Consulting Group", logoUrl: "/partners/bcg.png", url: "https://www.bcg.com/" },
+  { name: "Société Générale", logoUrl: "/partners/societe-generale.png", url: "https://www.societegenerale.com/" },
+  { name: "Publicis Groupe", logoUrl: "/partners/publicis.png", url: "https://www.publicisgroupe.com/" },
+  { name: "La French Tech", logoUrl: "/partners/la-french-tech.png", url: "https://lafrenchtech.com/" },
+];
+
 export default function PartnersLogos() {
   const { t } = useLanguage();
   const [partners, setPartners] = useState<Array<{ name: string; logoUrl: string; url: string; lqip?: string }>>([]);
   const [loading, setLoading] = useState(true);
-
-  const fallbackPartners: Array<{ name: string; logoUrl: string; url: string; lqip?: string }> = [
-    { name: "Campus France", logoUrl: "/partners/campus-france.png", url: "https://www.campusfrance.org/" },
-    { name: "Sciences Po Paris", logoUrl: "/partners/sciences-po.png", url: "https://www.sciencespo.fr/" },
-    { name: "Polish Embassy in Paris", logoUrl: "/partners/polish-embassy.png", url: "https://www.gov.pl/web/france" },
-    { name: "Boston Consulting Group", logoUrl: "/partners/bcg.png", url: "https://www.bcg.com/" },
-    { name: "Société Générale", logoUrl: "/partners/societe-generale.png", url: "https://www.societegenerale.com/" },
-    { name: "Publicis Groupe", logoUrl: "/partners/publicis.png", url: "https://www.publicisgroupe.com/" },
-    { name: "La French Tech", logoUrl: "/partners/la-french-tech.png", url: "https://lafrenchtech.com/" },
-  ];
 
   useEffect(() => {
     let mounted = true;
@@ -55,7 +55,7 @@ export default function PartnersLogos() {
         } else {
           setPartners(fallbackPartners);
         }
-      } catch (error) {
+      } catch {
         if (mounted) setPartners(fallbackPartners);
       } finally {
         if (mounted) setLoading(false);

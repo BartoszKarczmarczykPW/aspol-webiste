@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
+import { getAlternates } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Partners",
   description: "Partner with ASPOL to connect with top Polish student talent in France.",
-  alternates: {
-    canonical: "/partners",
-  },
+  alternates: getAlternates("/partners"),
   openGraph: {
     title: "Partners | ASPOL",
     description: "Partner with ASPOL to connect with top Polish student talent in France.",

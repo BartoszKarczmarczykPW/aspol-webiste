@@ -138,7 +138,7 @@ const Statistics = memo(function Statistics() {
         } else {
           setItems([]);
         }
-      } catch (error) {
+      } catch {
         if (mounted) setItems([]);
       } finally {
         if (mounted) setLoading(false);

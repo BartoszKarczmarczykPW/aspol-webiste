@@ -50,7 +50,7 @@ export default function Events() {
         const data = await getInitiatives();
         if (!mounted) return;
         if (Array.isArray(data)) setInitiativesData(data);
-      } catch (error) {
+      } catch {
         if (mounted) setInitiativesData([]);
       }
     }

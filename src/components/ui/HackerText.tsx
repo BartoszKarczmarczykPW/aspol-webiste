@@ -13,17 +13,15 @@ const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#
 
 export default function HackerText({ text, className, speed = 30 }: HackerTextProps) {
     const [displayText, setDisplayText] = useState(text);
-    const [isHovering, setIsHovering] = useState(false);
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
     const startScramble = () => {
-        setIsHovering(true);
         let iteration = 0;
 
         if (intervalRef.current) clearInterval(intervalRef.current);
 
         intervalRef.current = setInterval(() => {
-            setDisplayText((prev) =>
+            setDisplayText(() =>
                 text
                     .split("")
                     .map((letter, index) => {
@@ -44,7 +42,6 @@ export default function HackerText({ text, className, speed = 30 }: HackerTextPr
     };
 
     const stopScramble = () => {
-        setIsHovering(false);
         if (intervalRef.current) clearInterval(intervalRef.current);
         setDisplayText(text); // Reset to original instantly on mouse leave, or could let it finish
     };

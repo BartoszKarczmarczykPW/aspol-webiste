@@ -3,13 +3,12 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Clock, User, Tag, BookOpen } from "lucide-react";
+import { ArrowRight, Clock, User, BookOpen } from "lucide-react";
 
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getPosts } from "@/lib/sanity";
 import SmoothBackground from "@/components/ui/effects/SmoothBackground";
 import GlassCard from "@/components/ui/cards/GlassCard";
-import Breadcrumb from "@/components/ui/navigation/Breadcrumb";
 
 // Type for Sanity post
 interface SanityPost {

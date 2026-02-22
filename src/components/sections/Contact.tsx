@@ -3,10 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { sendContactEmail } from "@/app/(website)/actions/contact";
+import { trackEvent } from "@/lib/analytics";
 
 export default function Contact() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const formStartRef = useRef<number>(Date.now());
   const [formData, setFormData] = useState({
     name: "",
@@ -123,6 +124,7 @@ export default function Contact() {
       const result = await sendContactEmail({}, data);
 
       if (result.success) {
+        trackEvent("contact_submit_success", { language });
         setSubmitStatus("success");
         setFormData({ name: "", email: "", message: "" });
         setErrors({ name: "", email: "", message: "" });
@@ -132,11 +134,13 @@ export default function Contact() {
 
         setTimeout(() => setSubmitStatus(null), 5000);
       } else {
+        trackEvent("contact_submit_error", { reason: "validation_or_server" });
         setFormError(result.errors?._form?.[0] || "Please try again later.");
         setSubmitStatus("error");
         setTimeout(() => setSubmitStatus(null), 5000);
       }
-    } catch (error) {
+    } catch {
+      trackEvent("contact_submit_error", { reason: "exception" });
       setFormError("Please try again later.");
       setSubmitStatus("error");
       setTimeout(() => setSubmitStatus(null), 5000);
@@ -423,6 +427,7 @@ export default function Contact() {
                         href="https://www.facebook.com/aspologne"
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={() => trackEvent("social_click", { platform: "facebook", source: "contact" })}
                         aria-label="Facebook - ASPOL"
                         className="text-gray-600 hover:text-red-600 transition-all duration-200 hover:translate-x-1 inline-flex items-center gap-2 group"
                       >
@@ -435,6 +440,7 @@ export default function Contact() {
                         href="https://www.instagram.com/aspolska/"
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={() => trackEvent("social_click", { platform: "instagram", source: "contact" })}
                         aria-label="Instagram - ASPOL"
                         className="text-gray-600 hover:text-red-600 transition-all duration-200 hover:translate-x-1 inline-flex items-center gap-2 group"
                       >
@@ -447,6 +453,7 @@ export default function Contact() {
                         href="https://www.linkedin.com/company/aspolscpo/"
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={() => trackEvent("social_click", { platform: "linkedin", source: "contact" })}
                         aria-label="LinkedIn - ASPOL"
                         className="text-gray-600 hover:text-red-600 transition-all duration-200 hover:translate-x-1 inline-flex items-center gap-2 group"
                       >
@@ -473,6 +480,7 @@ export default function Contact() {
                 href="https://docs.google.com/forms/d/e/1FAIpQLSebv4I-YbT98Y732JaGTqTfxDYpeGQAxUHybgzntkyai_VEwg/viewform"
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackEvent("join_click", { source: "contact" })}
                 className="block w-full px-6 py-3 bg-white text-red-600 font-semibold rounded-full hover:bg-gray-100 transition-all duration-200 text-center"
               >
                 {t.contact.join.button}

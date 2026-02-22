@@ -5,6 +5,7 @@ import Providers from "@/components/providers/Providers";
 import StructuredData from "@/components/seo/StructuredData";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import { getAlternates } from "@/lib/seo";
 
 const lora = Lora({
   variable: "--font-lora",
@@ -25,9 +26,7 @@ export const metadata: Metadata = {
     template: "%s | ASPOL",
   },
   description: "L'association des étudiants polonais en France. Rejoignez notre communauté dynamique et découvrez nos événements culturels, programme de mentorat et Paris Polish Forum.",
-  alternates: {
-    canonical: '/',
-  },
+  alternates: getAlternates('/'),
   keywords: ["ASPOL", "Polish students", "France", "Paris", "étudiants polonais", "association", "networking", "mentoring", "Paris Polish Forum"],
   authors: [{ name: "ASPOL" }],
   creator: "ASPOL",

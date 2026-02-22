@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { trackEvent } from "@/lib/analytics";
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -99,7 +100,10 @@ export default function Header() {
             {/* Language Switcher */}
             <div className="flex items-center space-x-2 border-l border-gray-200 pl-6">
               <button
-                onClick={() => setLanguage("en")}
+                onClick={() => {
+                  setLanguage("en");
+                  trackEvent("language_switch", { language: "en", source: "header_desktop" });
+                }}
                 className={`px-3 py-1.5 text-xs font-bold rounded-md transition-all ${language === "en"
                   ? "bg-aspol-navy text-white shadow-md shadow-blue-900/10"
                   : "text-gray-500 hover:bg-gray-50 hover:text-aspol-navy"
@@ -108,7 +112,10 @@ export default function Header() {
                 EN
               </button>
               <button
-                onClick={() => setLanguage("fr")}
+                onClick={() => {
+                  setLanguage("fr");
+                  trackEvent("language_switch", { language: "fr", source: "header_desktop" });
+                }}
                 className={`px-3 py-1.5 text-xs font-bold rounded-md transition-all ${language === "fr"
                   ? "bg-aspol-navy text-white shadow-md shadow-blue-900/10"
                   : "text-gray-500 hover:bg-gray-50 hover:text-aspol-navy"
@@ -117,7 +124,10 @@ export default function Header() {
                 FR
               </button>
               <button
-                onClick={() => setLanguage("pl")}
+                onClick={() => {
+                  setLanguage("pl");
+                  trackEvent("language_switch", { language: "pl", source: "header_desktop" });
+                }}
                 className={`px-3 py-1.5 text-xs font-bold rounded-md transition-all ${language === "pl"
                   ? "bg-aspol-navy text-white shadow-md shadow-blue-900/10"
                   : "text-gray-500 hover:bg-gray-50 hover:text-aspol-navy"
@@ -131,6 +141,7 @@ export default function Header() {
               href="https://docs.google.com/forms/d/e/1FAIpQLSebv4I-YbT98Y732JaGTqTfxDYpeGQAxUHybgzntkyai_VEwg/viewform"
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => trackEvent("join_click", { source: "header_desktop" })}
               className="px-5 py-2 bg-red-600 text-white text-sm font-medium rounded-full hover:bg-red-700 transition-all duration-200 hover:scale-105"
             >
               {t.nav.join}
@@ -233,6 +244,7 @@ export default function Header() {
                 <button
                   onClick={() => {
                     setLanguage("en");
+                    trackEvent("language_switch", { language: "en", source: "header_mobile" });
                     closeMobileMenu();
                   }}
                   className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-lg transition-colors touch-manipulation active:scale-95 min-h-11 ${language === "en"
@@ -245,6 +257,7 @@ export default function Header() {
                 <button
                   onClick={() => {
                     setLanguage("fr");
+                    trackEvent("language_switch", { language: "fr", source: "header_mobile" });
                     closeMobileMenu();
                   }}
                   className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-lg transition-colors touch-manipulation active:scale-95 min-h-11 ${language === "fr"
@@ -257,6 +270,7 @@ export default function Header() {
                 <button
                   onClick={() => {
                     setLanguage("pl");
+                    trackEvent("language_switch", { language: "pl", source: "header_mobile" });
                     closeMobileMenu();
                   }}
                   className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-lg transition-colors touch-manipulation active:scale-95 min-h-11 ${language === "pl"
@@ -273,8 +287,11 @@ export default function Header() {
                 href="https://docs.google.com/forms/d/e/1FAIpQLSebv4I-YbT98Y732JaGTqTfxDYpeGQAxUHybgzntkyai_VEwg/viewform"
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => {
+                  trackEvent("join_click", { source: "header_mobile" });
+                  closeMobileMenu();
+                }}
                 className="px-5 py-2 bg-red-600 text-white text-sm font-medium rounded-full hover:bg-red-700 transition-colors text-center"
-                onClick={closeMobileMenu}
               >
                 {t.nav.join}
               </a>

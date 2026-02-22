@@ -22,7 +22,7 @@ interface SanityPost {
     author: string;
     publishedAt: string;
     excerpt: { en: string; fr: string; pl: string };
-    content: { en: any[]; fr: any[]; pl: any[] };
+    content: { en: unknown[]; fr: unknown[]; pl: unknown[] };
     imageUrl: string;
     tags?: string[];
     featured?: boolean;

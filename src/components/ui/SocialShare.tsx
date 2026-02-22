@@ -34,7 +34,7 @@ export default function SocialShare({
       setCopied(true);
       setCopyError(null);
       setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
+    } catch {
       setCopyError("Unable to copy link");
       setTimeout(() => setCopyError(null), 2000);
     }

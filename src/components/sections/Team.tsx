@@ -12,6 +12,23 @@ import { TeamMember } from "@/types";
 import { getTeamMembers } from "@/lib/sanity";
 import { urlFor } from "@/sanity/lib/image";
 
+const LEGACY_PHOTO_MAP: Record<string, string> = {
+  "Kacper Pabisz": "/KacperPabisz.jpg",
+  "Zofia Gostkowska": "/ZosiaGostkowska.jpg",
+  "Amelia Ogiela": "/AmeliaOgiela.jpg",
+  "Klara Winiarczyk": "/KlaraWiniarczyk.jpg",
+  "Aleksandra Kobyłecka": "/AleksandraKobylecka.jpg",
+  "Wiktor Dżaman": "/WiktorDzaman.jpg",
+  "Marianna Maciąg": "/MariannaMaciag.jpg",
+  "Eliza Freret": "/ElizaFreret.jpg",
+  "Julianna Ramatowska": "/JuliannaRamatowska.jpg",
+  "Alicja Łukasik": "/AlicjaLukasik.png",
+  "Bartosz Karczmarczyk": "/BartoszKarczmarczyk.jpg",
+  "Wojciech Wiejak": "/WojciechWiejak.jpg",
+  "Weronika Sadownik": "/WeronikaSadownik.jpg",
+  "Aleksandra Borecka": "/AleksandraBorecka.jpg",
+};
+
 const Team = memo(function Team() {
   const { t, language } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
@@ -137,23 +154,6 @@ const Team = memo(function Team() {
     },
   ];
 
-  const legacyPhotoMap: Record<string, string> = {
-    "Kacper Pabisz": "/KacperPabisz.jpg",
-    "Zofia Gostkowska": "/ZosiaGostkowska.jpg",
-    "Amelia Ogiela": "/AmeliaOgiela.jpg",
-    "Klara Winiarczyk": "/KlaraWiniarczyk.jpg",
-    "Aleksandra Kobyłecka": "/AleksandraKobylecka.jpg",
-    "Wiktor Dżaman": "/WiktorDzaman.jpg",
-    "Marianna Maciąg": "/MariannaMaciag.jpg",
-    "Eliza Freret": "/ElizaFreret.jpg",
-    "Julianna Ramatowska": "/JuliannaRamatowska.jpg",
-    "Alicja Łukasik": "/AlicjaLukasik.png",
-    "Bartosz Karczmarczyk": "/BartoszKarczmarczyk.jpg",
-    "Wojciech Wiejak": "/WojciechWiejak.jpg",
-    "Weronika Sadownik": "/WeronikaSadownik.jpg",
-    "Aleksandra Borecka": "/AleksandraBorecka.jpg",
-  };
-
   const [boardMembers, setBoardMembers] = useState<
     Array<{
       name: string;
@@ -182,14 +182,14 @@ const Team = memo(function Team() {
             linkedin: member.linkedin || null,
             photoUrl: member.photo
               ? urlFor(member.photo).width(320).height(320).fit("crop").url()
-              : legacyPhotoMap[member.name] || "/default-avatar.svg",
+              : LEGACY_PHOTO_MAP[member.name] || "/default-avatar.svg",
             lqip: member.photo?.asset?.metadata?.lqip,
           }));
           setBoardMembers(mapped);
         } else {
           setBoardMembers([]);
         }
-      } catch (error) {
+      } catch {
         if (mounted) setBoardMembers([]);
       }
     }

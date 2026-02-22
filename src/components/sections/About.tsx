@@ -37,7 +37,7 @@ export default function About() {
         const data = await getAboutSection();
         if (!mounted) return;
         if (data) setAboutData(data);
-      } catch (error) {
+      } catch {
         if (mounted) setAboutData(null);
       }
     }

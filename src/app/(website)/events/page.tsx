@@ -9,8 +9,6 @@ import { Calendar, MapPin, Clock, ArrowRight, ChevronDown, ChevronUp } from "luc
 import AddToCalendarButton from "@/components/events/AddToCalendarButton";
 import CalendarWidget from "@/components/events/CalendarWidget";
 import SmoothBackground from "@/components/ui/effects/SmoothBackground";
-import RippleButton from "@/components/ui/RippleButton";
-// Removed ChevronDownIcon import as not critical
 import { ChevronDownIcon } from "@/components/icons/ChevronDownIcon";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
@@ -53,10 +51,17 @@ interface EventCountdownConfig {
     showLiveBadge?: boolean;
 }
 
+type EventsLabels = {
+    featured: string;
+    showLess: string;
+    readMore: string;
+    register: string;
+};
+
 // Event Card Component
 function EventCard({ event, t, formatDate, formatTime, language }: {
     event: SanityEvent;
-    t: any;
+    t: EventsLabels;
     formatDate: (d: string) => string;
     formatTime: (d: string) => string;
     language: string;
@@ -165,7 +170,7 @@ function EventCard({ event, t, formatDate, formatTime, language }: {
                             shortDescription: event.description[language as keyof typeof event.description],
                             fullDescription: '',
                             image: event.imageUrl,
-                            category: 'Event' as any,
+                            category: 'Social',
                             registrationLink: event.registrationLink,
                         }}
                         className="px-4 border border-gray-200 hover:border-aspol-navy hover:bg-aspol-navy/5 text-aspol-navy rounded-xl transition-colors"
@@ -180,7 +185,7 @@ function EventCard({ event, t, formatDate, formatTime, language }: {
 
 function FeaturedEventCard({ event, t, formatDate, formatTime, language }: {
     event: SanityEvent;
-    t: any;
+    t: EventsLabels;
     formatDate: (d: string) => string;
     formatTime: (d: string) => string;
     language: string;
@@ -253,7 +258,7 @@ function FeaturedEventCard({ event, t, formatDate, formatTime, language }: {
                                 shortDescription: event.description[language as keyof typeof event.description],
                                 fullDescription: "",
                                 image: event.imageUrl,
-                                category: "Event" as any,
+                                category: "Social",
                                 registrationLink: event.registrationLink,
                             }}
                             className="px-4 border border-gray-200 hover:border-aspol-navy hover:bg-aspol-navy/5 text-aspol-navy rounded-xl transition-colors"

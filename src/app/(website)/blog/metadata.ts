@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
+import { getAlternates } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Polish Paris Forum",
   description: "Conference news, highlights, and insights from the Polish Paris Forum.",
-  alternates: {
-    canonical: "/blog",
-  },
+  alternates: getAlternates("/blog"),
   openGraph: {
     title: "Polish Paris Forum | ASPOL",
     description: "Conference news, highlights, and insights from the Polish Paris Forum.",
