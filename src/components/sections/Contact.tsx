@@ -1,9 +1,40 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { sendContactEmail } from "@/app/(website)/actions/contact";
 import { trackEvent } from "@/lib/analytics";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+
+const VALIDATION_MESSAGES = {
+  en: {
+    nameRequired: "Name is required",
+    nameMin: "Name must be at least 2 characters",
+    emailRequired: "Email is required",
+    emailInvalid: "Please enter a valid email address",
+    messageRequired: "Message is required",
+    messageMin: "Message must be at least 10 characters",
+    messageMax: "Message must not exceed 1000 characters",
+  },
+  fr: {
+    nameRequired: "Le nom est requis",
+    nameMin: "Le nom doit contenir au moins 2 caractères",
+    emailRequired: "L'email est requis",
+    emailInvalid: "Veuillez entrer une adresse email valide",
+    messageRequired: "Le message est requis",
+    messageMin: "Le message doit contenir au moins 10 caractères",
+    messageMax: "Le message ne doit pas dépasser 1000 caractères",
+  },
+  pl: {
+    nameRequired: "Imię jest wymagane",
+    nameMin: "Imię musi mieć co najmniej 2 znaki",
+    emailRequired: "Email jest wymagany",
+    emailInvalid: "Proszę podać prawidłowy adres email",
+    messageRequired: "Wiadomość jest wymagana",
+    messageMin: "Wiadomość musi mieć co najmniej 10 znaków",
+    messageMax: "Wiadomość nie może przekraczać 1000 znaków",
+  },
+} as const;
 
 export default function Contact() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -29,53 +60,36 @@ export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"success" | "error" | null>(null);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("animate-fade-in-up");
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    if (sectionRef.current) {
-      const elements = sectionRef.current.querySelectorAll(".fade-in-element");
-      elements.forEach((el) => observer.observe(el));
-    }
-
-    return () => observer.disconnect();
-  }, []);
+  useScrollAnimation(sectionRef);
 
   const validateField = (field: string, value: string) => {
     let error = "";
+    const msg = VALIDATION_MESSAGES[language] || VALIDATION_MESSAGES.en;
 
     if (field === "name") {
       if (!value.trim()) {
-        error = "Name is required";
+        error = msg.nameRequired;
       } else if (value.trim().length < 2) {
-        error = "Name must be at least 2 characters";
+        error = msg.nameMin;
       }
     }
 
     if (field === "email") {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!value.trim()) {
-        error = "Email is required";
+        error = msg.emailRequired;
       } else if (!emailRegex.test(value)) {
-        error = "Please enter a valid email address";
+        error = msg.emailInvalid;
       }
     }
 
     if (field === "message") {
       if (!value.trim()) {
-        error = "Message is required";
+        error = msg.messageRequired;
       } else if (value.trim().length < 10) {
-        error = "Message must be at least 10 characters";
+        error = msg.messageMin;
       } else if (value.trim().length > 1000) {
-        error = "Message must not exceed 1000 characters";
+        error = msg.messageMax;
       }
     }
 
@@ -181,6 +195,7 @@ export default function Contact() {
       id="contact"
       ref={sectionRef}
       className="py-16 px-6 bg-white"
+      aria-label="Contact us"
     >
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
@@ -202,8 +217,8 @@ export default function Contact() {
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
                 <div>
-                  <p className="font-medium text-green-800">Message sent successfully!</p>
-                  <p className="text-sm text-green-700 mt-1">We&apos;ll get back to you as soon as possible.</p>
+                  <p className="font-medium text-green-800">{language === "fr" ? "Message envoyé avec succès !" : language === "pl" ? "Wiadomość wysłana pomyślnie!" : "Message sent successfully!"}</p>
+                  <p className="text-sm text-green-700 mt-1">{language === "fr" ? "Nous vous répondrons dès que possible." : language === "pl" ? "Odpowiemy najszybciej jak to możliwe." : "We'll get back to you as soon as possible."}</p>
                 </div>
               </div>
             )}
@@ -214,8 +229,8 @@ export default function Contact() {
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
                 </svg>
                 <div>
-                  <p className="font-medium text-red-800">Something went wrong</p>
-                  <p className="text-sm text-red-700 mt-1">{formError || "Please try again later."}</p>
+                  <p className="font-medium text-red-800">{language === "fr" ? "Une erreur est survenue" : language === "pl" ? "Coś poszło nie tak" : "Something went wrong"}</p>
+                  <p className="text-sm text-red-700 mt-1">{formError || (language === "fr" ? "Veuillez réessayer plus tard." : language === "pl" ? "Spróbuj ponownie później." : "Please try again later.")}</p>
                 </div>
               </div>
             )}
@@ -333,18 +348,18 @@ export default function Contact() {
               >
                 {isSubmitting ? (
                   <>
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    Sending...
+                    {language === "fr" ? "Envoi en cours..." : language === "pl" ? "Wysyłanie..." : "Sending..."}
                   </>
                 ) : (
                   t.contact.form.submit
                 )}
               </button>
               <p className="text-xs text-gray-400 text-center">
-                Protected against automated spam.
+                {language === "fr" ? "Protégé contre le spam automatisé." : language === "pl" ? "Chronione przed automatycznym spamem." : "Protected against automated spam."}
               </p>
             </form>
           </div>
@@ -368,6 +383,7 @@ export default function Contact() {
                       strokeWidth="2"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
+                      aria-hidden="true"
                     >
                       <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                     </svg>
@@ -393,6 +409,7 @@ export default function Contact() {
                       strokeWidth="2"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
+                      aria-hidden="true"
                     >
                       <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                       <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -414,6 +431,7 @@ export default function Contact() {
                       strokeWidth="2"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
+                      aria-hidden="true"
                     >
                       <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                     </svg>

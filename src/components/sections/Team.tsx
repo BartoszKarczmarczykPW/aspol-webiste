@@ -1,18 +1,18 @@
 "use client";
 
-import HackerText from "../ui/HackerText";
-import { memo } from 'react';
-
-import Image from "next/image";
-import { useLanguage } from "@/contexts/LanguageContext";
-import { useEffect, useRef, useState } from "react";
+import { memo, useRef } from 'react';
 import type { MouseEvent } from "react";
+import Image from "next/image";
+import HackerText from "../ui/HackerText";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { useInView } from "@/hooks/useInView";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { useSanityData } from "@/hooks/useSanityData";
 import { TeamMember } from "@/types";
 import { getTeamMembers } from "@/lib/sanity";
 import { urlFor } from "@/sanity/lib/image";
 
-const LEGACY_PHOTO_MAP: Record<string, string> = {
+const LEGACY_PHOTO_MAP: Readonly<Record<string, string>> = {
   "Kacper Pabisz": "/KacperPabisz.jpg",
   "Zofia Gostkowska": "/ZosiaGostkowska.jpg",
   "Amelia Ogiela": "/AmeliaOgiela.jpg",
@@ -29,42 +29,44 @@ const LEGACY_PHOTO_MAP: Record<string, string> = {
   "Aleksandra Borecka": "/AleksandraBorecka.jpg",
 };
 
+interface SanityTeamMember {
+  name: string;
+  role?: { en?: string; fr?: string; pl?: string };
+  linkedin?: string | null;
+  photo?: { asset?: { metadata?: { lqip?: string } } };
+}
+
+interface MappedTeamMember {
+  name: string;
+  role: string;
+  photoUrl: string;
+  linkedin: string | null;
+  lqip?: string;
+}
+
 const Team = memo(function Team() {
   const { t, language } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
   const isVisible = useInView(sectionRef);
-
-  const [tiltStyle, setTiltStyle] = useState<Record<number, { transform: string; transition: string }>>({});
+  const prefersReducedMotion = useReducedMotion();
 
   const handleMouseMove = (e: MouseEvent<HTMLDivElement>, index: number) => {
+    if (prefersReducedMotion) return;
     const card = e.currentTarget;
     const rect = card.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
+    const rotateX = (y - rect.height / 2) / 10;
+    const rotateY = (rect.width / 2 - x) / 10;
 
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-
-    const rotateX = (y - centerY) / 10;
-    const rotateY = (centerX - x) / 10;
-
-    setTiltStyle(prev => ({
-      ...prev,
-      [index]: {
-        transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`,
-        transition: 'transform 0.1s ease-out'
-      }
-    }));
+    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
+    card.style.transition = 'transform 0.1s ease-out';
   };
 
-  const handleMouseLeave = (index: number) => {
-    setTiltStyle(prev => ({
-      ...prev,
-      [index]: {
-        transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)',
-        transition: 'transform 0.5s ease-out'
-      }
-    }));
+  const handleMouseLeave = (e: MouseEvent<HTMLDivElement>) => {
+    const card = e.currentTarget;
+    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+    card.style.transition = 'transform 0.5s ease-out';
   };
 
   const fallbackBoardMembers: TeamMember[] = [
@@ -154,50 +156,22 @@ const Team = memo(function Team() {
     },
   ];
 
-  const [boardMembers, setBoardMembers] = useState<
-    Array<{
-      name: string;
-      role: string;
-      photoUrl: string;
-      linkedin: string | null;
-      lqip?: string;
-    }>
-  >([]);
-
-  useEffect(() => {
-    let mounted = true;
-    async function loadTeam() {
-      try {
-        const data = await getTeamMembers();
-        if (!mounted) return;
-        if (Array.isArray(data) && data.length > 0) {
-          const mapped = data.map((member: {
-            name: string;
-            role?: { en?: string; fr?: string; pl?: string };
-            linkedin?: string | null;
-            photo?: { asset?: { metadata?: { lqip?: string } } };
-          }) => ({
-            name: member.name,
-            role: member.role?.[language] || member.role?.en || "",
-            linkedin: member.linkedin || null,
-            photoUrl: member.photo
-              ? urlFor(member.photo).width(320).height(320).fit("crop").url()
-              : LEGACY_PHOTO_MAP[member.name] || "/default-avatar.svg",
-            lqip: member.photo?.asset?.metadata?.lqip,
-          }));
-          setBoardMembers(mapped);
-        } else {
-          setBoardMembers([]);
-        }
-      } catch {
-        if (mounted) setBoardMembers([]);
-      }
-    }
-    loadTeam();
-    return () => {
-      mounted = false;
-    };
-  }, [language]);
+  const { data: boardMembers } = useSanityData<MappedTeamMember[]>(
+    async () => {
+      const data = await getTeamMembers();
+      if (!Array.isArray(data) || data.length === 0) return null;
+      return (data as SanityTeamMember[]).map((member) => ({
+        name: member.name,
+        role: member.role?.[language] || member.role?.en || "",
+        linkedin: member.linkedin || null,
+        photoUrl: member.photo
+          ? urlFor(member.photo).width(320).height(320).fit("crop").url()
+          : LEGACY_PHOTO_MAP[member.name] || "/default-avatar.svg",
+        lqip: member.photo?.asset?.metadata?.lqip,
+      }));
+    },
+    { fallback: [], deps: [language] },
+  );
 
   const membersToRender = boardMembers.length > 0
     ? boardMembers
@@ -214,14 +188,15 @@ const Team = memo(function Team() {
       ref={sectionRef}
       id="team"
       className="py-16 px-6 bg-white relative overflow-hidden"
+      aria-label={language === "en" ? "Our team" : language === "fr" ? "Notre équipe" : "Nasz zespół"}
     >
       {/* Background Grid Pattern */}
-      <div className="absolute inset-0 pointer-events-none">
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-size-[32px_32px] mask-[radial-gradient(ellipse_60%_60%_at_50%_0%,#000_70%,transparent_100%)]"></div>
       </div>
 
       {/* Ambient Depth Blobs - Professional & Subtle */}
-      <div className="absolute top-0 right-0 w-125 h-125 bg-aspol-navy/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+      <div className="absolute top-0 right-0 w-125 h-125 bg-aspol-navy/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" aria-hidden="true"></div>
 
       <div className="max-w-7xl mx-auto relative z-10">
         <div
@@ -251,10 +226,9 @@ const Team = memo(function Team() {
                 }`}
               style={{
                 transitionDelay: `${index * 100}ms`,
-                ...(tiltStyle[index] || {})
               }}
               onMouseMove={(e) => handleMouseMove(e, index)}
-              onMouseLeave={() => handleMouseLeave(index)}
+              onMouseLeave={handleMouseLeave}
             >
               <div className="flex flex-col items-center text-center">
                 <div className="relative w-32 h-32 sm:w-40 sm:h-40 mb-6 group">
@@ -304,6 +278,7 @@ const Team = memo(function Team() {
                           fill="currentColor"
                           viewBox="0 0 24 24"
                           xmlns="http://www.w3.org/2000/svg"
+                          aria-hidden="true"
                         >
                           <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                         </svg>
@@ -325,7 +300,7 @@ const Team = memo(function Team() {
             className="inline-flex items-center px-8 py-4 bg-red-600 text-white font-semibold rounded-full hover:bg-red-700 transition-all duration-300 hover:scale-105 shadow-lg shadow-red-600/20"
           >
             {t.team.becomeVolunteer}
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2 -mr-1" viewBox="0 0 20 20" fill="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2 -mr-1" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
               <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
             </svg>
           </a>

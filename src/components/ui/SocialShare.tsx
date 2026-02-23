@@ -9,7 +9,7 @@ interface SocialShareProps {
 }
 
 export default function SocialShare({ 
-  url = typeof window !== 'undefined' ? window.location.href : 'https://aspol.fr',
+  url = 'https://aspol.fr',
   title = "ASPOL - Association des Étudiants Polonais en France",
   description = "Join the community of Polish students in France"
 }: SocialShareProps) {
@@ -40,7 +40,7 @@ export default function SocialShare({
     }
   };
 
-  const handleShare = (platform: string, link: string) => {
+  const handleShare = (_platform: string, link: string) => {
     window.open(link, '_blank', 'noopener,noreferrer,width=600,height=600');
   };
 

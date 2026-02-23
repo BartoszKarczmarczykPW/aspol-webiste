@@ -5,13 +5,38 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { subscribeToNewsletter } from "@/app/(website)/actions/newsletter";
 import { trackEvent } from "@/lib/analytics";
 
+const CONTENT = {
+  en: {
+    title: "Stay Updated",
+    description: "Subscribe to our newsletter for the latest events, news, and opportunities",
+    placeholder: "Enter your email",
+    button: "Subscribe",
+    success: "Successfully subscribed!",
+    error: "Something went wrong. Please try again.",
+  },
+  fr: {
+    title: "Restez Informé",
+    description: "Abonnez-vous à notre newsletter pour les derniers événements, actualités et opportunités",
+    placeholder: "Entrez votre email",
+    button: "S'abonner",
+    success: "Abonnement réussi!",
+    error: "Une erreur s'est produite. Veuillez réessayer.",
+  },
+  pl: {
+    title: "Bądź na Bieżąco",
+    description: "Zapisz się do naszego newslettera, aby otrzymywać najnowsze wydarzenia, wiadomości i możliwości",
+    placeholder: "Wprowadź swój email",
+    button: "Zapisz się",
+    success: "Pomyślnie zapisano!",
+    error: "Coś poszło nie tak. Spróbuj ponownie.",
+  },
+} as const;
+
 export default function Newsletter() {
   const { language } = useLanguage();
   const [email, setEmail] = useState("");
   const [trapField, setTrapField] = useState("");
   const formStartRef = useRef<number>(0);
-  // We use simple state for status to keep the UI responsive, 
-  // but call the server action in the background.
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
   useEffect(() => {
@@ -52,37 +77,10 @@ export default function Newsletter() {
     }
   };
 
-  const content = {
-    en: {
-      title: "Stay Updated",
-      description: "Subscribe to our newsletter for the latest events, news, and opportunities",
-      placeholder: "Enter your email",
-      button: "Subscribe",
-      success: "Successfully subscribed!",
-      error: "Something went wrong. Please try again.",
-    },
-    fr: {
-      title: "Restez Informé",
-      description: "Abonnez-vous à notre newsletter pour les derniers événements, actualités et opportunités",
-      placeholder: "Entrez votre email",
-      button: "S'abonner",
-      success: "Abonnement réussi!",
-      error: "Une erreur s'est produite. Veuillez réessayer.",
-    },
-    pl: {
-      title: "Bądź na Bieżąco",
-      description: "Zapisz się do naszego newslettera, aby otrzymywać najnowsze wydarzenia, wiadomości i możliwości",
-      placeholder: "Wprowadź swój email",
-      button: "Zapisz się",
-      success: "Pomyślnie zapisano!",
-      error: "Coś poszło nie tak. Spróbuj ponownie.",
-    },
-  };
-
-  const text = content[language] || content.en;
+  const text = CONTENT[language] || CONTENT.en;
 
   return (
-    <section className="py-16 px-6 bg-linear-to-r from-red-600 to-red-500">
+    <section className="py-16 px-6 bg-linear-to-r from-red-600 to-red-500" aria-label="Newsletter subscription">
       <div className="max-w-4xl mx-auto text-center">
         <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
           {text.title}
@@ -121,11 +119,12 @@ export default function Newsletter() {
             <button
               type="submit"
               disabled={status === "loading"}
+              aria-label={status === "loading" ? (language === "fr" ? "Envoi en cours" : language === "pl" ? "Wysyłanie" : "Submitting") : undefined}
               className="px-8 py-4 bg-white text-red-600 font-semibold rounded-full hover:bg-gray-100 transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 whitespace-nowrap"
             >
               {status === "loading" ? (
                 <span className="flex items-center justify-center">
-                  <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>

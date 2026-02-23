@@ -1,21 +1,19 @@
 "use client";
 
-import { memo } from 'react';
-
-import { useState, useEffect, useRef } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Testimonial } from "@/types";
+import { useSanityData } from "@/hooks/useSanityData";
 import { getTestimonials } from "@/lib/sanity";
 
-const Testimonials = memo(function Testimonials() {
-  const { language } = useLanguage();
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-  const touchStartX = useRef<number>(0);
-  const touchEndX = useRef<number>(0);
-  const [cmsTestimonials, setCmsTestimonials] = useState<Testimonial[] | null>(null);
+interface SanityTestimonial {
+  name: string;
+  role?: { en?: string; fr?: string; pl?: string };
+  text?: { en?: string; fr?: string; pl?: string };
+  year?: number | string;
+}
 
-  const testimonials: Record<string, Testimonial[]> = {
+const TESTIMONIALS: Readonly<Record<string, Testimonial[]>> = {
     en: [
       {
         name: "Maria K.",
@@ -130,41 +128,44 @@ const Testimonials = memo(function Testimonials() {
         year: "2023",
       },
     ],
-  };
+} as const;
 
-  const currentTestimonials = cmsTestimonials || testimonials[language] || testimonials.en;
+const Testimonials = memo(function Testimonials() {
+  const { language } = useLanguage();
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const touchStartX = useRef<number>(0);
+  const touchEndX = useRef<number>(0);
+  const autoPlayTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const { data: cmsTestimonials } = useSanityData<Testimonial[] | null>(
+    async () => {
+      const data = await getTestimonials();
+      if (!Array.isArray(data) || data.length === 0) return null;
+      return data.map((item: SanityTestimonial) => ({
+        name: item.name,
+        role: item.role?.[language] || item.role?.en || "",
+        text: item.text?.[language] || item.text?.en || "",
+        year: String(item.year || ""),
+      }));
+    },
+    { fallback: null, deps: [language] },
+  );
+
+  const currentTestimonials = cmsTestimonials || TESTIMONIALS[language] || TESTIMONIALS.en;
+
+  // Bounds check: clamp currentIndex when data source or language changes
   useEffect(() => {
-    let mounted = true;
-    async function loadTestimonials() {
-      try {
-        const data = await getTestimonials();
-        if (!mounted) return;
-        if (Array.isArray(data) && data.length > 0) {
-          const mapped = data.map((item: {
-            name: string;
-            role?: { en?: string; fr?: string; pl?: string };
-            text?: { en?: string; fr?: string; pl?: string };
-            year?: string;
-          }) => ({
-            name: item.name,
-            role: item.role?.[language] || item.role?.en || "",
-            text: item.text?.[language] || item.text?.en || "",
-            year: item.year || "",
-          }));
-          setCmsTestimonials(mapped);
-        } else {
-          setCmsTestimonials(null);
-        }
-      } catch {
-        if (mounted) setCmsTestimonials(null);
-      }
-    }
-    loadTestimonials();
-    return () => {
-      mounted = false;
-    };
-  }, [language]);
+    setCurrentIndex((prev) =>
+      prev >= currentTestimonials.length ? 0 : prev,
+    );
+  }, [currentTestimonials.length]);
+
+  // Defensive: derive safe index inline to prevent crash before useEffect fires
+  const safeIndex = currentTestimonials.length > 0
+    ? currentIndex % currentTestimonials.length
+    : 0;
+  const currentItem = currentTestimonials[safeIndex];
 
   useEffect(() => {
     if (!isAutoPlaying) return;
@@ -176,24 +177,38 @@ const Testimonials = memo(function Testimonials() {
     return () => clearInterval(interval);
   }, [isAutoPlaying, currentTestimonials.length]);
 
+  const pauseAutoPlay = useCallback(() => {
+    setIsAutoPlaying(false);
+    if (autoPlayTimerRef.current) {
+      clearTimeout(autoPlayTimerRef.current);
+    }
+    autoPlayTimerRef.current = setTimeout(() => setIsAutoPlaying(true), 10000);
+  }, []);
+
+  // Cleanup timer on unmount
+  useEffect(() => {
+    return () => {
+      if (autoPlayTimerRef.current) {
+        clearTimeout(autoPlayTimerRef.current);
+      }
+    };
+  }, []);
+
   const goToSlide = (index: number) => {
     setCurrentIndex(index);
-    setIsAutoPlaying(false);
-    setTimeout(() => setIsAutoPlaying(true), 10000);
+    pauseAutoPlay();
   };
 
   const nextSlide = () => {
     setCurrentIndex((prev) => (prev + 1) % currentTestimonials.length);
-    setIsAutoPlaying(false);
-    setTimeout(() => setIsAutoPlaying(true), 10000);
+    pauseAutoPlay();
   };
 
   const prevSlide = () => {
     setCurrentIndex((prev) =>
       prev === 0 ? currentTestimonials.length - 1 : prev - 1
     );
-    setIsAutoPlaying(false);
-    setTimeout(() => setIsAutoPlaying(true), 10000);
+    pauseAutoPlay();
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -216,7 +231,7 @@ const Testimonials = memo(function Testimonials() {
   };
 
   return (
-    <section className="py-16 px-6 bg-white">
+    <section className="py-16 px-6 bg-white" aria-label={language === "en" ? "Member testimonials" : language === "fr" ? "Témoignages des membres" : "Opinie członków"}>
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
@@ -233,32 +248,35 @@ const Testimonials = memo(function Testimonials() {
 
         <div
           className="relative"
+          role="region"
+          aria-roledescription="carousel"
+          aria-label={language === "en" ? "Member testimonials" : language === "fr" ? "T\u00e9moignages des membres" : "Opinie cz\u0142onk\u00f3w"}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
         >
           {/* Testimonial Card */}
-          <div className="bg-gray-50 rounded-3xl p-8 md:p-12 shadow-lg min-h-75 flex flex-col justify-between touch-pan-y transition-all duration-300 hover:shadow-xl">
+          <div aria-live="polite" aria-atomic="true" className="bg-gray-50 rounded-3xl p-8 md:p-12 shadow-lg min-h-75 flex flex-col justify-between touch-pan-y transition-all duration-300 hover:shadow-xl">
             <div>
-              <svg className="w-12 h-12 text-red-600 mb-6" fill="currentColor" viewBox="0 0 24 24">
+              <svg className="w-12 h-12 text-red-600 mb-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
               </svg>
               <p className="text-xl md:text-2xl text-gray-700 leading-relaxed mb-8 italic">
-                &quot;{currentTestimonials[currentIndex].text}&quot;
+                &quot;{currentItem?.text}&quot;
               </p>
             </div>
             <div className="flex items-center justify-between">
               <div>
                 <p className="font-bold text-gray-900 text-lg">
-                  {currentTestimonials[currentIndex].name}
+                  {currentItem?.name}
                 </p>
                 <p className="text-gray-600">
-                  {currentTestimonials[currentIndex].role}
+                  {currentItem?.role}
                 </p>
                 <p className="text-sm text-gray-500 mt-1">
                   {language === "en" && "Member since"}
                   {language === "fr" && "Membre depuis"}
-                  {language === "pl" && "Członek od"} {currentTestimonials[currentIndex].year}
+                  {language === "pl" && "Członek od"} {currentItem?.year}
                 </p>
               </div>
             </div>
@@ -282,11 +300,12 @@ const Testimonials = memo(function Testimonials() {
                 <button
                   key={index}
                   onClick={() => goToSlide(index)}
-                  className={`w-3 h-3 rounded-full transition-all ${index === currentIndex
+                  className={`w-3 h-3 rounded-full transition-all ${index === safeIndex
                     ? "bg-red-600 w-8"
                     : "bg-gray-300 hover:bg-gray-400"
                     }`}
                   aria-label={`Go to testimonial ${index + 1}`}
+                  aria-current={index === safeIndex ? "true" : undefined}
                 />
               ))}
             </div>

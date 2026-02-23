@@ -1,212 +1,204 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import GlassCard from "@/components/ui/cards/GlassCard";
 import { ArrowRight, CheckCircle2, Users, Building2, Globe, TrendingUp, Handshake } from "lucide-react";
+
+/**
+ * Static i18n content — hoisted to module level so the large object
+ * is created once at import time, not re-allocated on every render.
+ */
+const CONTENT = {
+    en: {
+        hero: {
+            label: "For Business Partners",
+            title: "Bridge to Top Polish Talent in France",
+            subtitle: "We connect visionary companies with high-potential students from Sciences Po, HEC Paris, Sorbonne, and other leading institutions.",
+            cta: "Start a Conversation",
+        },
+        value: {
+            title: "Strategic Value",
+            items: [
+                {
+                    icon: Users,
+                    title: "Access to Elite Talent",
+                    desc: "Direct recruitment channel to pre-screened, bilingual candidates from top 5 French universities."
+                },
+                {
+                    icon: TrendingUp,
+                    title: "Employer Branding",
+                    desc: "Position your company as a top employer of choice among the most ambitious Polish students abroad."
+                },
+                {
+                    icon: Globe,
+                    title: "CSR & Community Impact",
+                    desc: "Support the development of the Polish community in France and foster cross-border cooperation."
+                }
+            ]
+        },
+        scope: {
+            title: "Scope of Collaboration",
+            subtitle: "We believe in partnerships that drive real results. Our cooperation model is flexible and tailored to your business objectives.",
+            items: [
+                "Logo & brand visibility at Paris Polish Forum conference",
+                "Presence in ASPOL newsletter & social media campaigns",
+                "Speaking opportunities & dedicated panel sessions at PPF",
+                "Direct communication with ASPOL student community",
+                "Access to student CV database & career survey insights",
+                "Co-creation of educational projects & webinars",
+                "Promotional materials in conference packages",
+                "Exclusive industry partnership opportunities"
+            ]
+        },
+        demographics: {
+            title: "Our Community Profile",
+            stats: [
+                { value: "40%", label: "Sciences Po Paris" },
+                { value: "25%", label: "HEC / ESSEC / ESCP" },
+                { value: "20%", label: "Sorbonne & Polytechnic" },
+                { value: "15%", label: "Other Grand Écoles" },
+            ],
+            disciplines: "Law • Finance • International Relations • Engineering"
+        },
+        cta: {
+            title: "Let's Build Something Together",
+            subtitle: "Each partnership is unique. Contact us to design a collaboration plan that meets your specific goals.",
+            button: "Contact Partnership Team",
+            email: "office@aspol.fr",
+            emailCta: "or email us directly at",
+        }
+    },
+    fr: {
+        hero: {
+            label: "Pour les Partenaires",
+            title: "Un pont vers les meilleurs talents polonais en France",
+            subtitle: "Nous connectons les entreprises visionnaires avec des étudiants à haut potentiel de Sciences Po, HEC Paris, la Sorbonne et d'autres grandes écoles.",
+            cta: "Démarrer une conversation",
+        },
+        value: {
+            title: "Valeur Stratégique",
+            items: [
+                {
+                    icon: Users,
+                    title: "Accès aux Talents d'Élite",
+                    desc: "Canal de recrutement direct vers des candidats bilingues et pré-sélectionnés des 5 meilleures universités françaises."
+                },
+                {
+                    icon: TrendingUp,
+                    title: "Marque Employeur",
+                    desc: "Positionnez votre entreprise comme un employeur de choix parmi les étudiants polonais les plus ambitieux à l'étranger."
+                },
+                {
+                    icon: Globe,
+                    title: "RSE & Impact Communautaire",
+                    desc: "Soutenez le développement de la communauté polonaise en France et favorisez la coopération transfrontalière."
+                }
+            ]
+        },
+        scope: {
+            title: "Périmètre de Collaboration",
+            subtitle: "Nous croyons aux partenariats qui donnent des résultats concrets. Notre modèle de coopération est flexible et adapté à vos objectifs commerciaux.",
+            items: [
+                "Logo & visibilité de la marque lors de la conférence Paris Polish Forum",
+                "Présence dans la newsletter ASPOL & campagnes sur les réseaux sociaux",
+                "Opportunités de prise de parole & sessions de panel dédiées au PPF",
+                "Communication directe avec la communauté étudiante ASPOL",
+                "Accès à la base de données CV étudiants & insights d'enquête carrière",
+                "Co-création de projets éducatifs & webinaires",
+                "Matériels promotionnels dans les paquets de conférence",
+                "Opportunités de partenariat exclusif dans l'industrie"
+            ]
+        },
+        demographics: {
+            title: "Profil de Notre Communauté",
+            stats: [
+                { value: "40%", label: "Sciences Po Paris" },
+                { value: "25%", label: "HEC / ESSEC / ESCP" },
+                { value: "20%", label: "Sorbonne & Polytechnique" },
+                { value: "15%", label: "Autres Grandes Écoles" },
+            ],
+            disciplines: "Droit • Finance • Relations Internationales • Ingénierie"
+        },
+        cta: {
+            title: "Construisons quelque chose ensemble",
+            subtitle: "Chaque partenariat est unique. Contactez-nous pour concevoir un plan de collaboration qui répond à vos objectifs spécifiques.",
+            button: "Contacter l'équipe Partenariats",
+            email: "office@aspol.fr",
+            emailCta: "ou envoyez-nous un email directement à",
+        }
+    },
+    pl: {
+        hero: {
+            label: "Dla Partnerów Biznesowych",
+            title: "Most do najlepszych polskich talentów we Francji",
+            subtitle: "Łączymy wizjonerskie firmy ze studentami o wysokim potencjale z Sciences Po, HEC Paris, Sorbony i innych wiodących uczelni.",
+            cta: "Rozpocznij Rozmowę",
+        },
+        value: {
+            title: "Wartość Strategiczna",
+            items: [
+                {
+                    icon: Users,
+                    title: "Dostęp do Elitarnych Talentów",
+                    desc: "Bezpośredni kanał rekrutacyjny do wstępnie zweryfikowanych, dwujęzycznych kandydatów z top 5 francuskich uczelni."
+                },
+                {
+                    icon: TrendingUp,
+                    title: "Employer Branding",
+                    desc: "Pozycjonuj swoją firmę jako pracodawcę z wyboru wśród najbardziej ambitnych polskich studentów za granicą."
+                },
+                {
+                    icon: Globe,
+                    title: "CSR i Społeczność",
+                    desc: "Wspieraj rozwój polskiej społeczności we Francji i promuj współpracę transgraniczną."
+                }
+            ]
+        },
+        scope: {
+            title: "Zakres Współpracy",
+            subtitle: "Wierzymy w partnerstwa, które przynoszą realne wyniki. Nasz model współpracy jest elastyczny i dopasowany do Twoich celów biznesowych.",
+            items: [
+                "Logo & widoczność marki podczas konferencji Paris Polish Forum",
+                "Obecność w newsletterze ASPOL & kampaniach w mediach społecznościowych",
+                "Możliwości wystąpień & dedykowane sesje panelowe na PPF",
+                "Bezpośrednia komunikacja ze społecznością studencką ASPOL",
+                "Dostęp do bazy CV studentów & wyników ankiet zawodowych",
+                "Współtworzenie projektów edukacyjnych & webinarów",
+                "Materiały promocyjne w paczkach konferencyjnych",
+                "Ekskluzywne możliwości partnerstwa branżowego"
+            ]
+        },
+        demographics: {
+            title: "Profil Naszej Społeczności",
+            stats: [
+                { value: "40%", label: "Sciences Po Paris" },
+                { value: "25%", label: "HEC / ESSEC / ESCP" },
+                { value: "20%", label: "Sorbonne & Politechnika" },
+                { value: "15%", label: "Inne Grandes Écoles" },
+            ],
+            disciplines: "Prawo • Finanse • Stosunki Międzynarodowe • Inżynieria"
+        },
+        cta: {
+            title: "Zbudujmy coś razem",
+            subtitle: "Każde partnerstwo jest wyjątkowe. Skontaktuj się z nami, aby opracować plan współpracy spełniający Twoje konkretne cele.",
+            button: "Skontaktuj się z Działem Partnerstw",
+            email: "office@aspol.fr",
+            emailCta: "lub napisz do nas bezpośrednio na",
+        }
+    }
+} as const;
 
 export default function PartnersPage() {
     const { language } = useLanguage();
     const sectionRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add("animate-fade-in-up");
-                    }
-                });
-            },
-            { threshold: 0.1 }
-        );
+    /* Reuse the shared scroll-animation hook instead of a one-off
+       IntersectionObserver — keeps behavior consistent site-wide. */
+    useScrollAnimation(sectionRef);
 
-        if (sectionRef.current) {
-            const elements = sectionRef.current.querySelectorAll(".fade-in-element");
-            elements.forEach((el) => observer.observe(el));
-        }
-
-        return () => observer.disconnect();
-    }, []);
-
-    const content = {
-        en: {
-            hero: {
-                label: "For Business Partners",
-                title: "Bridge to Top Polish Talent in France",
-                subtitle: "We connect visionary companies with high-potential students from Sciences Po, HEC Paris, Sorbonne, and other leading institutions.",
-                cta: "Start a Conversation",
-            },
-            value: {
-                title: "Strategic Value",
-                items: [
-                    {
-                        icon: Users,
-                        title: "Access to Elite Talent",
-                        desc: "Direct recruitment channel to pre-screened, bilingual candidates from top 5 French universities."
-                    },
-                    {
-                        icon: TrendingUp,
-                        title: "Employer Branding",
-                        desc: "Position your company as a top employer of choice among the most ambitious Polish students abroad."
-                    },
-                    {
-                        icon: Globe,
-                        title: "CSR & Community Impact",
-                        desc: "Support the development of the Polish community in France and foster cross-border cooperation."
-                    }
-                ]
-            },
-            scope: {
-                title: "Scope of Collaboration",
-                subtitle: "We believe in partnerships that drive real results. Our cooperation model is flexible and tailored to your business objectives.",
-                items: [
-                    "Logo & brand visibility at Paris Polish Forum conference",
-                    "Presence in ASPOL newsletter & social media campaigns",
-                    "Speaking opportunities & dedicated panel sessions at PPF",
-                    "Direct communication with ASPOL student community",
-                    "Access to student CV database & career survey insights",
-                    "Co-creation of educational projects & webinars",
-                    "Promotional materials in conference packages",
-                    "Exclusive industry partnership opportunities"
-                ]
-            },
-            demographics: {
-                title: "Our Community Profile",
-                stats: [
-                    { value: "40%", label: "Sciences Po Paris" },
-                    { value: "25%", label: "HEC / ESSEC / ESCP" },
-                    { value: "20%", label: "Sorbonne & Polytechnic" },
-                    { value: "15%", label: "Other Grand Écoles" },
-                ],
-                disciplines: "Law • Finance • International Relations • Engineering"
-            },
-            cta: {
-                title: "Let's Build Something Together",
-                subtitle: "Each partnership is unique. Contact us to design a collaboration plan that meets your specific goals.",
-                button: "Contact Partnership Team",
-                email: "office@aspol.fr"
-            }
-        },
-        fr: {
-            hero: {
-                label: "Pour les Partenaires",
-                title: "Un pont vers les meilleurs talents polonais en France",
-                subtitle: "Nous connectons les entreprises visionnaires avec des étudiants à haut potentiel de Sciences Po, HEC Paris, la Sorbonne et d'autres grandes écoles.",
-                cta: "Démarrer une conversation",
-            },
-            value: {
-                title: "Valeur Stratégique",
-                items: [
-                    {
-                        icon: Users,
-                        title: "Accès aux Talents d'Élite",
-                        desc: "Canal de recrutement direct vers des candidats bilingues et pré-sélectionnés des 5 meilleures universités françaises."
-                    },
-                    {
-                        icon: TrendingUp,
-                        title: "Marque Employeur",
-                        desc: "Positionnez votre entreprise comme un employeur de choix parmi les étudiants polonais les plus ambitieux à l'étranger."
-                    },
-                    {
-                        icon: Globe,
-                        title: "RSE & Impact Communautaire",
-                        desc: "Soutenez le développement de la communauté polonaise en France et favorisez la coopération transfrontalière."
-                    }
-                ]
-            },
-            scope: {
-                title: "Périmètre de Collaboration",
-                subtitle: "Nous croyons aux partenariats qui donnent des résultats concrets. Notre modèle de coopération est flexible et adapté à vos objectifs commerciaux.",
-                items: [
-                    "Logo & visibilité de la marque lors de la conférence Paris Polish Forum",
-                    "Présence dans la newsletter ASPOL & campagnes sur les réseaux sociaux",
-                    "Opportunités de prise de parole & sessions de panel dédiées au PPF",
-                    "Communication directe avec la communauté étudiante ASPOL",
-                    "Accès à la base de données CV étudiants & insights d'enquête carrière",
-                    "Co-création de projets éducatifs & webinaires",
-                    "Matériels promotionnels dans les paquets de conférence",
-                    "Opportunités de partenariat exclusif dans l'industrie"
-                ]
-            },
-            demographics: {
-                title: "Profil de Notre Communauté",
-                stats: [
-                    { value: "40%", label: "Sciences Po Paris" },
-                    { value: "25%", label: "HEC / ESSEC / ESCP" },
-                    { value: "20%", label: "Sorbonne & Polytechnique" },
-                    { value: "15%", label: "Autres Grandes Écoles" },
-                ],
-                disciplines: "Droit • Finance • Relations Internationales • Ingénierie"
-            },
-            cta: {
-                title: "Construisons quelque chose ensemble",
-                subtitle: "Chaque partenariat est unique. Contactez-nous pour concevoir un plan de collaboration qui répond à vos objectifs spécifiques.",
-                button: "Contacter l'équipe Partenariats",
-                email: "office@aspol.fr"
-            }
-        },
-        pl: {
-            hero: {
-                label: "Dla Partnerów Biznesowych",
-                title: "Most do najlepszych polskich talentów we Francji",
-                subtitle: "Łączymy wizjonerskie firmy ze studentami o wysokim potencjale z Sciences Po, HEC Paris, Sorbony i innych wiodących uczelni.",
-                cta: "Rozpocznij Rozmowę",
-            },
-            value: {
-                title: "Wartość Strategiczna",
-                items: [
-                    {
-                        icon: Users,
-                        title: "Dostęp do Elitarnych Talentów",
-                        desc: "Bezpośredni kanał rekrutacyjny do wstępnie zweryfikowanych, dwujęzycznych kandydatów z top 5 francuskich uczelni."
-                    },
-                    {
-                        icon: TrendingUp,
-                        title: "Employer Branding",
-                        desc: "Pozycjonuj swoją firmę jako pracodawcę z wyboru wśród najbardziej ambitnych polskich studentów za granicą."
-                    },
-                    {
-                        icon: Globe,
-                        title: "CSR i Społeczność",
-                        desc: "Wspieraj rozwój polskiej społeczności we Francji i promuj współpracę transgraniczną."
-                    }
-                ]
-            },
-            scope: {
-                title: "Zakres Współpracy",
-                subtitle: "Wierzymy w partnerstwa, które przynoszą realne wyniki. Nasz model współpracy jest elastyczny i dopasowany do Twoich celów biznesowych.",
-                items: [
-                    "Logo & widoczność marki podczas konferencji Paris Polish Forum",
-                    "Obecność w newsletterze ASPOL & kampaniach w mediach społecznościowych",
-                    "Możliwości wystąpień & dedykowane sesje panelowe na PPF",
-                    "Bezpośrednia komunikacja ze społecznością studencką ASPOL",
-                    "Dostęp do bazy CV studentów & wyników ankiet zawodowych",
-                    "Współtworzenie projektów edukacyjnych & webinarów",
-                    "Materiały promocyjne w paczkach konferencyjnych",
-                    "Ekskluzywne możliwości partnerstwa branżowego"
-                ]
-            },
-            demographics: {
-                title: "Profil Naszej Społeczności",
-                stats: [
-                    { value: "40%", label: "Sciences Po Paris" },
-                    { value: "25%", label: "HEC / ESSEC / ESCP" },
-                    { value: "20%", label: "Sorbonne & Politechnika" },
-                    { value: "15%", label: "Inne Grandes Écoles" },
-                ],
-                disciplines: "Prawo • Finanse • Stosunki Międzynarodowe • Inżynieria"
-            },
-            cta: {
-                title: "Zbudujmy coś razem",
-                subtitle: "Każde partnerstwo jest wyjątkowe. Skontaktuj się z nami, aby opracować plan współpracy spełniający Twoje konkretne cele.",
-                button: "Skontaktuj się z Działem Partnerstw",
-                email: "office@aspol.fr"
-            }
-        }
-    };
-
-    const pageContent = content[language as keyof typeof content] || content.en;
+    const pageContent = CONTENT[language as keyof typeof CONTENT] || CONTENT.en;
 
     return (
         <main ref={sectionRef} className="min-h-screen bg-white">
@@ -344,7 +336,7 @@ export default function PartnersPage() {
                         <ArrowRight size={20} />
                     </a>
                     <div className="mt-8 text-gray-500">
-                        or email us directly at{" "}
+                        {pageContent.cta.emailCta}{" "}
                         <a href={`mailto:${pageContent.cta.email}`} className="text-aspol-red hover:underline font-semibold">
                             {pageContent.cta.email}
                         </a>

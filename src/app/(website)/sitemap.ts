@@ -4,6 +4,9 @@ import { eventsData } from '@/data/eventsData';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://aspol.fr';
+  // Current date at build time — Next.js regenerates this on each build
+  // so static routes always reflect the latest deployment date.
+  const buildDate = new Date();
 
   // Static routes
   const routes = [
@@ -17,7 +20,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/terms-of-use',
   ].map((route) => ({
     url: `${baseUrl}${route}`,
-    lastModified: new Date(),
+    lastModified: buildDate,
     changeFrequency: 'monthly' as const,
     priority: route === '' ? 1 : 0.8,
   }));
@@ -33,7 +36,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Dynamic Event routes (EN is default)
   const eventRoutes = eventsData.en.map((event) => ({
     url: `${baseUrl}/events/${event.id}`,
-    lastModified: new Date(),
+    lastModified: buildDate,
     changeFrequency: 'weekly' as const,
     priority: 0.7,
   }));

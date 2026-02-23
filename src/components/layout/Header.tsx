@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -10,19 +10,23 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { language, setLanguage, t } = useLanguage();
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const hamburgerRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const closeMobileMenu = () => {
+  const closeMobileMenu = useCallback(() => {
     setIsMobileMenuOpen(false);
-  };
+    // Return focus to hamburger button on close
+    hamburgerRef.current?.focus();
+  }, []);
 
   // Close mobile menu on escape key
   useEffect(() => {
@@ -34,6 +38,40 @@ export default function Header() {
 
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
+  }, [isMobileMenuOpen, closeMobileMenu]);
+
+  // Focus trap for mobile menu
+  useEffect(() => {
+    if (!isMobileMenuOpen || !mobileMenuRef.current) return;
+
+    // Move focus into the menu
+    const firstFocusable = mobileMenuRef.current.querySelector<HTMLElement>(
+      'a[href], button:not([disabled]), input:not([disabled])'
+    );
+    firstFocusable?.focus();
+
+    const handleTabTrap = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab' || !mobileMenuRef.current) return;
+
+      const focusableEls = mobileMenuRef.current.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled])'
+      );
+      if (focusableEls.length === 0) return;
+
+      const firstEl = focusableEls[0];
+      const lastEl = focusableEls[focusableEls.length - 1];
+
+      if (e.shiftKey && document.activeElement === firstEl) {
+        e.preventDefault();
+        lastEl.focus();
+      } else if (!e.shiftKey && document.activeElement === lastEl) {
+        e.preventDefault();
+        firstEl.focus();
+      }
+    };
+
+    document.addEventListener('keydown', handleTabTrap);
+    return () => document.removeEventListener('keydown', handleTabTrap);
   }, [isMobileMenuOpen]);
 
   return (
@@ -43,7 +81,7 @@ export default function Header() {
         : "bg-white/95 backdrop-blur-sm border-b border-transparent"
         }`}
     >
-      <nav className="max-w-7xl mx-auto px-6 py-4">
+      <nav className="max-w-7xl mx-auto px-6 py-4" aria-label="Main navigation">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2 group">
@@ -98,12 +136,14 @@ export default function Header() {
             </Link>
 
             {/* Language Switcher */}
-            <div className="flex items-center space-x-2 border-l border-gray-200 pl-6">
+            <div className="flex items-center space-x-2 border-l border-gray-200 pl-6" role="group" aria-label="Language switcher">
               <button
                 onClick={() => {
                   setLanguage("en");
                   trackEvent("language_switch", { language: "en", source: "header_desktop" });
                 }}
+                aria-pressed={language === "en"}
+                aria-label="Switch to English"
                 className={`px-3 py-1.5 text-xs font-bold rounded-md transition-all ${language === "en"
                   ? "bg-aspol-navy text-white shadow-md shadow-blue-900/10"
                   : "text-gray-500 hover:bg-gray-50 hover:text-aspol-navy"
@@ -116,6 +156,8 @@ export default function Header() {
                   setLanguage("fr");
                   trackEvent("language_switch", { language: "fr", source: "header_desktop" });
                 }}
+                aria-pressed={language === "fr"}
+                aria-label="Passer en français"
                 className={`px-3 py-1.5 text-xs font-bold rounded-md transition-all ${language === "fr"
                   ? "bg-aspol-navy text-white shadow-md shadow-blue-900/10"
                   : "text-gray-500 hover:bg-gray-50 hover:text-aspol-navy"
@@ -128,6 +170,8 @@ export default function Header() {
                   setLanguage("pl");
                   trackEvent("language_switch", { language: "pl", source: "header_desktop" });
                 }}
+                aria-pressed={language === "pl"}
+                aria-label="Przełącz na polski"
                 className={`px-3 py-1.5 text-xs font-bold rounded-md transition-all ${language === "pl"
                   ? "bg-aspol-navy text-white shadow-md shadow-blue-900/10"
                   : "text-gray-500 hover:bg-gray-50 hover:text-aspol-navy"
@@ -150,10 +194,12 @@ export default function Header() {
 
           {/* Mobile Menu Button */}
           <button
+            ref={hamburgerRef}
             className="md:hidden p-2 min-h-11 min-w-11 touch-manipulation active:scale-95 transition-transform"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Toggle menu"
+            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
             aria-expanded={isMobileMenuOpen}
+            aria-controls="mobile-menu"
           >
             {isMobileMenuOpen ? (
               <svg
@@ -164,6 +210,7 @@ export default function Header() {
                 strokeWidth="2"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
+                aria-hidden="true"
               >
                 <path d="M6 18L18 6M6 6l12 12"></path>
               </svg>
@@ -176,6 +223,7 @@ export default function Header() {
                 strokeWidth="2"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
+                aria-hidden="true"
               >
                 <path d="M4 6h16M4 12h16M4 18h16"></path>
               </svg>
@@ -194,7 +242,7 @@ export default function Header() {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="relative z-50 md:hidden mt-4 pb-4 border-t border-gray-200 bg-white backdrop-blur-md rounded-b-lg shadow-xl animate-fade-in">
+          <div id="mobile-menu" ref={mobileMenuRef} role="dialog" aria-modal="true" aria-label="Mobile navigation" className="relative z-50 md:hidden mt-4 pb-4 border-t border-gray-200 bg-white backdrop-blur-md rounded-b-lg shadow-xl animate-fade-in">
             <div className="flex flex-col space-y-1 pt-4 px-2">
               <Link
                 href="/#about"
@@ -247,6 +295,8 @@ export default function Header() {
                     trackEvent("language_switch", { language: "en", source: "header_mobile" });
                     closeMobileMenu();
                   }}
+                  aria-pressed={language === "en"}
+                  aria-label="Switch to English"
                   className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-lg transition-colors touch-manipulation active:scale-95 min-h-11 ${language === "en"
                     ? "bg-red-600 text-white"
                     : "text-gray-700 bg-gray-100 hover:bg-gray-200"
@@ -260,6 +310,8 @@ export default function Header() {
                     trackEvent("language_switch", { language: "fr", source: "header_mobile" });
                     closeMobileMenu();
                   }}
+                  aria-pressed={language === "fr"}
+                  aria-label="Passer en français"
                   className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-lg transition-colors touch-manipulation active:scale-95 min-h-11 ${language === "fr"
                     ? "bg-red-600 text-white"
                     : "text-gray-700 bg-gray-100 hover:bg-gray-200"
@@ -273,6 +325,8 @@ export default function Header() {
                     trackEvent("language_switch", { language: "pl", source: "header_mobile" });
                     closeMobileMenu();
                   }}
+                  aria-pressed={language === "pl"}
+                  aria-label="Przełącz na polski"
                   className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-lg transition-colors touch-manipulation active:scale-95 min-h-11 ${language === "pl"
                     ? "bg-red-600 text-white"
                     : "text-gray-700 bg-gray-100 hover:bg-gray-200"

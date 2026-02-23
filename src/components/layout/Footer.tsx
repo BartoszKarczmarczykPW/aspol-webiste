@@ -8,12 +8,18 @@ import { InstagramIcon } from "@/components/icons/InstagramIcon";
 import { LinkedInIcon } from "@/components/icons/LinkedInIcon";
 import { trackEvent } from "@/lib/analytics";
 
+const footerDescription: Record<string, string> = {
+  en: "Building a prosperous future through Polish-French cooperation since 2016.",
+  fr: "Construire un avenir prospère grâce à la coopération polono-française depuis 2016.",
+  pl: "Budujemy wspólną przyszłość poprzez współpracę polsko-francuską od 2016 roku.",
+};
+
 export default function Footer() {
   const currentYear = new Date().getFullYear();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   return (
-    <footer className="bg-aspol-dark text-white pt-20 pb-10 px-6 border-t border-aspol-navy">
+    <footer className="bg-aspol-dark text-white pt-20 pb-10 px-6 border-t border-aspol-navy" role="contentinfo">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
           {/* Brand */}
@@ -30,46 +36,46 @@ export default function Footer() {
               </div>
             </Link>
             <p className="text-gray-400 text-sm leading-relaxed mb-6">
-              Building a prosperous future through Polish-French cooperation since 2016.
+              {footerDescription[language] || footerDescription.en}
             </p>
           </div>
 
           {/* Quick Links */}
-          <div className="text-center sm:text-left">
+          <nav className="text-center sm:text-left" aria-label="Footer navigation">
             <h4 className="font-semibold mb-3 sm:mb-4 text-base">{t.footer.quickLinks}</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <a
-                  href="#about"
+                <Link
+                  href="/#about"
                   className="group inline-flex items-center text-gray-400 hover:text-white transition-colors"
                 >
                   <span className="relative">
                     {t.nav.about}
                     <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-aspol-red transition-all duration-300 group-hover:w-full"></span>
                   </span>
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#events"
+                <Link
+                  href="/events"
                   className="group inline-flex items-center text-gray-400 hover:text-white transition-colors"
                 >
                   <span className="relative">
                     {t.nav.events}
                     <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-aspol-red transition-all duration-300 group-hover:w-full"></span>
                   </span>
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#contact"
+                <Link
+                  href="/#contact"
                   className="group inline-flex items-center text-gray-400 hover:text-white transition-colors"
                 >
                   <span className="relative">
                     {t.nav.contact}
                     <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-aspol-red transition-all duration-300 group-hover:w-full"></span>
                   </span>
-                </a>
+                </Link>
               </li>
               <li>
                 <a
@@ -86,10 +92,10 @@ export default function Footer() {
                 </a>
               </li>
             </ul>
-          </div>
+          </nav>
 
           {/* Legal */}
-          <div className="text-center sm:text-left">
+          <nav className="text-center sm:text-left" aria-label="Legal navigation">
             <h4 className="font-semibold mb-3 sm:mb-4 text-base">{t.footer.legal}</h4>
             <ul className="space-y-2 text-sm">
               <li>
@@ -126,7 +132,7 @@ export default function Footer() {
                 </Link>
               </li>
             </ul>
-          </div>
+          </nav>
 
           {/* Social Media */}
           <div className="text-center sm:text-left">

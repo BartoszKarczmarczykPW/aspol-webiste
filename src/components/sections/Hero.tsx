@@ -40,11 +40,11 @@ export default function Hero() {
           {/* Main heading */}
           <div className="fade-in-element opacity-0 mb-6 sm:mb-8">
             <h1 className="text-5xl xs:text-6xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight text-aspol-dark mb-4">
-              <span className="sr-only">{t.hero.subtitle}</span>
               <span className="block leading-tight">{t.hero.welcome}</span>
               <span className="block text-aspol-red">
                 ASPOL
               </span>
+              <span className="sr-only"> — {t.hero.subtitle}</span>
             </h1>
           </div>
 
@@ -82,10 +82,20 @@ export default function Hero() {
         <div className="fade-in-element opacity-0 mt-20 pt-8 border-t border-gray-100 grid grid-cols-2 md:grid-cols-4 gap-8 text-center" style={{ animationDelay: "0.3s" }}>
           {/* We can move simple stats here or just leave it clean. Let's start with scroll indicator */}
           <div className="col-span-full flex justify-center">
-            <div className="flex flex-col items-center gap-3 cursor-pointer" onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}>
-              <span className="text-xs font-semibold uppercase tracking-widest text-aspol-navy/40">{t.hero.scrollDown}</span>
+            <button
+              type="button"
+              className="flex flex-col items-center gap-3 cursor-pointer bg-transparent border-none"
+              onClick={() => {
+                const nextSection = heroRef.current?.nextElementSibling;
+                if (nextSection) {
+                  nextSection.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+              aria-label={t.hero.scrollDown}
+            >
+              <span className="text-xs font-semibold uppercase tracking-widest text-aspol-navy/40" aria-hidden="true">{t.hero.scrollDown}</span>
               <ChevronDownIcon className="w-5 h-5 text-aspol-red animate-bounce" />
-            </div>
+            </button>
           </div>
         </div>
       </div>

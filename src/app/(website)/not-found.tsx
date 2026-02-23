@@ -1,17 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function NotFound() {
-  const [mounted, setMounted] = useState(false);
   const { t } = useLanguage();
-
-  useEffect(() => {
-    const timer = setTimeout(() => setMounted(true), 10);
-    return () => clearTimeout(timer);
-  }, []);
 
   return (
     <div className="min-h-screen bg-linear-to-br from-red-50 via-white to-gray-50 flex items-center justify-center px-4 relative overflow-hidden">
@@ -22,10 +15,10 @@ export default function NotFound() {
         <div className="absolute bottom-20 left-1/2 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
       </div>
 
-      <div className={`max-w-2xl w-full text-center transition-all duration-1000 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+      <div className="max-w-2xl w-full text-center">
         {/* Animated 404 */}
         <div className="mb-8">
-          <h1 className="text-8xl sm:text-9xl md:text-[10rem] font-bold bg-linear-to-r from-red-600 to-red-500 bg-clip-text text-transparent mb-4 animate-pulse">
+          <h1 className="text-8xl sm:text-9xl md:text-[10rem] font-bold bg-linear-to-r from-red-600 to-red-500 bg-clip-text text-transparent mb-4">
             404
           </h1>
           <div className="flex justify-center gap-2 mb-6">

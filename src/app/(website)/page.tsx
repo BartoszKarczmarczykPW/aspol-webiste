@@ -11,7 +11,7 @@ import Contact from "@/components/sections/Contact";
 
 export default function Home() {
     return (
-        <main className="min-h-screen bg-white">
+        <div className="min-h-screen bg-white">
             <Hero />
             <PartnersLogos />
             <About />
@@ -22,6 +22,6 @@ export default function Home() {
             <FAQ />
             <Newsletter />
             <Contact />
-        </main>
+        </div>
     );
 }

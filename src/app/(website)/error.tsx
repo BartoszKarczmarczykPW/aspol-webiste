@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Link from "next/link";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -11,7 +11,6 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  const [mounted] = useState(true);
   const { t } = useLanguage();
 
   useEffect(() => {
@@ -19,8 +18,8 @@ export default function Error({
   }, [error]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-6 bg-linear-to-br from-red-50 via-white to-gray-50">
-      <div className={`text-center transition-all duration-1000 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+    <div className="min-h-screen flex items-center justify-center px-6 bg-linear-to-br from-red-50 via-white to-gray-50" role="alert">
+      <div className="text-center">
         {/* Error Icon */}
         <div className="mb-8 flex justify-center">
           <div className="w-32 h-32 bg-red-100 rounded-full flex items-center justify-center">
@@ -29,6 +28,7 @@ export default function Error({
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
+              aria-hidden="true"
             >
               <path
                 strokeLinecap="round"

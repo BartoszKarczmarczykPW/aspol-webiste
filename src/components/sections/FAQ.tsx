@@ -4,93 +4,93 @@ import { useState, useMemo } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { FAQItem } from "@/types";
 
+const FAQS: Readonly<Record<string, FAQItem[]>> = {
+  en: [
+    {
+      question: "How can I become a member of ASPOL?",
+      answer: "You can join ASPOL by filling out our membership form. Click the 'Join Us' button at the top of the page or in the contact section. Membership is open to all Polish students in France.",
+    },
+    {
+      question: "Do I need to pay to join ASPOL?",
+      answer: "No, ASPOL membership is completely free! We believe in building an inclusive community accessible to all Polish students in France.",
+    },
+    {
+      question: "What kind of events does ASPOL organize?",
+      answer: "We organize various events including the Paris Polish Forum conference, networking meetups, cultural celebrations, professional development workshops, and social gatherings. Check our Events section for upcoming activities.",
+    },
+    {
+      question: "Can I participate if I'm not a Polish student?",
+      answer: "While ASPOL primarily serves Polish students in France, we welcome anyone interested in Polish-French cultural exchange and cooperation to participate in our public events.",
+    },
+    {
+      question: "How can I get involved with the mentoring program?",
+      answer: "If you're a Polish student planning to study in France, you can apply for our mentoring program through our contact form. If you're already studying in France and want to become a mentor, reach out to us!",
+    },
+    {
+      question: "Where are ASPOL events held?",
+      answer: "Most of our events take place in Paris, including at Sciences Po, various universities, and cultural venues. Specific locations are announced with each event.",
+    },
+  ],
+  fr: [
+    {
+      question: "Comment puis-je devenir membre d'ASPOL?",
+      answer: "Vous pouvez rejoindre ASPOL en remplissant notre formulaire d'adhésion. Cliquez sur le bouton 'Nous Rejoindre' en haut de la page ou dans la section contact. L'adhésion est ouverte à tous les étudiants polonais en France.",
+    },
+    {
+      question: "Dois-je payer pour rejoindre ASPOL?",
+      answer: "Non, l'adhésion à ASPOL est entièrement gratuite! Nous croyons en la construction d'une communauté inclusive accessible à tous les étudiants polonais en France.",
+    },
+    {
+      question: "Quel type d'événements ASPOL organise-t-il?",
+      answer: "Nous organisons divers événements dont la conférence Paris Polish Forum, des rencontres de networking, des célébrations culturelles, des ateliers de développement professionnel et des rassemblements sociaux. Consultez notre section Événements pour les activités à venir.",
+    },
+    {
+      question: "Puis-je participer si je ne suis pas étudiant polonais?",
+      answer: "Bien qu'ASPOL serve principalement les étudiants polonais en France, nous accueillons toute personne intéressée par l'échange culturel et la coopération polono-française à participer à nos événements publics.",
+    },
+    {
+      question: "Comment puis-je m'impliquer dans le programme de mentorat?",
+      answer: "Si vous êtes un étudiant polonais prévoyant d'étudier en France, vous pouvez postuler à notre programme de mentorat via notre formulaire de contact. Si vous étudiez déjà en France et souhaitez devenir mentor, contactez-nous!",
+    },
+    {
+      question: "Où se déroulent les événements ASPOL?",
+      answer: "La plupart de nos événements ont lieu à Paris, notamment à Sciences Po, dans diverses universités et lieux culturels. Les emplacements spécifiques sont annoncés avec chaque événement.",
+    },
+  ],
+  pl: [
+    {
+      question: "Jak mogę zostać członkiem ASPOL?",
+      answer: "Możesz dołączyć do ASPOL wypełniając nasz formularz członkowski. Kliknij przycisk 'Dołącz do Nas' u góry strony lub w sekcji kontakt. Członkostwo jest otwarte dla wszystkich polskich studentów we Francji.",
+    },
+    {
+      question: "Czy muszę płacić, aby dołączyć do ASPOL?",
+      answer: "Nie, członkostwo w ASPOL jest całkowicie darmowe! Wierzymy w budowanie włączającej społeczności dostępnej dla wszystkich polskich studentów we Francji.",
+    },
+    {
+      question: "Jakie wydarzenia organizuje ASPOL?",
+      answer: "Organizujemy różne wydarzenia, w tym konferencję Paris Polish Forum, spotkania networkingowe, celebracje kulturalne, warsztaty rozwoju zawodowego i spotkania towarzyskie. Sprawdź naszą sekcję Wydarzenia, aby poznać nadchodzące aktywności.",
+    },
+    {
+      question: "Czy mogę uczestniczyć, jeśli nie jestem polskim studentem?",
+      answer: "Chociaż ASPOL służy głównie polskim studentom we Francji, zapraszamy każdego zainteresowanego polsko-francuską wymianą kulturalną i współpracą do udziału w naszych publicznych wydarzeniach.",
+    },
+    {
+      question: "Jak mogę zaangażować się w program mentorski?",
+      answer: "Jeśli jesteś polskim studentem planującym studia we Francji, możesz aplikować do naszego programu mentorskiego przez formularz kontaktowy. Jeśli już studiujesz we Francji i chcesz zostać mentorem, skontaktuj się z nami!",
+    },
+    {
+      question: "Gdzie odbywają się wydarzenia ASPOL?",
+      answer: "Większość naszych wydarzeń odbywa się w Paryżu, m.in. w Sciences Po, różnych uniwersytetach i miejscach kulturalnych. Konkretne lokalizacje są ogłaszane przy każdym wydarzeniu.",
+    },
+  ],
+} as const;
+
 export default function FAQ() {
   const { language } = useLanguage();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const faqs: Record<string, FAQItem[]> = {
-    en: [
-      {
-        question: "How can I become a member of ASPOL?",
-        answer: "You can join ASPOL by filling out our membership form. Click the 'Join Us' button at the top of the page or in the contact section. Membership is open to all Polish students in France.",
-      },
-      {
-        question: "Do I need to pay to join ASPOL?",
-        answer: "No, ASPOL membership is completely free! We believe in building an inclusive community accessible to all Polish students in France.",
-      },
-      {
-        question: "What kind of events does ASPOL organize?",
-        answer: "We organize various events including the Paris Polish Forum conference, networking meetups, cultural celebrations, professional development workshops, and social gatherings. Check our Events section for upcoming activities.",
-      },
-      {
-        question: "Can I participate if I'm not a Polish student?",
-        answer: "While ASPOL primarily serves Polish students in France, we welcome anyone interested in Polish-French cultural exchange and cooperation to participate in our public events.",
-      },
-      {
-        question: "How can I get involved with the mentoring program?",
-        answer: "If you're a Polish student planning to study in France, you can apply for our mentoring program through our contact form. If you're already studying in France and want to become a mentor, reach out to us!",
-      },
-      {
-        question: "Where are ASPOL events held?",
-        answer: "Most of our events take place in Paris, including at Sciences Po, various universities, and cultural venues. Specific locations are announced with each event.",
-      },
-    ],
-    fr: [
-      {
-        question: "Comment puis-je devenir membre d'ASPOL?",
-        answer: "Vous pouvez rejoindre ASPOL en remplissant notre formulaire d'adhésion. Cliquez sur le bouton 'Nous Rejoindre' en haut de la page ou dans la section contact. L'adhésion est ouverte à tous les étudiants polonais en France.",
-      },
-      {
-        question: "Dois-je payer pour rejoindre ASPOL?",
-        answer: "Non, l'adhésion à ASPOL est entièrement gratuite! Nous croyons en la construction d'une communauté inclusive accessible à tous les étudiants polonais en France.",
-      },
-      {
-        question: "Quel type d'événements ASPOL organise-t-il?",
-        answer: "Nous organisons divers événements dont la conférence Paris Polish Forum, des rencontres de networking, des célébrations culturelles, des ateliers de développement professionnel et des rassemblements sociaux. Consultez notre section Événements pour les activités à venir.",
-      },
-      {
-        question: "Puis-je participer si je ne suis pas étudiant polonais?",
-        answer: "Bien qu'ASPOL serve principalement les étudiants polonais en France, nous accueillons toute personne intéressée par l'échange culturel et la coopération polono-française à participer à nos événements publics.",
-      },
-      {
-        question: "Comment puis-je m'impliquer dans le programme de mentorat?",
-        answer: "Si vous êtes un étudiant polonais prévoyant d'étudier en France, vous pouvez postuler à notre programme de mentorat via notre formulaire de contact. Si vous étudiez déjà en France et souhaitez devenir mentor, contactez-nous!",
-      },
-      {
-        question: "Où se déroulent les événements ASPOL?",
-        answer: "La plupart de nos événements ont lieu à Paris, notamment à Sciences Po, dans diverses universités et lieux culturels. Les emplacements spécifiques sont annoncés avec chaque événement.",
-      },
-    ],
-    pl: [
-      {
-        question: "Jak mogę zostać członkiem ASPOL?",
-        answer: "Możesz dołączyć do ASPOL wypełniając nasz formularz członkowski. Kliknij przycisk 'Dołącz do Nas' u góry strony lub w sekcji kontakt. Członkostwo jest otwarte dla wszystkich polskich studentów we Francji.",
-      },
-      {
-        question: "Czy muszę płacić, aby dołączyć do ASPOL?",
-        answer: "Nie, członkostwo w ASPOL jest całkowicie darmowe! Wierzymy w budowanie włączającej społeczności dostępnej dla wszystkich polskich studentów we Francji.",
-      },
-      {
-        question: "Jakie wydarzenia organizuje ASPOL?",
-        answer: "Organizujemy różne wydarzenia, w tym konferencję Paris Polish Forum, spotkania networkingowe, celebracje kulturalne, warsztaty rozwoju zawodowego i spotkania towarzyskie. Sprawdź naszą sekcję Wydarzenia, aby poznać nadchodzące aktywności.",
-      },
-      {
-        question: "Czy mogę uczestniczyć, jeśli nie jestem polskim studentem?",
-        answer: "Chociaż ASPOL służy głównie polskim studentom we Francji, zapraszamy każdego zainteresowanego polsko-francuską wymianą kulturalną i współpracą do udziału w naszych publicznych wydarzeniach.",
-      },
-      {
-        question: "Jak mogę zaangażować się w program mentorski?",
-        answer: "Jeśli jesteś polskim studentem planującym studia we Francji, możesz aplikować do naszego programu mentorskiego przez formularz kontaktowy. Jeśli już studiujesz we Francji i chcesz zostać mentorem, skontaktuj się z nami!",
-      },
-      {
-        question: "Gdzie odbywają się wydarzenia ASPOL?",
-        answer: "Większość naszych wydarzeń odbywa się w Paryżu, m.in. w Sciences Po, różnych uniwersytetach i miejscach kulturalnych. Konkretne lokalizacje są ogłaszane przy każdym wydarzeniu.",
-      },
-    ],
-  };
-
-  const currentFAQs = faqs[language] || faqs.en;
+  const currentFAQs = FAQS[language] || FAQS.en;
 
   // Filter FAQs based on search query
   const filteredFAQs = useMemo(() => {
@@ -109,7 +109,7 @@ export default function FAQ() {
   };
 
   return (
-    <section className="py-16 sm:py-24 px-4 sm:px-6 bg-gray-50 relative overflow-hidden">
+    <section className="py-16 sm:py-24 px-4 sm:px-6 bg-gray-50 relative overflow-hidden" aria-label={language === "en" ? "Frequently asked questions" : language === "fr" ? "Questions fréquentes" : "Najczęściej zadawane pytania"}>
         {/* Background blobs */}
         <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[500px] h-[500px] bg-blue-100 rounded-full blur-3xl opacity-50 mix-blend-multiply pointer-events-none"></div>
         <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-red-100 rounded-full blur-3xl opacity-50 mix-blend-multiply pointer-events-none"></div>
@@ -117,7 +117,7 @@ export default function FAQ() {
       <div className="max-w-4xl mx-auto relative z-10">
         <div className="text-center mb-16 sm:mb-20">
           <span className="inline-block py-1 px-3 rounded-full bg-gray-100 border border-gray-200 text-gray-600 text-xs font-bold tracking-widest uppercase mb-4">
-             Help Center
+             {language === "en" ? "Help Center" : language === "fr" ? "Centre d'aide" : "Centrum pomocy"}
           </span>
           <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 mb-6 tracking-tight">
             {language === "en" && "Frequently Asked Questions"}
@@ -214,6 +214,8 @@ export default function FAQ() {
                 onClick={() => toggleFAQ(index)}
                 className="w-full px-8 py-6 flex items-center justify-between text-left transition-colors"
                 aria-expanded={openIndex === index}
+                aria-controls={`faq-panel-${index}`}
+                id={`faq-button-${index}`}
               >
                 <span className={`text-lg font-bold transition-colors pr-8 ${openIndex === index ? 'text-red-700' : 'text-gray-900 group-hover:text-red-700'}`}>
                   {faq.question}
@@ -235,6 +237,11 @@ export default function FAQ() {
                 </div>
               </button>
               <div
+                id={`faq-panel-${index}`}
+                role="region"
+                aria-labelledby={`faq-button-${index}`}
+                aria-hidden={openIndex !== index}
+                inert={openIndex !== index ? true : undefined}
                 className={`overflow-hidden transition-all duration-500 ease-in-out ${
                   openIndex === index ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
                 }`}

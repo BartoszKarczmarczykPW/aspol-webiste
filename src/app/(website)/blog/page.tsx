@@ -28,11 +28,48 @@ interface SanityPost {
         fr: string;
         pl: string;
     };
-    imageUrl: string;
+    imageUrl: string | null;
     tags?: string[];
     featured?: boolean;
     upcoming?: boolean;
 }
+
+/**
+ * Static i18n labels — hoisted to module level so they are created once,
+ * not re-allocated on every render.
+ */
+const LABELS = {
+    en: {
+        title: "Polish Paris Forum",
+        subtitle: "Conference news, highlights, and insights from the Polish Paris Forum.",
+        all: "All Posts",
+        readMore: "Read Article",
+        featured: "Featured Story",
+        upcoming: "Upcoming",
+        empty: "No posts found for this category.",
+        loading: "Loading posts...",
+    },
+    fr: {
+        title: "Polish Paris Forum",
+        subtitle: "Actualités, temps forts et analyses de la conférence Polish Paris Forum.",
+        all: "Tous les articles",
+        readMore: "Lire l'article",
+        featured: "À la une",
+        upcoming: "À venir",
+        empty: "Aucun article trouvé pour cette catégorie.",
+        loading: "Chargement des articles...",
+    },
+    pl: {
+        title: "Polish Paris Forum",
+        subtitle: "Aktualności, relacje i wnioski z konferencji Polish Paris Forum.",
+        all: "Wszystkie wpisy",
+        readMore: "Czytaj artykuł",
+        featured: "Wyróżniony artykuł",
+        upcoming: "Nadchodzące",
+        empty: "Nie znaleziono wpisów dla tej kategorii.",
+        loading: "Ładowanie wpisów...",
+    },
+} as const;
 
 function BlogContent() {
     const { language } = useLanguage();
@@ -54,40 +91,7 @@ function BlogContent() {
         fetchPosts();
     }, []);
 
-    const labels = {
-        en: {
-            title: "Polish Paris Forum",
-            subtitle: "Conference news, highlights, and insights from the Polish Paris Forum.",
-            all: "All Posts",
-            readMore: "Read Article",
-            featured: "Featured Story",
-            upcoming: "Upcoming",
-            empty: "No posts found for this category.",
-            loading: "Loading posts...",
-        },
-        fr: {
-            title: "Polish Paris Forum",
-            subtitle: "Actualités, temps forts et analyses de la conférence Polish Paris Forum.",
-            all: "Tous les articles",
-            readMore: "Lire l'article",
-            featured: "À la une",
-            upcoming: "À venir",
-            empty: "Aucun article trouvé pour cette catégorie.",
-            loading: "Chargement des articles...",
-        },
-        pl: {
-            title: "Polish Paris Forum",
-            subtitle: "Aktualności, relacje i wnioski z konferencji Polish Paris Forum.",
-            all: "Wszystkie wpisy",
-            readMore: "Czytaj artykuł",
-            featured: "Wyróżniony artykuł",
-            upcoming: "Nadchodzące",
-            empty: "Nie znaleziono wpisów dla tej kategorii.",
-            loading: "Ładowanie wpisów...",
-        },
-    };
-
-    const t = labels[language as keyof typeof labels] || labels.en;
+    const t = LABELS[language as keyof typeof LABELS] || LABELS.en;
 
     // Get all unique tags
     const allTags = Array.from(new Set(posts.flatMap((post) => post.tags || [])));

@@ -24,7 +24,7 @@ interface SanityPost {
     publishedAt: string;
     excerpt: { en: string; fr: string; pl: string };
     content: { en: TypedObject[]; fr: TypedObject[]; pl: TypedObject[] };
-    imageUrl: string;
+    imageUrl: string | null;
     tags?: string[];
     featured?: boolean;
     sponsors?: { _key?: string; name: string; website?: string; logoUrl?: string }[];
@@ -72,51 +72,14 @@ const portableTextComponents: PortableTextComponents = {
     },
 };
 
-function BlogPostContent({ slug }: { slug: string }) {
-    const { language } = useLanguage();
-    const [post, setPost] = useState<SanityPost | null>(null);
-    const [loading, setLoading] = useState(true);
-
-    const t = {
-        en: {
-            back: "Back to Polish Paris Forum",
-            share: "Share Article",
-            readTime: "Read Time",
-            published: "Published",
-            writtenBy: "Written by",
-            sponsors: "Sponsors",
-            partners: "Partners",
-            visit: "Visit website",
-            notFoundTitle: "Article Not Found",
-            notFoundCta: "Return to Polish Paris Forum",
-        },
-        fr: {
-            back: "Retour au Polish Paris Forum",
-            share: "Partager l'article",
-            readTime: "Temps de lecture",
-            published: "Publié le",
-            writtenBy: "Écrit par",
-            sponsors: "Sponsors",
-            partners: "Partenaires",
-            visit: "Visiter le site",
-            notFoundTitle: "Article introuvable",
-            notFoundCta: "Retour au Polish Paris Forum",
-        },
-        pl: {
-            back: "Powrót do Polish Paris Forum",
-            share: "Udostępnij artykuł",
-            readTime: "Czas czytania",
-            published: "Opublikowano",
-            writtenBy: "Autor",
-            sponsors: "Sponsorzy",
-            partners: "Partnerzy",
-            visit: "Odwiedź stronę",
-            notFoundTitle: "Nie znaleziono artykułu",
-            notFoundCta: "Wróć do Polish Paris Forum",
-        },
-    }[language as "en" | "fr" | "pl"] || {
-        back: "Back",
-        share: "Share",
+/**
+ * Static i18n labels — hoisted to module level to avoid
+ * re-creating the object on every render.
+ */
+const LABELS = {
+    en: {
+        back: "Back to Polish Paris Forum",
+        share: "Share Article",
         readTime: "Read Time",
         published: "Published",
         writtenBy: "Written by",
@@ -124,8 +87,54 @@ function BlogPostContent({ slug }: { slug: string }) {
         partners: "Partners",
         visit: "Visit website",
         notFoundTitle: "Article Not Found",
-        notFoundCta: "Return to Blog",
-    };
+        notFoundCta: "Return to Polish Paris Forum",
+    },
+    fr: {
+        back: "Retour au Polish Paris Forum",
+        share: "Partager l'article",
+        readTime: "Temps de lecture",
+        published: "Publié le",
+        writtenBy: "Écrit par",
+        sponsors: "Sponsors",
+        partners: "Partenaires",
+        visit: "Visiter le site",
+        notFoundTitle: "Article introuvable",
+        notFoundCta: "Retour au Polish Paris Forum",
+    },
+    pl: {
+        back: "Powrót do Polish Paris Forum",
+        share: "Udostępnij artykuł",
+        readTime: "Czas czytania",
+        published: "Opublikowano",
+        writtenBy: "Autor",
+        sponsors: "Sponsorzy",
+        partners: "Partnerzy",
+        visit: "Odwiedź stronę",
+        notFoundTitle: "Nie znaleziono artykułu",
+        notFoundCta: "Wróć do Polish Paris Forum",
+    },
+} as const;
+
+/** Fallback labels for unknown locales */
+const FALLBACK_LABELS: Record<keyof typeof LABELS.en, string> = {
+    back: "Back",
+    share: "Share",
+    readTime: "Read Time",
+    published: "Published",
+    writtenBy: "Written by",
+    sponsors: "Sponsors",
+    partners: "Partners",
+    visit: "Visit website",
+    notFoundTitle: "Article Not Found",
+    notFoundCta: "Return to Blog",
+};
+
+function BlogPostContent({ slug }: { slug: string }) {
+    const { language } = useLanguage();
+    const [post, setPost] = useState<SanityPost | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    const t = LABELS[language as keyof typeof LABELS] || FALLBACK_LABELS;
 
     useEffect(() => {
         if (!slug) return;

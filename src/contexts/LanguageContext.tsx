@@ -1,7 +1,10 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, useCallback, useMemo, ReactNode } from "react";
 import { translations, Language } from "@/lib/translations";
+
+const VALID_LANGUAGES: ReadonlySet<string> = new Set(["en", "fr", "pl"]);
+const STORAGE_KEY = "aspolLanguage" as const;
 
 interface LanguageContextType {
   language: Language;
@@ -13,45 +16,26 @@ const LanguageContext = createContext<LanguageContextType | undefined>(
   undefined
 );
 
-// Get initial language from localStorage only (always defaults to English)
-const getInitialLanguage = (): Language => {
-  if (typeof window === "undefined") return "en";
-  
-  const savedLanguage = localStorage.getItem("aspolLanguage") as Language | null;
-  
-  if (savedLanguage && ["en", "fr", "pl"].includes(savedLanguage)) {
-    return savedLanguage;
-  }
-  
-  // Always default to English (no browser language detection)
-  return "en";
-};
-
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguageState] = useState<Language>("en");
 
-  // Initialize on mount - use setTimeout to avoid React compiler warning
   useEffect(() => {
-    setTimeout(() => {
-      const initialLang = getInitialLanguage();
-      if (initialLang !== "en") {
-        setLanguageState(initialLang);
-      }
-    }, 0);
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved && VALID_LANGUAGES.has(saved)) {
+      setLanguageState(saved as Language);
+    }
   }, []);
 
-  const setLanguage = (lang: Language) => {
+  const setLanguage = useCallback((lang: Language) => {
     setLanguageState(lang);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem("aspolLanguage", lang);
-    }
-  };
+    localStorage.setItem(STORAGE_KEY, lang);
+  }, []);
 
-  const value = {
+  const value = useMemo<LanguageContextType>(() => ({
     language,
     setLanguage,
     t: translations[language],
-  };
+  }), [language, setLanguage]);
 
   return (
     <LanguageContext.Provider value={value}>

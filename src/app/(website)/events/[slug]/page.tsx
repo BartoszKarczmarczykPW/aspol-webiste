@@ -16,63 +16,17 @@ interface PageProps {
     params: Promise<{ slug: string }>;
 }
 
-function EventDetailContent({ slug }: { slug: string }) {
-    const { language } = useLanguage();
-    const t = {
-        en: {
-            back: "Back to Events",
-            register: "Register Now",
-            share: "Share",
-            desc: "About this event",
-            details: "Event Details",
-            location: "Location",
-            notFoundTitle: "Event Not Found",
-            notFoundCta: "Return to Events",
-            dateLabel: "Date",
-            timeLabel: "Time",
-            locationLabel: "Location",
-            registrationClosed: "Registration Closed",
-            addToCalendar: "Add to Calendar",
-            tba: "TBA",
-        },
-        fr: {
-            back: "Retour aux événements",
-            register: "S'inscrire",
-            share: "Partager",
-            desc: "À propos de cet événement",
-            details: "Détails de l'événement",
-            location: "Lieu",
-            notFoundTitle: "Événement introuvable",
-            notFoundCta: "Retour aux événements",
-            dateLabel: "Date",
-            timeLabel: "Heure",
-            locationLabel: "Lieu",
-            registrationClosed: "Inscriptions fermées",
-            addToCalendar: "Ajouter au calendrier",
-            tba: "À confirmer",
-        },
-        pl: {
-            back: "Powrót do wydarzeń",
-            register: "Zarejestruj się",
-            share: "Udostępnij",
-            desc: "O wydarzeniu",
-            details: "Szczegóły wydarzenia",
-            location: "Lokalizacja",
-            notFoundTitle: "Nie znaleziono wydarzenia",
-            notFoundCta: "Wróć do wydarzeń",
-            dateLabel: "Data",
-            timeLabel: "Godzina",
-            locationLabel: "Lokalizacja",
-            registrationClosed: "Rejestracja zamknięta",
-            addToCalendar: "Dodaj do kalendarza",
-            tba: "Do ustalenia",
-        }
-    }[language as 'en' | 'fr' | 'pl'] || {
-        back: "Back",
-        register: "Register",
+/**
+ * Static i18n labels — hoisted to module level to avoid
+ * re-creating the object on every render.
+ */
+const LABELS = {
+    en: {
+        back: "Back to Events",
+        register: "Register Now",
         share: "Share",
-        desc: "About",
-        details: "Details",
+        desc: "About this event",
+        details: "Event Details",
         location: "Location",
         notFoundTitle: "Event Not Found",
         notFoundCta: "Return to Events",
@@ -82,7 +36,62 @@ function EventDetailContent({ slug }: { slug: string }) {
         registrationClosed: "Registration Closed",
         addToCalendar: "Add to Calendar",
         tba: "TBA",
-    };
+    },
+    fr: {
+        back: "Retour aux événements",
+        register: "S'inscrire",
+        share: "Partager",
+        desc: "À propos de cet événement",
+        details: "Détails de l'événement",
+        location: "Lieu",
+        notFoundTitle: "Événement introuvable",
+        notFoundCta: "Retour aux événements",
+        dateLabel: "Date",
+        timeLabel: "Heure",
+        locationLabel: "Lieu",
+        registrationClosed: "Inscriptions fermées",
+        addToCalendar: "Ajouter au calendrier",
+        tba: "À confirmer",
+    },
+    pl: {
+        back: "Powrót do wydarzeń",
+        register: "Zarejestruj się",
+        share: "Udostępnij",
+        desc: "O wydarzeniu",
+        details: "Szczegóły wydarzenia",
+        location: "Lokalizacja",
+        notFoundTitle: "Nie znaleziono wydarzenia",
+        notFoundCta: "Wróć do wydarzeń",
+        dateLabel: "Data",
+        timeLabel: "Godzina",
+        locationLabel: "Lokalizacja",
+        registrationClosed: "Rejestracja zamknięta",
+        addToCalendar: "Dodaj do kalendarza",
+        tba: "Do ustalenia",
+    },
+} as const;
+
+/** Fallback labels for unknown locales */
+const FALLBACK_LABELS: Record<keyof typeof LABELS.en, string> = {
+    back: "Back",
+    register: "Register",
+    share: "Share",
+    desc: "About",
+    details: "Details",
+    location: "Location",
+    notFoundTitle: "Event Not Found",
+    notFoundCta: "Return to Events",
+    dateLabel: "Date",
+    timeLabel: "Time",
+    locationLabel: "Location",
+    registrationClosed: "Registration Closed",
+    addToCalendar: "Add to Calendar",
+    tba: "TBA",
+};
+
+function EventDetailContent({ slug }: { slug: string }) {
+    const { language } = useLanguage();
+    const t = LABELS[language as keyof typeof LABELS] || FALLBACK_LABELS;
 
     const events = eventsData[language as keyof typeof eventsData] || eventsData.en;
     const event = events.find((e) => e.id === slug);

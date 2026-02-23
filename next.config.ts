@@ -25,11 +25,11 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
     ],
-    qualities: [100, 75],
+    qualities: [75],
   },
   compress: true, // Enable gzip compression
   experimental: {
-    optimizePackageImports: ['lucide-react', 'framer-motion'],
+    optimizePackageImports: ['lucide-react'],
   },
   poweredByHeader: false, // Security: Hide X-Powered-By header
   async headers() {

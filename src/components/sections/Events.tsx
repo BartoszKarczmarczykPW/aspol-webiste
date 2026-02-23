@@ -1,14 +1,29 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import SpotlightCard from "@/components/ui/cards/SpotlightCard";
 import SocialShare from "@/components/ui/SocialShare";
 import { useInView } from "@/hooks/useInView";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+import { useSanityData } from "@/hooks/useSanityData";
 import { getInitiatives } from "@/lib/sanity";
 
-// Inline Icons to prevent import errors
+interface LocalizedString {
+  en?: string;
+  fr?: string;
+  pl?: string;
+}
+
+interface SanityInitiative {
+  featured?: boolean;
+  icon?: string;
+  title?: LocalizedString;
+  badge?: LocalizedString;
+  description?: LocalizedString;
+}
+
+// Static icon components (outside render to prevent re-creation)
 const ForumIcon = ({ className }: { className?: string }) => (
   <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
@@ -31,34 +46,16 @@ export default function Events() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const isVisible = useInView(sectionRef);
   const { t, language } = useLanguage();
-  const [initiativesData, setInitiativesData] = useState<
-    Array<{
-      featured?: boolean;
-      icon?: string;
-      title?: { en?: string; fr?: string; pl?: string };
-      badge?: { en?: string; fr?: string; pl?: string };
-      description?: { en?: string; fr?: string; pl?: string };
-    }>
-  >([]);
+
+  const { data: initiativesData } = useSanityData<SanityInitiative[]>(
+    async () => {
+      const data = await getInitiatives();
+      return Array.isArray(data) ? data : null;
+    },
+    { fallback: [] },
+  );
 
   useScrollAnimation(sectionRef);
-
-  useEffect(() => {
-    let mounted = true;
-    async function loadInitiatives() {
-      try {
-        const data = await getInitiatives();
-        if (!mounted) return;
-        if (Array.isArray(data)) setInitiativesData(data);
-      } catch {
-        if (mounted) setInitiativesData([]);
-      }
-    }
-    loadInitiatives();
-    return () => {
-      mounted = false;
-    };
-  }, []);
 
   const fallbackInitiatives = [
     { icon: 'forum', data: t.events.parisforum },
@@ -101,16 +98,17 @@ export default function Events() {
       id="events"
       ref={sectionRef}
       className="relative py-16 sm:py-24 px-6 bg-aspol-white overflow-hidden border-t border-gray-100"
+      aria-label={language === "en" ? "Our initiatives" : language === "fr" ? "Nos initiatives" : "Nasze inicjatywy"}
     >
       {/* Background accents */}
-      <div className="absolute -top-40 right-0 h-80 w-80 rounded-full bg-red-500/10 blur-3xl"></div>
-      <div className="absolute -bottom-40 left-0 h-80 w-80 rounded-full bg-blue-500/10 blur-3xl"></div>
+      <div className="absolute -top-40 right-0 h-80 w-80 rounded-full bg-red-500/10 blur-3xl" aria-hidden="true"></div>
+      <div className="absolute -bottom-40 left-0 h-80 w-80 rounded-full bg-blue-500/10 blur-3xl" aria-hidden="true"></div>
 
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Section Header */}
         <div className={`text-center mb-14 sm:mb-20 transition-all duration-1000 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}>
           <span className="inline-block py-1 px-3 rounded-full bg-aspol-navy/5 border border-aspol-navy/10 text-aspol-navy text-xs font-bold tracking-widest uppercase mb-4">
-            Networking & Growth
+            {language === "fr" ? "Réseautage & Développement" : language === "pl" ? "Networking i Rozwój" : "Networking & Growth"}
           </span>
           <h2 className="text-4xl sm:text-5xl font-bold text-aspol-dark mb-6 px-2 tracking-tight">
             {t.events.title}

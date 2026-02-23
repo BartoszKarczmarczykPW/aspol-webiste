@@ -34,7 +34,7 @@ interface SanityEvent {
         fr: string;
         pl: string;
     };
-    imageUrl: string;
+    imageUrl: string | null;
     registrationLink?: string;
     tags?: string[];
     featured?: boolean;
@@ -169,7 +169,7 @@ function EventCard({ event, t, formatDate, formatTime, language }: {
                             isoDate: event.date,
                             shortDescription: event.description[language as keyof typeof event.description],
                             fullDescription: '',
-                            image: event.imageUrl,
+                            image: event.imageUrl || '',
                             category: 'Social',
                             registrationLink: event.registrationLink,
                         }}
@@ -257,7 +257,7 @@ function FeaturedEventCard({ event, t, formatDate, formatTime, language }: {
                                 isoDate: event.date,
                                 shortDescription: event.description[language as keyof typeof event.description],
                                 fullDescription: "",
-                                image: event.imageUrl,
+                                image: event.imageUrl || '',
                                 category: "Social",
                                 registrationLink: event.registrationLink,
                             }}
@@ -271,6 +271,85 @@ function FeaturedEventCard({ event, t, formatDate, formatTime, language }: {
         </article>
     );
 }
+
+/**
+ * Pure countdown calculation — hoisted out of the component so it
+ * can be called from both the `useState` initialiser and `useEffect`
+ * without capturing stale closures.
+ */
+function getCountdown(targetTimestamp: number) {
+    const now = new Date();
+    const diff = targetTimestamp - now.getTime();
+    if (diff <= 0) {
+        return { done: true, days: 0, hours: 0, minutes: 0 };
+    }
+    const totalMinutes = Math.floor(diff / 60000);
+    const days = Math.floor(totalMinutes / 1440);
+    const hours = Math.floor((totalMinutes % 1440) / 60);
+    const minutes = totalMinutes % 60;
+    return { done: false, days, hours, minutes };
+}
+
+/**
+ * Static i18n labels — hoisted to module level so they are created once,
+ * not re-allocated on every render.
+ */
+const LABELS = {
+    en: {
+        title: "Events Calendar",
+        subtitle: "Curated experiences for the Polish community in France.",
+        upcoming: "Upcoming",
+        past: "Archive",
+        featured: "Featured",
+        readMore: "Read More",
+        showLess: "Show Less",
+        register: "Register",
+        empty: "No upcoming events scheduled at the moment.",
+        loading: "Loading events...",
+        scrollDown: "Scroll Down",
+        heroBadge: "Community first",
+        heroCardTitle: "Meet ASPOL live",
+        heroCardDescription: "Meetups, workshops, and conferences created by students. Register for the next event or contact us.",
+        heroCardCtaPrimary: "View events",
+        heroCardCtaSecondary: "Contact us",
+    },
+    fr: {
+        title: "Calendrier des Événements",
+        subtitle: "Des expériences sélectionnées pour la communauté polonaise en France.",
+        upcoming: "À venir",
+        past: "Archives",
+        featured: "À la une",
+        readMore: "Lire la suite",
+        showLess: "Voir moins",
+        register: "S'inscrire",
+        empty: "Aucun événement prévu pour le moment.",
+        loading: "Chargement des événements...",
+        scrollDown: "Défiler vers le bas",
+        heroBadge: "La communauté d'abord",
+        heroCardTitle: "Rencontrez ASPOL en direct",
+        heroCardDescription: "Rencontres, ateliers et conférences créés par des étudiants. Inscrivez-vous au prochain événement ou contactez-nous.",
+        heroCardCtaPrimary: "Voir les événements",
+        heroCardCtaSecondary: "Contactez-nous",
+    },
+    pl: {
+        title: "Kalendarz Wydarzeń",
+        subtitle: "Wyjątkowe doświadczenia dla polskiej społeczności we Francji.",
+        upcoming: "Nadchodzące",
+        past: "Archiwum",
+        featured: "Wyróżnione",
+        readMore: "Czytaj więcej",
+        showLess: "Pokaż mniej",
+        register: "Zarejestruj się",
+        empty: "Brak zaplanowanych wydarzeń w tym momencie.",
+        loading: "Ładowanie wydarzeń...",
+        scrollDown: "Przewiń w dół",
+        heroBadge: "Społeczność przede wszystkim",
+        heroCardTitle: "Poznaj ASPOL na żywo",
+        heroCardDescription: "Spotkania, warsztaty i konferencje tworzone przez studentów. Zapisz się na najbliższe wydarzenie lub skontaktuj się z nami.",
+        heroCardCtaPrimary: "Zobacz wydarzenia",
+        heroCardCtaSecondary: "Skontaktuj się",
+    },
+} as const;
 
 function EventsContent() {
     const { language } = useLanguage();
@@ -307,19 +386,6 @@ function EventsContent() {
         return new Date("2026-04-25T00:00:00+02:00").getTime();
     }, [countdownConfig?.targetDate]);
 
-    const getCountdown = (targetTimestamp: number) => {
-        const now = new Date();
-        const diff = targetTimestamp - now.getTime();
-        if (diff <= 0) {
-            return { done: true, days: 0, hours: 0, minutes: 0 };
-        }
-        const totalMinutes = Math.floor(diff / 60000);
-        const days = Math.floor(totalMinutes / 1440);
-        const hours = Math.floor((totalMinutes % 1440) / 60);
-        const minutes = totalMinutes % 60;
-        return { done: false, days, hours, minutes };
-    };
-
     const [ppfCountdown, setPpfCountdown] = useState(() => getCountdown(countdownTargetTimestamp));
 
     useEffect(() => {
@@ -330,65 +396,7 @@ function EventsContent() {
         return () => clearInterval(id);
     }, [countdownTargetTimestamp]);
 
-
-    const labels = {
-        en: {
-            title: "Events Calendar",
-            subtitle: "Curated experiences for the Polish community in France.",
-            upcoming: "Upcoming",
-            past: "Archive",
-            featured: "Featured",
-            readMore: "Read More",
-            showLess: "Show Less",
-            register: "Register",
-            empty: "No upcoming events scheduled at the moment.",
-            loading: "Loading events...",
-            scrollDown: "Scroll Down",
-            heroBadge: "Community first",
-            heroCardTitle: "Meet ASPOL live",
-            heroCardDescription: "Meetups, workshops, and conferences created by students. Register for the next event or contact us.",
-            heroCardCtaPrimary: "View events",
-            heroCardCtaSecondary: "Contact us",
-        },
-        fr: {
-            title: "Calendrier des Événements",
-            subtitle: "Des expériences sélectionnées pour la communauté polonaise en France.",
-            upcoming: "À venir",
-            past: "Archives",
-            featured: "À la une",
-            readMore: "Lire la suite",
-            showLess: "Voir moins",
-            register: "S'inscrire",
-            empty: "Aucun événement prévu pour le moment.",
-            loading: "Chargement des événements...",
-            scrollDown: "Défiler vers le bas",
-            heroBadge: "La communauté d'abord",
-            heroCardTitle: "Rencontrez ASPOL en direct",
-            heroCardDescription: "Rencontres, ateliers et conférences créés par des étudiants. Inscrivez-vous au prochain événement ou contactez-nous.",
-            heroCardCtaPrimary: "Voir les événements",
-            heroCardCtaSecondary: "Contactez-nous",
-        },
-        pl: {
-            title: "Kalendarz Wydarzeń",
-            subtitle: "Wyjątkowe doświadczenia dla polskiej społeczności we Francji.",
-            upcoming: "Nadchodzące",
-            past: "Archiwum",
-            featured: "Wyróżnione",
-            readMore: "Czytaj więcej",
-            showLess: "Pokaż mniej",
-            register: "Zarejestruj się",
-            empty: "Brak zaplanowanych wydarzeń w tym momencie.",
-            loading: "Ładowanie wydarzeń...",
-            scrollDown: "Przewiń w dół",
-            heroBadge: "Społeczność przede wszystkim",
-            heroCardTitle: "Poznaj ASPOL na żywo",
-            heroCardDescription: "Spotkania, warsztaty i konferencje tworzone przez studentów. Zapisz się na najbliższe wydarzenie lub skontaktuj się z nami.",
-            heroCardCtaPrimary: "Zobacz wydarzenia",
-            heroCardCtaSecondary: "Skontaktuj się",
-        },
-    };
-
-    const t = labels[language as keyof typeof labels] || labels.en;
+    const t = LABELS[language as keyof typeof LABELS] || LABELS.en;
 
     // Filter events by upcoming/past
     const now = new Date();
@@ -682,7 +690,7 @@ function EventsContent() {
                                     location: e.location[language as keyof typeof e.location],
                                     shortDescription: e.description[language as keyof typeof e.description],
                                     fullDescription: "",
-                                    image: e.imageUrl,
+                                    image: e.imageUrl || '',
                                     category: "Social" as "Conference" | "Social" | "Workshop" | "Cultural" | "Webinar",
                                     registrationLink: e.registrationLink,
                                 }))}

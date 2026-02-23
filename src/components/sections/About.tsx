@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import SpotlightCard from "@/components/ui/cards/SpotlightCard"; // Import SpotlightCard
+import SpotlightCard from "@/components/ui/cards/SpotlightCard";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+import { useSanityData } from "@/hooks/useSanityData";
 import Link from "next/link";
 import { getAboutSection } from "@/lib/sanity";
 import { GraduationIcon } from "@/components/icons/GraduationIcon";
@@ -11,44 +12,41 @@ import { UsersIcon } from "@/components/icons/UsersIcon";
 import { RocketIcon } from "@/components/icons/RocketIcon";
 import { GlobeIcon } from "@/components/icons/GlobeIcon";
 
+interface LocalizedString {
+  en?: string;
+  fr?: string;
+  pl?: string;
+}
+
+interface AboutFeature {
+  icon?: string;
+  order?: number;
+  link?: string;
+  title?: LocalizedString;
+  description?: LocalizedString;
+}
+
+interface AboutSectionData {
+  eyebrow?: LocalizedString;
+  title?: LocalizedString;
+  subtitle?: LocalizedString;
+  description?: LocalizedString;
+  features?: AboutFeature[];
+}
+
 export default function About() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const { t, language } = useLanguage();
-  const [aboutData, setAboutData] = useState<null | {
-    eyebrow?: { en?: string; fr?: string; pl?: string };
-    title?: { en?: string; fr?: string; pl?: string };
-    subtitle?: { en?: string; fr?: string; pl?: string };
-    description?: { en?: string; fr?: string; pl?: string };
-    features?: Array<{
-      icon?: string;
-      order?: number;
-      link?: string;
-      title?: { en?: string; fr?: string; pl?: string };
-      description?: { en?: string; fr?: string; pl?: string };
-    }>;
-  }>(null);
+
+  const { data: aboutData } = useSanityData<AboutSectionData | null>(
+    getAboutSection,
+    { fallback: null },
+  );
 
   useScrollAnimation(sectionRef);
 
-  useEffect(() => {
-    let mounted = true;
-    async function loadAbout() {
-      try {
-        const data = await getAboutSection();
-        if (!mounted) return;
-        if (data) setAboutData(data);
-      } catch {
-        if (mounted) setAboutData(null);
-      }
-    }
-    loadAbout();
-    return () => {
-      mounted = false;
-    };
-  }, []);
-
   return (
-    <section id="about" ref={sectionRef} className="relative py-16 sm:py-20 px-4 sm:px-6 bg-transparent overflow-hidden">
+    <section id="about" ref={sectionRef} className="relative py-16 sm:py-20 px-4 sm:px-6 bg-transparent overflow-hidden" aria-label={language === "en" ? "About ASPOL" : language === "fr" ? "À propos d'ASPOL" : "O ASPOL"}>
 
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Section Header */}
