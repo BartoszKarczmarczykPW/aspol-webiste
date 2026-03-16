@@ -74,6 +74,16 @@ export default function Header() {
     return () => document.removeEventListener('keydown', handleTabTrap);
   }, [isMobileMenuOpen]);
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [isMobileMenuOpen]);
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
@@ -127,6 +137,12 @@ export default function Header() {
               className="text-sm font-semibold text-aspol-navy hover:text-aspol-red transition-colors tracking-wide"
             >
               {t.nav.partners || "Partners"}
+            </Link>
+            <Link
+              href="/ppf"
+              className="text-sm font-semibold text-white bg-red-600 hover:bg-red-700 px-3 py-1.5 rounded-lg transition-colors tracking-wide"
+            >
+              {t.nav.ppf || "PPF 2026"}
             </Link>
             <Link
               href="/#contact"
@@ -278,6 +294,13 @@ export default function Header() {
                 onClick={closeMobileMenu}
               >
                 {t.nav.partners || "Partners"}
+              </Link>
+              <Link
+                href="/ppf"
+                className="text-base font-bold text-white bg-red-600 hover:bg-red-700 transition-colors px-4 py-3 rounded-lg touch-manipulation active:bg-red-800 text-center"
+                onClick={closeMobileMenu}
+              >
+                {t.nav.ppf || "PPF 2026"}
               </Link>
               <Link
                 href="/#contact"

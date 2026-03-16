@@ -5,7 +5,7 @@ export const client = createClient({
   projectId,
   dataset,
   apiVersion,
-  useCdn: false, // Ensure newly published content shows immediately
+  useCdn: true, // Use CDN for fast public reads
 })
 
 /* ------------------------------------------------------------------ */

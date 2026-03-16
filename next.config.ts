@@ -63,7 +63,7 @@ const nextConfig: NextConfig = {
           },
           {
             key: 'Content-Security-Policy',
-            value: "default-src 'self'; base-uri 'self'; form-action 'self' https:; object-src 'none'; frame-ancestors 'self'; img-src 'self' data: https:; font-src 'self' data: https:; style-src 'self' 'unsafe-inline' https:; script-src 'self' 'unsafe-inline' https:; connect-src 'self' https: wss:; upgrade-insecure-requests"
+            value: "default-src 'self'; base-uri 'self'; form-action 'self' https:; object-src 'none'; frame-ancestors 'self'; img-src 'self' data: https:; font-src 'self' data: https:; style-src 'self' 'unsafe-inline' https:; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https:; connect-src 'self' https: wss:; upgrade-insecure-requests"
           },
           {
             key: 'Cross-Origin-Opener-Policy',

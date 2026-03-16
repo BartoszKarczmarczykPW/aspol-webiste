@@ -81,6 +81,7 @@ function EventCard({ event, t, formatDate, formatTime, language }: {
                     src={event.imageUrl || "/placeholder-event.jpg"}
                     alt={event.title[language as keyof typeof event.title]}
                     fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover group-hover:scale-105 transition-transform duration-700"
                 />
 
@@ -190,41 +191,74 @@ function FeaturedEventCard({ event, t, formatDate, formatTime, language }: {
     formatTime: (d: string) => string;
     language: string;
 }) {
+    const [isExpanded, setIsExpanded] = useState(false);
+
     return (
-        <article className="group bg-white rounded-3xl border border-gray-100 shadow-md hover:shadow-xl transition-all duration-500 overflow-hidden">
-            <div className="grid md:grid-cols-5 gap-0">
-                <div className="relative md:col-span-2 aspect-16/10 md:aspect-auto md:min-h-65 overflow-hidden bg-gray-100">
-                    <Image
-                        src={event.imageUrl || "/placeholder-event.jpg"}
-                        alt={event.title[language as keyof typeof event.title]}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-700"
-                    />
-                    <div className="absolute inset-0 bg-linear-to-t from-black/50 via-black/10 to-transparent opacity-80" />
-                    <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-md rounded-xl p-2.5 text-center min-w-14 shadow-md shadow-black/10 group-hover:scale-105 transition-transform duration-300">
-                        <span className="block text-xl font-bold text-aspol-navy leading-none">
-                            {new Date(event.date).getDate()}
-                        </span>
-                        <span className="block text-[0.65rem] font-bold uppercase tracking-widest text-aspol-red mt-0.5">
-                            {new Date(event.date).toLocaleDateString(language === "fr" ? "fr-FR" : language === "pl" ? "pl-PL" : "en-US", { month: "short" })}
-                        </span>
-                    </div>
+        <article className="group bg-white rounded-3xl border border-gray-100 shadow-md hover:shadow-xl transition-all duration-500 overflow-hidden flex flex-col">
+            {/* Image – locked to 16:9 so the full graphic is always visible */}
+            <div className="relative aspect-video overflow-hidden bg-gray-100">
+                <Image
+                    src={event.imageUrl || "/placeholder-event.jpg"}
+                    alt={event.title[language as keyof typeof event.title]}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-linear-to-t from-black/40 via-black/5 to-transparent" />
+
+                {/* Featured Badge */}
+                <div className="absolute top-4 right-4 z-10">
+                    <span className="bg-aspol-red text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg shadow-aspol-red/20">
+                        {t.featured}
+                    </span>
                 </div>
-                <div className="md:col-span-3 p-6 sm:p-8 flex flex-col">
-                    <div className="flex items-center gap-3 mb-3">
-                        <span className="inline-flex items-center px-3 py-1 bg-red-50 text-red-700 text-xs font-bold tracking-wider uppercase rounded-full">
-                            {t.featured}
-                        </span>
-                        <span className="text-xs text-gray-500 font-semibold uppercase tracking-widest">
-                            {formatDate(event.date)}
-                        </span>
+
+                {/* Date Box */}
+                <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-md rounded-xl p-2.5 text-center min-w-14 shadow-md shadow-black/10 group-hover:scale-105 transition-transform duration-300">
+                    <span className="block text-xl font-bold text-aspol-navy leading-none">
+                        {new Date(event.date).getDate()}
+                    </span>
+                    <span className="block text-[0.65rem] font-bold uppercase tracking-widest text-aspol-red mt-0.5">
+                        {new Date(event.date).toLocaleDateString(language === "fr" ? "fr-FR" : language === "pl" ? "pl-PL" : "en-US", { month: "short" })}
+                    </span>
+                </div>
+
+                {/* Date overlay at bottom-left */}
+                <div className="absolute bottom-4 left-4 z-10">
+                    <span className="text-xs text-white/90 font-semibold uppercase tracking-widest drop-shadow-md">
+                        {formatDate(event.date)}
+                    </span>
+                </div>
+            </div>
+
+            {/* Content */}
+            <div className="p-6 sm:p-8 flex flex-col grow">
+                <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 font-serif group-hover:text-aspol-navy transition-colors">
+                    {event.title[language as keyof typeof event.title]}
+                </h3>
+                    <div className="mb-5 relative">
+                        <p className={`text-gray-600 leading-relaxed transition-all duration-300 ${isExpanded ? '' : 'line-clamp-3'}`}>
+                            {event.description[language as keyof typeof event.description]}
+                        </p>
+                        <button
+                            onClick={() => setIsExpanded(!isExpanded)}
+                            className="group/btn text-aspol-navy text-xs font-bold uppercase tracking-wider mt-3 inline-flex items-center gap-1.5 hover:text-aspol-red transition-colors focus:outline-none"
+                        >
+                            {isExpanded ? (
+                                <>
+                                    {t.showLess}
+                                    <ChevronUp className="w-3.5 h-3.5" />
+                                </>
+                            ) : (
+                                <>
+                                    {t.readMore}
+                                    <div className="w-4 h-4 rounded-full bg-aspol-navy/5 flex items-center justify-center group-hover/btn:bg-aspol-red/10 transition-colors">
+                                        <ChevronDown className="w-3 h-3 group-hover/btn:text-aspol-red transition-colors" />
+                                    </div>
+                                </>
+                            )}
+                        </button>
                     </div>
-                    <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 font-serif group-hover:text-aspol-navy transition-colors">
-                        {event.title[language as keyof typeof event.title]}
-                    </h3>
-                    <p className="text-gray-600 leading-relaxed mb-5 line-clamp-3">
-                        {event.description[language as keyof typeof event.description]}
-                    </p>
                     <div className="flex flex-col items-start gap-2 text-gray-500 text-sm mb-6">
                         <div className="flex items-center gap-2">
                             <Clock className="w-4 h-4 text-aspol-red" />
@@ -267,7 +301,6 @@ function FeaturedEventCard({ event, t, formatDate, formatTime, language }: {
                         />
                     </div>
                 </div>
-            </div>
         </article>
     );
 }
@@ -305,8 +338,11 @@ const LABELS = {
         showLess: "Show Less",
         register: "Register",
         empty: "No upcoming events scheduled at the moment.",
+        emptyHint: "Check back later for updates.",
         loading: "Loading events...",
         scrollDown: "Scroll Down",
+        planned: "Planned",
+        monthView: "Month View",
         heroBadge: "Community first",
         heroCardTitle: "Meet ASPOL live",
         heroCardDescription: "Meetups, workshops, and conferences created by students. Register for the next event or contact us.",
@@ -323,8 +359,11 @@ const LABELS = {
         showLess: "Voir moins",
         register: "S'inscrire",
         empty: "Aucun événement prévu pour le moment.",
+        emptyHint: "Revenez plus tard pour les mises à jour.",
         loading: "Chargement des événements...",
         scrollDown: "Défiler vers le bas",
+        planned: "Planifié",
+        monthView: "Vue mensuelle",
         heroBadge: "La communauté d'abord",
         heroCardTitle: "Rencontrez ASPOL en direct",
         heroCardDescription: "Rencontres, ateliers et conférences créés par des étudiants. Inscrivez-vous au prochain événement ou contactez-nous.",
@@ -341,8 +380,11 @@ const LABELS = {
         showLess: "Pokaż mniej",
         register: "Zarejestruj się",
         empty: "Brak zaplanowanych wydarzeń w tym momencie.",
+        emptyHint: "Sprawdź ponownie później.",
         loading: "Ładowanie wydarzeń...",
         scrollDown: "Przewiń w dół",
+        planned: "Zaplanowane",
+        monthView: "Widok miesięczny",
         heroBadge: "Społeczność przede wszystkim",
         heroCardTitle: "Poznaj ASPOL na żywo",
         heroCardDescription: "Spotkania, warsztaty i konferencje tworzone przez studentów. Zapisz się na najbliższe wydarzenie lub skontaktuj się z nami.",
@@ -586,8 +628,11 @@ function EventsContent() {
             {/* Filter Tabs - Modernized */}
             <section id="events-grid" className="py-6 px-6 sticky top-0 z-10 bg-white/95 backdrop-blur-md transition-all border-b border-gray-100/60">
                 <div className="max-w-7xl mx-auto flex justify-center">
-                    <div className="flex gap-2 p-1.5 bg-gray-100/60 rounded-full border border-gray-200/60 w-fit shadow-sm">
+                    <div className="flex gap-2 p-1.5 bg-gray-100/60 rounded-full border border-gray-200/60 w-fit shadow-sm" role="tablist" aria-label="Event filter">
                     <button
+                        role="tab"
+                        aria-selected={filter === "upcoming"}
+                        aria-controls="events-panel"
                         onClick={() => setFilter("upcoming")}
                         className={`px-6 py-2 rounded-full font-bold text-sm transition-all duration-300 ${filter === "upcoming"
                             ? "bg-white text-aspol-red shadow-sm"
@@ -597,6 +642,9 @@ function EventsContent() {
                         {t.upcoming}
                     </button>
                     <button
+                        role="tab"
+                        aria-selected={filter === "past"}
+                        aria-controls="events-panel"
                         onClick={() => setFilter("past")}
                         className={`px-6 py-2 rounded-full font-bold text-sm transition-all duration-300 ${filter === "past"
                             ? "bg-white text-aspol-navy shadow-sm"
@@ -610,7 +658,7 @@ function EventsContent() {
             </section>
 
             {/* Events Grid */}
-            <section className="py-20 px-6 bg-gray-50/30">
+            <section id="events-panel" role="tabpanel" className="py-20 px-6 bg-gray-50/30">
                 <div className="max-w-7xl mx-auto">
                     <div className="mb-10 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
                         <div>
@@ -633,7 +681,7 @@ function EventsContent() {
                                 <Calendar className="h-8 w-8 text-gray-400" />
                             </div>
                             <p className="text-lg font-medium text-gray-900">{t.empty}</p>
-                            <p className="text-gray-500 mt-1">Check back later for updates.</p>
+                            <p className="text-gray-500 mt-1">{t.emptyHint}</p>
                         </div>
                     ) : (
                         <>
@@ -676,8 +724,8 @@ function EventsContent() {
                 <section className="py-20 px-6 bg-white border-t border-gray-100/50 relative overflow-hidden">
                     <div className="max-w-5xl mx-auto relative z-10">
                         <div className="text-center mb-12">
-                            <span className="text-aspol-red font-bold uppercase tracking-widest text-xs mb-2 block">Planned</span>
-                            <h2 className="text-3xl font-bold text-aspol-navy font-serif">Month View</h2>
+                            <span className="text-aspol-red font-bold uppercase tracking-widest text-xs mb-2 block">{t.planned}</span>
+                            <h2 className="text-3xl font-bold text-aspol-navy font-serif">{t.monthView}</h2>
                         </div>
                         <div className="rounded-3xl border border-gray-100 shadow-sm p-2 bg-white">
                             <CalendarWidget

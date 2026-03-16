@@ -8,6 +8,7 @@ export const translations = {
       contact: "Contact",
       partners: "Partners",
       join: "Join Us",
+      ppf: "PPF 2026 \u2014 Register",
     },
     hero: {
       welcome: "Welcome to",
@@ -584,6 +585,7 @@ export const translations = {
       contact: "Contact",
       partners: "Partenaires",
       join: "Rejoignez-nous",
+      ppf: "PPF 2026 \u2014 Inscription",
     },
     hero: {
       welcome: "Bienvenue à",
@@ -1160,6 +1162,7 @@ export const translations = {
       contact: "Kontakt",
       partners: "Partnerzy",
       join: "Dołącz do nas",
+      ppf: "PPF 2026 \u2014 Zapisy",
     },
     hero: {
       welcome: "Witamy w",
