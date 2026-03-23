@@ -50,7 +50,7 @@ const Team = memo(function Team() {
   const isVisible = useInView(sectionRef);
   const prefersReducedMotion = useReducedMotion();
 
-  const handleMouseMove = (e: MouseEvent<HTMLDivElement>, index: number) => {
+  const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
     if (prefersReducedMotion) return;
     const card = e.currentTarget;
     const rect = card.getBoundingClientRect();
@@ -227,7 +227,7 @@ const Team = memo(function Team() {
               style={{
                 transitionDelay: `${index * 100}ms`,
               }}
-              onMouseMove={(e) => handleMouseMove(e, index)}
+              onMouseMove={handleMouseMove}
               onMouseLeave={handleMouseLeave}
             >
               <div className="flex flex-col items-center text-center">

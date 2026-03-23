@@ -214,64 +214,6 @@ const t = {
   },
 };
 
-// ─── Spot ring indicator ──────────────────────────────────────
-function SpotRing({
-  label,
-  spotsLeft,
-  total,
-  fullLabel,
-  leftLabel,
-  tag,
-}: {
-  label: string;
-  spotsLeft: number;
-  total: number;
-  fullLabel: string;
-  leftLabel: string;
-  tag: string;
-}) {
-  const pct = Math.min(((total - spotsLeft) / total) * 100, 100);
-  const isFull = spotsLeft <= 0;
-  const isLow = spotsLeft > 0 && spotsLeft <= 10;
-  const circumference = 2 * Math.PI * 40;
-  const offset = circumference - (pct / 100) * circumference;
-
-  return (
-    <div className="flex flex-col items-center gap-3">
-      <div className="relative w-24 h-24">
-        <svg className="w-24 h-24 -rotate-90" viewBox="0 0 96 96">
-          <circle cx="48" cy="48" r="40" fill="none" stroke="currentColor" strokeWidth="6" className="text-white/10" />
-          <circle
-            cx="48" cy="48" r="40" fill="none"
-            strokeWidth="6" strokeLinecap="round"
-            stroke={isFull ? "#dc2626" : isLow ? "#f59e0b" : "#22c55e"}
-            strokeDasharray={circumference}
-            strokeDashoffset={offset}
-            className="transition-all duration-1000 ease-out"
-          />
-        </svg>
-        <div className="absolute inset-0 flex flex-col items-center justify-center">
-          {isFull ? (
-            <span className="text-xs font-bold text-red-400 uppercase">{fullLabel}</span>
-          ) : (
-            <>
-              <span className="text-xl font-bold text-white">{spotsLeft}</span>
-              <span className="text-[10px] text-white/40 uppercase tracking-wide">{leftLabel}</span>
-            </>
-          )}
-        </div>
-      </div>
-      <div className="text-center">
-        <span className="inline-block px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase rounded bg-white/10 text-white/70 mb-1">
-          {tag}
-        </span>
-        <p className="text-sm font-medium text-white/60">{label}</p>
-        <p className="text-xs text-white/30">{spotsLeft}/{total}</p>
-      </div>
-    </div>
-  );
-}
-
 const PINNED_COUNTRY_CODES = ["PL", "FR"] as CountryCode[];
 const SHOW_FRIDAY_FULL_NOTE = false;
 
@@ -407,17 +349,15 @@ export default function PPFRegistration() {
     [phoneCountryOptions, phoneCountryCode]
   );
 
-  useEffect(() => {
-    if (activePhoneCountryIndex >= filteredPhoneCountryOptions.length) {
-      setActivePhoneCountryIndex(Math.max(0, filteredPhoneCountryOptions.length - 1));
-    }
-  }, [filteredPhoneCountryOptions.length, activePhoneCountryIndex]);
+  const safeActivePhoneCountryIndex = useMemo(
+    () => Math.min(activePhoneCountryIndex, Math.max(0, filteredPhoneCountryOptions.length - 1)),
+    [activePhoneCountryIndex, filteredPhoneCountryOptions.length]
+  );
 
-  useEffect(() => {
-    if (activeCitizenshipIndex >= filteredCitizenshipOptions.length) {
-      setActiveCitizenshipIndex(Math.max(0, filteredCitizenshipOptions.length - 1));
-    }
-  }, [filteredCitizenshipOptions.length, activeCitizenshipIndex]);
+  const safeActiveCitizenshipIndex = useMemo(
+    () => Math.min(activeCitizenshipIndex, Math.max(0, filteredCitizenshipOptions.length - 1)),
+    [activeCitizenshipIndex, filteredCitizenshipOptions.length]
+  );
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -518,7 +458,7 @@ export default function PPFRegistration() {
 
     if (e.key === "Enter" && isPhoneCountryOpen && filteredPhoneCountryOptions.length > 0) {
       e.preventDefault();
-      const selected = filteredPhoneCountryOptions[activePhoneCountryIndex];
+      const selected = filteredPhoneCountryOptions[safeActivePhoneCountryIndex];
       if (selected) {
         setPhoneCountryCode(selected.dialCode);
         setIsPhoneCountryOpen(false);
@@ -556,7 +496,7 @@ export default function PPFRegistration() {
 
     if (e.key === "Enter" && isCitizenshipOpen && filteredCitizenshipOptions.length > 0) {
       e.preventDefault();
-      const selected = filteredCitizenshipOptions[activeCitizenshipIndex];
+      const selected = filteredCitizenshipOptions[safeActiveCitizenshipIndex];
       if (selected) {
         setSelectedCitizenship(selected.label);
         setIsCitizenshipOpen(false);
@@ -954,7 +894,7 @@ export default function PPFRegistration() {
                                               setPhoneCountryCode(opt.dialCode);
                                               setIsPhoneCountryOpen(false);
                                             }}
-                                            className={`w-full px-3 py-2 text-left text-sm transition-colors inline-flex items-center gap-2 ${phoneCountryCode === opt.dialCode ? "text-aspol-red font-semibold" : "text-gray-700"} ${activePhoneCountryIndex === optionIndex ? "bg-aspol-red/10" : "hover:bg-gray-50"}`}
+                                            className={`w-full px-3 py-2 text-left text-sm transition-colors inline-flex items-center gap-2 ${phoneCountryCode === opt.dialCode ? "text-aspol-red font-semibold" : "text-gray-700"} ${safeActivePhoneCountryIndex === optionIndex ? "bg-aspol-red/10" : "hover:bg-gray-50"}`}
                                           >
                                             <CountryFlag code={opt.countryCode} />
                                             <span>{opt.label} ({opt.dialCode})</span>
@@ -982,7 +922,7 @@ export default function PPFRegistration() {
                                               setPhoneCountryCode(opt.dialCode);
                                               setIsPhoneCountryOpen(false);
                                             }}
-                                            className={`w-full px-3 py-2 text-left text-sm transition-colors inline-flex items-center gap-2 ${phoneCountryCode === opt.dialCode ? "text-aspol-red font-semibold" : "text-gray-700"} ${activePhoneCountryIndex === optionIndex ? "bg-aspol-red/10" : "hover:bg-gray-50"}`}
+                                            className={`w-full px-3 py-2 text-left text-sm transition-colors inline-flex items-center gap-2 ${phoneCountryCode === opt.dialCode ? "text-aspol-red font-semibold" : "text-gray-700"} ${safeActivePhoneCountryIndex === optionIndex ? "bg-aspol-red/10" : "hover:bg-gray-50"}`}
                                           >
                                             <CountryFlag code={opt.countryCode} />
                                             <span>{opt.label} ({opt.dialCode})</span>
@@ -1076,7 +1016,7 @@ export default function PPFRegistration() {
                                             setSelectedCitizenship(opt.label);
                                             setIsCitizenshipOpen(false);
                                           }}
-                                          className={`w-full px-3 py-2 text-left text-sm transition-colors inline-flex items-center gap-2 ${selectedCitizenship === opt.label ? "text-aspol-red font-semibold" : "text-gray-700"} ${activeCitizenshipIndex === optionIndex ? "bg-aspol-red/10" : "hover:bg-gray-50"}`}
+                                          className={`w-full px-3 py-2 text-left text-sm transition-colors inline-flex items-center gap-2 ${selectedCitizenship === opt.label ? "text-aspol-red font-semibold" : "text-gray-700"} ${safeActiveCitizenshipIndex === optionIndex ? "bg-aspol-red/10" : "hover:bg-gray-50"}`}
                                         >
                                           <CountryFlag code={opt.countryCode} />
                                           <span>{opt.label}</span>
@@ -1104,7 +1044,7 @@ export default function PPFRegistration() {
                                             setSelectedCitizenship(opt.label);
                                             setIsCitizenshipOpen(false);
                                           }}
-                                          className={`w-full px-3 py-2 text-left text-sm transition-colors inline-flex items-center gap-2 ${selectedCitizenship === opt.label ? "text-aspol-red font-semibold" : "text-gray-700"} ${activeCitizenshipIndex === optionIndex ? "bg-aspol-red/10" : "hover:bg-gray-50"}`}
+                                          className={`w-full px-3 py-2 text-left text-sm transition-colors inline-flex items-center gap-2 ${selectedCitizenship === opt.label ? "text-aspol-red font-semibold" : "text-gray-700"} ${safeActiveCitizenshipIndex === optionIndex ? "bg-aspol-red/10" : "hover:bg-gray-50"}`}
                                         >
                                           <CountryFlag code={opt.countryCode} />
                                           <span>{opt.label}</span>

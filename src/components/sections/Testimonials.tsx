@@ -154,13 +154,6 @@ const Testimonials = memo(function Testimonials() {
 
   const currentTestimonials = cmsTestimonials || TESTIMONIALS[language] || TESTIMONIALS.en;
 
-  // Bounds check: clamp currentIndex when data source or language changes
-  useEffect(() => {
-    setCurrentIndex((prev) =>
-      prev >= currentTestimonials.length ? 0 : prev,
-    );
-  }, [currentTestimonials.length]);
-
   // Defensive: derive safe index inline to prevent crash before useEffect fires
   const safeIndex = currentTestimonials.length > 0
     ? currentIndex % currentTestimonials.length
@@ -300,13 +293,17 @@ const Testimonials = memo(function Testimonials() {
                 <button
                   key={index}
                   onClick={() => goToSlide(index)}
-                  className={`w-3 h-3 rounded-full transition-all ${index === safeIndex
-                    ? "bg-red-600 w-8"
-                    : "bg-gray-300 hover:bg-gray-400"
-                    }`}
+                  className="w-11 h-11 rounded-full flex items-center justify-center touch-manipulation"
                   aria-label={`Go to testimonial ${index + 1}`}
                   aria-current={index === safeIndex ? "true" : undefined}
-                />
+                >
+                  <span
+                    className={`h-3 rounded-full transition-all ${index === safeIndex
+                      ? "bg-red-600 w-8"
+                      : "bg-gray-300 hover:bg-gray-400 w-3"
+                      }`}
+                  />
+                </button>
               ))}
             </div>
 

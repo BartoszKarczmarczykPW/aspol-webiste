@@ -19,8 +19,8 @@ function StatItem({ end, label, suffix = "", duration = 2000 }: StatItemProps) {
 
     // If user prefers reduced motion, show the final value immediately
     if (prefersReducedMotion) {
-      setCount(end);
-      return;
+      const frame = requestAnimationFrame(() => setCount(end));
+      return () => cancelAnimationFrame(frame);
     }
 
     let startTime: number;

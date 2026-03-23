@@ -301,7 +301,7 @@ export function PPFConfirmationTemplate({
             >
               <span style={{ fontWeight: 700 }}>FR:</span>{" "}
               Votre inscription au Paris Polish Forum 2026 a ete confirmee.
-              Presentez cet email a l'entree de l'evenement.
+              Presentez cet email a l&apos;entree de l&apos;evenement.
             </p>
 
             <div
@@ -334,7 +334,7 @@ export function PPFConfirmationTemplate({
               >
                 PL: Zapisz ten email - jest Twoim biletem wstepu
                 <br />
-                FR: Sauvegardez cet email - c'est votre billet d'entree
+                FR: Sauvegardez cet email - c&apos;est votre billet d&apos;entree
               </p>
             </div>
           </div>

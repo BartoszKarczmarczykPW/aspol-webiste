@@ -3,7 +3,6 @@ import { Resend } from "resend";
 import { createElement } from "react";
 import { getPPFRegistrationByTicketId, markTicketAsSent } from "@/lib/google-sheets";
 import { PPFConfirmationTemplate } from "@/components/emails/PPFConfirmationTemplate";
-import type { TicketType } from "@/types/ppf";
 
 /**
  * POST /api/ppf/send-ticket
@@ -78,10 +77,7 @@ export async function POST(req: NextRequest) {
 
     if (emailError) {
       console.error("Failed to send PPF ticket email:", emailError);
-      return NextResponse.json(
-        { error: "Failed to send email", details: emailError.message },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: "Failed to send email" }, { status: 500 });
     }
 
     // Mark as sent in Google Sheets
@@ -90,9 +86,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("send-ticket route error:", error);
-    return NextResponse.json(
-      { error: "Internal server error", details: error instanceof Error ? error.message : String(error) },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

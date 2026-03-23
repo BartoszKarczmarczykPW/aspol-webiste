@@ -17,15 +17,11 @@ const LanguageContext = createContext<LanguageContextType | undefined>(
 );
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguageState] = useState<Language>("en");
-
-  // Restore saved language from localStorage after hydration
-  useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved && VALID_LANGUAGES.has(saved)) {
-      setLanguageState(saved as Language);
-    }
-  }, []);
+  const [language, setLanguageState] = useState<Language>(() => {
+    if (typeof window === "undefined") return "en";
+    const saved = window.localStorage.getItem(STORAGE_KEY);
+    return saved && VALID_LANGUAGES.has(saved) ? (saved as Language) : "en";
+  });
 
   // Keep <html lang> in sync with the selected language
   useEffect(() => {
