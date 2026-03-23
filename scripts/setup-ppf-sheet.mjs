@@ -530,7 +530,7 @@ async function setupStatsSheet() {
     /* 5  */ ["Both days (Fri + Sat):", `=COUNTIF(${reg}!C:C;"${BOTH}")`],
     /* 6  */ ["", ""],
     /* 7  */ ["Capacity", ""],
-    /* 8  */ ["Friday limit:", 70],
+    /* 8  */ ["Friday limit:", 150],
     /* 9  */ ["Friday registered:", `=COUNTIF(${reg}!C:C;"${BOTH}")`],
     /* 10 */ ["Friday spots left:", `=B9-B10`],
     /* 11 */ ["Saturday limit:", 300],

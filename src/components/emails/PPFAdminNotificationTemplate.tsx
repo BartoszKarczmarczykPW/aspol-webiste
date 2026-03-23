@@ -83,7 +83,7 @@ export function PPFAdminNotificationTemplate({
 
       <p style={{ color: "#666", fontSize: 14 }}>
         <strong>Pozostałe miejsca:</strong><br />
-        Piątek: {fridaySpots}/70 | Sobota: {saturdaySpots}/300
+        Piątek: {fridaySpots}/150 | Sobota: {saturdaySpots}/300
       </p>
     </div>
   );

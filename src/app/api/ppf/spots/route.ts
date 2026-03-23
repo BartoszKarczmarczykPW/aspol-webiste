@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getPPFRegistrationCounts } from "@/lib/google-sheets";
 
-const MAX_FRIDAY = 70;
+const MAX_FRIDAY = 150;
 const MAX_SATURDAY = 300;
 
 export async function GET() {

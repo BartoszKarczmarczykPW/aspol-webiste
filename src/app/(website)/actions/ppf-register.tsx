@@ -13,7 +13,7 @@ import {
 import type { PPFRegistration, PPFRegistrationState, TicketType } from "@/types/ppf";
 
 // --- Configuration ---
-const MAX_FRIDAY = 70;
+const MAX_FRIDAY = 150;
 const MAX_SATURDAY = 300;
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000; // 10 minutes
 const RATE_LIMIT_MAX = 5; // 5 attempts per window
