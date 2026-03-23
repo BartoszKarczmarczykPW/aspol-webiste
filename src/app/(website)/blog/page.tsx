@@ -42,6 +42,11 @@ const LABELS = {
     en: {
         title: "Polish Paris Forum",
         subtitle: "Conference news, highlights, and insights from the Polish Paris Forum.",
+        spotlightBadge: "Flagship Event 2026",
+        spotlightTitle: "Paris Polish Forum X",
+        spotlightText: "Join the 10th edition and explore the full agenda, speakers, and registration details.",
+        agendaCta: "View PPF 2026 Agenda",
+        registerCta: "Register for PPF 2026",
         all: "All Posts",
         readMore: "Read Article",
         featured: "Featured Story",
@@ -52,6 +57,11 @@ const LABELS = {
     fr: {
         title: "Polish Paris Forum",
         subtitle: "Actualités, temps forts et analyses de la conférence Polish Paris Forum.",
+        spotlightBadge: "Événement phare 2026",
+        spotlightTitle: "Paris Polish Forum X — Événement principal de l'année",
+        spotlightText: "Rejoignez la 10e édition et découvrez l'agenda complet, les intervenants et les informations d'inscription.",
+        agendaCta: "Voir l'agenda PPF 2026",
+        registerCta: "S'inscrire au PPF 2026",
         all: "Tous les articles",
         readMore: "Lire l'article",
         featured: "À la une",
@@ -62,6 +72,11 @@ const LABELS = {
     pl: {
         title: "Polish Paris Forum",
         subtitle: "Aktualności, relacje i wnioski z konferencji Polish Paris Forum.",
+        spotlightBadge: "Najważniejsze wydarzenie 2026",
+        spotlightTitle: "Paris Polish Forum X — główne wydarzenie roku",
+        spotlightText: "Dołącz do 10. edycji i zobacz pełną agendę, prelegentów oraz szczegóły zapisów.",
+        agendaCta: "Zobacz agendę PPF 2026",
+        registerCta: "Zapisz się na PPF 2026",
         all: "Wszystkie wpisy",
         readMore: "Czytaj artykuł",
         featured: "Wyróżniony artykuł",
@@ -139,6 +154,39 @@ function BlogContent() {
                     >
                         {t.subtitle}
                     </p>
+
+                    <div className="mt-10 animate-fade-in-up max-w-4xl mx-auto" style={{ animationDelay: "0.2s" }}>
+                        <GlassCard className="rounded-3xl border border-white/60 p-6 md:p-8 text-left shadow-xl/20 bg-white/75 backdrop-blur-md">
+                            <div className="inline-flex items-center rounded-full bg-aspol-red/10 border border-aspol-red/20 px-3 py-1 text-[11px] md:text-xs font-bold uppercase tracking-[0.12em] text-aspol-red">
+                                {t.spotlightBadge}
+                            </div>
+
+                            <h2 className="mt-4 text-2xl md:text-[2.05rem] font-bold text-aspol-navy leading-tight">
+                                {t.spotlightTitle}
+                            </h2>
+
+                            <p className="mt-3 text-base md:text-lg text-gray-600 max-w-3xl">
+                                {t.spotlightText}
+                            </p>
+
+                            <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                                <Link
+                                    href="/ppf#ppf-agenda"
+                                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-aspol-red px-6 py-3 text-sm md:text-base font-semibold text-white shadow-lg shadow-aspol-red/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-red-700"
+                                >
+                                    {t.agendaCta}
+                                    <ArrowRight className="w-4 h-4" />
+                                </Link>
+
+                                <Link
+                                    href="/ppf#ppf-form"
+                                    className="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-300 bg-white px-6 py-3 text-sm md:text-base font-semibold text-gray-700 transition-all duration-300 hover:-translate-y-0.5 hover:border-gray-400 hover:bg-gray-50"
+                                >
+                                    {t.registerCta}
+                                </Link>
+                            </div>
+                        </GlassCard>
+                    </div>
                 </div>
             </section>
 

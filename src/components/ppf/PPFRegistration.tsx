@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback, useMemo, type ComponentType, 
 import { useLanguage } from "@/contexts/LanguageContext";
 import { registerForPPF } from "@/app/(website)/actions/ppf-register";
 import type { PPFSpotsData, PPFRegistrationState } from "@/types/ppf";
+import PPFAgenda from "@/components/ppf/PPFAgenda";
 import { getCountries, getCountryCallingCode, type CountryCode } from "libphonenumber-js/min";
 import countriesData from "world-countries";
 import * as FlagIcons from "country-flag-icons/react/3x2";
@@ -691,6 +692,10 @@ export default function PPFRegistration() {
             <path d="M0 80V40C240 0 480 0 720 40C960 80 1200 80 1440 40V80H0Z" fill="#f9fafb" />
           </svg>
         </div>
+      </div>
+
+      <div className="bg-gray-50 border-t border-gray-100">
+        <PPFAgenda language={lang} />
       </div>
 
       {/* ── FORM AREA ── */}
