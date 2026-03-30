@@ -148,19 +148,19 @@ const content: Record<SupportedLanguage, AgendaContent> = {
           title: "Green Intelligence: Can AI Save the Environment?",
           description:
             "This panel explores whether the climate costs linked to AI development can be balanced by its potential benefits. The discussion focuses on energy use, efficiency gains, and AI-powered climate solutions.",
-          speakers: "Francesca Bria, Jean-Marc Jancovici, Luc Julia",
+          speakers: "Michał Szczepański, Laurence Tubiana, Majrut Falkstedt",
         },
         {
-          title: "Europe of Innovation",
+          title: "United Europe of Innovation",
           description:
             "This panel examines how research, technology, and entrepreneurship can strengthen Europe's position in an increasingly complex global landscape, with a special focus on Poland's role in the European innovation ecosystem.",
-          speakers: "Piotr Arak, Michael Keenan, Eliza Kruczkowska",
+          speakers: "Francesco Pappada, Jessica Ambler, Anita de Voisins",
         },
         {
-          title: "Battle of Words: Disinformation, Propaganda and Security",
+          title: "The War of Words: Disinformation, Propaganda, and Information Security",
           description:
             "Researchers, fact-checkers, and public-sector regulators discuss the role of disinformation and propaganda in modern societies, their impact on democratic stability, and possible regulatory responses.",
-          speakers: "Thomas Huchon, Wioletta Myszkowska, Dariusz Standerski",
+          speakers: "Michał Piękoś, Michalina Kowala, Matthieu Barthe",
         },
       ],
     },
@@ -382,10 +382,10 @@ export default function PPFAgenda({ language }: { language: string }) {
 
         <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6">
           {tr.panels.items.map((panel) => (
-            <article key={panel.title} className="bg-white rounded-2xl border border-gray-200 p-5 sm:p-6">
+            <article key={panel.title} className="h-full flex flex-col bg-white rounded-2xl border border-gray-200 p-5 sm:p-6">
               <h4 className="text-xl sm:text-2xl font-bold text-aspol-navy leading-tight">{panel.title}</h4>
               <p className="mt-4 text-base sm:text-lg text-aspol-dark/80 leading-relaxed">{panel.description}</p>
-              <p className="mt-5 pt-4 border-t border-dotted border-aspol-dark/40 italic text-aspol-dark/75">{panel.speakers}</p>
+              <p className="mt-auto pt-5 border-t border-dotted border-aspol-dark/40 italic text-aspol-dark/75">{panel.speakers}</p>
             </article>
           ))}
         </div>
