@@ -22,6 +22,33 @@ export function PPFConfirmationTemplate({
   const ticketLabelEN = isBothDays ? "Friday + Saturday" : "Saturday";
   const dates = isBothDays ? "April 17-18, 2026" : "April 18, 2026";
   const preheader = `PPF 2026 confirmation for ${firstName} ${lastName} - ${ticketId}`;
+  const embassyMapUrl = "https://www.google.com/maps/search/?api=1&query=Ambassade+de+Pologne+Paris+Rue+Saint-Dominique";
+  const panMapUrl = "https://www.google.com/maps/search/?api=1&query=Stacja+Naukowa+PAN+Paris";
+
+  const fridayAgenda = [
+    "17:00-17:20 Registration (only for participants registered for workshops)",
+    "17:20-18:30 Workshop by CEC group (Claudie-Marie Smolen, Aleksandra Kielan)",
+    "18:40-19:10 Registration and refreshments (hot drinks: tea/coffee)",
+    "19:15-19:40 Official Opening Ceremony",
+    "19:40-20:40 Green Intelligence: Can AI Save the Climate? (Michał Szczepański, Maxime Moisson; Moderator: Zofia Gostkowska)",
+    "20:40-22:00 Networking Session (wine served)",
+  ];
+
+  const saturdayAfternoonAgenda = [
+    "14:00-14:30 Reception",
+    "14:30-14:45 Official Opening of Day Two (embassy representative + ASPOL presidents)",
+    "14:45-16:00 The War of Words: Disinformation, Propaganda, and Information Security (Maja Czarnecka, Philippe Moreau-Chevrolet, Michał Piękoś, Aleksandra Kielan)",
+    "16:00-16:30 Refreshments (hot drinks: tea/coffee)",
+    "16:35-17:00 Fireside Chat with Wiesław Tarka",
+    "17:00-18:00 Keynote Speaker by Arancha González: Can Europe be a geopolitical actor? (followed by interactive Q&A)",
+  ];
+
+  const saturdayEveningAgenda = [
+    "18:00-18:30 Concert by Tempo Chopin",
+    "18:30-19:30 United Europe of Innovation (Rafał Kierzenkowski, Bartosz Mierzwa; Moderator: Weronika Nitecka)",
+    "19:30-19:45 Official Closing (Acknowledgements)",
+    "19:45-22:00 Networking (aperitifs and full dinner)",
+  ];
 
   const infoCardCell: CSSProperties = {
     verticalAlign: "top",
@@ -29,7 +56,7 @@ export function PPFConfirmationTemplate({
     borderRadius: 12,
     backgroundColor: "#f7fafe",
     padding: "16px 16px 14px",
-    height: 124,
+    height: 128,
   };
 
   return (
@@ -38,7 +65,7 @@ export function PPFConfirmationTemplate({
         fontFamily: "'Segoe UI', Arial, Helvetica, sans-serif",
         margin: 0,
         padding: 0,
-        backgroundColor: "#eef3f9",
+        backgroundColor: "#f2f5f9",
         color: "#111827",
       }}
     >
@@ -59,9 +86,9 @@ export function PPFConfirmationTemplate({
 
       <div
         style={{
-          maxWidth: 640,
+          maxWidth: 600,
           margin: "0 auto",
-          padding: "32px 16px",
+          padding: "24px 12px",
         }}
       >
         <div
@@ -70,7 +97,7 @@ export function PPFConfirmationTemplate({
             borderRadius: 14,
             overflow: "hidden",
             border: "1px solid #d7e0ea",
-            boxShadow: "0 10px 28px rgba(15, 23, 42, 0.08)",
+            boxShadow: "0 4px 12px rgba(15, 23, 42, 0.04)",
           }}
         >
           <div
@@ -164,6 +191,9 @@ export function PPFConfirmationTemplate({
             </p>
 
             <div style={{ marginTop: 24 }}>
+              <p style={{ margin: "0 0 8px", fontSize: 11, fontWeight: 700, color: "#64748b", textTransform: "uppercase", letterSpacing: 0.9 }}>
+                Ticket details
+              </p>
               <table style={{ width: "100%", borderCollapse: "separate", borderSpacing: 0 }}>
                 <tbody>
                   <tr>
@@ -225,31 +255,29 @@ export function PPFConfirmationTemplate({
               </p>
             </div>
 
-            <div style={{ marginTop: 18, textAlign: "center" }}>
-              <div
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 6,
-                  backgroundColor: "#e8f8ef",
-                  border: "1px solid #bee9ce",
-                  borderRadius: 100,
-                  padding: "7px 16px",
-                }}
-              >
-                <span
-                  style={{
-                    width: 6,
-                    height: 6,
-                    borderRadius: 999,
-                    backgroundColor: "#137c3c",
-                    display: "inline-block",
-                  }}
-                />
-                <p style={{ margin: 0, fontSize: 12, fontWeight: 700, color: "#137c3c", letterSpacing: 0.6, textTransform: "uppercase" }}>
-                  Registration confirmed
-                </p>
-              </div>
+            <div style={{ marginTop: 18 }}>
+              <table style={{ margin: "0 auto", borderCollapse: "separate" }}>
+                <tbody>
+                  <tr>
+                    <td
+                      style={{
+                        backgroundColor: "#e8f8ef",
+                        border: "1px solid #bee9ce",
+                        borderRadius: 100,
+                        padding: "7px 14px",
+                        color: "#137c3c",
+                        fontSize: 12,
+                        fontWeight: 700,
+                        letterSpacing: 0.5,
+                        textTransform: "uppercase",
+                        textAlign: "center",
+                      }}
+                    >
+                      Registration confirmed
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
 
@@ -306,9 +334,95 @@ export function PPFConfirmationTemplate({
 
             <div
               style={{
+                marginTop: 18,
+                backgroundColor: "#f6f9fd",
+                border: "1px solid #d8e4f0",
+                borderRadius: 10,
+                padding: "14px",
+              }}
+            >
+              <p style={{ margin: 0, fontSize: 12, fontWeight: 700, color: "#0f172a", textTransform: "uppercase", letterSpacing: 0.6 }}>
+                Practical information
+              </p>
+
+              <table style={{ width: "100%", borderCollapse: "collapse", marginTop: 10 }}>
+                <tbody>
+                  <tr>
+                    <td style={{ width: "34%", verticalAlign: "top", fontSize: 12, fontWeight: 700, color: "#334155", padding: "0 0 6px" }}>
+                      Locations
+                    </td>
+                    <td style={{ verticalAlign: "top", fontSize: 12, color: "#334155", lineHeight: 1.6, padding: "0 0 6px" }}>
+                      <a href={embassyMapUrl} style={{ color: "#0b5cab", textDecoration: "underline", fontWeight: 700 }}>
+                        Saturday location: Embassy (entrance from Rue Saint-Dominique)
+                      </a>
+                      <br />
+                      <a href={panMapUrl} style={{ color: "#0b5cab", textDecoration: "underline", fontWeight: 700 }}>
+                        Friday location: Polish Academy of Sciences Scientific Centre (PAN)
+                      </a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style={{ width: "34%", verticalAlign: "top", fontSize: 12, fontWeight: 700, color: "#334155", padding: "4px 0 6px" }}>
+                      ID document
+                    </td>
+                    <td style={{ verticalAlign: "top", fontSize: 12, color: "#334155", lineHeight: 1.6, padding: "4px 0 6px" }}>
+                      Please bring a valid identity document.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style={{ width: "34%", verticalAlign: "top", fontSize: 12, fontWeight: 700, color: "#334155", padding: "4px 0 2px" }}>
+                      Dress code
+                    </td>
+                    <td style={{ verticalAlign: "top", fontSize: 12, color: "#334155", lineHeight: 1.6, padding: "4px 0 2px" }}>
+                      Formal
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <p style={{ margin: "10px 0 0", fontSize: 12, fontWeight: 700, color: "#0f172a" }}>
+                Hours & agenda
+              </p>
+
+              {isBothDays ? (
+                <>
+                  <p style={{ margin: "6px 0 0", fontSize: 12, color: "#334155", fontWeight: 700 }}>Friday, April 17 (Polish Academy of Sciences Scientific Centre in Paris)</p>
+                  <ul style={{ margin: "4px 0 0 18px", padding: 0, color: "#334155", fontSize: 12, lineHeight: 1.55 }}>
+                    {fridayAgenda.map((item) => (
+                      <li key={item} style={{ marginBottom: 2 }}>{item}</li>
+                    ))}
+                  </ul>
+                </>
+              ) : null}
+
+              <p style={{ margin: isBothDays ? "8px 0 0" : "6px 0 0", fontSize: 12, color: "#334155", fontWeight: 700 }}>
+                Saturday, April 18 - Afternoon (Embassy of Poland in Paris)
+              </p>
+              <ul style={{ margin: "4px 0 0 18px", padding: 0, color: "#334155", fontSize: 12, lineHeight: 1.55 }}>
+                {saturdayAfternoonAgenda.map((item) => (
+                  <li key={item} style={{ marginBottom: 2 }}>{item}</li>
+                ))}
+              </ul>
+
+              <p style={{ margin: "8px 0 0", fontSize: 12, color: "#334155", fontWeight: 700 }}>
+                Saturday, April 18 - Evening (Embassy of Poland in Paris)
+              </p>
+              <ul style={{ margin: "4px 0 0 18px", padding: 0, color: "#334155", fontSize: 12, lineHeight: 1.55 }}>
+                {saturdayEveningAgenda.map((item) => (
+                  <li key={item} style={{ marginBottom: 2 }}>{item}</li>
+                ))}
+              </ul>
+
+              <p style={{ margin: "10px 0 0", fontSize: 11, color: "#475569", lineHeight: 1.6 }}>
+                By participating in the event, you consent to photography/audio/video recording and to the use of these materials by ASPOL for communication and promotional purposes.
+              </p>
+            </div>
+
+            <div
+              style={{
                 marginTop: 20,
-                backgroundColor: "#fff6f6",
-                border: "1px solid #f3cccc",
+                backgroundColor: "#fffaf2",
+                border: "1px solid #f2dfbd",
                 borderRadius: 10,
                 padding: "12px 14px",
               }}
@@ -317,7 +431,7 @@ export function PPFConfirmationTemplate({
                 style={{
                   margin: 0,
                   fontSize: 12,
-                  color: "#b91c1c",
+                  color: "#92400e",
                   fontWeight: 700,
                   lineHeight: 1.55,
                 }}
@@ -371,42 +485,14 @@ export function PPFConfirmationTemplate({
               href="https://aspol.fr"
               style={{
                 color: "#d71921",
-                textDecoration: "none",
+                textDecoration: "underline",
                 fontWeight: 700,
               }}
             >
               aspol.fr
             </a>
             <span style={{ color: "#94a3b8", margin: "0 10px" }}>&bull;</span>
-            <a
-              href="https://instagram.com/aspolska"
-              style={{
-                color: "#475569",
-                textDecoration: "none",
-              }}
-            >
-              @aspolska
-            </a>
-            <span style={{ color: "#94a3b8", margin: "0 10px" }}>&bull;</span>
-            <a
-              href="https://facebook.com/aspologne"
-              style={{
-                color: "#475569",
-                textDecoration: "none",
-              }}
-            >
-              @aspologne
-            </a>
-            <span style={{ color: "#94a3b8", margin: "0 10px" }}>&bull;</span>
-            <a
-              href="https://linkedin.com/company/aspol-association-des-%C3%A9tudiants-polonais-en-france"
-              style={{
-                color: "#475569",
-                textDecoration: "none",
-              }}
-            >
-              LinkedIn
-            </a>
+            <span style={{ color: "#475569" }}>Paris Polish Forum 2026</span>
           </p>
           <p
             style={{

@@ -23,11 +23,13 @@ type AgendaContent = {
     friday: {
       title: string;
       date: string;
+        location: string;
       items: AgendaItem[];
     };
     saturday: {
       title: string;
       date: string;
+        location: string;
       items: AgendaItem[];
     };
   };
@@ -50,30 +52,59 @@ const content: Record<SupportedLanguage, AgendaContent> = {
       friday: {
         title: "Piątek",
         date: "17 kwietnia",
+        location: "Lokalizacja: Stacja Naukowa PAN w Paryzu",
         items: [
-          { time: "16:30-17:00", title: "Rejestracja" },
-          { time: "17:00-18:00", title: "Warsztaty I*" },
-          { time: "18:00-19:00", title: "Warsztaty II*" },
-          { time: "19:15-19:30", title: "Oficjalne otwarcie wydarzenia" },
-          { time: "19:30-20:30", title: "Panel I" },
-          { time: "20:30-22:00", title: "Networking" },
+          { time: "17:00-17:20", title: "Rejestracja", subtitle: "Tylko dla uczestnikow warsztatow" },
+          {
+            time: "17:20-18:30",
+            title: "Warsztaty CEC group",
+            subtitle: "Prowadzenie: Claudie-Marie Smolen, Aleksandra Kielan",
+          },
+          { time: "18:40-19:10", title: "Rejestracja i poczestunek", subtitle: "Napoje gorace (herbata/kawa)" },
+          {
+            time: "19:15-19:40",
+            title: "Oficjalna inauguracja",
+            subtitle: "Aldona K. Jankowska, Zofia Gostkowska, Kacper Pabisz",
+          },
+          {
+            time: "19:40-20:40",
+            title: "Zielona Inteligencja: Czy AI uratuje klimat?",
+            subtitle: "M. Szczepanski, M. Moisson | Moderacja: Z. Gostkowska",
+          },
+          { time: "20:40-22:00", title: "Sesja networkingowa", subtitle: "Serwowane bedzie wino" },
         ],
       },
       saturday: {
         title: "Sobota",
         date: "18 kwietnia",
+        location: "Lokalizacja: Ambasada RP w Paryzu",
         items: [
           { time: "14:00-14:30", title: "Recepcja", subtitle: "Welcome coffee & croissanty" },
-          { time: "14:30-14:45", title: "Przemówienie przedstawiciela Ambasady" },
-          { time: "14:45-15:00", title: "Otwarcie drugiego dnia" },
-          { time: "15:00-16:00", title: "Panel II" },
-          { time: "16:00-16:30", title: "Przerwa kawowa" },
-          { time: "16:30-17:00", title: "Koncert" },
-          { time: "17:00-18:00", title: "Rozmowa przy kominku I" },
-          { time: "18:00-18:30", title: "Przerwa" },
-          { time: "18:30-19:30", title: "Panel III" },
+          {
+            time: "14:30-14:45",
+            title: "Oficjalne otwarcie dnia drugiego",
+            subtitle: "Przedstawiciel Ambasady i prezesi ASPOL",
+          },
+          {
+            time: "14:45-16:00",
+            title: "Walka Slow: dezinformacja, propaganda i bezpieczenstwo informacji",
+            subtitle: "M. Czarnecka, P. Moreau-Chevrolet, M. Piekos, A. Kielan",
+          },
+          { time: "16:00-16:30", title: "Poczestunek", subtitle: "Napoje gorace (herbata/kawa)" },
+          { time: "16:35-17:00", title: "Fireside Chat z Wieslawem Tarka" },
+          {
+            time: "17:00-18:00",
+            title: "Keynote: Arancha Gonzalez - Czy Europa moze byc aktorem geopolitycznym?",
+            subtitle: "Nastepnie interaktywna sesja Q&A",
+          },
+          { time: "18:00-18:30", title: "Koncert Tempo Chopin" },
+          {
+            time: "18:30-19:30",
+            title: "United Europe of Innovation",
+            subtitle: "R. Kierzenkowski, B. Mierzwa | Moderacja: W. Nitecka",
+          },
           { time: "19:30-19:45", title: "Oficjalne zakończenie", subtitle: "Podziękowania" },
-          { time: "19:45-22:00", title: "Muzyka i networking" },
+          { time: "19:45-22:00", title: "Networking", subtitle: "Aperitify i pelna kolacja" },
         ],
       },
     },
@@ -84,20 +115,20 @@ const content: Record<SupportedLanguage, AgendaContent> = {
         {
           title: "Zielona Inteligencja: Czy AI uratuje środowisko?",
           description:
-            "Ten panel zbada, czy koszty klimatyczne związane z rozwojem sztucznej inteligencji mogą zostać zrównoważone przez jej potencjalne korzyści. Dyskusja skupi się na zużyciu energii, wzroście efektywności oraz rozwiązaniach klimatycznych opartych na AI.",
-          speakers: "Francesca Bria, Jean-Marc Jancovici, Luc Julia",
+            "Dyskusja o zuzyciu energii, wzroscie efektywnosci oraz rozwiazaniach klimatycznych opartych na AI.",
+          speakers: "Michal Szczepanski, Maxime Moisson | Moderacja: Zofia Gostkowska",
         },
         {
           title: "Europa Innowacji",
           description:
-            "Ten panel analizuje, w jaki sposób badania naukowe, technologie i przedsiębiorczość mogą wzmocnić pozycję Europy w coraz bardziej złożonym środowisku globalnym, ze szczególnym uwzględnieniem roli Polski w europejskim krajobrazie innowacji.",
-          speakers: "Piotr Arak, Michael Keenan, Eliza Kruczkowska",
+            "Wplyw badan naukowych, technologii i przedsiebiorczosci na pozycje Europy w coraz bardziej zlozonym srodowisku globalnym.",
+          speakers: "Rafal Kierzenkowski, Bartosz Mierzwa | Moderacja: Weronika Nitecka",
         },
         {
           title: "Walka Słów: Dezinformacja, Propaganda i Bezpieczeństwo",
           description:
-            "Naukowcy, fact-checkerzy, badacze oraz regulatorzy sektora publicznego omówią rolę dezinformacji i propagandy we współczesnych społeczeństwach, ich wpływ na stabilność demokracji oraz możliwe odpowiedzi regulacyjne.",
-          speakers: "Thomas Huchon, Wioletta Myszkowska, Dariusz Standerski",
+            "Dyskusja o roli dezinformacji i propagandy we wspolczesnych spoleczenstwach oraz ich wplywie na stabilnosc demokracji.",
+          speakers: "Maja Czarnecka, Philippe Moreau-Chevrolet, Michal Piekos, Aleksandra Kielan",
         },
       ],
     },
@@ -113,30 +144,59 @@ const content: Record<SupportedLanguage, AgendaContent> = {
       friday: {
         title: "Friday",
         date: "April 17",
+        location: "Location: Polish Academy of Sciences Scientific Centre in Paris",
         items: [
-          { time: "16:30-17:00", title: "Registration" },
-          { time: "17:00-18:00", title: "Workshop I*" },
-          { time: "18:00-19:00", title: "Workshop II*" },
-          { time: "19:15-19:30", title: "Official event opening" },
-          { time: "19:30-20:30", title: "Panel I" },
-          { time: "20:30-22:00", title: "Networking" },
+          { time: "17:00-17:20", title: "Registration", subtitle: "Only for participants registered for workshops" },
+          {
+            time: "17:20-18:30",
+            title: "Workshop by CEC group",
+            subtitle: "Speakers: Claudie-Marie Smolen, Aleksandra Kielan",
+          },
+          { time: "18:40-19:10", title: "Registration and refreshments", subtitle: "Hot drinks (tea/coffee)" },
+          {
+            time: "19:15-19:40",
+            title: "Official Opening Ceremony",
+            subtitle: "Aldona K. Jankowska, Zofia Gostkowska, Kacper Pabisz",
+          },
+          {
+            time: "19:40-20:40",
+            title: "Green Intelligence: Can AI Save the Climate?",
+            subtitle: "Michał Szczepański, Maxime Moisson | Moderator: Zofia Gostkowska",
+          },
+          { time: "20:40-22:00", title: "Networking Session", subtitle: "Wine will be served" },
         ],
       },
       saturday: {
         title: "Saturday",
         date: "April 18",
+        location: "Location: Embassy of Poland in Paris",
         items: [
           { time: "14:00-14:30", title: "Reception", subtitle: "Welcome coffee & croissant" },
-          { time: "14:30-14:45", title: "Speech by Embassy representative" },
-          { time: "14:45-15:00", title: "Opening of day two" },
-          { time: "15:00-16:00", title: "Panel II" },
-          { time: "16:00-16:30", title: "Coffee break" },
-          { time: "16:30-17:00", title: "Concert" },
-          { time: "17:00-18:00", title: "Fireside Chat I" },
-          { time: "18:00-18:30", title: "Break" },
-          { time: "18:30-19:30", title: "Panel III" },
+          {
+            time: "14:30-14:45",
+            title: "Official Opening of Day Two",
+            subtitle: "Speech by the embassy representative and ASPOL presidents",
+          },
+          {
+            time: "14:45-16:00",
+            title: "The War of Words: Disinformation, Propaganda, and Information Security",
+            subtitle: "Maja Czarnecka, Philippe Moreau-Chevrolet, Michał Piękoś, Aleksandra Kielan",
+          },
+          { time: "16:00-16:30", title: "Refreshments", subtitle: "Hot drinks (tea/coffee)" },
+          { time: "16:35-17:00", title: "Fireside Chat with Wiesław Tarka" },
+          {
+            time: "17:00-18:00",
+            title: "Keynote Speaker by Arancha González: Can Europe be a geopolitical actor?",
+            subtitle: "Followed by an interactive Q&A session",
+          },
+          { time: "18:00-18:30", title: "Concert by Tempo Chopin" },
+          {
+            time: "18:30-19:30",
+            title: "United Europe of Innovation",
+            subtitle: "Rafał Kierzenkowski, Bartosz Mierzwa | Moderator: Weronika Nitecka",
+          },
           { time: "19:30-19:45", title: "Official closing", subtitle: "Thank-you note" },
-          { time: "19:45-22:00", title: "Music & networking" },
+          { time: "19:45-22:00", title: "Networking", subtitle: "Aperitifs and full dinner" },
         ],
       },
     },
@@ -147,19 +207,19 @@ const content: Record<SupportedLanguage, AgendaContent> = {
         {
           title: "Green Intelligence: Can AI Save the Environment?",
           description:
-            "This panel explores whether the climate costs linked to AI development can be balanced by its potential benefits. The discussion focuses on energy use, efficiency gains, and AI-powered climate solutions.",
-          speakers: "Michał Szczepański, Laurence Tubiana, Majrut Falkstedt",
+            "The discussion focuses on energy consumption, efficiency gains, and AI-based climate solutions.",
+          speakers: "Michał Szczepański, Maxime Moisson | Moderator: Zofia Gostkowska",
         },
         {
           title: "United Europe of Innovation",
           description:
-            "This panel examines how research, technology, and entrepreneurship can strengthen Europe's position in an increasingly complex global landscape, with a special focus on Poland's role in the European innovation ecosystem.",
-          speakers: "Francesco Pappada, Jessica Ambler, Anita de Voisins",
+            "Impact of scientific research, technology, and entrepreneurship on Europe&rsquo;s position in an increasingly complex global environment.",
+          speakers: "Rafał Kierzenkowski, Bartosz Mierzwa | Moderator: Weronika Nitecka",
         },
         {
           title: "The War of Words: Disinformation, Propaganda, and Information Security",
           description:
-            "Researchers, fact-checkers, and public-sector regulators discuss the role of disinformation and propaganda in modern societies, their impact on democratic stability, and possible regulatory responses.",
+            "Discussion on the role of disinformation and propaganda in contemporary societies and their impact on democratic stability.",
           speakers: "Michał Piękoś, Michalina Kowala, Matthieu Barthe",
         },
       ],
@@ -177,30 +237,59 @@ const content: Record<SupportedLanguage, AgendaContent> = {
       friday: {
         title: "Vendredi",
         date: "17 avril",
+        location: "Lieu: Centre scientifique de l'Academie polonaise des sciences a Paris",
         items: [
-          { time: "16:30-17:00", title: "Enregistrement" },
-          { time: "17:00-18:00", title: "Atelier I*" },
-          { time: "18:00-19:00", title: "Atelier II*" },
-          { time: "19:15-19:30", title: "Ouverture officielle" },
-          { time: "19:30-20:30", title: "Panel I" },
-          { time: "20:30-22:00", title: "Networking" },
+          { time: "17:00-17:20", title: "Enregistrement", subtitle: "Uniquement pour les participants aux ateliers" },
+          {
+            time: "17:20-18:30",
+            title: "Atelier par le groupe CEC",
+            subtitle: "Intervenantes: Claudie-Marie Smolen, Aleksandra Kielan",
+          },
+          { time: "18:40-19:10", title: "Enregistrement et rafraichissements", subtitle: "Boissons chaudes (the/cafe)" },
+          {
+            time: "19:15-19:40",
+            title: "Ceremonie d'ouverture officielle",
+            subtitle: "Aldona K. Jankowska, Zofia Gostkowska, Kacper Pabisz",
+          },
+          {
+            time: "19:40-20:40",
+            title: "Intelligence verte: l'IA peut-elle sauver le climat?",
+            subtitle: "M. Szczepanski, M. Moisson | Moderatrice: Z. Gostkowska",
+          },
+          { time: "20:40-22:00", title: "Session networking", subtitle: "Vin servi" },
         ],
       },
       saturday: {
         title: "Samedi",
         date: "18 avril",
+        location: "Lieu: Ambassade de Pologne a Paris",
         items: [
           { time: "14:00-14:30", title: "Reception", subtitle: "Welcome coffee & croissant" },
-          { time: "14:30-14:45", title: "Discours du représentant de l'Ambassade" },
-          { time: "14:45-15:00", title: "Ouverture de la deuxième journée" },
-          { time: "15:00-16:00", title: "Panel II" },
-          { time: "16:00-16:30", title: "Pause café" },
-          { time: "16:30-17:00", title: "Concert" },
-          { time: "17:00-18:00", title: "Fireside Chat I" },
-          { time: "18:00-18:30", title: "Pause" },
-          { time: "18:30-19:30", title: "Panel III" },
+          {
+            time: "14:30-14:45",
+            title: "Ouverture officielle du jour deux",
+            subtitle: "Discours du representant de l'Ambassade et des presidents ASPOL",
+          },
+          {
+            time: "14:45-16:00",
+            title: "La guerre des mots: desinformation, propagande et securite de l'information",
+            subtitle: "M. Czarnecka, P. Moreau-Chevrolet, M. Piekos, A. Kielan",
+          },
+          { time: "16:00-16:30", title: "Rafraichissements", subtitle: "Boissons chaudes (the/cafe)" },
+          { time: "16:35-17:00", title: "Fireside Chat avec Wieslaw Tarka" },
+          {
+            time: "17:00-18:00",
+            title: "Keynote par Arancha Gonzalez: l'Europe peut-elle etre un acteur geopolitique?",
+            subtitle: "Suivi d'une session Q&A interactive",
+          },
+          { time: "18:00-18:30", title: "Concert par Tempo Chopin" },
+          {
+            time: "18:30-19:30",
+            title: "United Europe of Innovation",
+            subtitle: "R. Kierzenkowski, B. Mierzwa | Moderatrice: W. Nitecka",
+          },
           { time: "19:30-19:45", title: "Clôture officielle", subtitle: "Remerciements" },
-          { time: "19:45-22:00", title: "Musique & networking" },
+          { time: "19:45-22:00", title: "Networking", subtitle: "Aperitifs et diner complet" },
         ],
       },
     },
@@ -211,20 +300,20 @@ const content: Record<SupportedLanguage, AgendaContent> = {
         {
           title: "Intelligence verte: l'IA peut-elle sauver l'environnement?",
           description:
-            "Ce panel étudie si les coûts climatiques liés au développement de l'IA peuvent être compensés par ses bénéfices potentiels. La discussion portera sur la consommation d'énergie, les gains d'efficacité et les solutions climatiques fondées sur l'IA.",
-          speakers: "Francesca Bria, Jean-Marc Jancovici, Luc Julia",
+            "Discussion sur la consommation d'energie, les gains d'efficacite et les solutions climatiques fondees sur l'IA.",
+          speakers: "Michał Szczepański, Maxime Moisson | Moderatrice: Zofia Gostkowska",
         },
         {
           title: "Europe de l'innovation",
           description:
-            "Ce panel analyse comment la recherche, la technologie et l'entrepreneuriat peuvent renforcer la position de l'Europe dans un environnement mondial de plus en plus complexe, en soulignant le rôle de la Pologne dans l'écosystème européen de l'innovation.",
-          speakers: "Piotr Arak, Michael Keenan, Eliza Kruczkowska",
+            "Impact de la recherche scientifique, de la technologie et de l'entrepreneuriat sur la position de l'Europe dans un environnement global complexe.",
+          speakers: "Rafal Kierzenkowski, Bartosz Mierzwa | Moderatrice: Weronika Nitecka",
         },
         {
           title: "Bataille des mots: désinformation, propagande et sécurité",
           description:
-            "Des chercheurs, fact-checkers et régulateurs du secteur public discuteront du rôle de la désinformation et de la propagande dans les sociétés contemporaines, de leur impact sur la stabilité démocratique et des réponses réglementaires possibles.",
-          speakers: "Thomas Huchon, Wioletta Myszkowska, Dariusz Standerski",
+            "Discussion sur le role de la desinformation et de la propagande dans les societes contemporaines et leur impact sur la stabilite democratique.",
+          speakers: "Maja Czarnecka, Philippe Moreau-Chevrolet, Michał Piękoś, Aleksandra Kielan",
         },
       ],
     },
@@ -251,11 +340,13 @@ function TimelineCard({ item, animationIndex }: { item: AgendaItem; animationInd
 function TimelineSection({
   dayTitle,
   dayDate,
+  dayLocation,
   items,
   dayLabel,
 }: {
   dayTitle: string;
   dayDate: string;
+  dayLocation: string;
   items: AgendaItem[];
   dayLabel: string;
 }) {
@@ -274,6 +365,7 @@ function TimelineSection({
         <p className="text-xs tracking-[0.24em] uppercase text-white/55">{dayLabel}</p>
         <h3 className="mt-2 text-5xl sm:text-6xl font-bold italic text-white font-heading leading-none">{dayTitle}</h3>
         <p className="mt-2 text-4xl sm:text-5xl font-semibold text-aspol-red leading-none">{dayDate}</p>
+        <p className="mt-3 text-sm sm:text-base text-white/80">{dayLocation}</p>
       </header>
 
       <div className="lg:hidden relative">
@@ -361,6 +453,7 @@ export default function PPFAgenda({ language }: { language: string }) {
           dayLabel={tr.dayLabel}
           dayTitle={tr.timeline.friday.title}
           dayDate={tr.timeline.friday.date}
+          dayLocation={tr.timeline.friday.location}
           items={tr.timeline.friday.items}
         />
 
@@ -370,6 +463,7 @@ export default function PPFAgenda({ language }: { language: string }) {
           dayLabel={tr.dayLabel}
           dayTitle={tr.timeline.saturday.title}
           dayDate={tr.timeline.saturday.date}
+          dayLocation={tr.timeline.saturday.location}
           items={tr.timeline.saturday.items}
         />
       </div>
