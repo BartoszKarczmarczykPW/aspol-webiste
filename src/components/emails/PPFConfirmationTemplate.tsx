@@ -20,7 +20,7 @@ export function PPFConfirmationTemplate({
   const isBothDays = ticketType === "both-days";
   const cecWorkshopFormUrl =
     process.env.PPF_CEC_WORKSHOP_FORM_URL?.trim() ||
-    "https://forms.gle/XCjeG1SXpUDSQN5d7";
+    "https://forms.gle/4ZfRYrNkx24ThdFTA";
   const shouldShowCECWorkshopLink =
     typeof showCECWorkshopLink === "boolean"
       ? showCECWorkshopLink
@@ -459,7 +459,7 @@ export function PPFConfirmationTemplate({
                 </tbody>
               </table>
 
-              <p style={{ margin: "10px 0 0", fontSize: 12, fontWeight: 700, color: "#0f172a" }}>
+            <p style={{ margin: "10px 0 0", fontSize: 12, fontWeight: 700, color: "#0f172a" }}>
                 Hours & agenda
               </p>
 
