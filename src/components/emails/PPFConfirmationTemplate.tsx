@@ -35,12 +35,12 @@ export function PPFConfirmationTemplate({
   const panMapUrl = "https://www.google.com/maps/search/?api=1&query=Stacja+Naukowa+PAN+Paris";
 
   const fridayAgenda = [
-    "17:00-17:20 Registration (only for participants registered for workshops)",
-    "17:20-18:30 Workshop by CEC group (Claudie-Marie Smolen, Aleksandra Kielan)",
+    "16:40-16:55 Registration (only for participants registered for workshops)",
+    "17:00-18:30 Workshop by CEC group (Claudie-Marie Smolen, Aleksandra Kielan)",
     "18:40-19:10 Registration and refreshments (hot drinks: tea/coffee)",
-    "19:15-19:40 Official Opening Ceremony",
-    "19:40-20:40 Green Intelligence: Can AI Save the Climate? (Michał Szczepański, Maxime Moisson; Moderator: Zofia Gostkowska)",
-    "20:40-22:00 Networking Session (wine served)",
+    "19:15-19:40 Official Opening Ceremony (Conducted by: dr hab. n. med. Aldona Katarzyna Jankowska, prof. UMK; ASPOL co-presidents Zofia Gostkowska and Kacper Pabisz)",
+    "19:40-20:40 Green Intelligence: Can AI Save the Climate? (The discussion will focus on energy consumption, efficiency gains, and AI-based climate solutions; speakers: Michał Szczepański, Maxime Moisson, Pilar Santamaria)",
+    "20:40-22:00 Networking Session (wine will be served during this session)",
   ];
 
   const saturdayAfternoonAgenda = [

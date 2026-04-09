@@ -54,9 +54,9 @@ const content: Record<SupportedLanguage, AgendaContent> = {
         date: "17 kwietnia",
         location: "Lokalizacja: Stacja Naukowa PAN w Paryzu",
         items: [
-          { time: "17:00-17:20", title: "Rejestracja", subtitle: "Tylko dla uczestnikow warsztatow" },
+          { time: "16:40-16:55", title: "Rejestracja", subtitle: "Tylko dla uczestnikow zapisanych na warsztaty" },
           {
-            time: "17:20-18:30",
+            time: "17:00-18:30",
             title: "Warsztaty CEC group",
             subtitle: "Prowadzenie: Claudie-Marie Smolen, Aleksandra Kielan",
           },
@@ -64,14 +64,14 @@ const content: Record<SupportedLanguage, AgendaContent> = {
           {
             time: "19:15-19:40",
             title: "Oficjalna inauguracja",
-            subtitle: "Aldona K. Jankowska, Zofia Gostkowska, Kacper Pabisz",
+            subtitle: "Prowadzenie: dr hab. n. med. Aldona Katarzyna Jankowska, prof. UMK; wspolprezesi ASPOL Zofia Gostkowska i Kacper Pabisz",
           },
           {
             time: "19:40-20:40",
             title: "Zielona Inteligencja: Czy AI uratuje klimat?",
-            subtitle: "M. Szczepanski, M. Moisson | Moderacja: Z. Gostkowska",
+            subtitle: "Dyskusja o zuzyciu energii, wzroscie efektywnosci i klimatycznych rozwiazaniach AI. Prelegenci: Michal Szczepanski, Maxime Moisson, Pilar Santamaria",
           },
-          { time: "20:40-22:00", title: "Sesja networkingowa", subtitle: "Serwowane bedzie wino" },
+          { time: "20:40-22:00", title: "Sesja networkingowa", subtitle: "W trakcie sesji bedzie serwowane wino" },
         ],
       },
       saturday: {
@@ -116,7 +116,7 @@ const content: Record<SupportedLanguage, AgendaContent> = {
           title: "Zielona Inteligencja: Czy AI uratuje środowisko?",
           description:
             "Dyskusja o zuzyciu energii, wzroscie efektywnosci oraz rozwiazaniach klimatycznych opartych na AI.",
-          speakers: "Michal Szczepanski, Maxime Moisson | Moderacja: Zofia Gostkowska",
+          speakers: "Michal Szczepanski, Maxime Moisson, Pilar Santamaria",
         },
         {
           title: "Europa Innowacji",
@@ -146,9 +146,9 @@ const content: Record<SupportedLanguage, AgendaContent> = {
         date: "April 17",
         location: "Location: Polish Academy of Sciences Scientific Centre in Paris",
         items: [
-          { time: "17:00-17:20", title: "Registration", subtitle: "Only for participants registered for workshops" },
+          { time: "16:40-16:55", title: "Registration", subtitle: "Only for participants registered for workshops" },
           {
-            time: "17:20-18:30",
+            time: "17:00-18:30",
             title: "Workshop by CEC group",
             subtitle: "Speakers: Claudie-Marie Smolen, Aleksandra Kielan",
           },
@@ -156,14 +156,14 @@ const content: Record<SupportedLanguage, AgendaContent> = {
           {
             time: "19:15-19:40",
             title: "Official Opening Ceremony",
-            subtitle: "Aldona K. Jankowska, Zofia Gostkowska, Kacper Pabisz",
+            subtitle: "Conducted by: dr hab. n. med. Aldona Katarzyna Jankowska, prof. UMK; ASPOL co-presidents Zofia Gostkowska and Kacper Pabisz",
           },
           {
             time: "19:40-20:40",
             title: "Green Intelligence: Can AI Save the Climate?",
-            subtitle: "Michał Szczepański, Maxime Moisson | Moderator: Zofia Gostkowska",
+            subtitle: "The discussion will focus on energy consumption, efficiency gains, and AI-based climate solutions. Speakers: Michał Szczepański, Maxime Moisson, Pilar Santamaria",
           },
-          { time: "20:40-22:00", title: "Networking Session", subtitle: "Wine will be served" },
+          { time: "20:40-22:00", title: "Networking Session", subtitle: "Wine will be served during this session" },
         ],
       },
       saturday: {
@@ -208,7 +208,7 @@ const content: Record<SupportedLanguage, AgendaContent> = {
           title: "Green Intelligence: Can AI Save the Environment?",
           description:
             "The discussion focuses on energy consumption, efficiency gains, and AI-based climate solutions.",
-          speakers: "Michał Szczepański, Maxime Moisson | Moderator: Zofia Gostkowska",
+          speakers: "Michał Szczepański, Maxime Moisson, Pilar Santamaria",
         },
         {
           title: "United Europe of Innovation",
@@ -239,9 +239,9 @@ const content: Record<SupportedLanguage, AgendaContent> = {
         date: "17 avril",
         location: "Lieu: Centre scientifique de l'Academie polonaise des sciences a Paris",
         items: [
-          { time: "17:00-17:20", title: "Enregistrement", subtitle: "Uniquement pour les participants aux ateliers" },
+          { time: "16:40-16:55", title: "Enregistrement", subtitle: "Uniquement pour les participants inscrits aux ateliers" },
           {
-            time: "17:20-18:30",
+            time: "17:00-18:30",
             title: "Atelier par le groupe CEC",
             subtitle: "Intervenantes: Claudie-Marie Smolen, Aleksandra Kielan",
           },
@@ -249,14 +249,14 @@ const content: Record<SupportedLanguage, AgendaContent> = {
           {
             time: "19:15-19:40",
             title: "Ceremonie d'ouverture officielle",
-            subtitle: "Aldona K. Jankowska, Zofia Gostkowska, Kacper Pabisz",
+            subtitle: "Animee par: dr hab. n. med. Aldona Katarzyna Jankowska, prof. UMK; copresidents ASPOL Zofia Gostkowska et Kacper Pabisz",
           },
           {
             time: "19:40-20:40",
             title: "Intelligence verte: l'IA peut-elle sauver le climat?",
-            subtitle: "M. Szczepanski, M. Moisson | Moderatrice: Z. Gostkowska",
+            subtitle: "Discussion sur la consommation d'energie, les gains d'efficacite et les solutions climatiques basees sur l'IA. Intervenants: Michal Szczepanski, Maxime Moisson, Pilar Santamaria",
           },
-          { time: "20:40-22:00", title: "Session networking", subtitle: "Vin servi" },
+          { time: "20:40-22:00", title: "Session networking", subtitle: "Du vin sera servi pendant cette session" },
         ],
       },
       saturday: {
@@ -301,7 +301,7 @@ const content: Record<SupportedLanguage, AgendaContent> = {
           title: "Intelligence verte: l'IA peut-elle sauver l'environnement?",
           description:
             "Discussion sur la consommation d'energie, les gains d'efficacite et les solutions climatiques fondees sur l'IA.",
-          speakers: "Michał Szczepański, Maxime Moisson | Moderatrice: Zofia Gostkowska",
+          speakers: "Michał Szczepański, Maxime Moisson, Pilar Santamaria",
         },
         {
           title: "Europe de l'innovation",
