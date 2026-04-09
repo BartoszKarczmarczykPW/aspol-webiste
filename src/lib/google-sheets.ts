@@ -206,3 +206,20 @@ export async function isPPFEmailRegistered(email: string): Promise<boolean> {
     (row) => (row.get("Email") || "").toLowerCase() === email.toLowerCase()
   );
 }
+
+export async function getCECWorkshopRegistrationsCount(): Promise<number> {
+  const doc = await getDoc();
+  const cecSheetTitle = process.env.PPF_CEC_SHEET_TITLE || "CEC";
+
+  let sheet;
+  try {
+    sheet = doc.sheetsByTitle[cecSheetTitle];
+  } catch {
+    return 0;
+  }
+
+  if (!sheet) return 0;
+
+  const rows = await sheet.getRows();
+  return rows.length;
+}

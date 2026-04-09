@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { createElement } from "react";
-import { getPPFRegistrationByTicketId, markTicketAsSent } from "@/lib/google-sheets";
+import {
+  getCECWorkshopRegistrationsCount,
+  getPPFRegistrationByTicketId,
+  markTicketAsSent,
+} from "@/lib/google-sheets";
 import { PPFConfirmationTemplate } from "@/components/emails/PPFConfirmationTemplate";
 
 /**
@@ -48,6 +52,10 @@ export async function POST(req: NextRequest) {
     }
 
     const { firstName, lastName, email, ticketType, status } = registration;
+    const cecWorkshopMax = Number(process.env.PPF_CEC_WORKSHOP_MAX || 40);
+    const cecRegistrationsCount = await getCECWorkshopRegistrationsCount();
+    const showCECWorkshopLink =
+      ticketType === "both-days" && cecRegistrationsCount < cecWorkshopMax;
 
     if (status !== "Accepted") {
       return NextResponse.json(
@@ -72,6 +80,7 @@ export async function POST(req: NextRequest) {
         lastName,
         ticketId: cleanTicketId,
         ticketType,
+        showCECWorkshopLink,
       }),
     });
 

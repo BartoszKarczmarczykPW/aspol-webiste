@@ -7,6 +7,7 @@ interface PPFConfirmationTemplateProps {
   lastName: string;
   ticketId: string;
   ticketType: TicketType;
+  showCECWorkshopLink?: boolean;
 }
 
 export function PPFConfirmationTemplate({
@@ -14,8 +15,16 @@ export function PPFConfirmationTemplate({
   lastName,
   ticketId,
   ticketType,
+  showCECWorkshopLink,
 }: PPFConfirmationTemplateProps) {
   const isBothDays = ticketType === "both-days";
+  const cecWorkshopFormUrl =
+    process.env.PPF_CEC_WORKSHOP_FORM_URL?.trim() ||
+    "https://forms.gle/XCjeG1SXpUDSQN5d7";
+  const shouldShowCECWorkshopLink =
+    typeof showCECWorkshopLink === "boolean"
+      ? showCECWorkshopLink
+      : isBothDays;
 
   const ticketLabelPL = isBothDays ? "Piatek + Sobota" : "Sobota";
   const ticketLabelFR = isBothDays ? "Vendredi + Samedi" : "Samedi";
@@ -331,6 +340,76 @@ export function PPFConfirmationTemplate({
               Votre inscription au Paris Polish Forum 2026 a ete confirmee.
               Presentez cet email a l&apos;entree de l&apos;evenement.
             </p>
+
+            {shouldShowCECWorkshopLink && cecWorkshopFormUrl ? (
+              <div
+                style={{
+                  marginTop: 16,
+                  backgroundColor: "#eef4ff",
+                  border: "1px solid #9ec5fe",
+                  borderRadius: 12,
+                  padding: "14px",
+                }}
+              >
+                <p
+                  style={{
+                    margin: 0,
+                    fontSize: 10,
+                    fontWeight: 700,
+                    letterSpacing: 0.9,
+                    textTransform: "uppercase",
+                    color: "#1d4ed8",
+                  }}
+                >
+                  Additional registration
+                </p>
+
+                <p style={{ margin: "5px 0 0", fontSize: 16, fontWeight: 800, color: "#0f172a", lineHeight: 1.35 }}>
+                  Register for the CEC Group workshop
+                </p>
+
+                <p style={{ margin: "8px 0 0", fontSize: 12, color: "#334155", lineHeight: 1.65 }}>
+                  This workshop is available for <span style={{ fontWeight: 700 }}>Both Days ticket holders</span> and places are limited.
+                  Complete the form now to secure your spot.
+                </p>
+
+                <table style={{ marginTop: 12, borderCollapse: "separate" }}>
+                  <tbody>
+                    <tr>
+                      <td
+                        style={{
+                          backgroundColor: "#1d4ed8",
+                          borderRadius: 8,
+                          textAlign: "center",
+                        }}
+                      >
+                        <a
+                          href={cecWorkshopFormUrl}
+                          style={{
+                            display: "inline-block",
+                            padding: "10px 16px",
+                            color: "#ffffff",
+                            textDecoration: "none",
+                            fontSize: 13,
+                            fontWeight: 700,
+                            lineHeight: 1.2,
+                          }}
+                        >
+                          Register now for CEC workshop
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <p style={{ margin: "8px 0 0", fontSize: 11, color: "#475569", lineHeight: 1.55 }}>
+                  If the button does not work, use this link: {" "}
+                  <a href={cecWorkshopFormUrl} style={{ color: "#0b5cab", textDecoration: "underline", fontWeight: 700 }}>
+                    {cecWorkshopFormUrl}
+                  </a>
+                </p>
+              </div>
+            ) : null}
 
             <div
               style={{
