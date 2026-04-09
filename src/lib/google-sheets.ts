@@ -209,7 +209,7 @@ export async function isPPFEmailRegistered(email: string): Promise<boolean> {
 
 export async function getCECWorkshopRegistrationsCount(): Promise<number> {
   const doc = await getDoc();
-  const cecSheetTitle = process.env.PPF_CEC_SHEET_TITLE || "CEC";
+  const cecSheetTitle = process.env.PPF_CEC_SHEET_TITLE || "CEC Workshop";
 
   let sheet;
   try {

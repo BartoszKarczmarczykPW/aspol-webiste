@@ -512,10 +512,12 @@ async function setupStatsSheet() {
   }
 
   sheet = await doc.addSheet({ title: STATS_TITLE });
-  await sheet.resize({ rowCount: 15, columnCount: 5 });
+  await sheet.resize({ rowCount: 18, columnCount: 5 });
 
   const sid = sheet.sheetId;
   const reg = `'PPF 2026 Registrations'`;
+  const cecSheetTitle = env.PPF_CEC_SHEET_TITLE || "CEC Workshop";
+  const cec = `'${cecSheetTitle.replace(/'/g, "''")}'`;
   const SAT = "Sobota / Saturday only";
   const BOTH = "Oba dni / Both days";
 
@@ -536,12 +538,14 @@ async function setupStatsSheet() {
     /* 11 */ ["Saturday limit:", 300],
     /* 12 */ ["Saturday registered:", `=COUNTA(${reg}!B:B)-1`],
     /* 13 */ ["Saturday spots left:", `=B12-B13`],
+    /* 14 */ ["", ""],
+    /* 15 */ ["CEC Workshop registrations:", `=IFERROR(MAX(COUNTA(${cec}!A:A)-1;0);0)`],
   ];
 
   // Write via values.update with USER_ENTERED (formulas parsed like user typing)
   await jwt.authorize();
   const token = jwt.credentials.access_token;
-  const range = encodeURIComponent(`'${STATS_TITLE}'!A1:B14`);
+  const range = encodeURIComponent(`'${STATS_TITLE}'!A1:B16`);
   const valuesUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?valueInputOption=USER_ENTERED`;
 
   const valRes = await fetch(valuesUrl, {
@@ -604,7 +608,7 @@ async function setupStatsSheet() {
   // Bold + centre the value column B
   requests.push({
     repeatCell: {
-      range: { sheetId: sid, startRowIndex: 3, endRowIndex: 14, startColumnIndex: 1, endColumnIndex: 2 },
+      range: { sheetId: sid, startRowIndex: 3, endRowIndex: 16, startColumnIndex: 1, endColumnIndex: 2 },
       cell: {
         userEnteredFormat: {
           textFormat: { bold: true },
