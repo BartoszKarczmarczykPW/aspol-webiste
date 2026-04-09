@@ -159,7 +159,6 @@ export default function Header() {
                   trackEvent("language_switch", { language: "en", source: "header_desktop" });
                 }}
                 aria-pressed={language === "en"}
-                aria-label="Switch to English"
                 className={`px-3 py-1.5 text-xs font-bold rounded-md transition-all ${language === "en"
                   ? "bg-aspol-navy text-white shadow-md shadow-blue-900/10"
                   : "text-gray-500 hover:bg-gray-50 hover:text-aspol-navy"
@@ -173,7 +172,6 @@ export default function Header() {
                   trackEvent("language_switch", { language: "fr", source: "header_desktop" });
                 }}
                 aria-pressed={language === "fr"}
-                aria-label="Passer en français"
                 className={`px-3 py-1.5 text-xs font-bold rounded-md transition-all ${language === "fr"
                   ? "bg-aspol-navy text-white shadow-md shadow-blue-900/10"
                   : "text-gray-500 hover:bg-gray-50 hover:text-aspol-navy"
@@ -187,7 +185,6 @@ export default function Header() {
                   trackEvent("language_switch", { language: "pl", source: "header_desktop" });
                 }}
                 aria-pressed={language === "pl"}
-                aria-label="Przełącz na polski"
                 className={`px-3 py-1.5 text-xs font-bold rounded-md transition-all ${language === "pl"
                   ? "bg-aspol-navy text-white shadow-md shadow-blue-900/10"
                   : "text-gray-500 hover:bg-gray-50 hover:text-aspol-navy"
@@ -319,7 +316,6 @@ export default function Header() {
                     closeMobileMenu();
                   }}
                   aria-pressed={language === "en"}
-                  aria-label="Switch to English"
                   className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-lg transition-colors touch-manipulation active:scale-95 min-h-11 ${language === "en"
                     ? "bg-red-600 text-white"
                     : "text-gray-700 bg-gray-100 hover:bg-gray-200"
@@ -334,7 +330,6 @@ export default function Header() {
                     closeMobileMenu();
                   }}
                   aria-pressed={language === "fr"}
-                  aria-label="Passer en français"
                   className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-lg transition-colors touch-manipulation active:scale-95 min-h-11 ${language === "fr"
                     ? "bg-red-600 text-white"
                     : "text-gray-700 bg-gray-100 hover:bg-gray-200"
@@ -349,7 +344,6 @@ export default function Header() {
                     closeMobileMenu();
                   }}
                   aria-pressed={language === "pl"}
-                  aria-label="Przełącz na polski"
                   className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-lg transition-colors touch-manipulation active:scale-95 min-h-11 ${language === "pl"
                     ? "bg-red-600 text-white"
                     : "text-gray-700 bg-gray-100 hover:bg-gray-200"

@@ -176,7 +176,7 @@ export default function Footer() {
         <div className="text-gray-400 text-sm flex flex-col md:flex-row justify-center items-center gap-2">
           <p>© {currentYear} ASPOL. {t.footer.rights}</p>
           <span className="hidden md:inline text-gray-700">•</span>
-          <p className="opacity-60 hover:opacity-100 transition-opacity">
+          <p className="text-gray-300 hover:text-white transition-colors">
             Designed & Built by <a href="https://www.linkedin.com/in/bartosz-karczmarczyk-4a747432b/" target="_blank" rel="noopener noreferrer" className="font-semibold text-gray-300 hover:text-white transition-colors">Bartosz Karczmarczyk</a>
           </p>
         </div>
