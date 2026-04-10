@@ -19,6 +19,7 @@
     "@sanity/vision": "^4.22.0",
     "clsx": "^2.1.1",
     "country-flag-icons": "^1.6.15",
+    "framer-motion": "^12.38.0",
     "google-auth-library": "^10.6.1",
     "google-spreadsheet": "^5.2.0",
     "gray-matter": "^4.0.3",

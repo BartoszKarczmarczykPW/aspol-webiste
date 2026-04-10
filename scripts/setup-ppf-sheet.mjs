@@ -512,7 +512,7 @@ async function setupStatsSheet() {
   }
 
   sheet = await doc.addSheet({ title: STATS_TITLE });
-  await sheet.resize({ rowCount: 18, columnCount: 5 });
+  await sheet.resize({ rowCount: 28, columnCount: 5 });
 
   const sid = sheet.sheetId;
   const reg = `'PPF 2026 Registrations'`;
@@ -531,21 +531,30 @@ async function setupStatsSheet() {
     /* 4  */ ["Saturday only:", `=COUNTIF(${reg}!C:C;"${SAT}")`],
     /* 5  */ ["Both days (Fri + Sat):", `=COUNTIF(${reg}!C:C;"${BOTH}")`],
     /* 6  */ ["", ""],
-    /* 7  */ ["Capacity", ""],
-    /* 8  */ ["Friday limit:", 150],
-    /* 9  */ ["Friday registered:", `=COUNTIF(${reg}!C:C;"${BOTH}")`],
-    /* 10 */ ["Friday spots left:", `=B9-B10`],
-    /* 11 */ ["Saturday limit:", 300],
-    /* 12 */ ["Saturday registered:", `=COUNTA(${reg}!B:B)-1`],
-    /* 13 */ ["Saturday spots left:", `=B12-B13`],
-    /* 14 */ ["", ""],
-    /* 15 */ ["CEC Workshop registrations:", `=IFERROR(MAX(COUNTA(${cec}!A:A)-1;0);0)`],
+    /* 7  */ ["Status Overview", ""],
+    /* 8  */ ["Accepted:", `=COUNTIF(${reg}!A:A;"Accepted")`],
+    /* 9  */ ["Waiting:", `=COUNTIF(${reg}!A:A;"Waiting")`],
+    /* 10 */ ["Rejected:", `=COUNTIF(${reg}!A:A;"Rejected")`],
+    /* 11 */ ["", ""],
+    /* 12 */ ["Accepted by Ticket Type", ""],
+    /* 13 */ ["Accepted (Both days):", `=COUNTIFS(${reg}!A:A;"Accepted";${reg}!C:C;"${BOTH}")`],
+    /* 14 */ ["Accepted (Saturday only):", `=COUNTIFS(${reg}!A:A;"Accepted";${reg}!C:C;"${SAT}")`],
+    /* 15 */ ["", ""],
+    /* 16 */ ["Capacity", ""],
+    /* 17 */ ["Friday limit:", 150],
+    /* 18 */ ["Friday registered:", `=COUNTIF(${reg}!C:C;"${BOTH}")`],
+    /* 19 */ ["Friday spots left:", `=B18-B19`],
+    /* 20 */ ["Saturday limit:", 300],
+    /* 21 */ ["Saturday registered:", `=COUNTA(${reg}!B:B)-1`],
+    /* 22 */ ["Saturday spots left:", `=B21-B22`],
+    /* 23 */ ["", ""],
+    /* 24 */ ["CEC Workshop registrations:", `=IFERROR(MAX(COUNTA(${cec}!A:A)-1;0);0)`],
   ];
 
   // Write via values.update with USER_ENTERED (formulas parsed like user typing)
   await jwt.authorize();
   const token = jwt.credentials.access_token;
-  const range = encodeURIComponent(`'${STATS_TITLE}'!A1:B16`);
+  const range = encodeURIComponent(`'${STATS_TITLE}'!A1:B25`);
   const valuesUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?valueInputOption=USER_ENTERED`;
 
   const valRes = await fetch(valuesUrl, {
@@ -589,8 +598,8 @@ async function setupStatsSheet() {
     },
   });
 
-  // Section headers bold (rows 2, 7)
-  for (const row of [2, 7]) {
+  // Section headers bold (rows 2, 7, 12, 16)
+  for (const row of [2, 7, 12, 16]) {
     requests.push({
       repeatCell: {
         range: { sheetId: sid, startRowIndex: row, endRowIndex: row + 1, startColumnIndex: 0, endColumnIndex: 1 },
@@ -608,7 +617,7 @@ async function setupStatsSheet() {
   // Bold + centre the value column B
   requests.push({
     repeatCell: {
-      range: { sheetId: sid, startRowIndex: 3, endRowIndex: 16, startColumnIndex: 1, endColumnIndex: 2 },
+      range: { sheetId: sid, startRowIndex: 3, endRowIndex: 25, startColumnIndex: 1, endColumnIndex: 2 },
       cell: {
         userEnteredFormat: {
           textFormat: { bold: true },
