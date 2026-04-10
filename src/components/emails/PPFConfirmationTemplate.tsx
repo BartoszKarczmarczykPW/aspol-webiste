@@ -39,24 +39,24 @@ export function PPFConfirmationTemplate({
     "17:00-18:30 Workshop by CEC group (Claudie-Marie Smolen, Aleksandra Kielan)",
     "18:40-19:10 Registration and refreshments (hot drinks: tea/coffee)",
     "19:15-19:40 Official Opening Ceremony (Conducted by: dr hab. n. med. Aldona Katarzyna Jankowska, prof. UMK; ASPOL co-presidents Zofia Gostkowska and Kacper Pabisz)",
-    "19:40-20:40 Green Intelligence: Can AI Save the Climate? (The discussion will focus on energy consumption, efficiency gains, and AI-based climate solutions; speakers: Michał Szczepański, Maxime Moisson, Pilar Santamaria)",
+    "19:40-20:40 Green Intelligence: Can AI Save the Climate? (The discussion will focus on energy consumption, efficiency gains, and AI-based climate solutions; speakers: Michał Szczepański, Maxime Moisson, Pilar Santamaria; moderator: Zofia Gostkowska)",
     "20:40-22:00 Networking Session (wine will be served during this session)",
   ];
 
   const saturdayAfternoonAgenda = [
-    "14:00-14:30 Reception",
-    "14:30-14:45 Official Opening of Day Two (embassy representative + ASPOL presidents)",
-    "14:45-16:00 The War of Words: Disinformation, Propaganda, and Information Security (Maja Czarnecka, Philippe Moreau-Chevrolet, Michał Piękoś, Aleksandra Kielan)",
+    "14:00-14:30 Reception and Reception (welcome coffee & croissants)",
+    "14:30-14:45 Official Opening of the Day Two (welcome speech of the embassy representative Chief of Economic Section at Polish Embassy in Paris - Błazkiewicz Jakub; ASPOL presidents: Zofia Gostkowska, Kacper Pabisz)",
+    "14:45-16:00 The War of Words: Disinformation, Propaganda, and Information Security (discussion on the role of disinformation and propaganda in contemporary societies and their impact on the stability of democracy; speakers: Maja Czarnecka, Philippe Moreau-Chevrolet, Michał Piękoś, Aleksandra Kielan; moderator: Klara Winiarczyk)",
     "16:00-16:30 Refreshments (hot drinks: tea/coffee)",
-    "16:35-17:00 Fireside Chat with Wiesław Tarka",
-    "17:00-18:00 Keynote Speaker by Arancha González: Can Europe be a geopolitical actor? (followed by interactive Q&A)",
+    "16:35-17:00 Fireside Chat with Ambassador Wiesław Tarka",
+    "17:00-18:00 Keynote Speech by Arancha González: Can Europe be a geopolitical actor? (followed by an interactive Q&A session)",
   ];
 
   const saturdayEveningAgenda = [
     "18:00-18:30 Concert by Tempo Chopin",
-    "18:30-19:30 United Europe of Innovation (Rafał Kierzenkowski, Bartosz Mierzwa; Moderator: Weronika Nitecka)",
+    "18:30-19:30 United Europe of Innovation (impact of scientific research, technology, and entrepreneurship can strengthen Europe's position in an increasingly complex global environment; speakers: Rafał Kierzenkowski, Tomasz Mierzwa, Francesco Pappada, Lola Pinel; moderator: Weronika Nitecka)",
     "19:30-19:45 Official Closing (Acknowledgements)",
-    "19:45-22:00 Networking (aperitifs and full dinner)",
+    "19:45-22:00 Networking (aperitifs and dinner will be served)",
   ];
 
   const infoCardCell: CSSProperties = {
