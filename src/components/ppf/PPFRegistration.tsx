@@ -9,6 +9,41 @@ import { getCountries, getCountryCallingCode, type CountryCode } from "libphonen
 import countriesData from "world-countries";
 import * as FlagIcons from "country-flag-icons/react/3x2";
 
+const DEFAULT_SPOTS: PPFSpotsData = {
+  friday: { total: 150, registered: 0, spotsLeft: 150 },
+  saturday: { total: 300, registered: 0, spotsLeft: 300 },
+  isOpen: true,
+};
+
+const SPOTS_FETCH_RETRY_DELAY_MS = 500;
+const SPOTS_FETCH_MAX_ATTEMPTS = 2;
+
+function waitWithAbort(ms: number, signal?: AbortSignal): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const timeoutId = setTimeout(() => {
+      cleanup();
+      resolve();
+    }, ms);
+
+    const onAbort = () => {
+      cleanup();
+      reject(new DOMException("Aborted", "AbortError"));
+    };
+
+    const cleanup = () => {
+      clearTimeout(timeoutId);
+      signal?.removeEventListener("abort", onAbort);
+    };
+
+    if (signal?.aborted) {
+      onAbort();
+      return;
+    }
+
+    signal?.addEventListener("abort", onAbort, { once: true });
+  });
+}
+
 // ─── Translations ─────────────────────────────────────────────
 const t = {
   en: {
@@ -32,6 +67,7 @@ const t = {
     firstName: "First Name",
     lastName: "Last Name",
     email: "Email",
+    dateOfBirth: "Date of Birth",
     phone: "Phone",
     optional: "optional",
     academicInfo: "Academic Information",
@@ -99,6 +135,7 @@ const t = {
     firstName: "Prénom",
     lastName: "Nom",
     email: "Email",
+    dateOfBirth: "Date de naissance",
     phone: "Téléphone",
     optional: "optionnel",
     academicInfo: "Informations académiques",
@@ -166,6 +203,7 @@ const t = {
     firstName: "Imię",
     lastName: "Nazwisko",
     email: "Email",
+    dateOfBirth: "Data urodzenia",
     phone: "Telefon",
     optional: "opcjonalnie",
     academicInfo: "Informacje o profilu",
@@ -383,15 +421,50 @@ export default function PPFRegistration() {
     requestAnimationFrame(() => setMounted(true));
   }, []);
 
-  const fetchSpots = useCallback(() => {
-    fetch("/api/ppf/spots")
-      .then((r) => r.json())
-      .then((data: PPFSpotsData) => setSpots(data))
-      .catch(console.error);
+  const fetchSpots = useCallback(async (signal?: AbortSignal) => {
+    try {
+      for (let attempt = 1; attempt <= SPOTS_FETCH_MAX_ATTEMPTS; attempt += 1) {
+        try {
+          const response = await fetch("/api/ppf/spots", {
+            cache: "no-store",
+            signal,
+          });
+
+          if (!response.ok) {
+            throw new Error(`Failed to fetch spots: ${response.status}`);
+          }
+
+          const data: PPFSpotsData = await response.json();
+          setSpots(data);
+          return;
+        } catch (error) {
+          if (error instanceof DOMException && error.name === "AbortError") {
+            return;
+          }
+
+          if (attempt < SPOTS_FETCH_MAX_ATTEMPTS) {
+            await waitWithAbort(SPOTS_FETCH_RETRY_DELAY_MS, signal);
+            continue;
+          }
+
+          throw error;
+        }
+      }
+    } catch (error) {
+      if (error instanceof DOMException && error.name === "AbortError") {
+        return;
+      }
+
+      // Keep form usable when the spots endpoint is temporarily unavailable.
+      setSpots((prev) => prev ?? DEFAULT_SPOTS);
+    }
   }, []);
 
   useEffect(() => {
-    fetchSpots();
+    const controller = new AbortController();
+    void fetchSpots(controller.signal);
+
+    return () => controller.abort();
   }, [fetchSpots]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -414,7 +487,7 @@ export default function PPFRegistration() {
     setIsSubmitting(false);
 
     if (state.success) {
-      fetchSpots();
+      void fetchSpots();
     }
   };
 
@@ -672,6 +745,12 @@ export default function PPFRegistration() {
               onSubmit={handleSubmit}
               className="space-y-8"
             >
+              {result?.errors?._form && (
+                <div className="px-5 py-4 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm font-medium">
+                  {result.errors._form[0]}
+                </div>
+              )}
+
               {/* Honeypot */}
               <div className="absolute opacity-0 -z-10" aria-hidden="true">
                 <label htmlFor="company">Company</label>
@@ -828,6 +907,23 @@ export default function PPFRegistration() {
                     />
                     {result?.errors?.email && (
                       <p className="text-red-500 text-sm mt-1.5">{result.errors.email[0]}</p>
+                    )}
+                  </div>
+
+                  {/* Date of Birth */}
+                  <div>
+                    <label htmlFor="dateOfBirth" className="block text-sm font-medium text-gray-700 mb-1.5">
+                      {tr.dateOfBirth} <span className="text-aspol-red">*</span>
+                    </label>
+                    <input
+                      type="date"
+                      id="dateOfBirth"
+                      name="dateOfBirth"
+                      required
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-aspol-red/20 focus:border-aspol-red transition-all text-gray-900"
+                    />
+                    {result?.errors?.dateOfBirth && (
+                      <p className="text-red-500 text-sm mt-1.5">{result.errors.dateOfBirth[0]}</p>
                     )}
                   </div>
 

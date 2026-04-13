@@ -4,6 +4,7 @@ export interface PPFRegistration {
   firstName: string;
   lastName: string;
   email: string;
+  dateOfBirth: string;
   ticketType: TicketType;
   phone?: string;
   university?: string;
@@ -40,6 +41,7 @@ export interface PPFRegistrationState {
     firstName?: string[];
     lastName?: string[];
     email?: string[];
+    dateOfBirth?: string[];
     ticketType?: string[];
     citizenship?: string[];
     professionalStatus?: string[];

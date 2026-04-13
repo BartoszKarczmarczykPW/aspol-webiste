@@ -53,6 +53,9 @@ const PPFSchema = z.object({
   firstName: z.string().min(2, "Minimum 2 characters"),
   lastName: z.string().min(2, "Minimum 2 characters"),
   email: z.string().email("Invalid email address"),
+  dateOfBirth: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "Please provide a valid date of birth"),
   ticketType: z.enum(["saturday-only", "both-days"], {
     error: "Please select a ticket type",
   }),
@@ -99,6 +102,7 @@ export async function registerForPPF(
     firstName: formData.get("firstName"),
     lastName: formData.get("lastName"),
     email: formData.get("email"),
+    dateOfBirth: formData.get("dateOfBirth"),
     ticketType: formData.get("ticketType"),
     phone: formData.get("phone") || undefined,
     university: formData.get("university") || undefined,
@@ -137,7 +141,7 @@ export async function registerForPPF(
   }
 
   const {
-    firstName, lastName, email, ticketType,
+    firstName, lastName, email, dateOfBirth, ticketType,
     phone, university, fieldOfStudy, howDidYouHear,
     citizenship, professionalStatus, returnPlans,
   } = validatedFields.data;
@@ -180,6 +184,7 @@ export async function registerForPPF(
       firstName,
       lastName,
       email,
+      dateOfBirth,
       ticketType: ticketType as TicketType,
       phone,
       university,

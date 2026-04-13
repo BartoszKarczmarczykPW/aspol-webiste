@@ -80,3 +80,23 @@ test('critical flow home to events to contact', async ({ page }) => {
   await page.goto('/#contact');
   await expect(page.locator('#contact')).toBeVisible();
 });
+
+test('ppf page loads without failed fetch errors', async ({ page }) => {
+  const browserErrors: string[] = [];
+
+  page.on('console', (message) => {
+    if (message.type() === 'error') {
+      browserErrors.push(message.text());
+    }
+  });
+
+  page.on('pageerror', (error) => {
+    browserErrors.push(String(error));
+  });
+
+  await page.goto('/ppf');
+  await expect(page.getByRole('heading', { name: /Paris Polish Forum/i }).first()).toBeVisible();
+
+  const fetchFailures = browserErrors.filter((message) => /Failed to fetch|fetch spots/i.test(message));
+  expect(fetchFailures).toEqual([]);
+});

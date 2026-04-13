@@ -69,6 +69,27 @@ async function getOrCreateSheet(doc: GoogleSpreadsheet, title: string, headers: 
   return sheet;
 }
 
+async function ensureSheetHeaders(sheet: Awaited<ReturnType<typeof getOrCreateSheet>>, requiredHeaders: string[]) {
+  await sheet.loadHeaderRow();
+  const existingHeaders = (sheet.headerValues || []).map((header) => header.trim()).filter(Boolean);
+  const missingHeaders = requiredHeaders.filter((header) => !existingHeaders.includes(header));
+
+  if (missingHeaders.length > 0) {
+    const nextHeaders = [...existingHeaders, ...missingHeaders];
+
+    // `setHeaderRow` cannot write more headers than current sheet width.
+    // Ensure enough columns exist before updating the header row.
+    if (sheet.columnCount < nextHeaders.length) {
+      await sheet.resize({
+        rowCount: sheet.rowCount,
+        columnCount: nextHeaders.length,
+      });
+    }
+
+    await sheet.setHeaderRow(nextHeaders);
+  }
+}
+
 const SHEET_TITLE = "PPF 2026 Registrations";
 const HEADERS = [
   "Status wysyłki",
@@ -85,12 +106,14 @@ const HEADERS = [
   "Status zawodowy / Professional Status",
   "Plany powrotu / Return Plans",
   "Zgoda RODO / GDPR Consent",
+  "Data urodzenia / Date of Birth",
   "Data rejestracji / Registration Date",
 ];
 
 export async function addPPFRegistration(data: PPFRegistration): Promise<void> {
   const doc = await getDoc();
   const sheet = await getOrCreateSheet(doc, SHEET_TITLE, HEADERS);
+  await ensureSheetHeaders(sheet, HEADERS);
 
   await sheet.addRow({
     "Ticket ID": data.ticketId,
@@ -106,6 +129,7 @@ export async function addPPFRegistration(data: PPFRegistration): Promise<void> {
     "Status zawodowy / Professional Status": normalizeProfessionalStatus(data.professionalStatus),
     "Plany powrotu / Return Plans": normalizeReturnPlans(data.returnPlans),
     "Zgoda RODO / GDPR Consent": data.gdprConsent ? "Tak / Yes" : "Nie / No",
+    "Data urodzenia / Date of Birth": data.dateOfBirth,
     "Data rejestracji / Registration Date": data.registrationDate,
     "Status wysyłki": "Waiting",
   });
