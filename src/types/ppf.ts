@@ -51,3 +51,17 @@ export interface PPFRegistrationState {
   };
 }
 
+export interface PPFDobBackfillState {
+  success?: boolean;
+  message?: string;
+  errors?: {
+    ticketId?: string[];
+    firstName?: string[];
+    lastName?: string[];
+    email?: string[];
+    dateOfBirth?: string[];
+    dataProcessingConsent?: string[];
+    _form?: string[];
+  };
+}
+

@@ -110,6 +110,29 @@ const HEADERS = [
   "Data rejestracji / Registration Date",
 ];
 
+function normalizeForMatch(value: string): string {
+  return (value || "")
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, " ");
+}
+
+export type PPFDobBackfillResult =
+  | { ok: true }
+  | {
+      ok: false;
+      reason: "NOT_FOUND" | "NOT_ACCEPTED" | "IDENTITY_MISMATCH" | "DOB_ALREADY_SET";
+    };
+
+export interface PPFDobReminderCandidate {
+  ticketId: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+}
+
 export async function addPPFRegistration(data: PPFRegistration): Promise<void> {
   const doc = await getDoc();
   const sheet = await getOrCreateSheet(doc, SHEET_TITLE, HEADERS);
@@ -246,4 +269,73 @@ export async function getCECWorkshopRegistrationsCount(): Promise<number> {
 
   const rows = await sheet.getRows();
   return rows.length;
+}
+
+export async function backfillPPFDateOfBirthForAcceptedRegistration(input: {
+  ticketId: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  dateOfBirth: string;
+}): Promise<PPFDobBackfillResult> {
+  const doc = await getDoc();
+  const sheet = doc.sheetsByTitle[SHEET_TITLE];
+  if (!sheet) {
+    return { ok: false, reason: "NOT_FOUND" };
+  }
+
+  const rows = await sheet.getRows();
+  const row = rows.find((r) => (r.get("Ticket ID") || "").trim() === input.ticketId.trim());
+  if (!row) {
+    return { ok: false, reason: "NOT_FOUND" };
+  }
+
+  const status = (row.get("Status wysyłki") || "").trim();
+  if (status !== "Accepted") {
+    return { ok: false, reason: "NOT_ACCEPTED" };
+  }
+
+  const currentDob = (row.get("Data urodzenia / Date of Birth") || "").trim();
+  if (currentDob) {
+    return { ok: false, reason: "DOB_ALREADY_SET" };
+  }
+
+  const firstNameMatches =
+    normalizeForMatch(row.get("Imię / First Name") || "") === normalizeForMatch(input.firstName);
+  const lastNameMatches =
+    normalizeForMatch(row.get("Nazwisko / Last Name") || "") === normalizeForMatch(input.lastName);
+  const emailMatches =
+    normalizeForMatch(row.get("Email") || "") === normalizeForMatch(input.email);
+
+  if (!firstNameMatches || !lastNameMatches || !emailMatches) {
+    return { ok: false, reason: "IDENTITY_MISMATCH" };
+  }
+
+  row.set("Data urodzenia / Date of Birth", input.dateOfBirth.trim());
+  await row.save();
+
+  return { ok: true };
+}
+
+export async function getAcceptedRegistrationsMissingDob(): Promise<PPFDobReminderCandidate[]> {
+  const doc = await getDoc();
+  const sheet = doc.sheetsByTitle[SHEET_TITLE];
+  if (!sheet) return [];
+
+  const rows = await sheet.getRows();
+
+  return rows
+    .filter((row) => {
+      const status = (row.get("Status wysyłki") || "").trim();
+      const dob = (row.get("Data urodzenia / Date of Birth") || "").trim();
+      const email = (row.get("Email") || "").trim();
+      const ticketId = (row.get("Ticket ID") || "").trim();
+      return status === "Accepted" && !dob && !!email && !!ticketId;
+    })
+    .map((row) => ({
+      ticketId: (row.get("Ticket ID") || "").trim(),
+      firstName: (row.get("Imię / First Name") || "").trim(),
+      lastName: (row.get("Nazwisko / Last Name") || "").trim(),
+      email: (row.get("Email") || "").trim(),
+    }));
 }

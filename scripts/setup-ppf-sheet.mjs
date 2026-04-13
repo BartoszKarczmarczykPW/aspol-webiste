@@ -124,13 +124,14 @@ const REG_HEADERS = [
   "Status zawodowy / Professional Status",
   "Plany powrotu / Return Plans",
   "Zgoda RODO / GDPR Consent",
+  "Data urodzenia / Date of Birth",
   "Data rejestracji / Registration Date",
 ];
 
 const STATUS_HEADER = "Status wysyłki";
 const STATUS_OPTIONS = ["Waiting", "Accepted", "Rejected"];
 
-const COLUMN_WIDTHS = [160, 160, 200, 180, 180, 260, 150, 220, 220, 220, 180, 180, 180, 150, 220];
+const COLUMN_WIDTHS = [160, 160, 200, 180, 180, 260, 150, 220, 220, 220, 180, 180, 180, 150, 170, 220];
 const HEADER_ROW_HEIGHT = 42;
 const DATA_ROW_HEIGHT = 34;
 
@@ -414,7 +415,7 @@ async function setupRegistrationSheet() {
         startRowIndex: 1,
         endRowIndex: sheet.rowCount,
         startColumnIndex: 14,
-        endColumnIndex: 15,
+        endColumnIndex: 16,
       },
       cell: { userEnteredFormat: { horizontalAlignment: "CENTER" } },
       fields: "userEnteredFormat.horizontalAlignment",
