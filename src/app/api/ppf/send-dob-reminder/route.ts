@@ -86,7 +86,7 @@ export async function POST(req: NextRequest) {
     const { error } = await resend.emails.send({
       from: process.env.RESEND_FROM_EMAIL,
       to: [registration.email],
-      subject: `PPF 2026 - Missing Date of Birth - ${cleanTicketId}`,
+      subject: `Your PPF registration requires immediate action - ${cleanTicketId}`,
       react: createElement(PPFDobReminderTemplate, {
         firstName: registration.firstName,
         lastName: registration.lastName,
