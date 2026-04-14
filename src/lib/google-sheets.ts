@@ -106,10 +106,13 @@ const HEADERS = [
   "Status zawodowy / Professional Status",
   "Plany powrotu / Return Plans",
   "Zgoda RODO / GDPR Consent",
-  "Data urodzenia / Date of Birth",
-  "Status przypomnienia DOB",
   "Data rejestracji / Registration Date",
+  "Status przypomnienia DOB",
+  "Data urodzenia / Date of Birth",
 ];
+
+const REGISTRATION_DATE_HEADER = "Data rejestracji / Registration Date";
+const DOB_HEADER = "Data urodzenia / Date of Birth";
 
 function normalizeForMatch(value: string): string {
   return (value || "")
@@ -138,7 +141,24 @@ function normalizeDobCellValue(value: unknown): string {
     return "";
   }
 
+  // Treat full ISO timestamps as registration-date values, not DOB values.
+  if (/^\d{4}-\d{2}-\d{2}t\d{2}:\d{2}:\d{2}(?:\.\d+)?z$/i.test(cleaned)) {
+    return "";
+  }
+
   return cleaned;
+}
+
+function getDobFromRow(row: { get: (key: string) => unknown }): string {
+  const lastColumnDob = normalizeDobCellValue(row.get(DOB_HEADER));
+  if (lastColumnDob) return lastColumnDob;
+
+  // Backward compatibility for older rows where DOB may still live in registration column.
+  return normalizeDobCellValue(row.get(REGISTRATION_DATE_HEADER));
+}
+
+function setDobOnRow(row: { set: (key: string, value: string) => void }, dateOfBirth: string): void {
+  row.set(DOB_HEADER, dateOfBirth.trim());
 }
 
 export type PPFDobBackfillResult =
@@ -184,9 +204,9 @@ export async function addPPFRegistration(data: PPFRegistration): Promise<void> {
     "Status zawodowy / Professional Status": normalizeProfessionalStatus(data.professionalStatus),
     "Plany powrotu / Return Plans": normalizeReturnPlans(data.returnPlans),
     "Zgoda RODO / GDPR Consent": data.gdprConsent ? "Tak / Yes" : "Nie / No",
-    "Data urodzenia / Date of Birth": data.dateOfBirth,
-    "Status przypomnienia DOB": "",
     "Data rejestracji / Registration Date": data.registrationDate,
+    "Status przypomnienia DOB": "",
+    "Data urodzenia / Date of Birth": data.dateOfBirth,
     "Status wysyłki": "Waiting",
   });
 }
@@ -339,7 +359,7 @@ export async function backfillPPFDateOfBirthForAcceptedRegistration(input: {
     return { ok: false, reason: "IDENTITY_MISMATCH" };
   }
 
-  row.set("Data urodzenia / Date of Birth", input.dateOfBirth.trim());
+  setDobOnRow(row, input.dateOfBirth);
   await row.save();
 
   return { ok: true };
@@ -355,7 +375,7 @@ export async function getAcceptedRegistrationsMissingDob(): Promise<PPFDobRemind
   return rows
     .filter((row) => {
       const status = (row.get("Status wysyłki") || "").trim();
-      const dob = normalizeDobCellValue(row.get("Data urodzenia / Date of Birth"));
+      const dob = getDobFromRow(row);
       const reminderStatus = (row.get("Status przypomnienia DOB") || "").trim();
       const email = (row.get("Email") || "").trim();
       const ticketId = (row.get("Ticket ID") || "").trim();
@@ -393,12 +413,12 @@ export async function getPPFDobReminderRegistrationByTicketId(
       .reverse()
       .find((r) => {
         const status = (r.get("Status wysyłki") || "").trim();
-        const dob = normalizeDobCellValue(r.get("Data urodzenia / Date of Birth"));
+        const dob = getDobFromRow(r);
         return status === "Accepted" && !dob;
       }) ||
     [...matchingRows]
       .reverse()
-      .find((r) => !normalizeDobCellValue(r.get("Data urodzenia / Date of Birth"))) ||
+      .find((r) => !getDobFromRow(r)) ||
     matchingRows[matchingRows.length - 1];
 
   if (!row) return null;
@@ -409,7 +429,7 @@ export async function getPPFDobReminderRegistrationByTicketId(
     lastName: (row.get("Nazwisko / Last Name") || "").trim(),
     email: (row.get("Email") || "").trim(),
     status: (row.get("Status wysyłki") || "").trim(),
-    dateOfBirth: normalizeDobCellValue(row.get("Data urodzenia / Date of Birth")),
+    dateOfBirth: getDobFromRow(row),
     reminderStatus: (row.get("Status przypomnienia DOB") || "").trim(),
   };
 }
@@ -433,7 +453,7 @@ export async function getPPFDobReminderRegistrationBySheetRow(
     lastName: (row.get("Nazwisko / Last Name") || "").trim(),
     email: (row.get("Email") || "").trim(),
     status: (row.get("Status wysyłki") || "").trim(),
-    dateOfBirth: normalizeDobCellValue(row.get("Data urodzenia / Date of Birth")),
+    dateOfBirth: getDobFromRow(row),
     reminderStatus: (row.get("Status przypomnienia DOB") || "").trim(),
   };
 }
@@ -451,7 +471,7 @@ export async function markDobReminderAsSent(ticketId: string): Promise<void> {
       .reverse()
       .find((r) => {
         const status = (r.get("Status wysyłki") || "").trim();
-        const dob = normalizeDobCellValue(r.get("Data urodzenia / Date of Birth"));
+        const dob = getDobFromRow(r);
         return status === "Accepted" && !dob;
       }) ||
     matchingRows[matchingRows.length - 1];

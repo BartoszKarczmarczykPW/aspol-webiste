@@ -124,9 +124,9 @@ const REG_HEADERS = [
   "Status zawodowy / Professional Status",
   "Plany powrotu / Return Plans",
   "Zgoda RODO / GDPR Consent",
-  "Data urodzenia / Date of Birth",
-  "Status przypomnienia DOB",
   "Data rejestracji / Registration Date",
+  "Status przypomnienia DOB",
+  "Data urodzenia / Date of Birth",
 ];
 
 const STATUS_HEADER = "Status wysyłki";
