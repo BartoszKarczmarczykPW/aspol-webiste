@@ -99,13 +99,6 @@ export async function backfillPPFDateOfBirth(
     const result = await backfillPPFDateOfBirthForAcceptedRegistration(validated.data);
 
     if (!result.ok) {
-      if (result.reason === "DOB_ALREADY_SET") {
-        return {
-          success: false,
-          errors: { _form: ["Data urodzenia jest już uzupełniona dla tego zgłoszenia."] },
-        };
-      }
-
       return {
         success: false,
         errors: {

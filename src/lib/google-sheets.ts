@@ -145,7 +145,7 @@ export type PPFDobBackfillResult =
   | { ok: true }
   | {
       ok: false;
-      reason: "NOT_FOUND" | "NOT_ACCEPTED" | "IDENTITY_MISMATCH" | "DOB_ALREADY_SET";
+      reason: "NOT_FOUND" | "NOT_ACCEPTED" | "IDENTITY_MISMATCH";
     };
 
 export interface PPFDobReminderCandidate {
@@ -326,11 +326,6 @@ export async function backfillPPFDateOfBirthForAcceptedRegistration(input: {
   const status = (row.get("Status wysyłki") || "").trim();
   if (status !== "Accepted") {
     return { ok: false, reason: "NOT_ACCEPTED" };
-  }
-
-  const currentDob = normalizeDobCellValue(row.get("Data urodzenia / Date of Birth"));
-  if (currentDob) {
-    return { ok: false, reason: "DOB_ALREADY_SET" };
   }
 
   const firstNameMatches =
