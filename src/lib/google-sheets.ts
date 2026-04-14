@@ -107,6 +107,7 @@ const HEADERS = [
   "Plany powrotu / Return Plans",
   "Zgoda RODO / GDPR Consent",
   "Data urodzenia / Date of Birth",
+  "Status przypomnienia DOB",
   "Data rejestracji / Registration Date",
 ];
 
@@ -133,6 +134,16 @@ export interface PPFDobReminderCandidate {
   email: string;
 }
 
+export interface PPFDobReminderRegistration {
+  ticketId: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  status: string;
+  dateOfBirth: string;
+  reminderStatus: string;
+}
+
 export async function addPPFRegistration(data: PPFRegistration): Promise<void> {
   const doc = await getDoc();
   const sheet = await getOrCreateSheet(doc, SHEET_TITLE, HEADERS);
@@ -153,6 +164,7 @@ export async function addPPFRegistration(data: PPFRegistration): Promise<void> {
     "Plany powrotu / Return Plans": normalizeReturnPlans(data.returnPlans),
     "Zgoda RODO / GDPR Consent": data.gdprConsent ? "Tak / Yes" : "Nie / No",
     "Data urodzenia / Date of Birth": data.dateOfBirth,
+    "Status przypomnienia DOB": "",
     "Data rejestracji / Registration Date": data.registrationDate,
     "Status wysyłki": "Waiting",
   });
@@ -328,9 +340,16 @@ export async function getAcceptedRegistrationsMissingDob(): Promise<PPFDobRemind
     .filter((row) => {
       const status = (row.get("Status wysyłki") || "").trim();
       const dob = (row.get("Data urodzenia / Date of Birth") || "").trim();
+      const reminderStatus = (row.get("Status przypomnienia DOB") || "").trim();
       const email = (row.get("Email") || "").trim();
       const ticketId = (row.get("Ticket ID") || "").trim();
-      return status === "Accepted" && !dob && !!email && !!ticketId;
+      return (
+        status === "Accepted" &&
+        !dob &&
+        reminderStatus !== "Sent" &&
+        !!email &&
+        !!ticketId
+      );
     })
     .map((row) => ({
       ticketId: (row.get("Ticket ID") || "").trim(),
@@ -338,4 +357,39 @@ export async function getAcceptedRegistrationsMissingDob(): Promise<PPFDobRemind
       lastName: (row.get("Nazwisko / Last Name") || "").trim(),
       email: (row.get("Email") || "").trim(),
     }));
+}
+
+export async function getPPFDobReminderRegistrationByTicketId(
+  ticketId: string
+): Promise<PPFDobReminderRegistration | null> {
+  const doc = await getDoc();
+  const sheet = doc.sheetsByTitle[SHEET_TITLE];
+  if (!sheet) return null;
+
+  const rows = await sheet.getRows();
+  const row = rows.find((r) => (r.get("Ticket ID") || "").trim() === ticketId.trim());
+  if (!row) return null;
+
+  return {
+    ticketId: (row.get("Ticket ID") || "").trim(),
+    firstName: (row.get("Imię / First Name") || "").trim(),
+    lastName: (row.get("Nazwisko / Last Name") || "").trim(),
+    email: (row.get("Email") || "").trim(),
+    status: (row.get("Status wysyłki") || "").trim(),
+    dateOfBirth: (row.get("Data urodzenia / Date of Birth") || "").trim(),
+    reminderStatus: (row.get("Status przypomnienia DOB") || "").trim(),
+  };
+}
+
+export async function markDobReminderAsSent(ticketId: string): Promise<void> {
+  const doc = await getDoc();
+  const sheet = doc.sheetsByTitle[SHEET_TITLE];
+  if (!sheet) throw new Error("Registration sheet not found");
+
+  const rows = await sheet.getRows();
+  const row = rows.find((r) => (r.get("Ticket ID") || "").trim() === ticketId.trim());
+  if (!row) throw new Error(`Ticket ${ticketId} not found`);
+
+  row.set("Status przypomnienia DOB", "Sent");
+  await row.save();
 }

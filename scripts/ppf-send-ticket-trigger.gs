@@ -18,10 +18,16 @@ const PPF_SHEET_NAME = "PPF 2026 Registrations";
 const PPF_STATUS_COLUMN = 1; // A
 const PPF_TICKET_ID_COLUMN = 2; // B
 const PPF_ACCEPTED_VALUE = "Accepted";
+const PPF_DOB_REMINDER_STATUS_COLUMN = 16; // P
+const PPF_DOB_REMINDER_SEND_VALUE = "Send";
+const PPF_DOB_REMINDER_SENT_VALUE = "Sent";
+const PPF_DOB_REMINDER_WAITING_VALUE = "Waiting";
 
 // Update these two values before using.
 const PPF_SEND_TICKET_URL = "https://aspol.fr/api/ppf/send-ticket";
 const PPF_SEND_TICKET_SECRET = "2d44d0951ca64208a0401b6a8c83abdec17dfa6a53da46d1b06ba2e12b6c2345";
+const PPF_SEND_DOB_REMINDER_URL = "https://aspol.fr/api/ppf/send-dob-reminder";
+const PPF_SEND_DOB_REMINDER_SECRET = PPF_SEND_TICKET_SECRET;
 
 function onEditPPFStatus(e) {
   try {
@@ -31,11 +37,47 @@ function onEditPPFStatus(e) {
     const sheet = range.getSheet();
 
     if (sheet.getName() !== PPF_SHEET_NAME) return;
-    if (range.getColumn() !== PPF_STATUS_COLUMN) return;
     if (range.getRow() <= 1) return; // skip header row
 
+    const editedColumn = range.getColumn();
     const newValue = String(e.value || "").trim();
     const oldValue = String(e.oldValue || "").trim();
+
+    if (editedColumn === PPF_DOB_REMINDER_STATUS_COLUMN) {
+      if (newValue !== PPF_DOB_REMINDER_SEND_VALUE) return;
+      if (oldValue === PPF_DOB_REMINDER_SEND_VALUE) return;
+
+      const ticketId = String(sheet.getRange(range.getRow(), PPF_TICKET_ID_COLUMN).getValue() || "").trim();
+      if (!ticketId) {
+        range.setValue(PPF_DOB_REMINDER_WAITING_VALUE);
+        range.setNote("No ticket ID in column B - reminder skipped.");
+        return;
+      }
+
+      const response = UrlFetchApp.fetch(PPF_SEND_DOB_REMINDER_URL, {
+        method: "post",
+        contentType: "application/json",
+        muteHttpExceptions: true,
+        payload: JSON.stringify({
+          ticketId,
+          secret: PPF_SEND_DOB_REMINDER_SECRET,
+        }),
+      });
+
+      const statusCode = response.getResponseCode();
+      const body = response.getContentText();
+
+      if (statusCode >= 200 && statusCode < 300) {
+        range.setValue(PPF_DOB_REMINDER_SENT_VALUE);
+        range.setNote("DOB reminder sent at " + new Date().toISOString());
+      } else {
+        range.setValue(PPF_DOB_REMINDER_WAITING_VALUE);
+        range.setNote("Reminder failed (" + statusCode + "): " + body);
+      }
+      return;
+    }
+
+    if (editedColumn !== PPF_STATUS_COLUMN) return;
 
     // Send only on transition TO Accepted.
     if (newValue !== PPF_ACCEPTED_VALUE) return;

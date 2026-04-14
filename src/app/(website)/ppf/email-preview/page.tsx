@@ -1,4 +1,5 @@
 import { PPFConfirmationTemplate } from "@/components/emails/PPFConfirmationTemplate";
+import { PPFDobReminderTemplate } from "@/components/emails/PPFDobReminderTemplate";
 
 export const metadata = {
   title: "PPF Email Preview",
@@ -30,14 +31,45 @@ export default function PPFEmailPreviewPage() {
             fontFamily: "Arial, sans-serif",
           }}
         >
-          This page renders the participant confirmation email template locally. No email is sent.
+          This page renders PPF email templates locally. No email is sent.
         </p>
+
+        <h2
+          style={{
+            margin: "0 0 14px",
+            fontSize: "18px",
+            fontWeight: 700,
+            color: "#111827",
+            fontFamily: "Arial, sans-serif",
+          }}
+        >
+          1) Confirmation Email
+        </h2>
 
         <PPFConfirmationTemplate
           firstName="Jan"
           lastName="Kowalski"
           ticketId="PPF26-EXAMPLE01"
           ticketType="both-days"
+        />
+
+        <h2
+          style={{
+            margin: "36px 0 14px",
+            fontSize: "18px",
+            fontWeight: 700,
+            color: "#111827",
+            fontFamily: "Arial, sans-serif",
+          }}
+        >
+          2) Date of Birth Reminder Email
+        </h2>
+
+        <PPFDobReminderTemplate
+          firstName="Jan"
+          lastName="Kowalski"
+          ticketId="PPF26-EXAMPLE01"
+          formUrl="https://aspol.fr/ppf/dob-update?ticketId=PPF26-EXAMPLE01"
         />
       </div>
     </main>
