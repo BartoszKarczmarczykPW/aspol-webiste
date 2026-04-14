@@ -56,7 +56,7 @@ export async function backfillPPFDateOfBirth(
 ): Promise<PPFDobBackfillState> {
   const honeypot = String(formData.get("company") || "").trim();
   if (honeypot) {
-    return { success: true, message: "OK", errors: {} };
+    return { success: true, errors: {} };
   }
 
   const formStartRaw = Number(formData.get("formStart") || 0);
@@ -111,7 +111,6 @@ export async function backfillPPFDateOfBirth(
 
     return {
       success: true,
-      message: "Data urodzenia została zapisana. Dziękujemy.",
       errors: {},
     };
   } catch (error) {
