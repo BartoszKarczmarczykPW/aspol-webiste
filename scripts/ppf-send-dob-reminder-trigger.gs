@@ -55,6 +55,7 @@ function onEditPPFDobReminderStatus(e) {
       muteHttpExceptions: true,
       payload: JSON.stringify({
         ticketId,
+        sheetRow: range.getRow(),
         secret: PPF_SINGLE_DOB_REMINDER_SECRET,
       }),
     });

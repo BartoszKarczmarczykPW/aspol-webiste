@@ -60,6 +60,7 @@ function onEditPPFStatus(e) {
         muteHttpExceptions: true,
         payload: JSON.stringify({
           ticketId,
+          sheetRow: range.getRow(),
           secret: PPF_SEND_DOB_REMINDER_SECRET,
         }),
       });

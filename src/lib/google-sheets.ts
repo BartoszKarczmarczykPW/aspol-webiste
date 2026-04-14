@@ -398,6 +398,30 @@ export async function getPPFDobReminderRegistrationByTicketId(
   };
 }
 
+export async function getPPFDobReminderRegistrationBySheetRow(
+  sheetRow: number
+): Promise<PPFDobReminderRegistration | null> {
+  if (!Number.isInteger(sheetRow) || sheetRow < 2) return null;
+
+  const doc = await getDoc();
+  const sheet = doc.sheetsByTitle[SHEET_TITLE];
+  if (!sheet) return null;
+
+  const rows = await sheet.getRows();
+  const row = rows.find((r) => r.rowNumber === sheetRow);
+  if (!row) return null;
+
+  return {
+    ticketId: (row.get("Ticket ID") || "").trim(),
+    firstName: (row.get("Imię / First Name") || "").trim(),
+    lastName: (row.get("Nazwisko / Last Name") || "").trim(),
+    email: (row.get("Email") || "").trim(),
+    status: (row.get("Status wysyłki") || "").trim(),
+    dateOfBirth: (row.get("Data urodzenia / Date of Birth") || "").trim(),
+    reminderStatus: (row.get("Status przypomnienia DOB") || "").trim(),
+  };
+}
+
 export async function markDobReminderAsSent(ticketId: string): Promise<void> {
   const doc = await getDoc();
   const sheet = doc.sheetsByTitle[SHEET_TITLE];
@@ -417,6 +441,23 @@ export async function markDobReminderAsSent(ticketId: string): Promise<void> {
     matchingRows[matchingRows.length - 1];
 
   if (!row) throw new Error(`Ticket ${ticketId} not found`);
+
+  row.set("Status przypomnienia DOB", "Sent");
+  await row.save();
+}
+
+export async function markDobReminderAsSentBySheetRow(sheetRow: number): Promise<void> {
+  if (!Number.isInteger(sheetRow) || sheetRow < 2) {
+    throw new Error(`Invalid sheet row: ${sheetRow}`);
+  }
+
+  const doc = await getDoc();
+  const sheet = doc.sheetsByTitle[SHEET_TITLE];
+  if (!sheet) throw new Error("Registration sheet not found");
+
+  const rows = await sheet.getRows();
+  const row = rows.find((r) => r.rowNumber === sheetRow);
+  if (!row) throw new Error(`Sheet row ${sheetRow} not found`);
 
   row.set("Status przypomnienia DOB", "Sent");
   await row.save();

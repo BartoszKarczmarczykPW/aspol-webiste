@@ -2,13 +2,16 @@ import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { createElement } from "react";
 import {
+  getPPFDobReminderRegistrationBySheetRow,
   getPPFDobReminderRegistrationByTicketId,
+  markDobReminderAsSentBySheetRow,
   markDobReminderAsSent,
 } from "@/lib/google-sheets";
 import { PPFDobReminderTemplate } from "@/components/emails/PPFDobReminderTemplate";
 
 interface RequestBody {
   ticketId?: unknown;
+  sheetRow?: unknown;
   secret?: unknown;
 }
 
@@ -40,10 +43,24 @@ export async function POST(req: NextRequest) {
     }
 
     const cleanTicketId = body.ticketId.trim();
-    const registration = await getPPFDobReminderRegistrationByTicketId(cleanTicketId);
+    const parsedSheetRow =
+      typeof body.sheetRow === "number" && Number.isInteger(body.sheetRow) && body.sheetRow >= 2
+        ? body.sheetRow
+        : null;
+
+    const registration = parsedSheetRow
+      ? await getPPFDobReminderRegistrationBySheetRow(parsedSheetRow)
+      : await getPPFDobReminderRegistrationByTicketId(cleanTicketId);
 
     if (!registration) {
       return NextResponse.json({ error: "Registration not found" }, { status: 404 });
+    }
+
+    if (registration.ticketId !== cleanTicketId) {
+      return NextResponse.json(
+        { error: "Ticket ID does not match selected sheet row" },
+        { status: 409 }
+      );
     }
 
     if (registration.status !== "Accepted") {
@@ -96,7 +113,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Failed to send email" }, { status: 500 });
     }
 
-    await markDobReminderAsSent(cleanTicketId);
+    if (parsedSheetRow) {
+      await markDobReminderAsSentBySheetRow(parsedSheetRow);
+    } else {
+      await markDobReminderAsSent(cleanTicketId);
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {
