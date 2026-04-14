@@ -4,6 +4,7 @@ import { z } from "zod";
 import { headers } from "next/headers";
 import { Resend } from "resend";
 import { nanoid } from "nanoid";
+import countriesData from "world-countries";
 import { PPFAdminNotificationTemplate } from "@/components/emails/PPFAdminNotificationTemplate";
 import {
   addPPFRegistration,
@@ -22,6 +23,33 @@ const MIN_FORM_FILL_MS = 2000; // 2 seconds minimum
 // --- Rate limiting (in-memory) ---
 type RateLimitEntry = { count: number; resetAt: number };
 const rateLimitStore = new Map<string, RateLimitEntry>();
+
+function normalizeCountryName(value: string): string {
+  return value
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, " ");
+}
+
+const ALLOWED_COUNTRY_NAMES = new Set<string>(
+  countriesData.flatMap((country) => {
+    const names = [country.name?.common, country.name?.official];
+
+    if (country.translations && typeof country.translations === "object") {
+      for (const translation of Object.values(country.translations)) {
+        if (translation && typeof translation === "object") {
+          names.push(translation.common, translation.official);
+        }
+      }
+    }
+
+    return names
+      .filter((name): name is string => typeof name === "string" && name.trim().length > 0)
+      .map(normalizeCountryName);
+  })
+);
 
 const getClientIp = async () => {
   const requestHeaders = await headers();
@@ -56,6 +84,11 @@ const PPFSchema = z.object({
   dateOfBirth: z
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/, "Please provide a valid date of birth"),
+  countryOfBirth: z
+    .string()
+    .trim()
+    .min(2, "Please select your country of birth")
+    .refine((value) => ALLOWED_COUNTRY_NAMES.has(normalizeCountryName(value)), "Please select a country from the list"),
   ticketType: z.enum(["saturday-only", "both-days"], {
     error: "Please select a ticket type",
   }),
@@ -103,6 +136,7 @@ export async function registerForPPF(
     lastName: formData.get("lastName"),
     email: formData.get("email"),
     dateOfBirth: formData.get("dateOfBirth"),
+    countryOfBirth: formData.get("countryOfBirth"),
     ticketType: formData.get("ticketType"),
     phone: formData.get("phone") || undefined,
     university: formData.get("university") || undefined,
@@ -141,7 +175,7 @@ export async function registerForPPF(
   }
 
   const {
-    firstName, lastName, email, dateOfBirth, ticketType,
+    firstName, lastName, email, dateOfBirth, countryOfBirth, ticketType,
     phone, university, fieldOfStudy, howDidYouHear,
     citizenship, professionalStatus, returnPlans,
   } = validatedFields.data;
@@ -185,6 +219,7 @@ export async function registerForPPF(
       lastName,
       email,
       dateOfBirth,
+      countryOfBirth,
       ticketType: ticketType as TicketType,
       phone,
       university,

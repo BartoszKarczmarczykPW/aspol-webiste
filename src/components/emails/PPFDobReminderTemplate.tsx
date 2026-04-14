@@ -13,7 +13,7 @@ export function PPFDobReminderTemplate({
   ticketId,
   formUrl,
 }: PPFDobReminderTemplateProps) {
-  const preheader = `PPF 2026 missing date of birth - ${ticketId}`;
+  const preheader = `PPF 2026 required security details missing - ${ticketId}`;
 
   return (
     <div
@@ -150,8 +150,35 @@ export function PPFDobReminderTemplate({
               Action required before event entry
             </p>
             <p style={{ margin: "6px 0 0", fontSize: 13, color: "#881337", lineHeight: 1.6 }}>
-              Completing date of birth is mandatory to be allowed entry to the Embassy.
+              Please complete your date of birth and country of birth for security reasons.
+              This is mandatory for Embassy access.
             </p>
+
+            <div
+              style={{
+                marginTop: 10,
+                backgroundColor: "#7f1d1d",
+                border: "1px solid #991b1b",
+                borderRadius: 10,
+                padding: "10px 12px",
+              }}
+            >
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: 12,
+                  fontWeight: 800,
+                  letterSpacing: 0.3,
+                  color: "#ffffff",
+                  textTransform: "uppercase",
+                }}
+              >
+                Deadline: Tomorrow 12:00 (Paris time)
+              </p>
+              <p style={{ margin: "6px 0 0", fontSize: 12, color: "#fee2e2", lineHeight: 1.5 }}>
+                PL: Termin: jutro o 12:00 (czas paryski) | FR: Date limite: demain a 12:00 (heure de Paris)
+              </p>
+            </div>
 
             <table style={{ width: "100%", marginTop: 12, borderCollapse: "separate" }}>
               <tbody>
@@ -176,7 +203,7 @@ export function PPFDobReminderTemplate({
                         letterSpacing: 0.2,
                       }}
                     >
-                      Complete Date of Birth Now
+                      Complete Required Details Now
                     </a>
                   </td>
                 </tr>
@@ -192,8 +219,8 @@ export function PPFDobReminderTemplate({
           </div>
 
           <p style={{ margin: "18px 0 0", color: "#334155", lineHeight: 1.65, fontSize: 13 }}>
-            We need your date of birth to finalize your access list for the event at the Polish Embassy in Paris.
-            Please complete this short form as soon as possible.
+            We need your date of birth and country of birth to finalize your access list for the event at the Polish Embassy in Paris.
+            For security reasons, both fields are mandatory.
           </p>
 
           <div
@@ -235,14 +262,19 @@ export function PPFDobReminderTemplate({
           <div style={{ borderTop: "1px solid #e2e8f0", margin: "22px 0 0" }} />
 
           <p style={{ margin: "18px 0 0", fontSize: 13, color: "#334155", lineHeight: 1.65 }}>
+            <span style={{ fontWeight: 700 }}>EN:</span>{" "}
+            Please provide your date of birth and country of birth for security reasons.
+            Deadline: tomorrow at 12:00 (Paris time).
+          </p>
+          <p style={{ margin: "8px 0 0", fontSize: 13, color: "#334155", lineHeight: 1.65 }}>
             <span style={{ fontWeight: 700 }}>PL:</span>{" "}
-            Potrzebujemy Twojej daty urodzenia, aby domknac liste uczestnikow do Ambasady RP.
-            Uzupelnij krotki formularz powyzej. To jest obowiazkowe, aby moc wejsc do Ambasady.
+            Potrzebujemy daty urodzenia i kraju urodzenia ze wzgledow bezpieczenstwa.
+            Deadline: jutro o 12:00 (czas paryski).
           </p>
           <p style={{ margin: "8px 0 0", fontSize: 13, color: "#334155", lineHeight: 1.65 }}>
             <span style={{ fontWeight: 700 }}>FR:</span>{" "}
-            Nous avons besoin de votre date de naissance pour finaliser la liste d&apos;acces a l&apos;Ambassade de Pologne.
-            Merci de completer le court formulaire ci-dessus. Cette information est obligatoire pour pouvoir entrer a l&apos;Ambassade.
+            Nous avons besoin de votre date de naissance et de votre pays de naissance pour des raisons de securite.
+            Date limite: demain a 12:00 (heure de Paris).
           </p>
 
           <div

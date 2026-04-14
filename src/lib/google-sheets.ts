@@ -109,10 +109,12 @@ const HEADERS = [
   "Data rejestracji / Registration Date",
   "Status przypomnienia DOB",
   "Data urodzenia / Date of Birth",
+  "Kraj urodzenia / Country of Birth",
 ];
 
 const REGISTRATION_DATE_HEADER = "Data rejestracji / Registration Date";
 const DOB_HEADER = "Data urodzenia / Date of Birth";
+const COUNTRY_OF_BIRTH_HEADER = "Kraj urodzenia / Country of Birth";
 
 function normalizeForMatch(value: string): string {
   return (value || "")
@@ -149,6 +151,22 @@ function normalizeDobCellValue(value: unknown): string {
   return cleaned;
 }
 
+function normalizeCountryOfBirthCellValue(value: unknown): string {
+  const cleaned = toCellString(value)
+    .replace(/[\u200B-\u200D\uFEFF]/g, "")
+    .replace(/^'+/, "")
+    .trim();
+
+  if (!cleaned) return "";
+
+  const lowered = cleaned.toLowerCase();
+  if (["-", "--", "—", "n/a", "na", "none", "null", "undefined", "brak"].includes(lowered)) {
+    return "";
+  }
+
+  return cleaned;
+}
+
 function getDobFromRow(row: { get: (key: string) => unknown }): string {
   const lastColumnDob = normalizeDobCellValue(row.get(DOB_HEADER));
   if (lastColumnDob) return lastColumnDob;
@@ -157,8 +175,19 @@ function getDobFromRow(row: { get: (key: string) => unknown }): string {
   return normalizeDobCellValue(row.get(REGISTRATION_DATE_HEADER));
 }
 
+function getCountryOfBirthFromRow(row: { get: (key: string) => unknown }): string {
+  return normalizeCountryOfBirthCellValue(row.get(COUNTRY_OF_BIRTH_HEADER));
+}
+
 function setDobOnRow(row: { set: (key: string, value: string) => void }, dateOfBirth: string): void {
   row.set(DOB_HEADER, dateOfBirth.trim());
+}
+
+function setCountryOfBirthOnRow(
+  row: { set: (key: string, value: string) => void },
+  countryOfBirth: string
+): void {
+  row.set(COUNTRY_OF_BIRTH_HEADER, countryOfBirth.trim());
 }
 
 export type PPFDobBackfillResult =
@@ -182,6 +211,7 @@ export interface PPFDobReminderRegistration {
   email: string;
   status: string;
   dateOfBirth: string;
+  countryOfBirth: string;
   reminderStatus: string;
 }
 
@@ -207,6 +237,7 @@ export async function addPPFRegistration(data: PPFRegistration): Promise<void> {
     "Data rejestracji / Registration Date": data.registrationDate,
     "Status przypomnienia DOB": "",
     "Data urodzenia / Date of Birth": data.dateOfBirth,
+    "Kraj urodzenia / Country of Birth": data.countryOfBirth,
     "Status wysyłki": "Waiting",
   });
 }
@@ -330,12 +361,15 @@ export async function backfillPPFDateOfBirthForAcceptedRegistration(input: {
   lastName: string;
   email: string;
   dateOfBirth: string;
+  countryOfBirth: string;
 }): Promise<PPFDobBackfillResult> {
   const doc = await getDoc();
   const sheet = doc.sheetsByTitle[SHEET_TITLE];
   if (!sheet) {
     return { ok: false, reason: "NOT_FOUND" };
   }
+
+  await ensureSheetHeaders(sheet, HEADERS);
 
   const rows = await sheet.getRows();
   const row = rows.find((r) => (r.get("Ticket ID") || "").trim() === input.ticketId.trim());
@@ -360,6 +394,7 @@ export async function backfillPPFDateOfBirthForAcceptedRegistration(input: {
   }
 
   setDobOnRow(row, input.dateOfBirth);
+  setCountryOfBirthOnRow(row, input.countryOfBirth);
   await row.save();
 
   return { ok: true };
@@ -370,18 +405,21 @@ export async function getAcceptedRegistrationsMissingDob(): Promise<PPFDobRemind
   const sheet = doc.sheetsByTitle[SHEET_TITLE];
   if (!sheet) return [];
 
+  await ensureSheetHeaders(sheet, HEADERS);
+
   const rows = await sheet.getRows();
 
   return rows
     .filter((row) => {
       const status = (row.get("Status wysyłki") || "").trim();
       const dob = getDobFromRow(row);
+      const countryOfBirth = getCountryOfBirthFromRow(row);
       const reminderStatus = (row.get("Status przypomnienia DOB") || "").trim();
       const email = (row.get("Email") || "").trim();
       const ticketId = (row.get("Ticket ID") || "").trim();
       return (
         status === "Accepted" &&
-        !dob &&
+        (!dob || !countryOfBirth) &&
         reminderStatus !== "Sent" &&
         !!email &&
         !!ticketId
@@ -402,6 +440,8 @@ export async function getPPFDobReminderRegistrationByTicketId(
   const sheet = doc.sheetsByTitle[SHEET_TITLE];
   if (!sheet) return null;
 
+  await ensureSheetHeaders(sheet, HEADERS);
+
   const rows = await sheet.getRows();
   const cleanTicketId = ticketId.trim();
   const matchingRows = rows.filter((r) => (r.get("Ticket ID") || "").trim() === cleanTicketId);
@@ -414,11 +454,12 @@ export async function getPPFDobReminderRegistrationByTicketId(
       .find((r) => {
         const status = (r.get("Status wysyłki") || "").trim();
         const dob = getDobFromRow(r);
-        return status === "Accepted" && !dob;
+        const countryOfBirth = getCountryOfBirthFromRow(r);
+        return status === "Accepted" && (!dob || !countryOfBirth);
       }) ||
     [...matchingRows]
       .reverse()
-      .find((r) => !getDobFromRow(r)) ||
+      .find((r) => !getDobFromRow(r) || !getCountryOfBirthFromRow(r)) ||
     matchingRows[matchingRows.length - 1];
 
   if (!row) return null;
@@ -430,6 +471,7 @@ export async function getPPFDobReminderRegistrationByTicketId(
     email: (row.get("Email") || "").trim(),
     status: (row.get("Status wysyłki") || "").trim(),
     dateOfBirth: getDobFromRow(row),
+    countryOfBirth: getCountryOfBirthFromRow(row),
     reminderStatus: (row.get("Status przypomnienia DOB") || "").trim(),
   };
 }
@@ -443,6 +485,8 @@ export async function getPPFDobReminderRegistrationBySheetRow(
   const sheet = doc.sheetsByTitle[SHEET_TITLE];
   if (!sheet) return null;
 
+  await ensureSheetHeaders(sheet, HEADERS);
+
   const rows = await sheet.getRows();
   const row = rows.find((r) => r.rowNumber === sheetRow);
   if (!row) return null;
@@ -454,6 +498,7 @@ export async function getPPFDobReminderRegistrationBySheetRow(
     email: (row.get("Email") || "").trim(),
     status: (row.get("Status wysyłki") || "").trim(),
     dateOfBirth: getDobFromRow(row),
+    countryOfBirth: getCountryOfBirthFromRow(row),
     reminderStatus: (row.get("Status przypomnienia DOB") || "").trim(),
   };
 }
@@ -462,6 +507,8 @@ export async function markDobReminderAsSent(ticketId: string): Promise<void> {
   const doc = await getDoc();
   const sheet = doc.sheetsByTitle[SHEET_TITLE];
   if (!sheet) throw new Error("Registration sheet not found");
+
+  await ensureSheetHeaders(sheet, HEADERS);
 
   const rows = await sheet.getRows();
   const cleanTicketId = ticketId.trim();
@@ -472,7 +519,8 @@ export async function markDobReminderAsSent(ticketId: string): Promise<void> {
       .find((r) => {
         const status = (r.get("Status wysyłki") || "").trim();
         const dob = getDobFromRow(r);
-        return status === "Accepted" && !dob;
+        const countryOfBirth = getCountryOfBirthFromRow(r);
+        return status === "Accepted" && (!dob || !countryOfBirth);
       }) ||
     matchingRows[matchingRows.length - 1];
 
@@ -490,6 +538,8 @@ export async function markDobReminderAsSentBySheetRow(sheetRow: number): Promise
   const doc = await getDoc();
   const sheet = doc.sheetsByTitle[SHEET_TITLE];
   if (!sheet) throw new Error("Registration sheet not found");
+
+  await ensureSheetHeaders(sheet, HEADERS);
 
   const rows = await sheet.getRows();
   const row = rows.find((r) => r.rowNumber === sheetRow);

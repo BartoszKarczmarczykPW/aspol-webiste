@@ -45,7 +45,7 @@ export function PPFConfirmationTemplate({
 
   const saturdayAfternoonAgenda = [
     "14:00-14:30 Reception and Reception (welcome coffee & croissants)",
-    "14:30-14:45 Official Opening of the Day Two (welcome speech of the embassy representative Chief of Economic Section at Polish Embassy in Paris - Błazkiewicz Jakub; ASPOL presidents: Zofia Gostkowska, Kacper Pabisz)",
+    "14:30-14:45 Official Opening of the Day Two (welcome speech of the embassy representative Chief of Economic Section at Polish Embassy in Paris - Blatkiewicz Jakub; ASPOL presidents: Zofia Gostkowska, Kacper Pabisz)",
     "14:45-16:00 The War of Words: Disinformation, Propaganda, and Information Security (discussion on the role of disinformation and propaganda in contemporary societies and their impact on the stability of democracy; speakers: Maja Czarnecka, Philippe Moreau-Chevrolet, Michał Piękoś, Aleksandra Kielan; moderator: Klara Winiarczyk)",
     "16:00-16:30 Refreshments (hot drinks: tea/coffee)",
     "16:35-17:00 Fireside Chat with Ambassador Wiesław Tarka",

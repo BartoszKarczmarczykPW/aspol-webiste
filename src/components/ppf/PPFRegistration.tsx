@@ -68,6 +68,8 @@ const t = {
     lastName: "Last Name",
     email: "Email",
     dateOfBirth: "Date of Birth",
+    countryOfBirthLabel: "Country of Birth",
+    countryOfBirthSearchPlaceholder: "Search country of birth",
     phone: "Phone",
     optional: "optional",
     academicInfo: "Academic Information",
@@ -136,6 +138,8 @@ const t = {
     lastName: "Nom",
     email: "Email",
     dateOfBirth: "Date de naissance",
+    countryOfBirthLabel: "Pays de naissance",
+    countryOfBirthSearchPlaceholder: "Rechercher pays de naissance",
     phone: "Téléphone",
     optional: "optionnel",
     academicInfo: "Informations académiques",
@@ -204,6 +208,8 @@ const t = {
     lastName: "Nazwisko",
     email: "Email",
     dateOfBirth: "Data urodzenia",
+    countryOfBirthLabel: "Kraj urodzenia",
+    countryOfBirthSearchPlaceholder: "Szukaj kraju urodzenia",
     phone: "Telefon",
     optional: "opcjonalnie",
     academicInfo: "Informacje o profilu",
@@ -260,7 +266,7 @@ function CountryFlag({ code }: { code: string }) {
   if (!Flag) {
     return <span className="inline-flex items-center justify-center w-4 text-[10px] font-semibold text-gray-500">{code.toUpperCase()}</span>;
   }
-  return <Flag className="w-4 h-3 rounded-[2px] shadow-[0_0_0_1px_rgba(0,0,0,0.08)]" aria-hidden="true" />;
+  return <Flag className="w-4 h-3 rounded-xs shadow-[0_0_0_1px_rgba(0,0,0,0.08)]" aria-hidden="true" />;
 }
 
 // ─── Main component ───────────────────────────────────────────
@@ -318,6 +324,27 @@ export default function PPFRegistration() {
     return [...pinnedOptions, ...rest];
   }, [countryMetaMap]);
 
+  const birthCountryOptions = useMemo(() => {
+    const toCountryName = (countryCode: CountryCode) => {
+      const meta = countryMetaMap.get(countryCode);
+
+      return {
+        countryCode,
+        label: meta?.countryName || countryCode,
+        isPinned: PINNED_COUNTRY_CODES.includes(countryCode),
+      };
+    };
+
+    const pinnedOptions = PINNED_COUNTRY_CODES.map(toCountryName);
+
+    const rest = getCountries()
+      .filter((countryCode) => !PINNED_COUNTRY_CODES.includes(countryCode))
+      .map(toCountryName)
+      .sort((a, b) => a.label.localeCompare(b.label, "en"));
+
+    return [...pinnedOptions, ...rest];
+  }, [countryMetaMap]);
+
   const [spots, setSpots] = useState<PPFSpotsData | null>(null);
   const [ticketType, setTicketType] = useState<"saturday-only" | "both-days" | "">("");
   const [gdprConsent, setGdprConsent] = useState<"accept" | "reject" | "">("");
@@ -330,12 +357,17 @@ export default function PPFRegistration() {
   const [citizenshipQuery, setCitizenshipQuery] = useState("");
   const [isCitizenshipOpen, setIsCitizenshipOpen] = useState(false);
   const [activeCitizenshipIndex, setActiveCitizenshipIndex] = useState(0);
+  const [selectedCountryOfBirth, setSelectedCountryOfBirth] = useState("");
+  const [countryOfBirthQuery, setCountryOfBirthQuery] = useState("");
+  const [isCountryOfBirthOpen, setIsCountryOfBirthOpen] = useState(false);
+  const [activeCountryOfBirthIndex, setActiveCountryOfBirthIndex] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [result, setResult] = useState<PPFRegistrationState | null>(null);
   const [mounted, setMounted] = useState(false);
   const formStartRef = useRef<number>(0);
   const phoneCountryDropdownRef = useRef<HTMLDivElement>(null);
   const citizenshipDropdownRef = useRef<HTMLDivElement>(null);
+  const countryOfBirthDropdownRef = useRef<HTMLDivElement>(null);
 
   const noResultsLabel = lang === "pl" ? "Brak wyników" : lang === "fr" ? "Aucun résultat" : "No results";
   const pinnedLabel = lang === "pl" ? "Wyróżnione" : lang === "fr" ? "Épinglés" : "Pinned";
@@ -362,6 +394,16 @@ export default function PPFRegistration() {
     );
   }, [citizenshipOptions, citizenshipQuery]);
 
+  const filteredBirthCountryOptions = useMemo(() => {
+    const query = countryOfBirthQuery.trim().toLowerCase();
+    if (!query) return birthCountryOptions;
+    return birthCountryOptions.filter(
+      (opt) =>
+        opt.label.toLowerCase().includes(query) ||
+        opt.countryCode.toLowerCase().includes(query)
+    );
+  }, [birthCountryOptions, countryOfBirthQuery]);
+
   const filteredPinnedPhoneCountryOptions = useMemo(
     () => filteredPhoneCountryOptions.filter((opt) => opt.isPinned),
     [filteredPhoneCountryOptions]
@@ -382,6 +424,16 @@ export default function PPFRegistration() {
     [filteredCitizenshipOptions]
   );
 
+  const filteredPinnedBirthCountryOptions = useMemo(
+    () => filteredBirthCountryOptions.filter((opt) => opt.isPinned),
+    [filteredBirthCountryOptions]
+  );
+
+  const filteredOtherBirthCountryOptions = useMemo(
+    () => filteredBirthCountryOptions.filter((opt) => !opt.isPinned),
+    [filteredBirthCountryOptions]
+  );
+
   const selectedPhoneCountryOption = useMemo(
     () => phoneCountryOptions.find((opt) => opt.dialCode === phoneCountryCode) || phoneCountryOptions[0],
     [phoneCountryOptions, phoneCountryCode]
@@ -397,6 +449,11 @@ export default function PPFRegistration() {
     [activeCitizenshipIndex, filteredCitizenshipOptions.length]
   );
 
+  const safeActiveBirthCountryIndex = useMemo(
+    () => Math.min(activeCountryOfBirthIndex, Math.max(0, filteredBirthCountryOptions.length - 1)),
+    [activeCountryOfBirthIndex, filteredBirthCountryOptions.length]
+  );
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Node;
@@ -405,6 +462,9 @@ export default function PPFRegistration() {
       }
       if (citizenshipDropdownRef.current && !citizenshipDropdownRef.current.contains(target)) {
         setIsCitizenshipOpen(false);
+      }
+      if (countryOfBirthDropdownRef.current && !countryOfBirthDropdownRef.current.contains(target)) {
+        setIsCountryOfBirthOpen(false);
       }
     };
 
@@ -503,6 +563,10 @@ export default function PPFRegistration() {
     setCitizenshipQuery("");
     setIsCitizenshipOpen(false);
     setActiveCitizenshipIndex(0);
+    setSelectedCountryOfBirth("");
+    setCountryOfBirthQuery("");
+    setIsCountryOfBirthOpen(false);
+    setActiveCountryOfBirthIndex(0);
     formStartRef.current = Date.now();
   };
 
@@ -579,6 +643,44 @@ export default function PPFRegistration() {
 
     if (e.key === "Escape") {
       setIsCitizenshipOpen(false);
+    }
+  };
+
+  const handleCountryOfBirthSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      if (!isCountryOfBirthOpen) {
+        setIsCountryOfBirthOpen(true);
+        setActiveCountryOfBirthIndex(0);
+        return;
+      }
+      setActiveCountryOfBirthIndex((prev) => Math.min(prev + 1, filteredBirthCountryOptions.length - 1));
+      return;
+    }
+
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      if (!isCountryOfBirthOpen) {
+        setIsCountryOfBirthOpen(true);
+        setActiveCountryOfBirthIndex(Math.max(0, filteredBirthCountryOptions.length - 1));
+        return;
+      }
+      setActiveCountryOfBirthIndex((prev) => Math.max(prev - 1, 0));
+      return;
+    }
+
+    if (e.key === "Enter" && isCountryOfBirthOpen && filteredBirthCountryOptions.length > 0) {
+      e.preventDefault();
+      const selected = filteredBirthCountryOptions[safeActiveBirthCountryIndex];
+      if (selected) {
+        setSelectedCountryOfBirth(selected.label);
+        setIsCountryOfBirthOpen(false);
+      }
+      return;
+    }
+
+    if (e.key === "Escape") {
+      setIsCountryOfBirthOpen(false);
     }
   };
 
@@ -927,6 +1029,123 @@ export default function PPFRegistration() {
                     )}
                   </div>
 
+                  {/* Country of Birth */}
+                  <div>
+                    <label htmlFor="countryOfBirthSearch" className="block text-sm font-medium text-gray-700 mb-1.5">
+                      {tr.countryOfBirthLabel} <span className="text-aspol-red">*</span>
+                    </label>
+                    <div ref={countryOfBirthDropdownRef}>
+                      <input
+                        id="countryOfBirthSearch"
+                        type="text"
+                        value={countryOfBirthQuery}
+                        onChange={(e) => {
+                          setCountryOfBirthQuery(e.target.value);
+                          setIsCountryOfBirthOpen(true);
+                          setActiveCountryOfBirthIndex(0);
+                        }}
+                        onKeyDown={handleCountryOfBirthSearchKeyDown}
+                        placeholder={tr.countryOfBirthSearchPlaceholder}
+                        className="w-full px-3 py-2 mb-2 rounded-lg border border-gray-200 bg-white focus:ring-2 focus:ring-aspol-red/20 focus:border-aspol-red text-sm text-gray-800 placeholder:text-gray-400"
+                      />
+                      <input type="hidden" name="countryOfBirth" value={selectedCountryOfBirth} />
+                      <div className="relative">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setIsCountryOfBirthOpen((prev) => !prev);
+                            setActiveCountryOfBirthIndex(0);
+                          }}
+                          className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 hover:bg-white focus:ring-2 focus:ring-aspol-red/20 focus:border-aspol-red transition-all text-gray-900 text-left flex items-center justify-between"
+                        >
+                          <span className={`truncate inline-flex items-center gap-2 ${selectedCountryOfBirth ? "text-gray-900" : "text-gray-400"}`}>
+                            {selectedCountryOfBirth && (
+                              <CountryFlag
+                                code={
+                                  birthCountryOptions.find((opt) => opt.label === selectedCountryOfBirth)?.countryCode || "PL"
+                                }
+                              />
+                            )}
+                            <span>{selectedCountryOfBirth || tr.selectSource}</span>
+                          </span>
+                          <svg className={`w-4 h-4 text-gray-500 transition-transform ${isCountryOfBirthOpen ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25L12 15.75 4.5 8.25" />
+                          </svg>
+                        </button>
+                        {isCountryOfBirthOpen && (
+                          <div className="absolute z-30 mt-2 w-full rounded-xl border border-gray-200 bg-white shadow-xl max-h-72 overflow-y-auto">
+                            {filteredBirthCountryOptions.length === 0 ? (
+                              <div className="px-3 py-2 text-sm text-gray-500">
+                                {noResultsLabel}
+                              </div>
+                            ) : (
+                              <>
+                                {filteredPinnedBirthCountryOptions.length > 0 && (
+                                  <>
+                                    <div className="px-3 py-2 text-[11px] font-bold tracking-wide uppercase text-gray-400 bg-gray-50 sticky top-0">
+                                      {pinnedLabel}
+                                    </div>
+                                    {filteredPinnedBirthCountryOptions.map((opt) => {
+                                      const optionIndex = filteredBirthCountryOptions.findIndex(
+                                        (candidate) => candidate.countryCode === opt.countryCode
+                                      );
+                                      return (
+                                        <button
+                                          key={`birth-${opt.countryCode}`}
+                                          type="button"
+                                          onMouseEnter={() => setActiveCountryOfBirthIndex(optionIndex)}
+                                          onClick={() => {
+                                            setSelectedCountryOfBirth(opt.label);
+                                            setIsCountryOfBirthOpen(false);
+                                          }}
+                                          className={`w-full px-3 py-2 text-left text-sm transition-colors inline-flex items-center gap-2 ${selectedCountryOfBirth === opt.label ? "text-aspol-red font-semibold" : "text-gray-700"} ${safeActiveBirthCountryIndex === optionIndex ? "bg-aspol-red/10" : "hover:bg-gray-50"}`}
+                                        >
+                                          <CountryFlag code={opt.countryCode} />
+                                          <span>{opt.label}</span>
+                                        </button>
+                                      );
+                                    })}
+                                  </>
+                                )}
+
+                                {filteredOtherBirthCountryOptions.length > 0 && (
+                                  <>
+                                    <div className="px-3 py-2 text-[11px] font-bold tracking-wide uppercase text-gray-400 bg-gray-50 sticky top-0">
+                                      {allCountriesLabel}
+                                    </div>
+                                    {filteredOtherBirthCountryOptions.map((opt) => {
+                                      const optionIndex = filteredBirthCountryOptions.findIndex(
+                                        (candidate) => candidate.countryCode === opt.countryCode
+                                      );
+                                      return (
+                                        <button
+                                          key={`birth-${opt.countryCode}`}
+                                          type="button"
+                                          onMouseEnter={() => setActiveCountryOfBirthIndex(optionIndex)}
+                                          onClick={() => {
+                                            setSelectedCountryOfBirth(opt.label);
+                                            setIsCountryOfBirthOpen(false);
+                                          }}
+                                          className={`w-full px-3 py-2 text-left text-sm transition-colors inline-flex items-center gap-2 ${selectedCountryOfBirth === opt.label ? "text-aspol-red font-semibold" : "text-gray-700"} ${safeActiveBirthCountryIndex === optionIndex ? "bg-aspol-red/10" : "hover:bg-gray-50"}`}
+                                        >
+                                          <CountryFlag code={opt.countryCode} />
+                                          <span>{opt.label}</span>
+                                        </button>
+                                      );
+                                    })}
+                                  </>
+                                )}
+                              </>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    {result?.errors?.countryOfBirth && (
+                      <p className="text-red-500 text-sm mt-1.5">{result.errors.countryOfBirth[0]}</p>
+                    )}
+                  </div>
+
                   {/* Phone */}
                   <div>
                     <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1.5">
@@ -1223,7 +1442,7 @@ export default function PPFRegistration() {
                       ].map((opt) => (
                         <label
                           key={opt.id}
-                          className="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:border-aspol-red/30 hover:bg-aspol-red/5 cursor-pointer transition-all has-[:checked]:border-aspol-red has-[:checked]:bg-aspol-red/5"
+                          className="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:border-aspol-red/30 hover:bg-aspol-red/5 cursor-pointer transition-all has-checked:border-aspol-red has-checked:bg-aspol-red/5"
                         >
                           <input
                             type="radio"
@@ -1251,7 +1470,7 @@ export default function PPFRegistration() {
                       ].map((opt) => (
                         <label
                           key={opt.id}
-                          className="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:border-aspol-red/30 hover:bg-aspol-red/5 cursor-pointer transition-all has-[:checked]:border-aspol-red has-[:checked]:bg-aspol-red/5"
+                          className="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:border-aspol-red/30 hover:bg-aspol-red/5 cursor-pointer transition-all has-checked:border-aspol-red has-checked:bg-aspol-red/5"
                         >
                           <input
                             type="radio"

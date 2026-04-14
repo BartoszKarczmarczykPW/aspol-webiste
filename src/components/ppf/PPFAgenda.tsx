@@ -175,7 +175,7 @@ const content: Record<SupportedLanguage, AgendaContent> = {
           {
             time: "14:30-14:45",
             title: "Official Opening of Day Two",
-            subtitle: "Welcome speech of the embassy representative Chief of Economic Section at Polish Embassy in Paris - Błazkiewicz Jakub and ASPOL presidents: Zofia Gostkowska, Kacper Pabisz",
+            subtitle: "Welcome speech of the embassy representative Chief of Economic Section at Polish Embassy in Paris - Blatkiewicz Jakub and ASPOL presidents: Zofia Gostkowska, Kacper Pabisz",
           },
           {
             time: "14:45-16:00",

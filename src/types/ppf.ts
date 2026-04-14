@@ -5,6 +5,7 @@ export interface PPFRegistration {
   lastName: string;
   email: string;
   dateOfBirth: string;
+  countryOfBirth: string;
   ticketType: TicketType;
   phone?: string;
   university?: string;
@@ -42,6 +43,7 @@ export interface PPFRegistrationState {
     lastName?: string[];
     email?: string[];
     dateOfBirth?: string[];
+    countryOfBirth?: string[];
     ticketType?: string[];
     citizenship?: string[];
     professionalStatus?: string[];
@@ -60,6 +62,7 @@ export interface PPFDobBackfillState {
     lastName?: string[];
     email?: string[];
     dateOfBirth?: string[];
+    countryOfBirth?: string[];
     dataProcessingConsent?: string[];
     _form?: string[];
   };
