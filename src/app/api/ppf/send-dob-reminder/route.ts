@@ -70,20 +70,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if (registration.dateOfBirth) {
-      return NextResponse.json(
-        { error: "Date of birth already provided for this registration" },
-        { status: 409 }
-      );
-    }
-
-    if (registration.reminderStatus === "Sent") {
-      return NextResponse.json(
-        { error: "DOB reminder has already been sent for this registration" },
-        { status: 409 }
-      );
-    }
-
     if (!registration.email) {
       return NextResponse.json({ error: "Recipient email is missing" }, { status: 409 });
     }
