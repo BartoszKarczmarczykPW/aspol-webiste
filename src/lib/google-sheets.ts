@@ -367,7 +367,24 @@ export async function getPPFDobReminderRegistrationByTicketId(
   if (!sheet) return null;
 
   const rows = await sheet.getRows();
-  const row = rows.find((r) => (r.get("Ticket ID") || "").trim() === ticketId.trim());
+  const cleanTicketId = ticketId.trim();
+  const matchingRows = rows.filter((r) => (r.get("Ticket ID") || "").trim() === cleanTicketId);
+  if (matchingRows.length === 0) return null;
+
+  // Prefer the newest row that still needs DOB reminder.
+  const row =
+    [...matchingRows]
+      .reverse()
+      .find((r) => {
+        const status = (r.get("Status wysyłki") || "").trim();
+        const dob = (r.get("Data urodzenia / Date of Birth") || "").trim();
+        return status === "Accepted" && !dob;
+      }) ||
+    [...matchingRows]
+      .reverse()
+      .find((r) => !(r.get("Data urodzenia / Date of Birth") || "").trim()) ||
+    matchingRows[matchingRows.length - 1];
+
   if (!row) return null;
 
   return {
@@ -387,7 +404,18 @@ export async function markDobReminderAsSent(ticketId: string): Promise<void> {
   if (!sheet) throw new Error("Registration sheet not found");
 
   const rows = await sheet.getRows();
-  const row = rows.find((r) => (r.get("Ticket ID") || "").trim() === ticketId.trim());
+  const cleanTicketId = ticketId.trim();
+  const matchingRows = rows.filter((r) => (r.get("Ticket ID") || "").trim() === cleanTicketId);
+  const row =
+    [...matchingRows]
+      .reverse()
+      .find((r) => {
+        const status = (r.get("Status wysyłki") || "").trim();
+        const dob = (r.get("Data urodzenia / Date of Birth") || "").trim();
+        return status === "Accepted" && !dob;
+      }) ||
+    matchingRows[matchingRows.length - 1];
+
   if (!row) throw new Error(`Ticket ${ticketId} not found`);
 
   row.set("Status przypomnienia DOB", "Sent");
