@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, useCallback, useMemo, ReactNode } from "react";
+import { createContext, use, useState, useEffect, ReactNode } from "react";
 import { translations, Language } from "@/lib/translations";
 
 const VALID_LANGUAGES: ReadonlySet<string> = new Set(["en", "fr", "pl"]);
@@ -28,16 +28,16 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     document.documentElement.lang = language;
   }, [language]);
 
-  const setLanguage = useCallback((lang: Language) => {
+  const setLanguage = (lang: Language) => {
     setLanguageState(lang);
     localStorage.setItem(STORAGE_KEY, lang);
-  }, []);
+  };
 
-  const value = useMemo<LanguageContextType>(() => ({
+  const value: LanguageContextType = {
     language,
     setLanguage,
     t: translations[language],
-  }), [language, setLanguage]);
+  };
 
   return (
     <LanguageContext.Provider value={value}>
@@ -46,8 +46,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export function useLanguage() {
-  const context = useContext(LanguageContext);
+export function useLanguage(): LanguageContextType {
+  const context = use(LanguageContext);
   if (context === undefined) {
     throw new Error("useLanguage must be used within a LanguageProvider");
   }

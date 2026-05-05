@@ -139,12 +139,6 @@ export default function Header() {
               {t.nav.partners || "Partners"}
             </Link>
             <Link
-              href="/ppf"
-              className="text-sm font-semibold text-white bg-red-600 hover:bg-red-700 px-3 py-1.5 rounded-lg transition-colors tracking-wide"
-            >
-              {t.nav.ppf || "PPF 2026"}
-            </Link>
-            <Link
               href="/#contact"
               className="text-sm font-semibold text-aspol-navy hover:text-aspol-red transition-colors tracking-wide"
             >
@@ -291,13 +285,6 @@ export default function Header() {
                 onClick={closeMobileMenu}
               >
                 {t.nav.partners || "Partners"}
-              </Link>
-              <Link
-                href="/ppf"
-                className="text-base font-bold text-white bg-red-600 hover:bg-red-700 transition-colors px-4 py-3 rounded-lg touch-manipulation active:bg-red-800 text-center"
-                onClick={closeMobileMenu}
-              >
-                {t.nav.ppf || "PPF 2026"}
               </Link>
               <Link
                 href="/#contact"

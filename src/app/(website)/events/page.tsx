@@ -1,16 +1,21 @@
 "use client";
 
-import { useState, useEffect, useRef, useMemo } from "react";
+import dynamic from "next/dynamic";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { getEventCountdown, getEvents } from "@/lib/sanity";
+import { getEvents } from "@/lib/sanity";
 import { Calendar, MapPin, Clock, ArrowRight, ChevronDown, ChevronUp } from "lucide-react";
 import AddToCalendarButton from "@/components/events/AddToCalendarButton";
-import CalendarWidget from "@/components/events/CalendarWidget";
 import SmoothBackground from "@/components/ui/effects/SmoothBackground";
 import { ChevronDownIcon } from "@/components/icons/ChevronDownIcon";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+
+const CalendarWidget = dynamic(() => import("@/components/events/CalendarWidget"), {
+    ssr: false,
+    loading: () => <div className="animate-pulse bg-gray-100 rounded-3xl h-[600px] w-full" />
+});
 
 // Type for Sanity event
 interface SanityEvent {
@@ -40,16 +45,6 @@ interface SanityEvent {
     featured?: boolean;
 }
 
-interface EventCountdownConfig {
-    _id: string;
-    title: string;
-    label: { en: string; fr: string; pl: string };
-    targetDate: string;
-    liveLabel?: { en: string; fr: string; pl: string };
-    completedMessage?: { en: string; fr: string; pl: string };
-    isActive?: boolean;
-    showLiveBadge?: boolean;
-}
 
 type EventsLabels = {
     featured: string;
@@ -67,6 +62,7 @@ function EventCard({ event, t, formatDate, formatTime, language }: {
     language: string;
 }) {
     const [isExpanded, setIsExpanded] = useState(false);
+    const isPastEvent = new Date(event.date) < new Date();
 
     // Extract day and month for the Date Box
     const dateObj = new Date(event.date);
@@ -149,7 +145,7 @@ function EventCard({ event, t, formatDate, formatTime, language }: {
 
                 {/* Action Buttons */}
                 <div className="flex gap-3 mt-auto pt-4 border-t border-gray-100">
-                    {event.registrationLink && (
+                    {event.registrationLink && !isPastEvent && (
                         <a
                             href={event.registrationLink}
                             target="_blank"
@@ -192,6 +188,7 @@ function FeaturedEventCard({ event, t, formatDate, formatTime, language }: {
     language: string;
 }) {
     const [isExpanded, setIsExpanded] = useState(false);
+    const isPastEvent = new Date(event.date) < new Date();
 
     return (
         <article className="group bg-white rounded-3xl border border-gray-100 shadow-md hover:shadow-xl transition-all duration-500 overflow-hidden flex flex-col">
@@ -270,7 +267,7 @@ function FeaturedEventCard({ event, t, formatDate, formatTime, language }: {
                         </div>
                     </div>
                     <div className="flex gap-3 mt-auto">
-                        {event.registrationLink && (
+                        {event.registrationLink && !isPastEvent && (
                             <a
                                 href={event.registrationLink}
                                 target="_blank"
@@ -305,23 +302,6 @@ function FeaturedEventCard({ event, t, formatDate, formatTime, language }: {
     );
 }
 
-/**
- * Pure countdown calculation — hoisted out of the component so it
- * can be called from both the `useState` initialiser and `useEffect`
- * without capturing stale closures.
- */
-function getCountdown(targetTimestamp: number) {
-    const now = new Date();
-    const diff = targetTimestamp - now.getTime();
-    if (diff <= 0) {
-        return { done: true, days: 0, hours: 0, minutes: 0 };
-    }
-    const totalMinutes = Math.floor(diff / 60000);
-    const days = Math.floor(totalMinutes / 1440);
-    const hours = Math.floor((totalMinutes % 1440) / 60);
-    const minutes = totalMinutes % 60;
-    return { done: false, days, hours, minutes };
-}
 
 /**
  * Static i18n labels — hoisted to module level so they are created once,
@@ -398,7 +378,6 @@ function EventsContent() {
     const [filter, setFilter] = useState<"upcoming" | "past">("upcoming");
     const [events, setEvents] = useState<SanityEvent[]>([]);
     const [loading, setLoading] = useState(true);
-    const [countdownConfig, setCountdownConfig] = useState<EventCountdownConfig | null>(null);
 
     const heroRef = useRef<HTMLDivElement>(null);
     useScrollAnimation(heroRef);
@@ -406,12 +385,8 @@ function EventsContent() {
     useEffect(() => {
         async function fetchEvents() {
             try {
-                const [eventsData, countdownData] = await Promise.all([
-                    getEvents(),
-                    getEventCountdown(),
-                ]);
+                const eventsData = await getEvents();
                 setEvents(eventsData);
-                setCountdownConfig(countdownData || null);
             } catch (error) {
                 console.error("Error fetching events:", error);
             } finally {
@@ -421,22 +396,6 @@ function EventsContent() {
         fetchEvents();
     }, []);
 
-    const countdownTargetTimestamp = useMemo(() => {
-        if (countdownConfig?.targetDate) {
-            return new Date(countdownConfig.targetDate).getTime();
-        }
-        return new Date("2026-04-25T00:00:00+02:00").getTime();
-    }, [countdownConfig?.targetDate]);
-
-    const [ppfCountdown, setPpfCountdown] = useState(() => getCountdown(countdownTargetTimestamp));
-
-    useEffect(() => {
-        setPpfCountdown(getCountdown(countdownTargetTimestamp));
-        const id = setInterval(() => {
-            setPpfCountdown(getCountdown(countdownTargetTimestamp));
-        }, 60000);
-        return () => clearInterval(id);
-    }, [countdownTargetTimestamp]);
 
     const t = LABELS[language as keyof typeof LABELS] || LABELS.en;
 
@@ -542,66 +501,6 @@ function EventsContent() {
                                 <p className="text-gray-600 mb-6 leading-relaxed">
                                     {t.heroCardDescription}
                                 </p>
-
-                                {countdownConfig?.isActive !== false && (
-                                    <div className="mb-6 rounded-2xl border border-aspol-navy/10 bg-white/70 p-4 sm:p-5 shadow-sm">
-                                        <div className="flex items-center justify-between gap-3 mb-4">
-                                            <div>
-                                                <p className="text-[0.7rem] font-semibold uppercase tracking-widest text-aspol-navy/60">
-                                                    {countdownConfig?.label?.[language as keyof EventCountdownConfig["label"]] ||
-                                                        (language === "fr"
-                                                            ? "Compte à rebours vers PPF X 2026"
-                                                            : language === "en"
-                                                                ? "Countdown to PPF X 2026"
-                                                                : "Odliczanie do PPF X 2026")}
-                                                </p>
-                                                <p className="text-sm font-semibold text-aspol-navy">
-                                                    {new Date(countdownTargetTimestamp).toLocaleDateString(
-                                                        language === "fr" ? "fr-FR" : language === "pl" ? "pl-PL" : "en-US",
-                                                        { day: "2-digit", month: "2-digit", year: "numeric" }
-                                                    )}
-                                                </p>
-                                            </div>
-                                            {countdownConfig?.showLiveBadge !== false && (
-                                                <span className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-[0.65rem] font-bold uppercase tracking-widest text-aspol-red shadow-sm">
-                                                    <span className="h-1.5 w-1.5 rounded-full bg-aspol-red animate-pulse" />
-                                                    {countdownConfig?.liveLabel?.[language as keyof EventCountdownConfig["label"]] || "Live"}
-                                                </span>
-                                            )}
-                                        </div>
-                                        {ppfCountdown.done ? (
-                                            <div className="rounded-xl bg-white/80 px-4 py-3 text-sm font-semibold text-aspol-navy text-center shadow-sm">
-                                                {countdownConfig?.completedMessage?.[language as keyof EventCountdownConfig["label"]] ||
-                                                    (language === "fr"
-                                                        ? "On commence aujourd’hui !"
-                                                        : language === "en"
-                                                            ? "We start today!"
-                                                            : "Startujemy dziś!")}
-                                            </div>
-                                        ) : (
-                                            <div className="grid grid-cols-3 gap-3 text-center">
-                                                <div className="rounded-2xl bg-white px-3 py-3 shadow-sm border border-gray-100">
-                                                    <div className="text-2xl font-bold text-aspol-navy leading-none">{ppfCountdown.days}</div>
-                                                    <div className="text-[0.65rem] uppercase tracking-widest text-gray-500 mt-1">
-                                                        {language === "fr" ? "jours" : language === "en" ? "days" : "dni"}
-                                                    </div>
-                                                </div>
-                                                <div className="rounded-2xl bg-white px-3 py-3 shadow-sm border border-gray-100">
-                                                    <div className="text-2xl font-bold text-aspol-navy leading-none">{ppfCountdown.hours}</div>
-                                                    <div className="text-[0.65rem] uppercase tracking-widest text-gray-500 mt-1">
-                                                        {language === "fr" ? "h" : language === "en" ? "hrs" : "godz."}
-                                                    </div>
-                                                </div>
-                                                <div className="rounded-2xl bg-white px-3 py-3 shadow-sm border border-gray-100">
-                                                    <div className="text-2xl font-bold text-aspol-navy leading-none">{ppfCountdown.minutes}</div>
-                                                    <div className="text-[0.65rem] uppercase tracking-widest text-gray-500 mt-1">
-                                                        {language === "fr" ? "min" : language === "en" ? "min" : "min"}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                )}
 
                                 <div className="flex flex-wrap gap-3">
                                     <button

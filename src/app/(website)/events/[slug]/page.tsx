@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { use } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,7 +10,11 @@ import { eventsData } from "@/data/eventsData";
 import { useLanguage } from "@/contexts/LanguageContext";
 import RippleButton from "@/components/ui/RippleButton";
 import AddToCalendarButton from "@/components/events/AddToCalendarButton";
-import EventMap from "@/components/events/EventMap";
+
+const EventMap = dynamic(() => import("@/components/events/EventMap"), {
+    ssr: false,
+    loading: () => <div className="bg-gray-100 animate-pulse rounded-2xl w-full h-[300px] mb-8" />
+});
 
 
 interface PageProps {
@@ -106,6 +111,11 @@ function EventDetailContent({ slug }: { slug: string }) {
             </div>
         );
     }
+
+    const now = new Date();
+    const eventEndOfDay = new Date(event.isoDate);
+    eventEndOfDay.setHours(23, 59, 59, 999);
+    const isPastEvent = eventEndOfDay < now;
 
     return (
         <div className="min-h-screen bg-[#FDFDFD] font-sans">
@@ -227,7 +237,7 @@ function EventDetailContent({ slug }: { slug: string }) {
                                     </div>
 
                                     <div className="space-y-3">
-                                        {event.registrationLink ? (
+                                        {event.registrationLink && !isPastEvent ? (
                                             <RippleButton
                                                 href={event.registrationLink}
                                                 className="w-full py-4 bg-aspol-navy text-white font-bold rounded-xl hover:bg-aspol-blue transition-all shadow-lg text-center block"

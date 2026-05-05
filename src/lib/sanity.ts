@@ -147,7 +147,7 @@ export async function getEvents(): Promise<SanityEvent[]> {
     registrationLink,
     tags,
     featured
-  }`)
+  }`, undefined, { next: { tags: ['events'] } })
 }
 
 /** Fetch the active event countdown configuration (singleton). */
@@ -161,7 +161,7 @@ export async function getEventCountdown(): Promise<EventCountdownConfig | null> 
     completedMessage,
     isActive,
     showLiveBadge
-  }`)
+  }`, undefined, { next: { tags: ['eventCountdown'] } })
 }
 
 /** Fetch all blog posts, newest first. */
@@ -178,7 +178,7 @@ export async function getPosts(): Promise<SanityPost[]> {
     tags,
     upcoming,
     featured
-  }`)
+  }`, undefined, { next: { tags: ['blog'] } })
 }
 
 /** Fetch a single event by its slug. Returns `null` when not found. */
@@ -194,7 +194,7 @@ export async function getEventBySlug(slug: string): Promise<SanityEvent | null> 
     registrationLink,
     tags,
     featured
-  }`, { slug })
+  }`, { slug }, { next: { tags: [`event-${slug}`] } })
 }
 
 /** Fetch a single post by its slug (includes sponsors & partners). */
@@ -222,7 +222,7 @@ export async function getPostBySlug(slug: string): Promise<SanityPostDetail | nu
       website,
       "logoUrl": logo.asset->url
     }
-  }`, { slug })
+  }`, { slug }, { next: { tags: [`post-${slug}`] } })
 }
 
 /** Fetch active partners for the carousel. */
@@ -240,7 +240,7 @@ export async function getPartners(): Promise<SanityPartner[]> {
       }
     },
     order
-  }`)
+  }`, undefined, { next: { tags: ['partners'] } })
 }
 
 /** Fetch site-wide statistics (singleton). */
@@ -252,7 +252,7 @@ export async function getStatistics(): Promise<SanityStatistics | null> {
       order,
       label { en, fr, pl }
     }
-  }`)
+  }`, undefined, { next: { tags: ['statistics'] } })
 }
 
 /** Fetch the home-page About section (singleton). */
@@ -269,7 +269,7 @@ export async function getAboutSection(): Promise<SanityAboutSection | null> {
       title { en, fr, pl },
       description { en, fr, pl }
     }
-  }`)
+  }`, undefined, { next: { tags: ['aboutSection'] } })
 }
 
 /** Fetch active initiatives for the home page. */
@@ -281,7 +281,7 @@ export async function getInitiatives(): Promise<SanityInitiative[]> {
     title { en, fr, pl },
     badge { en, fr, pl },
     description { en, fr, pl }
-  }`)
+  }`, undefined, { next: { tags: ['initiatives'] } })
 }
 
 /** Fetch active team members. */
@@ -298,7 +298,7 @@ export async function getTeamMembers(): Promise<SanityTeamMember[]> {
         metadata { lqip, dimensions { width, height } }
       }
     }
-  }`)
+  }`, undefined, { next: { tags: ['teamMembers'] } })
 }
 
 /** Fetch active testimonials. */
@@ -309,5 +309,5 @@ export async function getTestimonials(): Promise<SanityTestimonial[]> {
     role { en, fr, pl },
     text { en, fr, pl },
     year
-  }`)
+  }`, undefined, { next: { tags: ['testimonials'] } })
 }

@@ -1,6 +1,5 @@
 "use client";
 
-import { useMemo } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getPartners } from "@/lib/sanity";
 import { useSanityData } from "@/hooks/useSanityData";
@@ -57,10 +56,8 @@ export default function PartnersLogos() {
     { fallback: [...fallbackPartners] },
   );
 
-  const infinitePartners = useMemo(
-    () => [...partners, ...partners, ...partners, ...partners],
-    [partners],
-  );
+  const safePartners = partners || fallbackPartners;
+  const infinitePartners = [...safePartners, ...safePartners, ...safePartners, ...safePartners];
 
   return (
     <section className="py-12 border-y border-gray-100 bg-white/50 backdrop-blur-sm overflow-hidden" aria-label="Our partners">

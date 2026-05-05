@@ -40,7 +40,7 @@
   --animate-fade-in: fadeIn 0.6s ease-out forwards;
   --animate-blob: blob 7s infinite;
   --animate-ripple: ripple 0.6s ease-out;
-  --animate-scroll: scroll 22s linear infinite;
+  --animate-scroll: scroll 44s linear infinite;
   --animate-gradient-x: gradient-x 15s ease infinite;
   --animate-gradient-y: gradient-y 15s ease infinite;
   --animate-gradient-xy: gradient-xy 15s ease infinite;
@@ -57,6 +57,105 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans);
 }
+
+/* --- UI SMACZKI (Wizualne ulepszenia) --- */
+/* 1. Globalne zaznaczenie tekstu (Selection) w barwach marki */
+::selection {
+  background-color: rgb(144, 12, 21, 0.9); /* aspol-red z alpha */
+  color: #ffffff;
+}
+::-moz-selection {
+  background-color: rgb(144, 12, 21, 0.9);
+  color: #ffffff;
+}
+
+/* 2. Shine sweep effect & 3. Colored Glowing Shadows dla przycisków */
+:where(a, button)[class*="bg-aspol-red"],
+:where(a, button)[class*="bg-aspol-blue"] {
+  position: relative;
+  overflow: hidden;
+}
+:where(a, button)[class*="bg-aspol-"]::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent);
+  transform: skewX(-20deg);
+  transition: none;
+  z-index: 10;
+  pointer-events: none;
+}
+:where(a, button)[class*="bg-aspol-"]:hover::after {
+  left: 200%;
+  transition: all 0.7s ease-in-out;
+}
+:where(a, button)[class*="bg-aspol-red"]:hover {
+  box-shadow: 0 10px 20px -5px rgba(144, 12, 21, 0.4), 0 8px 10px -6px rgba(144, 12, 21, 0.2);
+}
+:where(a, button)[class*="bg-aspol-blue"]:hover {
+  box-shadow: 0 10px 20px -5px rgba(0, 74, 173, 0.4), 0 8px 10px -6px rgba(0, 74, 173, 0.2);
+}
+
+/* 4. Subcelne obramowania (1px rings) i miękkie unoszenie dla kart */
+:where(div, article, aside)[class*="bg-white"][class*="rounded-xl"],
+:where(div, article, aside)[class*="bg-white"][class*="rounded-2xl"],
+:where(div, article, aside)[class*="bg-white"][class*="rounded-3xl"] {
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.04), 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+:where(div, article, aside)[class*="bg-white"][class*="rounded-"]:hover {
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06), 0 12px 25px -5px rgba(0, 0, 0, 0.08);
+  /* Unoszenie jest wyłączone globalnie, aby nie psuć siatki, same cienie załatwiają sprawę premium */
+}
+
+/* 5. Interaktywne zachowanie mikroikon (Lucide) na najechanie */
+:where(a, button):hover svg.lucide {
+  transform: scale(1.1) rotate(-3deg);
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+svg.lucide {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 7. Image Hover Zoom (Powiększanie zdjęć na kartach wydarzeń) */
+:where(article, div)[class*="rounded"] {
+  overflow: hidden;
+}
+:where(article, div)[class*="rounded"]:hover img {
+  transform: scale(1.05);
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+img {
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 8. Animowane podkreślenia dla zwykłych linków w sekcjach tekstowych */
+article a:not([class*="bg-"]):not([class*="btn"]) {
+  position: relative;
+  text-decoration: none;
+  font-weight: 500;
+  color: var(--color-aspol-red);
+}
+article a:not([class*="bg-"]):not([class*="btn"])::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background-color: var(--color-aspol-red);
+  transform-origin: bottom right;
+  transition: transform 0.3s ease-out;
+}
+article a:not([class*="bg-"]):not([class*="btn"]):hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+/* ---------------------------------------- */
 
 /* Skip link for keyboard users */
 .skip-link {
@@ -301,12 +400,6 @@ html {
 
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(180deg, #b91c1c 0%, #991b1b 100%);
-}
-
-/* For Firefox */
-html {
-  scrollbar-width: thin;
-  scrollbar-color: #dc2626 #f1f1f1;
 }
 
 /* Enhanced Focus Styles for Accessibility */
