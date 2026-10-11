@@ -1,6 +1,7 @@
 "use client";
 
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Testimonial } from "@/types";
 import { useSanityData } from "@/hooks/useSanityData";

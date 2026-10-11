@@ -262,7 +262,7 @@ const Team = memo(function Team() {
                 <div className="w-12 h-0.5 bg-gray-100 mb-4"></div>
 
                 <div className="flex items-center justify-center gap-2 text-gray-500 text-xs">
-                  <span className="font-medium text-gray-400">{t.team.board} 2025/26</span>
+                  <span className="font-medium text-gray-400">{t.team.board} 2026/27</span>
                   {member.linkedin && (
                     <>
                       <span className="text-gray-300">•</span>

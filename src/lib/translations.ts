@@ -65,7 +65,7 @@ export const translations = {
     },
     team: {
       title: "Our Board",
-      subtitle: "Meet the dedicated team leading ASPOL 2025/26",
+      subtitle: "Meet the dedicated team leading ASPOL 2026/27",
       president: "President",
       coPresident: "Co-President",
       vicePresident: "Vice President",
@@ -642,7 +642,7 @@ export const translations = {
     },
     team: {
       title: "Notre Bureau",
-      subtitle: "Rencontrez l'équipe dévouée qui dirige ASPOL 2025/26",
+      subtitle: "Rencontrez l'équipe dévouée qui dirige ASPOL 2026/27",
       president: "Président",
       coPresident: "Co-Président",
       vicePresident: "Vice-Président",
@@ -1219,7 +1219,7 @@ export const translations = {
     },
     team: {
       title: "Nasz Zarząd",
-      subtitle: "Poznaj zaangażowany zespół prowadzący ASPOL 2025/26",
+      subtitle: "Poznaj zaangażowany zespół prowadzący ASPOL 2026/27",
       president: "Prezes",
       coPresident: "Współprezes",
       vicePresident: "Wiceprezes",
