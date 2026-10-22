@@ -14,7 +14,7 @@ Nothing has been committed, pushed or deployed. Sanity schema changes exist only
 | Pattern on mdfellows.com | What I took | How it appears on ASPOL |
 |---|---|---|
 | Flat, fully saturated colour fields (periwinkle hero, black sections) instead of gradients | One flat field per section | Hero, Testimonials and inner-page heroes are flat **#004AAD**. The Statistics section and footer are flat **#122348**. Newsletter and the partner CTA are flat **#900c15**. |
-| Giant poster-weight uppercase headlines (Proxima Nova Extrabold, around 42px even on small blocks) | Heavy, slightly extended, uppercase, tight leading | `Archivo` variable font (width axis at 112%, weight 800) through the `.display` classes. |
+| Giant poster-weight uppercase headlines (Proxima Nova Extrabold, around 42px even on small blocks) | Heavy, slightly extended, uppercase, tight leading | System sans stack at weight 800 and 112% stretch through the `.display` classes. |
 | A huge black **dome/arc** that rises over the hero and becomes the next section | Arc as the section transition | The hero photo rises as a dome and widens on scroll. `.dome-top` gives Statistics, Testimonials, Newsletter and the footer a curved top edge. Inner-page heroes get a convex bottom edge. |
 | Pill navigation with a pill CTA ending in a **dark circle with an arrow** | The pill and chip | Floating white pill header. The `Pill` component is the same label plus circular arrow chip, and the arrow swaps on hover. |
 | Rounded white/blue **panels** (~32px radius) with large internal padding | One panel radius | `--radius-panel: 2rem`, and the radius **grows** on hover (to 3 to 3.5rem). |
@@ -58,11 +58,13 @@ Focus ring: `--focus-ring` is brand blue on light backgrounds and flips to white
 
 ### Typography
 
-| Role | Family | Settings |
-|---|---|---|
-| Display | **Archivo** (variable, width axis) via `next/font`, latin and latin-ext (Polish diacritics) | weight 800, `font-stretch` 112%, uppercase, line-height 0.88 to 1, letter-spacing -0.015em, `text-wrap: balance` |
-| Body and UI | **Mulish** (unchanged, the existing Avenir stand-in) | 16 to 18px, line-height 1.6 to 1.7 |
-| Headings in subpages | Archivo, mixed case (`h1`-`h6` map to the display family; `font-serif` is aliased to it) | |
+All text uses the system UI sans-serif stack (`ui-sans-serif, system-ui, sans-serif, …`, i.e. Segoe UI on Windows, San Francisco on Apple devices). No web fonts are loaded, which keeps the site fast. (Archivo/Mulish were briefly wired in via `next/font` and then removed again on request.)
+
+| Role | Settings |
+|---|---|
+| Display (`.display`) | weight 800, `font-stretch` 112%, uppercase, line-height 0.88 to 1, letter-spacing -0.015em, `text-wrap: balance` |
+| Headings in subpages | same family, mixed case (`h1`-`h6` and the `font-serif` utility map to the sans stack) |
+| Body and UI | 16 to 18px, line-height 1.6 to 1.7 |
 
 | Class | Size |
 |---|---|
@@ -70,10 +72,8 @@ Focus ring: `--focus-ring` is brand blue on light backgrounds and flips to white
 | `.display-lg` | `clamp(2.25rem, 6.2vw, 5.75rem)` (section headlines) |
 | `.display-md` | `clamp(1.625rem, 3.4vw, 2.75rem)` |
 | `.display-sm` | `clamp(1.25rem, 2vw, 1.625rem)` (card titles) |
-| Lead / sub-headline | 20 to 24px Archivo bold, sentence case |
-| Body | 16 to 18px Mulish |
-
-Lora was removed (it is no longer loaded). Archivo replaces it, which also saves a font request.
+| Lead / sub-headline | 20 to 24px bold, sentence case |
+| Body | 16 to 18px |
 
 ### Spacing, radii, shadows
 
@@ -104,7 +104,7 @@ Lora was removed (it is no longer loaded). Archivo replaces it, which also saves
 ## 3. Component specs
 
 ### `Pill` (`src/components/ui/Pill.tsx`)
-Label (Archivo 800, uppercase, 14px, +0.04em) with a 43px circular arrow chip.
+Label (weight 800, uppercase, 14px, +0.04em) with a 43px circular arrow chip.
 Variants: `light` (paper pill, dark chip), `dark`, `red`, `blue`, `ghost` (outlined, no chip when `noChip`).
 Renders a Next `<Link>` for internal hrefs, `<a>` for external or `mailto:`, `<button>` otherwise. `PillFace` is a non-interactive version used inside a card that is already a link.
 
@@ -201,7 +201,7 @@ Inner pages:
 
 Removed: the old shine-sweep on buttons, the 3D team-card tilt, the blob and constellation hero background, scroll fade-ups on every section.
 
-Performance notes: only one scroll listener (hero, rAF throttled, passive); everything else is CSS or a one-shot IntersectionObserver. The hero photo is the only `priority` image, with `sizes="100vw"`; all other photos are lazy with explicit `sizes`. Lora (one font) was replaced by Archivo (one variable font).
+Performance notes: only one scroll listener (hero, rAF throttled, passive); everything else is CSS or a one-shot IntersectionObserver. The hero photo is the only `priority` image, with `sizes="100vw"`; all other photos are lazy with explicit `sizes`.
 
 ---
 
@@ -245,7 +245,7 @@ Audited on a local production build (`next build` + `next start`), reading the r
 | `/pathway` and `/ppf` had Open Graph tags without an image; dynamic pages pointed at `og-image.svg` (social crawlers ignore SVG). | One shared `DEFAULT_OG_IMAGE` (1200×630 PNG) in `src/lib/seo.ts`, used everywhere; canonical added for `/pathway`. |
 | Sitemap listed neither `/ppf` nor the nine university guides, and used a bundled blog list that can differ from Sanity (404 URLs). | Sitemap now includes them and builds blog URLs from Sanity (bundled list only as fallback). 30 URLs. |
 | The hero headline stayed invisible until React hydrated (JS-driven reveal), delaying LCP and breaking without JS. | The hero headline uses a CSS-only entrance (`.is-now`); below-the-fold headings keep the observer-based reveal with a `<noscript>` fallback. |
-| The `next/font` variables were set on `<body>`, but the theme variables that use them are declared on `:root`, so **Archivo and Mulish were never applied** (the site rendered in the visitor's system font) and four font files were preloaded anyway. | Font classes moved to `<html>`. Latin and latin-ext subsets are now separate fonts; only the latin files are preloaded (≈120 KB instead of ≈230 KB), latin-ext (Polish/French diacritics) loads on demand. |
+| The `next/font` variables were set on `<body>`, but the theme variables that use them are declared on `:root`, so the web fonts never applied while four font files were still preloaded. | Web fonts removed entirely; the site uses the system font stack (no font requests, nothing to preload). |
 
 Verified in the final HTML: one `<h1>` per page, unique title/description/canonical per route, all `<img>` have `alt` (only decorative ones are empty), valid JSON-LD (Organization, WebSite, Event), `noindex` on the 404, `/studio/` disallowed in robots.txt.
 
@@ -417,7 +417,7 @@ Totals: 182 reviewed, 15 used, 5 shortlisted-unused, 162 rejected.
 
 Modified:
 
-- `src/app/(website)/layout.tsx`: fonts (Archivo replaces Lora, latin-ext added to Mulish), theme colour `#004AAD`, `<noscript>` rule for headline reveal
+- `src/app/(website)/layout.tsx`: Lora and Mulish removed (system font stack), theme colour `#143D73`, `<noscript>` rule for headline reveal
 - `src/app/(website)/globals.css`: tokens, new `@layer components` design layer (display type, pill, dome, reveal, photo-card, nav link, page-in, quote-in), brand-colour focus ring and scrollbar, removed button shine sweep and the global mobile `section` padding
 - `src/app/(website)/page.tsx`: wrapper background to paper (section order unchanged)
 - `src/app/(website)/template.tsx`: route transition now pure CSS
@@ -452,4 +452,4 @@ Not used any more but left in place (safe to delete later): `src/components/ui/e
 - Not tested: real devices, Safari/Firefox, a Lighthouse run, keyboard walk-through of every page, `/ppf` form flow after the hero change, and detail pages (`/blog/[slug]`, `/events/[slug]`, `/pathway/[slug]`) beyond the shared header/footer.
 - The scroll-linked hero is the only scroll listener; remaining motion is CSS or one-shot observers, but Core Web Vitals have not been measured.
 - Hard-coded strings that already existed are untouched (hero badge "Est. 2016 · Paris, France", FAQ and testimonial fallbacks, the "Core Disciplines:" label on `/partners`). New text added by the redesign: only the aria-label of the photo strip ("Moments from our events", also in FR/PL) and the image alt texts.
-- Fonts changed (Lora out, Archivo in). This is a visible typography change beyond the reference's own look; revert is a two-line change in `layout.tsx` and `globals.css`.
+- Fonts: the previous web fonts (Lora, Mulish) were removed; the site uses the system font stack.

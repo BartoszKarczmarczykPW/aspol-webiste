@@ -34,11 +34,11 @@
   --color-aspol-ink-soft: color-mix(in srgb, var(--color-aspol-dark) 72%, var(--color-aspol-white));
 
   /* Font configuration */
-  --font-display: var(--font-archivo-ext), var(--font-archivo), "Archivo", "Arial Narrow", sans-serif;
-  --font-heading: var(--font-archivo-ext), var(--font-archivo), "Archivo", sans-serif;
-  --font-serif: var(--font-archivo-ext), var(--font-archivo), "Archivo", sans-serif;
+  --font-display: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-heading: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-serif: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   /* Stack: Avenir (if available) -> Avenir Next -> Mulish (fallback) */
-  --font-sans: "Avenir", "Avenir Next", var(--font-avenir-ext), var(--font-avenir), "Mulish", sans-serif;
+  --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-inter: var(--font-sans);
   /* Fallback mapping for existing classes */
 

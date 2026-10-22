@@ -1,54 +1,10 @@
 import type { Metadata } from "next";
-import { Archivo, Mulish } from "next/font/google"; // Mulish is an excellent Avenir alternative
 import "./globals.css";
 import Providers from "@/components/providers/Providers";
 import StructuredData from "@/components/seo/StructuredData";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { getAlternates } from "@/lib/seo";
-
-/**
- * Display face: Archivo is a variable family with a width axis, so headlines
- * can run heavy and slightly extended (poster-style type)
- * without loading a second font file. Polish/French diacritics live in the
- * latin-ext subset, which is declared separately with preload off: it is only
- * downloaded when a page actually renders such a glyph, instead of costing every
- * visitor ~120 KB up front. (Its variable comes first in the font stack; with
- * adjustFontFallback off it has no fallback face that could shadow the latin file.)
- */
-const archivo = Archivo({
-  variable: "--font-archivo",
-  subsets: ["latin"],
-  axes: ["wdth"],
-  display: "swap",
-});
-const archivoExt = Archivo({
-  variable: "--font-archivo-ext",
-  subsets: ["latin-ext"],
-  axes: ["wdth"],
-  display: "swap",
-  preload: false,
-  adjustFontFallback: false,
-});
-
-/**
- * Mulish serves as a free Avenir alternative.
- * The CSS variable stays `--font-avenir` so globals.css and Tailwind
- * still reference it, but the JS variable is now honest about the
- * actual typeface being loaded.
- */
-const mulish = Mulish({
-  variable: "--font-avenir",
-  subsets: ["latin"],
-  display: "swap",
-});
-const mulishExt = Mulish({
-  variable: "--font-avenir-ext",
-  subsets: ["latin-ext"],
-  display: "swap",
-  preload: false,
-  adjustFontFallback: false,
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://aspol.fr'),
@@ -112,13 +68,10 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // The next/font variable classes live on <html> so the theme variables declared on :root
-  // in globals.css (e.g. --font-display) can resolve them; on <body> they would be undefined there.
   return (
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${archivo.variable} ${archivoExt.variable} ${mulish.variable} ${mulishExt.variable}`}
     >
       <head>
         <link rel="manifest" href="/manifest.json" />
