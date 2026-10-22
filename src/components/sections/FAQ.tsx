@@ -4,7 +4,8 @@ import { useState, useMemo } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useSiteContent } from "@/contexts/SiteContentContext";
 import { useSanityData } from "@/hooks/useSanityData";
-import { getFaqs } from "@/lib/sanity";
+import { usePrefetch } from "@/contexts/SanityPrefetchContext";
+import { getFaqs, type SanityFaq } from "@/lib/sanity";
 import { FAQItem } from "@/types";
 import Reveal from "@/components/ui/Reveal";
 import Pill from "@/components/ui/Pill";
@@ -95,16 +96,23 @@ export default function FAQ() {
   const { home, text } = useSiteContent();
 
   // FAQ entries come from Sanity when any are published; otherwise the built-in list is used.
-  const { data: cmsFaqs } = useSanityData<FAQItem[] | null>(
+  const prefetch = usePrefetch();
+  const { data: rawFaqs } = useSanityData<SanityFaq[] | null>(
     async () => {
       const data = await getFaqs();
-      if (!Array.isArray(data) || data.length === 0) return null;
-      return data.map((f) => ({
-        question: f.question?.[language] || f.question?.en || "",
-        answer: f.answer?.[language] || f.answer?.en || "",
-      }));
+      return Array.isArray(data) && data.length > 0 ? data : null;
     },
-    { fallback: null, deps: [language] },
+    { fallback: null, initial: prefetch.faqs },
+  );
+  const cmsFaqs = useMemo<FAQItem[] | null>(
+    () =>
+      rawFaqs && rawFaqs.length > 0
+        ? rawFaqs.map((f) => ({
+            question: f.question?.[language] || f.question?.en || "",
+            answer: f.answer?.[language] || f.answer?.en || "",
+          }))
+        : null,
+    [rawFaqs, language],
   );
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState("");

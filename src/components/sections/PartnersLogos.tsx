@@ -4,6 +4,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useSiteContent } from "@/contexts/SiteContentContext";
 import { getPartners } from "@/lib/sanity";
 import { useSanityData } from "@/hooks/useSanityData";
+import { usePrefetch } from "@/contexts/SanityPrefetchContext";
 import { urlFor } from "@/sanity/lib/image";
 import Image from "next/image";
 import Pill from "@/components/ui/Pill";
@@ -32,30 +33,33 @@ const fallbackPartners: readonly PartnerItem[] = [
   { name: "La French Tech", logoUrl: "/partners/la-french-tech.png", url: "https://lafrenchtech.com/" },
 ];
 
+/** Sanity partners -> logo tiles (null when nothing is usable, so the built-in list is shown). */
+function mapPartners(data: unknown): PartnerItem[] | null {
+  if (!Array.isArray(data) || data.length === 0) return null;
+  const mapped = (data as SanityPartner[])
+    .map((item) => {
+      const logoUrl = item.logo?.asset
+        ? urlFor(item.logo).width(320).height(160).fit("max").url()
+        : item.logoPath || "";
+      return {
+        name: item.name,
+        url: item.website,
+        logoUrl,
+        lqip: item.logo?.asset?.metadata?.lqip,
+      };
+    })
+    .filter((item) => item.logoUrl);
+  return mapped.length > 0 ? mapped : null;
+}
+
 export default function PartnersLogos() {
   const { t } = useLanguage();
   const { home, text } = useSiteContent();
 
+  const prefetch = usePrefetch();
   const { data: partners, loading } = useSanityData<PartnerItem[]>(
-    async () => {
-      const data = await getPartners();
-      if (!Array.isArray(data) || data.length === 0) return null;
-      const mapped = (data as SanityPartner[])
-        .map((item) => {
-          const logoUrl = item.logo?.asset
-            ? urlFor(item.logo).width(320).height(160).fit("max").url()
-            : item.logoPath || "";
-          return {
-            name: item.name,
-            url: item.website,
-            logoUrl,
-            lqip: item.logo?.asset?.metadata?.lqip,
-          };
-        })
-        .filter((item) => item.logoUrl);
-      return mapped.length > 0 ? mapped : null;
-    },
-    { fallback: [...fallbackPartners] },
+    async () => mapPartners(await getPartners()),
+    { fallback: [...fallbackPartners], initial: mapPartners(prefetch.partners) },
   );
 
   const safePartners = partners || fallbackPartners;

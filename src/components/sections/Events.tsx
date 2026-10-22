@@ -7,6 +7,7 @@ import SocialShare from "@/components/ui/SocialShare";
 import Reveal from "@/components/ui/Reveal";
 import Pill from "@/components/ui/Pill";
 import { useSanityData } from "@/hooks/useSanityData";
+import { usePrefetch } from "@/contexts/SanityPrefetchContext";
 import { getInitiatives, type SanityImageWithAlt } from "@/lib/sanity";
 import { PHOTOS, photoAlt, type PhotoKey } from "@/lib/photos";
 
@@ -64,12 +65,13 @@ export default function Events() {
   const { home, text, image, joinUrl } = useSiteContent();
   const learnMore = language === "fr" ? "En savoir plus" : language === "pl" ? "Dowiedz się więcej" : "Learn more";
 
+  const prefetch = usePrefetch();
   const { data: initiativesData } = useSanityData<SanityInitiative[]>(
     async () => {
       const data = await getInitiatives();
       return Array.isArray(data) ? data : null;
     },
-    { fallback: [] },
+    { fallback: [], initial: prefetch.initiatives as SanityInitiative[] | null | undefined },
   );
 
   const fallbackInitiatives = [

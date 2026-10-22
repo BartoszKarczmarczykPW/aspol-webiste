@@ -5,6 +5,8 @@ type SanityFetchFn<T> = () => Promise<T>;
 interface UseSanityDataOptions<T> {
   /** Fallback value while loading or on error */
   fallback: T;
+  /** Data already fetched on the server. When present the client does not fetch at all. */
+  initial?: T | null;
   /** Dependencies that should trigger a refetch (e.g., [language]) */
   deps?: ReadonlyArray<unknown>;
 }
@@ -23,15 +25,16 @@ interface UseSanityDataResult<T> {
  */
 export function useSanityData<T>(
   fetchFn: SanityFetchFn<T | null | undefined>,
-  { fallback, deps = [] }: UseSanityDataOptions<T>,
+  { fallback, deps = [], initial = null }: UseSanityDataOptions<T>,
 ): UseSanityDataResult<T> {
-  const [data, setData] = useState<T | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<T | null>(initial);
+  const [loading, setLoading] = useState(initial == null);
   const [error, setError] = useState(false);
   const mountedRef = useRef(true);
 
   useEffect(() => {
     mountedRef.current = true;
+    if (initial != null) return;
     setLoading(true);
     setError(false);
 

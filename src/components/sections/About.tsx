@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useSiteContent } from "@/contexts/SiteContentContext";
 import { useSanityData } from "@/hooks/useSanityData";
+import { usePrefetch } from "@/contexts/SanityPrefetchContext";
 import { getAboutSection, type SanityImageWithAlt } from "@/lib/sanity";
 import { PHOTOS, photoAlt } from "@/lib/photos";
 import Reveal from "@/components/ui/Reveal";
@@ -63,7 +64,11 @@ export default function About() {
   const { t, language } = useLanguage();
   const { image } = useSiteContent();
 
-  const { data: aboutData } = useSanityData<AboutSectionData | null>(getAboutSection, { fallback: null });
+  const prefetch = usePrefetch();
+  const { data: aboutData } = useSanityData<AboutSectionData | null>(getAboutSection, {
+    fallback: null,
+    initial: prefetch.about as AboutSectionData | null | undefined,
+  });
 
   const pick = (value?: LocalizedString) => value?.[language] || value?.en || "";
 

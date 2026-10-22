@@ -7,6 +7,7 @@ import { useSiteContent } from "@/contexts/SiteContentContext";
 import { useInView } from "@/hooks/useInView";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useSanityData } from "@/hooks/useSanityData";
+import { usePrefetch } from "@/contexts/SanityPrefetchContext";
 import { StatItemProps } from "@/types";
 import { getStatistics } from "@/lib/sanity";
 import { PHOTOS } from "@/lib/photos";
@@ -89,13 +90,14 @@ const Statistics = memo(function Statistics() {
 
   const currentLabels = FALLBACK_LABELS[language] || FALLBACK_LABELS.en;
 
+  const prefetch = usePrefetch();
   const { data: items, loading } = useSanityData<StatDataItem[]>(
     async () => {
       const data = await getStatistics();
       if (!data?.items?.length) return null;
       return [...data.items].sort((a: StatDataItem, b: StatDataItem) => (a.order ?? 0) - (b.order ?? 0));
     },
-    { fallback: [] },
+    { fallback: [], initial: prefetch.statistics as StatDataItem[] | null | undefined },
   );
 
   const resolvedItems = !loading && items.length > 0 ? items : FALLBACK_ITEMS;

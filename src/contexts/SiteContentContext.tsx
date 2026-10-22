@@ -2,6 +2,7 @@
 
 import { createContext, use, useEffect, useMemo, useState, type ReactNode } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { usePrefetch } from "@/contexts/SanityPrefetchContext";
 import {
   getHomePage,
   getSiteSettings,
@@ -46,10 +47,14 @@ const EMPTY_HOME: SanityHomePage = {};
  */
 export function SiteContentProvider({ children }: { children: ReactNode }) {
   const { language } = useLanguage();
-  const [settings, setSettings] = useState<SanitySiteSettings>(EMPTY_SETTINGS);
-  const [home, setHome] = useState<SanityHomePage>(EMPTY_HOME);
+  const prefetch = usePrefetch();
+  const [settings, setSettings] = useState<SanitySiteSettings>(prefetch.settings ?? EMPTY_SETTINGS);
+  const [home, setHome] = useState<SanityHomePage>(prefetch.home ?? EMPTY_HOME);
+  // undefined = the server query failed (retry in the browser); null = the document does not exist yet.
+  const hasPrefetch = prefetch.settings !== undefined && prefetch.home !== undefined;
 
   useEffect(() => {
+    if (hasPrefetch) return;
     let active = true;
     Promise.all([getSiteSettings().catch(() => null), getHomePage().catch(() => null)]).then(([s, h]) => {
       if (!active) return;
@@ -59,7 +64,7 @@ export function SiteContentProvider({ children }: { children: ReactNode }) {
     return () => {
       active = false;
     };
-  }, []);
+  }, [hasPrefetch]);
 
   const value = useMemo<SiteContent>(
     () => ({

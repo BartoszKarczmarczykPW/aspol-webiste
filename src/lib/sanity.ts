@@ -157,7 +157,7 @@ export async function getEvents(): Promise<SanityEvent[]> {
     registrationLink,
     tags,
     featured
-  }`, undefined, { next: { tags: ['events'] } })
+  }`, undefined, { next: { revalidate: 300, tags: ['events'] } })
 }
 
 /** Fetch the active event countdown configuration (singleton). */
@@ -171,7 +171,7 @@ export async function getEventCountdown(): Promise<EventCountdownConfig | null> 
     completedMessage,
     isActive,
     showLiveBadge
-  }`, undefined, { next: { tags: ['eventCountdown'] } })
+  }`, undefined, { next: { revalidate: 300, tags: ['eventCountdown'] } })
 }
 
 /** Fetch all blog posts, newest first. */
@@ -188,7 +188,7 @@ export async function getPosts(): Promise<SanityPost[]> {
     tags,
     upcoming,
     featured
-  }`, undefined, { next: { tags: ['blog'] } })
+  }`, undefined, { next: { revalidate: 300, tags: ['blog'] } })
 }
 
 /** Fetch a single event by its slug. Returns `null` when not found. */
@@ -204,7 +204,7 @@ export async function getEventBySlug(slug: string): Promise<SanityEvent | null> 
     registrationLink,
     tags,
     featured
-  }`, { slug }, { next: { tags: [`event-${slug}`] } })
+  }`, { slug }, { next: { revalidate: 300, tags: [`event-${slug}`] } })
 }
 
 /** Fetch a single post by its slug (includes sponsors & partners). */
@@ -232,7 +232,7 @@ export async function getPostBySlug(slug: string): Promise<SanityPostDetail | nu
       website,
       "logoUrl": logo.asset->url
     }
-  }`, { slug }, { next: { tags: [`post-${slug}`] } })
+  }`, { slug }, { next: { revalidate: 300, tags: [`post-${slug}`] } })
 }
 
 /** Fetch active partners for the carousel. */
@@ -250,7 +250,7 @@ export async function getPartners(): Promise<SanityPartner[]> {
       }
     },
     order
-  }`, undefined, { next: { tags: ['partners'] } })
+  }`, undefined, { next: { revalidate: 300, tags: ['partners'] } })
 }
 
 /** Fetch site-wide statistics (singleton). */
@@ -262,7 +262,7 @@ export async function getStatistics(): Promise<SanityStatistics | null> {
       order,
       label { en, fr, pl }
     }
-  }`, undefined, { next: { tags: ['statistics'] } })
+  }`, undefined, { next: { revalidate: 300, tags: ['statistics'] } })
 }
 
 /** Fetch the home-page About section (singleton). */
@@ -280,7 +280,7 @@ export async function getAboutSection(): Promise<SanityAboutSection | null> {
       title { en, fr, pl },
       description { en, fr, pl }
     }
-  }`, undefined, { next: { tags: ['aboutSection'] } })
+  }`, undefined, { next: { revalidate: 300, tags: ['aboutSection'] } })
 }
 
 /** Fetch active initiatives for the home page. */
@@ -294,7 +294,7 @@ export async function getInitiatives(): Promise<SanityInitiative[]> {
     title { en, fr, pl },
     badge { en, fr, pl },
     description { en, fr, pl }
-  }`, undefined, { next: { tags: ['initiatives'] } })
+  }`, undefined, { next: { revalidate: 300, tags: ['initiatives'] } })
 }
 
 /** Fetch active team members. */
@@ -311,7 +311,7 @@ export async function getTeamMembers(): Promise<SanityTeamMember[]> {
         metadata { lqip, dimensions { width, height } }
       }
     }
-  }`, undefined, { next: { tags: ['teamMembers'] } })
+  }`, undefined, { next: { revalidate: 300, tags: ['teamMembers'] } })
 }
 
 /** Fetch active testimonials. */
@@ -323,7 +323,7 @@ export async function getTestimonials(): Promise<SanityTestimonial[]> {
     text { en, fr, pl },
     photo { ..., alt { en, fr, pl } },
     year
-  }`, undefined, { next: { tags: ['testimonials'] } })
+  }`, undefined, { next: { revalidate: 300, tags: ['testimonials'] } })
 }
 
 /* ------------------------------------------------------------------ */
@@ -397,7 +397,7 @@ export async function getSiteSettings(): Promise<SanitySiteSettings | null> {
     contactEmail, contactLocation { en, fr, pl },
     foundedLabel, boardSeason,
     footerStatement { en, fr, pl }
-  }`, undefined, { next: { tags: ['siteSettings'] } })
+  }`, undefined, { next: { revalidate: 300, tags: ['siteSettings'] } })
 }
 
 const L3 = '{ en, fr, pl }'
@@ -417,7 +417,7 @@ export async function getHomePage(): Promise<SanityHomePage | null> {
     newsletterTitle ${L3}, newsletterDescription ${L3}, newsletterButton ${L3},
     contactTitle ${L3}, contactSubtitle ${L3},
     joinPanelTitle ${L3}, joinPanelDescription ${L3}, joinPanelButton ${L3}, joinPanelImage ${IMG}
-  }`, undefined, { next: { tags: ['homePage'] } })
+  }`, undefined, { next: { revalidate: 300, tags: ['homePage'] } })
 }
 
 /** Fetch active FAQ entries. */
@@ -426,7 +426,7 @@ export async function getFaqs(): Promise<SanityFaq[]> {
     _id,
     question ${L3},
     answer ${L3}
-  }`, undefined, { next: { tags: ['faq'] } })
+  }`, undefined, { next: { revalidate: 300, tags: ['faq'] } })
 }
 
 export interface SanityPartnersPage {
@@ -449,5 +449,5 @@ export async function getPartnersPage(): Promise<SanityPartnersPage | null> {
     scopeTitle ${L3}, scopeSubtitle ${L3}, scopeItems[] { text ${L3} },
     communityTitle ${L3}, disciplines ${L3}, stats[] { value, label ${L3} },
     ctaTitle ${L3}, ctaSubtitle ${L3}, ctaButton ${L3}, ctaEmailText ${L3}
-  }`, undefined, { next: { tags: ['partnersPage'] } })
+  }`, undefined, { next: { revalidate: 300, tags: ['partnersPage'] } })
 }

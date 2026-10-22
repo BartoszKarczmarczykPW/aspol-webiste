@@ -5,6 +5,7 @@ import StructuredData from "@/components/seo/StructuredData";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { getAlternates } from "@/lib/seo";
+import { getPrefetch } from "@/lib/prefetch";
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://aspol.fr'),
@@ -63,11 +64,14 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Live Sanity content is fetched here, on the server, and cached (revalidate 300s).
+  const prefetch = await getPrefetch();
+
   return (
     <html
       lang="en"
@@ -83,7 +87,7 @@ export default function RootLayout({
       </head>
       <body className="antialiased" suppressHydrationWarning>
         <StructuredData />
-        <Providers>
+        <Providers prefetch={prefetch}>
           <a href="#main-content" className="skip-link">Skip to content</a>
           <Header />
           <main id="main-content">

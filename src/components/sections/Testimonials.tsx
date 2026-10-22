@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useCallback, useEffect, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Image from "next/image";
 import Reveal from "@/components/ui/Reveal";
 import Pill from "@/components/ui/Pill";
@@ -9,6 +9,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useSiteContent } from "@/contexts/SiteContentContext";
 import { Testimonial } from "@/types";
 import { useSanityData } from "@/hooks/useSanityData";
+import { usePrefetch } from "@/contexts/SanityPrefetchContext";
 import { getTestimonials, type SanityImageWithAlt } from "@/lib/sanity";
 import type { ResolvedImage } from "@/contexts/SiteContentContext";
 
@@ -148,19 +149,26 @@ const Testimonials = memo(function Testimonials() {
   const touchEndX = useRef<number>(0);
   const autoPlayTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const { data: cmsTestimonials } = useSanityData<TestimonialWithPhoto[] | null>(
+  const prefetch = usePrefetch();
+  const { data: rawTestimonials } = useSanityData<SanityTestimonial[] | null>(
     async () => {
       const data = await getTestimonials();
-      if (!Array.isArray(data) || data.length === 0) return null;
-      return data.map((item: SanityTestimonial) => ({
-        name: item.name,
-        role: item.role?.[language] || item.role?.en || "",
-        text: item.text?.[language] || item.text?.en || "",
-        year: String(item.year || ""),
-        photo: item.photo ?? null,
-      }));
+      return Array.isArray(data) && data.length > 0 ? (data as SanityTestimonial[]) : null;
     },
-    { fallback: null, deps: [language] },
+    { fallback: null, initial: prefetch.testimonials as SanityTestimonial[] | null | undefined },
+  );
+  const cmsTestimonials = useMemo<TestimonialWithPhoto[] | null>(
+    () =>
+      rawTestimonials && rawTestimonials.length > 0
+        ? rawTestimonials.map((item) => ({
+            name: item.name,
+            role: item.role?.[language] || item.role?.en || "",
+            text: item.text?.[language] || item.text?.en || "",
+            year: String(item.year || ""),
+            photo: item.photo ?? null,
+          }))
+        : null,
+    [rawTestimonials, language],
   );
 
   const currentTestimonials: TestimonialWithPhoto[] = cmsTestimonials || TESTIMONIALS[language] || TESTIMONIALS.en;

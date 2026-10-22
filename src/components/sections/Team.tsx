@@ -1,6 +1,6 @@
 "use client";
 
-import { memo } from "react";
+import { memo, useMemo } from "react";
 import Image from "next/image";
 import HackerText from "../ui/HackerText";
 import Reveal from "@/components/ui/Reveal";
@@ -8,6 +8,7 @@ import Pill from "@/components/ui/Pill";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useSiteContent } from "@/contexts/SiteContentContext";
 import { useSanityData } from "@/hooks/useSanityData";
+import { usePrefetch } from "@/contexts/SanityPrefetchContext";
 import { TeamMember } from "@/types";
 import { getTeamMembers } from "@/lib/sanity";
 import { urlFor } from "@/sanity/lib/image";
@@ -135,11 +136,20 @@ const Team = memo(function Team() {
     },
   ];
 
-  const { data: boardMembers } = useSanityData<MappedTeamMember[]>(
+  // Raw members come from the server (prefetch) or, failing that, from the browser; the localised
+  // role/photo mapping happens here so a language switch needs no refetch.
+  const prefetch = usePrefetch();
+  const { data: rawMembers } = useSanityData<SanityTeamMember[]>(
     async () => {
       const data = await getTeamMembers();
-      if (!Array.isArray(data) || data.length === 0) return null;
-      return (data as SanityTeamMember[]).map((member) => ({
+      return Array.isArray(data) && data.length > 0 ? (data as SanityTeamMember[]) : null;
+    },
+    { fallback: [], initial: prefetch.team as SanityTeamMember[] | null | undefined },
+  );
+
+  const boardMembers = useMemo<MappedTeamMember[]>(
+    () =>
+      rawMembers.map((member) => ({
         name: member.name,
         role: member.role?.[language] || member.role?.en || "",
         linkedin: member.linkedin || null,
@@ -147,9 +157,8 @@ const Team = memo(function Team() {
           ? urlFor(member.photo).width(640).height(800).fit("crop").url()
           : LEGACY_PHOTO_MAP[member.name] || "/default-avatar.svg",
         lqip: member.photo?.asset?.metadata?.lqip,
-      }));
-    },
-    { fallback: [], deps: [language] },
+      })),
+    [rawMembers, language],
   );
 
   const membersToRender: MappedTeamMember[] =
