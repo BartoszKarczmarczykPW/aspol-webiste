@@ -2,12 +2,14 @@
 
 import React, { useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { ArrowLeft, ExternalLink, CheckCircle2, XCircle, Building2, BookOpen } from 'lucide-react';
+import { ArrowLeft, ExternalLink, CheckCircle2, XCircle } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Components } from 'react-markdown';
 import { UniversityGuide } from '@/data/universityGuides';
 import { useLanguage } from '@/contexts/LanguageContext';
+import PageHero from "@/components/layout/PageHero";
+import Pill from "@/components/ui/Pill";
 
 interface UniversityGuideContentProps {
     guide: UniversityGuide;
@@ -46,8 +48,7 @@ export default function UniversityGuideContent({ guide }: UniversityGuideContent
             const text = String(children);
             const id = slugify(text);
             return (
-                <h2 id={id} className="text-2xl md:text-3xl font-bold text-aspol-navy mt-12 mb-5 flex items-center gap-3 border-b border-gray-100 pb-3 scroll-mt-24">
-                    <span className="w-1.5 h-7 bg-aspol-red rounded-full" />
+                <h2 id={id} className="display display-md mt-16 mb-6 border-b border-aspol-line pb-4 scroll-mt-28">
                     {children}
                 </h2>
             );
@@ -59,9 +60,9 @@ export default function UniversityGuideContent({ guide }: UniversityGuideContent
                 const isYes = text.includes("✅");
                 const cleanText = text.replace(":", "").replace("✅", "").replace("❌", "").trim();
                 return (
-                    <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium mr-2 mb-2 ${isYes
-                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                        : 'bg-gray-100 text-gray-500 border border-gray-200'
+                    <span className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-sm font-semibold mr-2 mb-2 ${isYes
+                        ? 'bg-aspol-navy text-white'
+                        : 'bg-aspol-mist text-aspol-ink-soft'
                         }`}>
                         {isYes ? <CheckCircle2 className="w-3.5 h-3.5" /> : <XCircle className="w-3.5 h-3.5" />}
                         {cleanText}
@@ -70,7 +71,7 @@ export default function UniversityGuideContent({ guide }: UniversityGuideContent
             }
             const id = slugify(text);
             return (
-                <h3 id={id} className="text-xl font-semibold text-aspol-navy mt-8 mb-3 scroll-mt-24">
+                <h3 id={id} className="display display-sm mt-10 mb-3 scroll-mt-28">
                     {children}
                 </h3>
             );
@@ -101,7 +102,7 @@ export default function UniversityGuideContent({ guide }: UniversityGuideContent
             }
 
             return (
-                <li className="flex items-start gap-3 text-gray-700 text-base leading-relaxed">
+                <li className="flex items-start gap-3 text-aspol-ink-soft text-base leading-relaxed sm:text-lg sm:leading-8">
                     <span className="mt-2 w-1.5 h-1.5 rounded-full bg-aspol-navy/50 shrink-0" />
                     <span className="flex-1">{children}</span>
                 </li>
@@ -147,7 +148,7 @@ export default function UniversityGuideContent({ guide }: UniversityGuideContent
                         href={href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-aspol-navy bg-aspol-navy/5 hover:bg-aspol-navy hover:text-white rounded-lg transition-all duration-200 mr-2 mb-2"
+                        className="inline-flex min-h-11 items-center gap-1.5 px-5 py-2.5 text-sm font-bold text-aspol-dark bg-aspol-mist hover:bg-aspol-navy hover:text-white rounded-full transition-colors duration-300 mr-2 mb-2"
                     >
                         {children}
                         <ExternalLink className="w-3.5 h-3.5 opacity-60" />
@@ -185,164 +186,118 @@ export default function UniversityGuideContent({ guide }: UniversityGuideContent
             }
 
             return (
-                <p className="text-gray-700 text-base leading-7 mb-4">
+                <p className="text-aspol-ink-soft text-base leading-7 sm:text-lg sm:leading-8 mb-4">
                     {children}
                 </p>
             );
         },
         strong: ({ children }) => (
-            <strong className="font-semibold text-aspol-navy">{children}</strong>
+            <strong className="font-bold text-aspol-dark">{children}</strong>
         ),
         blockquote: ({ children }) => (
-            <blockquote className="border-l-4 border-aspol-red/50 pl-5 my-8 text-gray-600 italic bg-red-50/40 py-3 rounded-r-lg">
+            <blockquote className="border-l-4 border-aspol-navy pl-5 my-8 font-display text-lg font-bold leading-snug text-aspol-dark">
                 {children}
             </blockquote>
         ),
     };
 
     return (
-        <main className="min-h-screen bg-white">
-            {/* Minimal Header */}
-            <header className="border-b border-gray-100 bg-white/80 backdrop-blur-sm sticky top-0 z-50">
-                <div className="max-w-4xl mx-auto px-6 py-4">
-                    <Link
-                        href="/pathway"
-                        className="inline-flex items-center gap-2 text-gray-500 hover:text-aspol-navy transition-colors text-sm"
-                    >
-                        <ArrowLeft className="w-4 h-4" />
-                        <span>{t.pathway.guideBack}</span>
-                    </Link>
+        <main className="min-h-screen bg-aspol-white text-aspol-dark">
+            <PageHero
+                badge={`${t.pathway.guideCountry}  ·  ${t.pathway.guideType}`}
+                title={guide.name}
+                titleClassName="text-[clamp(2rem,5.4vw,5rem)]"
+                actions={
+                    <Pill href="/pathway" variant="ghost" noChip className="px-7">
+                        {t.pathway.guideBack}
+                    </Pill>
+                }
+                aside={
+                    <div className="grid size-36 place-items-center rounded-[2rem] bg-white p-6 lg:ml-auto lg:size-48 lg:p-8">
+                        <Image
+                            src={guide.logo}
+                            alt={guide.name}
+                            width={120}
+                            height={120}
+                            className="max-h-full max-w-full object-contain"
+                        />
+                    </div>
+                }
+            />
+
+            <div className="mx-auto max-w-4xl px-5 sm:px-6">
+                {/* Campus France tip */}
+                <div className="mt-10 flex flex-col items-start gap-5 rounded-[2rem] bg-aspol-mist p-6 sm:flex-row sm:items-center sm:p-8">
+                    <div className="grid size-16 shrink-0 place-items-center rounded-2xl bg-white p-3">
+                        <Image
+                            src="/images/logos/campus-france.png"
+                            alt="Campus France"
+                            width={40}
+                            height={40}
+                            className="max-h-full max-w-full object-contain"
+                        />
+                    </div>
+                    <p className="flex-1 text-base leading-relaxed text-aspol-ink-soft">
+                        <span className="font-display font-bold text-aspol-dark">{t.pathway.guideTipLabel}</span>{" "}
+                        {t.pathway.guideTipBody}{" "}
+                        <a
+                            href="https://www.pologne.campusfrance.org/pl"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 font-semibold text-aspol-navy underline underline-offset-4 hover:text-aspol-red"
+                        >
+                            {t.pathway.guideTipLink}
+                            <ExternalLink className="size-3.5" aria-hidden="true" />
+                        </a>{" "}
+                        {t.pathway.guideTipSuffix}
+                    </p>
                 </div>
-            </header>
 
-            {/* Hero Section */}
-            <section className="border-b border-gray-100 bg-linear-to-b from-gray-50/50 to-white">
-                <div className="max-w-4xl mx-auto px-6 py-12 md:py-16">
-                    <div className="flex flex-col md:flex-row items-start gap-6 md:gap-10">
-                        {/* Logo */}
-                        <div className="w-20 h-20 md:w-28 md:h-28 bg-white rounded-2xl border border-gray-200 p-4 flex items-center justify-center shrink-0 shadow-sm">
-                            <Image
-                                src={guide.logo}
-                                alt={guide.name}
-                                width={80}
-                                height={80}
-                                className="max-w-full max-h-full object-contain"
-                            />
-                        </div>
+                <article className="py-12 md:py-16">
+                    {tocItems.length > 0 && (
+                        <nav className="mb-12 rounded-[2rem] bg-aspol-mist p-6 md:p-8" aria-label={t.pathway.guideTocTitle}>
+                            <h2 className="display display-sm mb-4">{t.pathway.guideTocTitle}</h2>
+                            <ul className="space-y-1">
+                                {tocItems.map((item) => (
+                                    <li key={item.id} className={item.level === 3 ? "ml-4" : undefined}>
+                                        <a
+                                            href={`#${item.id}`}
+                                            className="inline-block py-1.5 text-base text-aspol-navy underline-offset-4 transition-colors hover:text-aspol-red hover:underline"
+                                        >
+                                            {item.text}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </nav>
+                    )}
 
-                        {/* Title & Meta */}
-                        <div className="flex-1">
-                            <h1 className="text-3xl md:text-4xl font-bold text-aspol-navy mb-4 leading-tight">
-                                {guide.name}
-                            </h1>
-                            <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500">
-                                <span className="flex items-center gap-1.5">
-                                    <Building2 className="w-4 h-4" />
-                                    {t.pathway.guideCountry}
-                                </span>
-                                <span className="w-1 h-1 rounded-full bg-gray-300" />
-                                <span className="flex items-center gap-1.5">
-                                    <BookOpen className="w-4 h-4" />
-                                    {t.pathway.guideType}
-                                </span>
-                            </div>
+                    <div className="prose-custom">
+                        <ReactMarkdown components={components}>{localizedContent}</ReactMarkdown>
+                    </div>
+
+                    {/* Bottom CTA */}
+                    <div className="on-dark mt-16 rounded-[2rem] bg-aspol-navy p-7 text-white sm:p-12">
+                        <h3 className="display display-md max-w-[20ch]">{t.pathway.guideCtaTitle}</h3>
+                        <p className="mt-4 max-w-[48ch] text-base leading-relaxed text-white/85 sm:text-lg">
+                            {t.pathway.guideCtaBody.replace("{university}", guide.name)}
+                        </p>
+                        <div className="mt-8">
+                            <Pill href="/#contact">{t.pathway.guideCtaButton}</Pill>
                         </div>
                     </div>
-                </div>
-            </section>
 
-            {/* Campus France Info + Disclaimer */}
-            <section className="py-6 px-6 bg-blue-50/50 border-b border-blue-100/50">
-                <div className="max-w-4xl mx-auto">
-                    <div className="flex flex-col sm:flex-row items-start gap-4">
-                        <div className="w-14 h-14 bg-white rounded-lg p-2 flex items-center justify-center shrink-0 border border-gray-100">
-                            <Image
-                                src="/images/logos/campus-france.png"
-                                alt="Campus France"
-                                width={40}
-                                height={40}
-                                className="max-w-full max-h-full object-contain"
-                            />
-                        </div>
-                        <div className="flex-1">
-                            <p className="text-gray-700 text-sm">
-                                <span className="font-semibold text-aspol-navy">{t.pathway.guideTipLabel}</span>{" "}
-                                {t.pathway.guideTipBody}{" "}
-                                <a
-                                    href="https://www.pologne.campusfrance.org/pl"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="font-semibold text-aspol-navy hover:text-aspol-red transition-colors inline-flex items-center gap-1"
-                                >
-                                    {t.pathway.guideTipLink}
-                                    <ExternalLink className="w-3 h-3" />
-                                </a>
-                                {" "}{t.pathway.guideTipSuffix}
-                            </p>
-                        </div>
+                    <div className="mt-10 text-center">
+                        <Link
+                            href="/pathway"
+                            className="inline-flex items-center gap-2 py-3 text-sm font-semibold text-aspol-navy underline-offset-4 hover:text-aspol-red hover:underline"
+                        >
+                            <ArrowLeft className="size-4" aria-hidden="true" />
+                            <span>{t.pathway.guideBackAll}</span>
+                        </Link>
                     </div>
-                </div>
-            </section>
-
-            {/* Content */}
-            <article className="max-w-4xl mx-auto px-6 py-10 md:py-14">
-                {tocItems.length > 0 && (
-                    <div className="mb-8 rounded-2xl border border-gray-100 bg-gray-50/70 p-5 md:p-6">
-                        <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-500 mb-3">
-                            {t.pathway.guideTocTitle}
-                        </h3>
-                        <ul className="space-y-2">
-                            {tocItems.map((item) => (
-                                <li key={item.id} className={item.level === 3 ? "ml-4" : undefined}>
-                                    <a
-                                        href={`#${item.id}`}
-                                        className="text-aspol-navy hover:text-aspol-red transition-colors text-sm md:text-base"
-                                    >
-                                        {item.text}
-                                    </a>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                )}
-
-                <div className="prose-custom bg-white rounded-3xl border border-gray-100 shadow-sm p-6 md:p-10">
-                    <ReactMarkdown components={components}>{localizedContent}</ReactMarkdown>
-                </div>
-
-                {/* Bottom CTA */}
-                <div className="mt-14 pt-10 border-t border-gray-100">
-                    <div className="bg-aspol-navy rounded-2xl p-8 md:p-10 text-white relative overflow-hidden">
-                        <div className="relative z-10">
-                            <h3 className="text-xl md:text-2xl font-bold mb-3">
-                                {t.pathway.guideCtaTitle}
-                            </h3>
-                            <p className="text-white/70 text-sm md:text-base mb-6 max-w-lg">
-                                {t.pathway.guideCtaBody.replace("{university}", guide.name)}
-                            </p>
-                            <Link
-                                href="/#contact"
-                                className="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-aspol-navy font-semibold rounded-lg hover:bg-gray-100 transition-colors text-sm"
-                            >
-                                {t.pathway.guideCtaButton}
-                            </Link>
-                        </div>
-                        {/* Decorative */}
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-                    </div>
-                </div>
-
-                {/* Back Link */}
-                <div className="mt-10 text-center">
-                    <Link
-                        href="/pathway"
-                        className="inline-flex items-center gap-2 text-gray-500 hover:text-aspol-navy transition-colors text-sm"
-                    >
-                        <ArrowLeft className="w-4 h-4" />
-                        <span>{t.pathway.guideBackAll}</span>
-                    </Link>
-                </div>
-            </article>
+                </article>
+            </div>
         </main>
     );
 }

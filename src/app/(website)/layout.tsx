@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Lora, Mulish } from "next/font/google"; // Mulish is an excellent Avenir alternative
+import { Archivo, Mulish } from "next/font/google"; // Mulish is an excellent Avenir alternative
 import "./globals.css";
 import Providers from "@/components/providers/Providers";
 import StructuredData from "@/components/seo/StructuredData";
@@ -7,10 +7,28 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { getAlternates } from "@/lib/seo";
 
-const lora = Lora({
-  variable: "--font-lora",
+/**
+ * Display face: Archivo is a variable family with a width axis, so headlines
+ * can run heavy and slightly extended (poster-style type)
+ * without loading a second font file. Polish/French diacritics live in the
+ * latin-ext subset, which is declared separately with preload off: it is only
+ * downloaded when a page actually renders such a glyph, instead of costing every
+ * visitor ~120 KB up front. (Its variable comes first in the font stack; with
+ * adjustFontFallback off it has no fallback face that could shadow the latin file.)
+ */
+const archivo = Archivo({
+  variable: "--font-archivo",
   subsets: ["latin"],
+  axes: ["wdth"],
   display: "swap",
+});
+const archivoExt = Archivo({
+  variable: "--font-archivo-ext",
+  subsets: ["latin-ext"],
+  axes: ["wdth"],
+  display: "swap",
+  preload: false,
+  adjustFontFallback: false,
 });
 
 /**
@@ -23,6 +41,13 @@ const mulish = Mulish({
   variable: "--font-avenir",
   subsets: ["latin"],
   display: "swap",
+});
+const mulishExt = Mulish({
+  variable: "--font-avenir-ext",
+  subsets: ["latin-ext"],
+  display: "swap",
+  preload: false,
+  adjustFontFallback: false,
 });
 
 export const metadata: Metadata = {
@@ -87,13 +112,23 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // The next/font variable classes live on <html> so the theme variables declared on :root
+  // in globals.css (e.g. --font-display) can resolve them; on <body> they would be undefined there.
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${archivo.variable} ${archivoExt.variable} ${mulish.variable} ${mulishExt.variable}`}
+    >
       <head>
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#dc2626" />
+        <meta name="theme-color" content="#143D73" />
+        <noscript>
+          {/* Headline reveals start hidden; without JS show them as-is. */}
+          <style>{`.rw>span{transform:none!important}`}</style>
+        </noscript>
       </head>
-      <body className={`${lora.variable} ${mulish.variable} antialiased`} suppressHydrationWarning>
+      <body className="antialiased" suppressHydrationWarning>
         <StructuredData />
         <Providers>
           <a href="#main-content" className="skip-link">Skip to content</a>

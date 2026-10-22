@@ -2,9 +2,14 @@
 
 import { useRef, useState, useActionState, useEffect } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useSiteContent } from "@/contexts/SiteContentContext";
 import { sendContactEmail } from "@/app/(website)/actions/contact";
 import { trackEvent } from "@/lib/analytics";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+import Image from "next/image";
+import Reveal from "@/components/ui/Reveal";
+import Pill from "@/components/ui/Pill";
+import { PHOTOS } from "@/lib/photos";
 
 const VALIDATION_MESSAGES = {
   en: {
@@ -39,6 +44,9 @@ const VALIDATION_MESSAGES = {
 export default function Contact() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const { t, language } = useLanguage();
+  const { settings, home, text, image, joinUrl } = useSiteContent();
+  const joinImg = image(home.joinPanelImage, 2000);
+  const email = settings.contactEmail || "office@aspol.fr";
   const formStartRef = useRef<number>(Date.now());
   const [formData, setFormData] = useState({
     name: "",
@@ -190,47 +198,117 @@ export default function Contact() {
     }
   };
 
+  const fieldClass = (hasError: boolean) =>
+    `w-full rounded-2xl bg-white px-5 py-4 text-base text-aspol-dark ring-1 transition-shadow duration-300 placeholder:text-aspol-ink-soft/60 touch-manipulation focus:outline-none focus:ring-2 ${
+      hasError ? "ring-aspol-red focus:ring-aspol-red" : "ring-aspol-line focus:ring-aspol-blue"
+    } ${isSubmitting ? "cursor-not-allowed opacity-50" : ""}`;
+  const labelClass = "mb-2 block font-display text-sm font-bold text-aspol-dark";
+
+  const infoRowIcon = "grid size-12 shrink-0 place-items-center rounded-full bg-aspol-mist text-aspol-navy";
+
+  const socials = [
+    { key: "facebook", label: `Facebook: ${settings.facebookHandle || "@aspologne"}`, aria: "Facebook - ASPOL", href: settings.facebookUrl || "https://www.facebook.com/aspologne" },
+    { key: "instagram", label: `Instagram: ${settings.instagramHandle || "@aspolska"}`, aria: "Instagram - ASPOL", href: settings.instagramUrl || "https://www.instagram.com/aspolska/" },
+    { key: "linkedin", label: `LinkedIn: ${settings.linkedinHandle || "ASPOL"}`, aria: "LinkedIn - ASPOL", href: settings.linkedinUrl || "https://www.linkedin.com/company/aspolscpo/" },
+  ];
+
   return (
     <section
       id="contact"
       ref={sectionRef}
-      className="py-16 px-6 bg-white"
+      className="section-pad dome-gap relative overflow-hidden bg-aspol-white text-aspol-dark"
       aria-label="Contact us"
     >
-      <div className="max-w-7xl mx-auto">
-        {/* Section Header */}
-        <div className="text-center mb-16 fade-in-element opacity-0">
-          <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
-            {t.contact.title}
-          </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            {t.contact.subtitle}
+      <div className="container-x">
+        <div className="grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-12">
+          <Reveal as="h2" className="display display-lg lg:col-span-7" text={text(home.contactTitle, t.contact.title)} />
+          <p className="max-w-[48ch] text-base leading-relaxed text-aspol-ink-soft sm:text-lg lg:col-span-5">
+            {text(home.contactSubtitle, t.contact.subtitle)}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Contact Form */}
-          <div className="fade-in-element opacity-0">
+        <div className="mt-12 grid gap-8 sm:mt-16 lg:grid-cols-12 lg:gap-12">
+          {/* Contact info */}
+          <div className="lg:col-span-5">
+            <h3 className="display display-sm mb-8">{t.contact.info.title}</h3>
+            <ul className="space-y-7">
+              <li className="flex items-start gap-4">
+                <span className={infoRowIcon} aria-hidden="true">
+                  <svg className="size-6" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
+                    <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                  </svg>
+                </span>
+                <div>
+                  <p className="font-display text-sm font-bold">{t.contact.info.email}</p>
+                  <a href={`mailto:${email}`} className="text-lg text-aspol-ink-soft underline-offset-4 transition-colors hover:text-aspol-blue hover:underline">
+                    {email}
+                  </a>
+                </div>
+              </li>
+
+              <li className="flex items-start gap-4">
+                <span className={infoRowIcon} aria-hidden="true">
+                  <svg className="size-6" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
+                    <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                    <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                  </svg>
+                </span>
+                <div>
+                  <p className="font-display text-sm font-bold">{t.contact.info.location}</p>
+                  <p className="text-lg text-aspol-ink-soft">{text(settings.contactLocation, t.contact.info.locationValue)}</p>
+                </div>
+              </li>
+
+              <li className="flex items-start gap-4">
+                <span className={infoRowIcon} aria-hidden="true">
+                  <svg className="size-6" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
+                    <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                </span>
+                <div>
+                  <p className="font-display text-sm font-bold">{t.contact.info.social}</p>
+                  <div className="mt-1 flex flex-col gap-1">
+                    {socials.map((social) => (
+                      <a
+                        key={social.key}
+                        href={social.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() => trackEvent("social_click", { platform: social.key, source: "contact" })}
+                        aria-label={social.aria}
+                        className="group inline-flex items-center gap-2 text-lg text-aspol-ink-soft transition-colors hover:text-aspol-blue"
+                      >
+                        <span className="underline-offset-4 group-hover:underline">{social.label}</span>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          {/* Contact form */}
+          <div className="rounded-[2rem] bg-aspol-mist p-6 sm:p-10 lg:col-span-7">
             {submitStatus === "success" && (
-              <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-start" role="status" aria-live="polite" aria-atomic="true">
-                <svg className="w-5 h-5 text-green-600 mr-3 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+              <div className="mb-6 flex items-start gap-3 rounded-2xl bg-aspol-dark p-4 text-white" role="status" aria-live="polite" aria-atomic="true">
+                <svg className="mt-0.5 size-5 shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
                 <div>
-                  <p className="font-medium text-green-800">{language === "fr" ? "Message envoyé avec succès !" : language === "pl" ? "Wiadomość wysłana pomyślnie!" : "Message sent successfully!"}</p>
-                  <p className="text-sm text-green-700 mt-1">{language === "fr" ? "Nous vous répondrons dès que possible." : language === "pl" ? "Odpowiemy najszybciej jak to możliwe." : "We'll get back to you as soon as possible."}</p>
+                  <p className="font-semibold">{language === "fr" ? "Message envoyé avec succès !" : language === "pl" ? "Wiadomość wysłana pomyślnie!" : "Message sent successfully!"}</p>
+                  <p className="mt-1 text-sm text-white/80">{language === "fr" ? "Nous vous répondrons dès que possible." : language === "pl" ? "Odpowiemy najszybciej jak to możliwe." : "We'll get back to you as soon as possible."}</p>
                 </div>
               </div>
             )}
 
             {submitStatus === "error" && (
-              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start" role="alert" aria-live="assertive" aria-atomic="true">
-                <svg className="w-5 h-5 text-red-600 mr-3 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+              <div className="mb-6 flex items-start gap-3 rounded-2xl bg-aspol-red p-4 text-white" role="alert" aria-live="assertive" aria-atomic="true">
+                <svg className="mt-0.5 size-5 shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
                 </svg>
                 <div>
-                  <p className="font-medium text-red-800">{language === "fr" ? "Une erreur est survenue" : language === "pl" ? "Coś poszło nie tak" : "Something went wrong"}</p>
-                  <p className="text-sm text-red-700 mt-1">{formError || (language === "fr" ? "Veuillez réessayer plus tard." : language === "pl" ? "Spróbuj ponownie później." : "Please try again later.")}</p>
+                  <p className="font-semibold">{language === "fr" ? "Une erreur est survenue" : language === "pl" ? "Coś poszło nie tak" : "Something went wrong"}</p>
+                  <p className="mt-1 text-sm text-white/90">{formError || (language === "fr" ? "Veuillez réessayer plus tard." : language === "pl" ? "Spróbuj ponownie później." : "Please try again later.")}</p>
                 </div>
               </div>
             )}
@@ -248,13 +326,9 @@ export default function Contact() {
                   autoComplete="off"
                 />
               </div>
+
               <div>
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  {t.contact.form.name}
-                </label>
+                <label htmlFor="name" className={labelClass}>{t.contact.form.name}</label>
                 <input
                   type="text"
                   id="name"
@@ -270,22 +344,16 @@ export default function Contact() {
                   aria-required="true"
                   aria-invalid={errors.name ? "true" : "false"}
                   aria-describedby={errors.name ? "name-error" : undefined}
-                  className={`w-full px-4 py-3.5 text-base border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all touch-manipulation ${errors.name ? "border-red-500" : "border-gray-300"
-                    } ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`}
+                  className={fieldClass(!!errors.name)}
                   placeholder={t.contact.form.namePlaceholder}
                 />
                 {errors.name && (
-                  <p id="name-error" className="mt-1 text-sm text-red-600" role="alert">{errors.name}</p>
+                  <p id="name-error" className="mt-2 text-sm font-semibold text-aspol-red" role="alert">{errors.name}</p>
                 )}
               </div>
 
               <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  {t.contact.form.email}
-                </label>
+                <label htmlFor="email" className={labelClass}>{t.contact.form.email}</label>
                 <input
                   type="email"
                   id="email"
@@ -301,22 +369,16 @@ export default function Contact() {
                   aria-required="true"
                   aria-invalid={errors.email ? "true" : "false"}
                   aria-describedby={errors.email ? "email-error" : undefined}
-                  className={`w-full px-4 py-3.5 text-base border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all touch-manipulation ${errors.email ? "border-red-500" : "border-gray-300"
-                    } ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`}
+                  className={fieldClass(!!errors.email)}
                   placeholder={t.contact.form.emailPlaceholder}
                 />
                 {errors.email && (
-                  <p id="email-error" className="mt-1 text-sm text-red-600" role="alert">{errors.email}</p>
+                  <p id="email-error" className="mt-2 text-sm font-semibold text-aspol-red" role="alert">{errors.email}</p>
                 )}
               </div>
 
               <div>
-                <label
-                  htmlFor="message"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  {t.contact.form.message}
-                </label>
+                <label htmlFor="message" className={labelClass}>{t.contact.form.message}</label>
                 <textarea
                   id="message"
                   name="message"
@@ -332,178 +394,77 @@ export default function Contact() {
                   aria-required="true"
                   aria-invalid={errors.message ? "true" : "false"}
                   aria-describedby={errors.message ? "message-error" : undefined}
-                  className={`w-full px-4 py-3.5 text-base border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all resize-none touch-manipulation ${errors.message ? "border-red-500" : "border-gray-300"
-                    } ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`}
+                  className={`${fieldClass(!!errors.message)} resize-none`}
                   placeholder={t.contact.form.messagePlaceholder}
                 />
                 {errors.message && (
-                  <p id="message-error" className="mt-1 text-sm text-red-600" role="alert">{errors.message}</p>
+                  <p id="message-error" className="mt-2 text-sm font-semibold text-aspol-red" role="alert">{errors.message}</p>
                 )}
               </div>
 
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full px-8 py-4 min-h-14 bg-red-600 text-white text-lg font-semibold rounded-full hover:bg-red-700 transition-all duration-200 hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center touch-manipulation active:scale-95"
+                className="pill pill--red w-full justify-between disabled:cursor-not-allowed disabled:opacity-60"
               >
-                {isSubmitting ? (
-                  <>
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                <span>
+                  {isSubmitting
+                    ? language === "fr"
+                      ? "Envoi en cours..."
+                      : language === "pl"
+                        ? "Wysyłanie..."
+                        : "Sending..."
+                    : t.contact.form.submit}
+                </span>
+                <span className="pill__chip" aria-hidden="true">
+                  {isSubmitting ? (
+                    <svg className="animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    {language === "fr" ? "Envoi en cours..." : language === "pl" ? "Wysyłanie..." : "Sending..."}
-                  </>
-                ) : (
-                  t.contact.form.submit
-                )}
+                  ) : (
+                    <>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M5 12h14M13 6l6 6-6 6" />
+                      </svg>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M5 12h14M13 6l6 6-6 6" />
+                      </svg>
+                    </>
+                  )}
+                </span>
               </button>
-              <p className="text-xs text-gray-400 text-center">
+              <p className="text-center text-xs text-aspol-ink-soft">
                 {language === "fr" ? "Protégé contre le spam automatisé." : language === "pl" ? "Chronione przed automatycznym spamem." : "Protected against automated spam."}
               </p>
             </form>
           </div>
+        </div>
 
-          {/* Contact Info */}
-          <div className="fade-in-element opacity-0 space-y-8" style={{ animationDelay: "0.1s" }}>
-            <div className="bg-gray-50 rounded-2xl p-8">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">
-                {t.contact.info.title}
-              </h3>
-
-              <div className="space-y-6">
-                {/* Email Section - VERIFIED */}
-                <div className="flex items-start space-x-4">
-                  <div className="shrink-0 w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
-                    <svg
-                      className="w-6 h-6 text-red-600"
-                      fill="none"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="font-semibold text-gray-900">{t.contact.info.email}</p>
-                    <a
-                      href="mailto:office@aspol.fr"
-                      className="text-gray-600 hover:text-red-600 transition-colors"
-                    >
-                      office@aspol.fr
-                    </a>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4">
-                  <div className="shrink-0 w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
-                    <svg
-                      className="w-6 h-6 text-red-600"
-                      fill="none"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                      <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="font-semibold text-gray-900">{t.contact.info.location}</p>
-                    <p className="text-gray-600">{t.contact.info.locationValue}</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4">
-                  <div className="shrink-0 w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
-                    <svg
-                      className="w-6 h-6 text-red-600"
-                      fill="none"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="font-semibold text-gray-900">
-                      {t.contact.info.social}
-                    </p>
-                    <div className="flex flex-col gap-1 mt-1">
-                      <a
-                        href="https://www.facebook.com/aspologne"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={() => trackEvent("social_click", { platform: "facebook", source: "contact" })}
-                        aria-label="Facebook - ASPOL"
-                        className="text-gray-600 hover:text-red-600 transition-all duration-200 hover:translate-x-1 inline-flex items-center gap-2 group"
-                      >
-                        <svg className="w-4 h-4 shrink-0 group-hover:scale-110 transition-transform duration-200" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-                        </svg>
-                        <span>Facebook: @aspologne</span>
-                      </a>
-                      <a
-                        href="https://www.instagram.com/aspolska/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={() => trackEvent("social_click", { platform: "instagram", source: "contact" })}
-                        aria-label="Instagram - ASPOL"
-                        className="text-gray-600 hover:text-red-600 transition-all duration-200 hover:translate-x-1 inline-flex items-center gap-2 group"
-                      >
-                        <svg className="w-4 h-4 shrink-0 group-hover:scale-110 transition-transform duration-200" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-                        </svg>
-                        <span>Instagram: @aspolska</span>
-                      </a>
-                      <a
-                        href="https://www.linkedin.com/company/aspolscpo/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={() => trackEvent("social_click", { platform: "linkedin", source: "contact" })}
-                        aria-label="LinkedIn - ASPOL"
-                        className="text-gray-600 hover:text-red-600 transition-all duration-200 hover:translate-x-1 inline-flex items-center gap-2 group"
-                      >
-                        <svg className="w-4 h-4 shrink-0 group-hover:scale-110 transition-transform duration-200" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                        </svg>
-                        <span>LinkedIn: ASPOL</span>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
+        {/* Join panel */}
+        <div id="join" className="on-dark photo-card relative mt-8 overflow-hidden rounded-[2rem] bg-aspol-navy text-white sm:mt-12">
+          <Image
+            src={joinImg?.src ?? PHOTOS.sunsetFriends.src}
+            alt=""
+            fill
+            sizes="(min-width: 1408px) 1312px, 100vw"
+            loading="lazy"
+            className="object-cover opacity-40 mix-blend-multiply"
+            aria-hidden="true"
+          />
+          <div className="relative flex flex-col items-start justify-between gap-8 p-7 sm:p-12 lg:flex-row lg:items-end">
+            <div className="max-w-2xl">
+              <h3 className="display display-md">{text(home.joinPanelTitle, t.contact.join.title)}</h3>
+              <p className="mt-4 text-base leading-relaxed text-white/90 sm:text-lg">{text(home.joinPanelDescription, t.contact.join.description)}</p>
             </div>
-
-            {/* Join Section */}
-            <div id="join" className="bg-linear-to-r from-red-600 to-red-500 rounded-2xl p-8 text-white">
-              <h3 className="text-2xl font-bold mb-4">
-                {t.contact.join.title}
-              </h3>
-              <p className="text-red-100 mb-6">
-                {t.contact.join.description}
-              </p>
-              <a
-                href="https://docs.google.com/forms/d/e/1FAIpQLSebv4I-YbT98Y732JaGTqTfxDYpeGQAxUHybgzntkyai_VEwg/viewform"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => trackEvent("join_click", { source: "contact" })}
-                className="block w-full px-6 py-3 bg-white text-red-600 font-semibold rounded-full hover:bg-gray-100 transition-all duration-200 text-center"
-              >
-                {t.contact.join.button}
-              </a>
-            </div>
+            <Pill
+              href={joinUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackEvent("join_click", { source: "contact" })}
+            >
+              {text(home.joinPanelButton, t.contact.join.button)}
+            </Pill>
           </div>
         </div>
       </div>

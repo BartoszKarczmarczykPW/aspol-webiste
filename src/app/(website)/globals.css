@@ -28,12 +28,27 @@
   --color-neutral-900: #122348;
   --color-neutral-950: #0a152e;
 
+  /* Derived neutrals — tints of the brand navy/white, not new brand colours */
+  --color-aspol-mist: color-mix(in srgb, var(--color-aspol-navy) 6%, var(--color-aspol-white));
+  --color-aspol-line: color-mix(in srgb, var(--color-aspol-navy) 14%, var(--color-aspol-white));
+  --color-aspol-ink-soft: color-mix(in srgb, var(--color-aspol-dark) 72%, var(--color-aspol-white));
+
   /* Font configuration */
-  --font-heading: var(--font-lora), "Lora", serif;
+  --font-display: var(--font-archivo-ext), var(--font-archivo), "Archivo", "Arial Narrow", sans-serif;
+  --font-heading: var(--font-archivo-ext), var(--font-archivo), "Archivo", sans-serif;
+  --font-serif: var(--font-archivo-ext), var(--font-archivo), "Archivo", sans-serif;
   /* Stack: Avenir (if available) -> Avenir Next -> Mulish (fallback) */
-  --font-sans: "Avenir", "Avenir Next", var(--font-avenir), "Mulish", sans-serif;
+  --font-sans: "Avenir", "Avenir Next", var(--font-avenir-ext), var(--font-avenir), "Mulish", sans-serif;
   --font-inter: var(--font-sans);
   /* Fallback mapping for existing classes */
+
+  /* Radii */
+  --radius-panel: 2rem;
+  --radius-card: 1.5rem;
+
+  /* Motion */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
 
   /* Custom Animations */
   --animate-fade-in-up: fadeInUp 0.8s ease-out forwards;
@@ -69,35 +84,8 @@ body {
   color: #ffffff;
 }
 
-/* 2. Shine sweep effect & 3. Colored Glowing Shadows dla przycisków */
-:where(a, button)[class*="bg-aspol-red"],
-:where(a, button)[class*="bg-aspol-blue"] {
-  position: relative;
-  overflow: hidden;
-}
-:where(a, button)[class*="bg-aspol-"]::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 50%;
-  height: 100%;
-  background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent);
-  transform: skewX(-20deg);
-  transition: none;
-  z-index: 10;
-  pointer-events: none;
-}
-:where(a, button)[class*="bg-aspol-"]:hover::after {
-  left: 200%;
-  transition: all 0.7s ease-in-out;
-}
-:where(a, button)[class*="bg-aspol-red"]:hover {
-  box-shadow: 0 10px 20px -5px rgba(144, 12, 21, 0.4), 0 8px 10px -6px rgba(144, 12, 21, 0.2);
-}
-:where(a, button)[class*="bg-aspol-blue"]:hover {
-  box-shadow: 0 10px 20px -5px rgba(0, 74, 173, 0.4), 0 8px 10px -6px rgba(0, 74, 173, 0.2);
-}
+/* (Legacy shine-sweep on bg-aspol-* buttons removed in the redesign: pill
+   buttons now use the arrow-chip hover defined in the design layer below.) */
 
 /* 4. Subcelne obramowania (1px rings) i miękkie unoszenie dla kart */
 :where(div, article, aside)[class*="bg-white"][class*="rounded-xl"],
@@ -133,13 +121,13 @@ img {
 }
 
 /* 8. Animowane podkreślenia dla zwykłych linków w sekcjach tekstowych */
-article a:not([class*="bg-"]):not([class*="btn"]) {
+article a:not([class*="bg-"]):not([class*="btn"]):not(.pill):not([class*="group"]) {
   position: relative;
   text-decoration: none;
   font-weight: 500;
   color: var(--color-aspol-red);
 }
-article a:not([class*="bg-"]):not([class*="btn"])::after {
+article a:not([class*="bg-"]):not([class*="btn"]):not(.pill):not([class*="group"])::after {
   content: '';
   position: absolute;
   width: 100%;
@@ -151,7 +139,7 @@ article a:not([class*="bg-"]):not([class*="btn"])::after {
   transform-origin: bottom right;
   transition: transform 0.3s ease-out;
 }
-article a:not([class*="bg-"]):not([class*="btn"]):hover::after {
+article a:not([class*="bg-"]):not([class*="btn"]):not(.pill):not([class*="group"]):hover::after {
   transform: scaleX(1);
   transform-origin: bottom left;
 }
@@ -176,22 +164,10 @@ article a:not([class*="bg-"]):not([class*="btn"]):hover::after {
   top: 1rem;
 }
 
-/* Focus-visible for nav links */
-:where(header a, nav a, footer a):focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.35);
-  border-radius: 0.375rem;
-}
-
-/* CTA micro-interactions & accessible focus */
+/* CTA micro-interactions */
 :where(a, button)[class*="rounded"] {
   transition: transform 150ms ease, box-shadow 150ms ease, filter 150ms ease;
   -webkit-tap-highlight-color: transparent;
-}
-
-:where(a, button)[class*="rounded"]:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.35);
 }
 
 :where(a, button)[class*="rounded"]:active {
@@ -205,6 +181,239 @@ h4,
 h5,
 h6 {
   font-family: var(--font-heading);
+  font-stretch: 105%;
+}
+
+@layer components {
+/* ===================================================================
+   ASPOL design layer (display type, domes, pills, photo cards)
+   =================================================================== */
+
+/* Display type: heavy, slightly extended, uppercase, tight. */
+.display {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-stretch: 112%;
+  text-transform: uppercase;
+  line-height: 0.95;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+.display-xl { font-size: clamp(2.9rem, 13.5vw, 9.5rem); line-height: 0.88; }
+.display-lg { font-size: clamp(2.25rem, 6.2vw, 5.75rem); }
+.display-md { font-size: clamp(1.625rem, 3.4vw, 2.75rem); line-height: 1; }
+.display-sm { font-size: clamp(1.25rem, 2vw, 1.625rem); line-height: 1.05; }
+
+/* Page container with fluid gutters */
+.container-x {
+  width: 100%;
+  max-width: 88rem;
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 4vw, 3rem);
+}
+
+/* Section vertical rhythm */
+.section-pad {
+  padding-block: clamp(4.5rem, 10vw, 9rem);
+}
+
+/* Dome: a section whose top edge is a big elliptical curve overlapping the
+   previous section (the arc section transition). */
+.dome-top {
+  --dome: clamp(44px, 8vw, 128px);
+  position: relative;
+  margin-top: calc(var(--dome) * -1);
+  border-radius: 50% 50% 0 0 / var(--dome) var(--dome) 0 0;
+  padding-top: calc(var(--dome) + clamp(3rem, 7vw, 6rem));
+  z-index: 1;
+}
+.dome-gap {
+  /* bottom padding on the section above a dome, so its content clears it */
+  padding-bottom: calc(clamp(44px, 8vw, 128px) + clamp(2rem, 5vw, 4rem));
+}
+
+/* Headline word mask reveal (see components/ui/Reveal.tsx) */
+.rw {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+.rw > span {
+  display: inline-block;
+  transform: translateY(108%);
+  transition: transform 1.05s var(--ease-out-expo);
+  transition-delay: calc(var(--i, 0) * 55ms);
+  will-change: transform;
+}
+.is-in .rw > span {
+  transform: translateY(0);
+}
+/* Above-the-fold headline: plays from CSS alone, no hydration needed */
+@keyframes rwIn {
+  from { transform: translateY(108%); }
+  to { transform: translateY(0); }
+}
+.is-now .rw > span {
+  transform: none;
+  animation: rwIn 1.05s var(--ease-out-expo) both;
+  animation-delay: calc(var(--i, 0) * 55ms);
+}
+
+/* Pill button: label + circular arrow chip (the primary CTA) */
+.pill {
+  --pill-bg: var(--color-aspol-white);
+  --pill-fg: var(--color-aspol-dark);
+  --chip-bg: var(--color-aspol-dark);
+  --chip-fg: var(--color-aspol-white);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.9rem;
+  min-height: 3.5rem;
+  padding: 0.4rem 0.4rem 0.4rem 1.6rem;
+  max-width: 100%;
+  border-radius: 999px;
+  background: var(--pill-bg);
+  color: var(--pill-fg);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-stretch: 108%;
+  font-size: 0.875rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  border: 0;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s var(--ease-out-expo);
+  -webkit-tap-highlight-color: transparent;
+}
+.pill:active { transform: scale(0.97); }
+.pill--dark { --pill-bg: var(--color-aspol-dark); --pill-fg: var(--color-aspol-white); --chip-bg: var(--color-aspol-white); --chip-fg: var(--color-aspol-dark); }
+.pill--red { --pill-bg: var(--color-aspol-red); --pill-fg: #fff; --chip-bg: var(--color-aspol-white); --chip-fg: var(--color-aspol-red); }
+.pill--blue { --pill-bg: var(--color-aspol-blue); --pill-fg: #fff; --chip-bg: var(--color-aspol-white); --chip-fg: var(--color-aspol-blue); }
+.pill--ghost { --pill-bg: transparent; --pill-fg: currentColor; --chip-bg: currentColor; --chip-fg: var(--color-aspol-navy); box-shadow: inset 0 0 0 2px currentColor; }
+.pill__chip {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 2.7rem;
+  height: 2.7rem;
+  border-radius: 999px;
+  background: var(--chip-bg);
+  color: var(--chip-fg);
+  overflow: hidden;
+  flex: none;
+  transition: transform 0.5s var(--ease-out-expo);
+}
+.pill__chip svg {
+  grid-area: 1 / 1;
+  width: 1.15rem;
+  height: 1.15rem;
+  transition: transform 0.5s var(--ease-out-expo);
+}
+.pill__chip svg:last-child { transform: translateX(-250%); }
+.pill > span:first-child { min-width: 0; text-align: left; line-height: 1.15; }
+.pill:focus-visible .pill__chip svg:first-child,
+.group:focus-visible .pill--face .pill__chip svg:first-child { transform: translateX(250%); }
+.pill:focus-visible .pill__chip svg:last-child,
+.group:focus-visible .pill--face .pill__chip svg:last-child { transform: translateX(0); }
+@media (hover: hover) {
+  .pill:hover .pill__chip svg:first-child,
+  .group:hover .pill--face .pill__chip svg:first-child { transform: translateX(250%); }
+  .pill:hover .pill__chip svg:last-child,
+  .group:hover .pill--face .pill__chip svg:last-child { transform: translateX(0); }
+}
+/* Phones: stand-alone pill buttons become full-width, thumb-sized targets */
+@media (max-width: 639px) {
+  a.pill:not(.pill--inline), button.pill:not(.pill--inline) { width: 100%; justify-content: space-between; }
+  a.pill--ghost:not(.pill--inline) { justify-content: center; }
+}
+
+/* Desktop nav link: underline wipes in from the left */
+.nav-link::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0.875rem;
+  bottom: 0.3rem;
+  height: 2px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.5s var(--ease-out-expo);
+}
+.nav-link:hover::after,
+.nav-link:focus-visible::after { transform: scaleX(1); transform-origin: left; }
+.pill--ghost:hover { --pill-bg: var(--color-aspol-white); --pill-fg: var(--color-aspol-navy); box-shadow: inset 0 0 0 2px var(--color-aspol-white); }
+
+/* Photo card: grayscale at rest, colour + softer corners on hover/focus */
+.photo-card img {
+  filter: grayscale(1) contrast(1.05);
+  transition: filter 0.7s var(--ease-out-expo), transform 1.1s var(--ease-out-expo);
+}
+.photo-card {
+  transition: border-radius 0.7s var(--ease-out-expo);
+}
+@media (hover: hover) {
+  .photo-card:hover img,
+  .photo-card:focus-within img {
+    filter: none;
+    transform: scale(1.04);
+  }
+}
+@media (hover: none) {
+  .photo-card img { filter: none; }
+}
+
+/* Soft grain-free tonal panel helpers */
+.panel { border-radius: var(--radius-panel); }
+.on-blue { background: var(--color-aspol-blue); color: #fff; }
+.on-dark-bg { background: var(--color-aspol-dark); color: var(--color-aspol-white); }
+.on-red { background: var(--color-aspol-red); color: #fff; }
+
+/* Long-form article text (blog posts, event descriptions) */
+.article-body { color: var(--color-aspol-ink-soft); font-size: 1.125rem; line-height: 1.75; }
+.article-body > * + * { margin-top: 1.25em; }
+.article-body h2, .article-body h3, .article-body h4 {
+  font-family: var(--font-display); font-weight: 800; font-stretch: 108%;
+  line-height: 1.08; letter-spacing: -0.01em; color: var(--color-aspol-dark);
+}
+.article-body h2 { font-size: clamp(1.6rem, 3.2vw, 2.4rem); margin-top: 2.2em; }
+.article-body h3 { font-size: clamp(1.3rem, 2.4vw, 1.7rem); margin-top: 1.9em; }
+.article-body h4 { font-size: 1.15rem; margin-top: 1.6em; }
+.article-body a { color: var(--color-aspol-navy); text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 2px; }
+.article-body a:hover { color: var(--color-aspol-red); }
+.article-body strong { color: var(--color-aspol-dark); }
+.article-body ul, .article-body ol { padding-left: 1.4em; }
+.article-body ul { list-style: disc; }
+.article-body ol { list-style: decimal; }
+.article-body li + li { margin-top: 0.5em; }
+.article-body li::marker { color: var(--color-aspol-navy); }
+.article-body blockquote {
+  border-left: 4px solid var(--color-aspol-navy); padding-left: 1.25rem;
+  font-family: var(--font-display); font-weight: 700; font-size: 1.35rem; line-height: 1.35; color: var(--color-aspol-dark);
+}
+.article-body img { border-radius: 2rem; }
+
+/* Route transition: content eases up 12px while fading in */
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+.page-in { animation: pageIn 0.55s var(--ease-out-expo) both; }
+
+/* Testimonial swap: the new quote rises in once per change */
+@keyframes quoteIn {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.quote-in { animation: quoteIn 0.8s var(--ease-out-expo) both; }
+
+.no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* Stagger helper for list groups */
+.stagger > * { transition-delay: calc(var(--i, 0) * 70ms); }
 }
 
 /* Smooth scroll behavior - Removed from html to prevent Next.js conflicts */
@@ -393,34 +602,41 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #dc2626 0%, #b91c1c 100%);
+  background: var(--color-aspol-navy);
   border-radius: 10px;
   border: 2px solid #f1f1f1;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #b91c1c 0%, #991b1b 100%);
+  background: var(--color-aspol-blue);
 }
 
-/* Enhanced Focus Styles for Accessibility */
+/* Enhanced Focus Styles for Accessibility.
+   The ring colour flips to white inside dark/blue/red panels (.on-dark). */
+:root {
+  --focus-ring: var(--color-aspol-blue);
+}
+.on-dark {
+  --focus-ring: #ffffff;
+}
+
 *:focus-visible {
-  outline: 3px solid #dc2626;
-  outline-offset: 2px;
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 3px;
   border-radius: 4px;
 }
 
 button:focus-visible,
 a:focus-visible {
-  outline: 3px solid #dc2626;
+  outline: 3px solid var(--focus-ring);
   outline-offset: 3px;
 }
 
 input:focus-visible,
 textarea:focus-visible,
 select:focus-visible {
-  outline: 2px solid #dc2626;
-  outline-offset: 0px;
-  border-color: #dc2626;
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
 }
 
 /* Reduced Motion Support for Accessibility - handled in main block above */
@@ -455,12 +671,6 @@ select:focus-visible {
   /* Prevent horizontal scroll */
   body {
     overflow-x: hidden;
-  }
-
-  /* Better spacing for mobile */
-  section {
-    padding-left: 1rem;
-    padding-right: 1rem;
   }
 
   /* Optimize images for mobile */

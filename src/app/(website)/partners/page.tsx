@@ -1,10 +1,15 @@
 "use client";
 
-import { useRef } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-import GlassCard from "@/components/ui/cards/GlassCard";
-import { ArrowRight, CheckCircle2, Users, Building2, Globe, TrendingUp, Handshake } from "lucide-react";
+import { useSiteContent } from "@/contexts/SiteContentContext";
+import { useSanityData } from "@/hooks/useSanityData";
+import { getPartnersPage, type SanityPartnersPage } from "@/lib/sanity";
+import Image from "next/image";
+import PageHero from "@/components/layout/PageHero";
+import Pill from "@/components/ui/Pill";
+import Reveal from "@/components/ui/Reveal";
+import { PHOTOS, photoAlt } from "@/lib/photos";
+import { Users, Globe, TrendingUp, Check } from "lucide-react";
 
 /**
  * Static i18n content — hoisted to module level so the large object
@@ -192,154 +197,169 @@ const CONTENT = {
 
 export default function PartnersPage() {
     const { language } = useLanguage();
-    const sectionRef = useRef<HTMLDivElement>(null);
 
-    /* Reuse the shared scroll-animation hook instead of a one-off
-       IntersectionObserver — keeps behavior consistent site-wide. */
-    useScrollAnimation(sectionRef);
+    const { settings, text, image } = useSiteContent();
+    const { data: cms } = useSanityData<SanityPartnersPage | null>(getPartnersPage, { fallback: null });
+    const d = CONTENT[language as keyof typeof CONTENT] || CONTENT.en;
 
-    const pageContent = CONTENT[language as keyof typeof CONTENT] || CONTENT.en;
+    // Built-in copy is the base; any field (or list) filled in Sanity replaces it.
+    const pageContent = {
+        hero: {
+            label: text(cms?.heroLabel, d.hero.label),
+            title: text(cms?.heroTitle, d.hero.title),
+            subtitle: text(cms?.heroSubtitle, d.hero.subtitle),
+            cta: text(cms?.heroCta, d.hero.cta),
+        },
+        value: {
+            title: text(cms?.valueTitle, d.value.title),
+            items: cms?.valueItems?.length
+                ? cms.valueItems.map((item, i) => ({
+                      icon: d.value.items[i % d.value.items.length].icon,
+                      title: text(item.title, ""),
+                      desc: text(item.description, ""),
+                  }))
+                : d.value.items,
+        },
+        scope: {
+            title: text(cms?.scopeTitle, d.scope.title),
+            subtitle: text(cms?.scopeSubtitle, d.scope.subtitle),
+            items: cms?.scopeItems?.length
+                ? cms.scopeItems.map((item) => text(item.text, "")).filter(Boolean)
+                : d.scope.items,
+        },
+        demographics: {
+            title: text(cms?.communityTitle, d.demographics.title),
+            disciplines: text(cms?.disciplines, d.demographics.disciplines),
+            stats: cms?.stats?.length
+                ? cms.stats.map((stat) => ({ value: stat.value ?? "", label: text(stat.label, "") }))
+                : d.demographics.stats,
+        },
+        cta: {
+            title: text(cms?.ctaTitle, d.cta.title),
+            subtitle: text(cms?.ctaSubtitle, d.cta.subtitle),
+            button: text(cms?.ctaButton, d.cta.button),
+            email: settings.contactEmail || d.cta.email,
+            emailCta: text(cms?.ctaEmailText, d.cta.emailCta),
+        },
+    };
+    const heroImg = image(cms?.heroImage);
+    const tones = [
+        "bg-aspol-dark text-white",
+        "bg-aspol-mist text-aspol-dark",
+        "bg-aspol-navy text-white",
+    ];
 
     return (
-        <main ref={sectionRef} className="min-h-screen bg-white">
-            {/* HERO SECTION */}
-            <section className="relative pt-32 pb-20 px-6 bg-gradient-to-br from-aspol-navy via-aspol-dark to-aspol-navy text-white overflow-hidden">
-                {/* Animated Background Elements */}
-                <div className="absolute inset-0 opacity-10">
-                    <div className="absolute top-20 right-10 w-72 h-72 bg-white rounded-full blur-3xl animate-pulse"></div>
-                    <div className="absolute bottom-20 left-10 w-96 h-96 bg-aspol-red rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }}></div>
-                </div>
-
-                <div className="max-w-7xl mx-auto relative z-10">
-                    <div className="fade-in-element opacity-0 text-center mb-6">
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/20 bg-white/10 backdrop-blur-sm text-sm font-semibold tracking-wide uppercase">
-                            <Building2 size={16} />
-                            {pageContent.hero.label}
-                        </div>
+        <main className="min-h-screen bg-aspol-white text-aspol-dark">
+            {/* HERO */}
+            <PageHero
+                badge={pageContent.hero.label}
+                title={pageContent.hero.title}
+                subtitle={pageContent.hero.subtitle}
+                actions={<Pill href={`mailto:${pageContent.cta.email}`}>{pageContent.hero.cta}</Pill>}
+                aside={
+                    <div className="photo-card relative aspect-4/3 overflow-hidden rounded-[2rem] bg-aspol-dark">
+                        <Image
+                            src={heroImg?.src ?? PHOTOS.groupBanner.src}
+                            alt={heroImg?.alt || photoAlt("groupBanner", language)}
+                            fill
+                            priority
+                            sizes="(min-width: 1024px) 40vw, 100vw"
+                            className="object-cover"
+                        />
                     </div>
+                }
+            />
 
-                    <h1 className="fade-in-element opacity-0 text-5xl md:text-7xl font-bold text-center mb-8 leading-tight" style={{ animationDelay: "0.1s" }}>
-                        {pageContent.hero.title}
-                    </h1>
-
-                    <p className="fade-in-element opacity-0 text-xl md:text-2xl text-gray-200 text-center max-w-4xl mx-auto mb-12 leading-relaxed" style={{ animationDelay: "0.2s" }}>
-                        {pageContent.hero.subtitle}
-                    </p>
-
-                    <div className="fade-in-element opacity-0 text-center" style={{ animationDelay: "0.3s" }}>
-                        <a
-                            href={`mailto:${pageContent.cta.email}`}
-                            className="inline-flex items-center gap-3 px-8 py-4 bg-aspol-red text-white text-lg font-semibold rounded-full hover:bg-red-700 transition-all duration-200 hover:scale-105 shadow-lg"
-                        >
-                            {pageContent.hero.cta}
-                            <ArrowRight size={20} />
-                        </a>
-                    </div>
-                </div>
-            </section>
-
-            {/* VALUE PROPOSITION SECTION */}
-            <section className="py-24 px-6 bg-gray-50">
-                <div className="max-w-7xl mx-auto">
-                    <h2 className="fade-in-element opacity-0 text-4xl md:text-5xl font-bold text-center text-gray-900 mb-16">
-                        {pageContent.value.title}
-                    </h2>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* VALUE PROPOSITION */}
+            <section className="section-pad">
+                <div className="container-x">
+                    <Reveal as="h2" className="display display-lg mb-12 sm:mb-16" text={pageContent.value.title} />
+                    <ul className="grid gap-5 [grid-template-columns:repeat(auto-fit,minmax(min(100%,18rem),1fr))]">
                         {pageContent.value.items.map((item, idx) => {
                             const Icon = item.icon;
                             return (
-                                <div key={idx} className="fade-in-element opacity-0" style={{ animationDelay: `${idx * 0.1}s` }}>
-                                    <GlassCard className="h-full p-8 hover:scale-105 transition-transform duration-300">
-                                        <div className="w-16 h-16 mb-6 bg-gradient-to-br from-aspol-red to-red-600 rounded-2xl flex items-center justify-center text-white shadow-lg">
-                                            <Icon size={32} />
-                                        </div>
-                                        <h3 className="text-2xl font-bold mb-4 text-gray-900">{item.title}</h3>
-                                        <p className="text-gray-600 leading-relaxed">{item.desc}</p>
-                                    </GlassCard>
-                                </div>
+                                <li
+                                    key={idx}
+                                    className={`group flex min-h-80 flex-col justify-between gap-10 rounded-[2rem] p-7 transition-[border-radius] duration-700 ease-(--ease-out-expo) hover:rounded-[3.25rem] sm:p-9 ${tones[idx % tones.length]}`}
+                                >
+                                    <span className="grid size-14 place-items-center rounded-full bg-white/15 transition-transform duration-500 ease-(--ease-out-expo) group-hover:-rotate-12 group-hover:scale-110" aria-hidden="true">
+                                        <Icon size={28} />
+                                    </span>
+                                    <div>
+                                        <h3 className="display display-sm">{item.title}</h3>
+                                        <p className="mt-3 text-base leading-relaxed opacity-85">{item.desc}</p>
+                                    </div>
+                                </li>
                             );
                         })}
-                    </div>
+                    </ul>
                 </div>
             </section>
 
-            {/* COLLABORATION SCOPE SECTION */}
-            <section className="py-24 px-6 bg-white">
-                <div className="max-w-6xl mx-auto">
-                    <div className="text-center mb-16 fade-in-element opacity-0">
-                        <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">{pageContent.scope.title}</h2>
-                        <p className="text-xl text-gray-600 max-w-3xl mx-auto">{pageContent.scope.subtitle}</p>
+            {/* COLLABORATION SCOPE */}
+            <section className="section-pad bg-aspol-mist">
+                <div className="container-x grid gap-12 lg:grid-cols-12 lg:gap-16">
+                    <div className="lg:col-span-5">
+                        <div className="lg:sticky lg:top-32">
+                            <Reveal as="h2" className="display text-[clamp(2.1rem,4.4vw,4.25rem)] [overflow-wrap:anywhere]" text={pageContent.scope.title} />
+                            <p className="mt-6 max-w-[40ch] text-base leading-relaxed text-aspol-ink-soft sm:text-lg">{pageContent.scope.subtitle}</p>
+                        </div>
                     </div>
-
-                    <GlassCard className="fade-in-element opacity-0 p-10 md:p-14" style={{ animationDelay: "0.1s" }}>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="lg:col-span-7">
+                        <ul className="border-b border-aspol-line">
                             {pageContent.scope.items.map((item, idx) => (
-                                <div key={idx} className="flex items-start gap-4">
-                                    <CheckCircle2 className="text-green-600 mt-1 shrink-0" size={20} />
-                                    <span className="text-gray-700 font-medium">{item}</span>
-                                </div>
+                                <li key={idx} className="flex items-start gap-4 border-t border-aspol-line py-5 sm:py-6">
+                                    <span className="mt-0.5 grid size-8 shrink-0 place-items-center rounded-full bg-aspol-navy text-white" aria-hidden="true">
+                                        <Check size={16} strokeWidth={3} />
+                                    </span>
+                                    <span className="font-display text-lg font-bold leading-snug sm:text-xl">{item}</span>
+                                </li>
                             ))}
-                        </div>
-
-                        <div className="mt-12 pt-8 border-t border-gray-200 text-center">
-                            <p className="text-sm text-gray-500 italic">
-                                * Custom arrangements available upon request for strategic partners.
-                            </p>
-                        </div>
-                    </GlassCard>
-                </div>
-            </section>
-
-            {/* DEMOGRAPHICS SECTION */}
-            <section className="py-24 px-6 bg-gradient-to-br from-gray-50 to-white">
-                <div className="max-w-7xl mx-auto">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                        <div className="fade-in-element opacity-0">
-                            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">{pageContent.demographics.title}</h2>
-                            <div className="w-20 h-1 bg-aspol-red mb-8"></div>
-                            <p className="text-sm font-semibold tracking-wide uppercase text-gray-500 mb-2">
-                                Core Disciplines:
-                            </p>
-                            <p className="text-xl font-semibold text-aspol-navy mb-8">
-                                {pageContent.demographics.disciplines}
-                            </p>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-6 fade-in-element opacity-0" style={{ animationDelay: "0.1s" }}>
-                            {pageContent.demographics.stats.map((stat, idx) => (
-                                <GlassCard key={idx} className="p-8 text-center hover:scale-105 transition-transform duration-300">
-                                    <div className="text-5xl font-bold text-aspol-navy mb-3">{stat.value}</div>
-                                    <div className="text-sm font-semibold text-gray-600 uppercase tracking-wide">{stat.label}</div>
-                                </GlassCard>
-                            ))}
-                        </div>
+                        </ul>
+                        <p className="mt-6 text-sm text-aspol-ink-soft">
+                            * Custom arrangements available upon request for strategic partners.
+                        </p>
                     </div>
                 </div>
             </section>
 
-            {/* CTA SECTION */}
-            <section className="py-24 px-6 bg-white">
-                <div className="max-w-4xl mx-auto text-center fade-in-element opacity-0">
-                    <div className="mb-8">
-                        <Handshake className="mx-auto text-aspol-red" size={64} strokeWidth={1.5} />
+            {/* DEMOGRAPHICS */}
+            <section className="on-dark bg-aspol-dark py-20 text-white sm:py-28">
+                <div className="container-x">
+                    <div className="grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-12">
+                        <Reveal as="h2" className="display display-lg lg:col-span-7" text={pageContent.demographics.title} />
+                        <div className="lg:col-span-5">
+                            <p className="font-display text-sm font-bold text-white/70">Core Disciplines:</p>
+                            <p className="mt-1 font-display text-xl font-bold leading-snug sm:text-2xl">{pageContent.demographics.disciplines}</p>
+                        </div>
                     </div>
-                    <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">{pageContent.cta.title}</h2>
-                    <p className="text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
-                        {pageContent.cta.subtitle}
-                    </p>
-                    <a
-                        href={`mailto:${pageContent.cta.email}`}
-                        className="inline-flex items-center gap-3 px-10 py-5 bg-aspol-navy text-white text-lg font-semibold rounded-full hover:bg-aspol-dark transition-all duration-200 hover:scale-105 shadow-xl"
-                    >
-                        {pageContent.cta.button}
-                        <ArrowRight size={20} />
-                    </a>
-                    <div className="mt-8 text-gray-500">
-                        {pageContent.cta.emailCta}{" "}
-                        <a href={`mailto:${pageContent.cta.email}`} className="text-aspol-red hover:underline font-semibold">
-                            {pageContent.cta.email}
-                        </a>
+                    <ul className="mt-14 grid grid-cols-2 gap-x-6 gap-y-12 lg:grid-cols-4 lg:gap-x-10">
+                        {pageContent.demographics.stats.map((stat, idx) => (
+                            <li key={idx} className="flex flex-col justify-between gap-6 border-t border-white/25 pt-6">
+                                <span className="display text-[clamp(3rem,7vw,6.5rem)] leading-[0.85]">{stat.value}</span>
+                                <span className="max-w-[16ch] font-display text-base font-bold leading-tight text-white/85 sm:text-lg">{stat.label}</span>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </section>
+
+            {/* CTA */}
+            <section className="section-pad">
+                <div className="container-x">
+                    <div className="on-dark relative overflow-hidden rounded-[2rem] bg-aspol-red p-8 text-white sm:p-14 lg:p-20">
+                        <Reveal as="h2" className="display display-lg max-w-[16ch]" text={pageContent.cta.title} />
+                        <p className="mt-6 max-w-[52ch] text-base leading-relaxed text-white/90 sm:text-lg">{pageContent.cta.subtitle}</p>
+                        <div className="mt-10 flex flex-col items-start gap-5 sm:flex-row sm:items-center">
+                            <Pill href={`mailto:${pageContent.cta.email}`}>{pageContent.cta.button}</Pill>
+                            <p className="text-white/85">
+                                {pageContent.cta.emailCta}{" "}
+                                <a href={`mailto:${pageContent.cta.email}`} className="font-semibold text-white underline underline-offset-4">
+                                    {pageContent.cta.email}
+                                </a>
+                            </p>
+                        </div>
                     </div>
                 </div>
             </section>

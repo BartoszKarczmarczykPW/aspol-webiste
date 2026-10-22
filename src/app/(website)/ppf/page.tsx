@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getAlternates } from "@/lib/seo";
+import { DEFAULT_OG_IMAGE, getAlternates } from "@/lib/seo";
 import PPFRegistration from "@/components/ppf/PPFRegistration";
 
 export const metadata: Metadata = {
@@ -12,7 +12,10 @@ export const metadata: Metadata = {
     description:
       "Register for Paris Polish Forum 2026 (April 17-18). Join Polish students and professionals for two days of conferences and networking in Paris.",
     type: "website",
+    url: "/ppf",
+    images: [DEFAULT_OG_IMAGE],
   },
+  twitter: { card: "summary_large_image", images: [DEFAULT_OG_IMAGE.url] },
 };
 
 export default function PPFPage() {

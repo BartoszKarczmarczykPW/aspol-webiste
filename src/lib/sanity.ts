@@ -100,13 +100,22 @@ export interface SanityAboutSection {
     icon?: string
     order?: number
     link?: string
+    image?: SanityImageWithAlt | null
     title?: LocalizedString
     description?: LocalizedString
   }[]
 }
 
+export interface SanityImageWithAlt {
+  asset?: { _ref?: string; _id?: string; url?: string } | null
+  alt?: Partial<LocalizedString>
+  [key: string]: unknown
+}
+
 export interface SanityInitiative {
   _id: string
+  image?: SanityImageWithAlt | null
+  link?: string
   featured?: boolean
   icon?: string
   title: LocalizedString
@@ -124,6 +133,7 @@ export interface SanityTeamMember {
 
 export interface SanityTestimonial {
   _id: string
+  photo?: SanityImageWithAlt | null
   name: string
   role: LocalizedString
   text: LocalizedString
@@ -266,6 +276,7 @@ export async function getAboutSection(): Promise<SanityAboutSection | null> {
       icon,
       order,
       link,
+      image { ..., alt { en, fr, pl } },
       title { en, fr, pl },
       description { en, fr, pl }
     }
@@ -278,6 +289,8 @@ export async function getInitiatives(): Promise<SanityInitiative[]> {
     _id,
     featured,
     icon,
+    link,
+    image { ..., alt { en, fr, pl } },
     title { en, fr, pl },
     badge { en, fr, pl },
     description { en, fr, pl }
@@ -308,6 +321,133 @@ export async function getTestimonials(): Promise<SanityTestimonial[]> {
     name,
     role { en, fr, pl },
     text { en, fr, pl },
+    photo { ..., alt { en, fr, pl } },
     year
   }`, undefined, { next: { tags: ['testimonials'] } })
+}
+
+/* ------------------------------------------------------------------ */
+/*  Site settings, home page content and FAQ (all fields optional)     */
+/* ------------------------------------------------------------------ */
+
+type L = Partial<LocalizedString>
+
+export interface SanitySiteSettings {
+  joinUrl?: string
+  facebookUrl?: string
+  instagramUrl?: string
+  linkedinUrl?: string
+  facebookHandle?: string
+  instagramHandle?: string
+  linkedinHandle?: string
+  contactEmail?: string
+  contactLocation?: L
+  foundedLabel?: string
+  boardSeason?: string
+  footerStatement?: L
+}
+
+export interface SanityHomePage {
+  heroWelcome?: L
+  heroSubtitle?: L
+  heroDescription?: L
+  heroJoinLabel?: L
+  heroPartnerLabel?: L
+  heroImage?: SanityImageWithAlt | null
+  statsImage?: SanityImageWithAlt | null
+  partnersTitle?: L
+  partnersCta?: L
+  initiativesTitle?: L
+  initiativesSubtitle?: L
+  initiativesCta?: L
+  initiativesJoinButton?: L
+  teamTitle?: L
+  teamSubtitle?: L
+  teamJoinText?: L
+  teamJoinButton?: L
+  testimonialsTitle?: L
+  testimonialsSubtitle?: L
+  testimonialsShareText?: L
+  testimonialsJoinButton?: L
+  moments?: SanityImageWithAlt[]
+  faqTitle?: L
+  faqSubtitle?: L
+  newsletterTitle?: L
+  newsletterDescription?: L
+  newsletterButton?: L
+  contactTitle?: L
+  contactSubtitle?: L
+  joinPanelTitle?: L
+  joinPanelDescription?: L
+  joinPanelButton?: L
+  joinPanelImage?: SanityImageWithAlt | null
+}
+
+export interface SanityFaq {
+  _id: string
+  question: LocalizedString
+  answer: LocalizedString
+}
+
+/** Fetch the Site Settings singleton. */
+export async function getSiteSettings(): Promise<SanitySiteSettings | null> {
+  return client.fetch(`*[_type == "siteSettings"] | order(_updatedAt desc)[0] {
+    joinUrl, facebookUrl, instagramUrl, linkedinUrl,
+    facebookHandle, instagramHandle, linkedinHandle,
+    contactEmail, contactLocation { en, fr, pl },
+    foundedLabel, boardSeason,
+    footerStatement { en, fr, pl }
+  }`, undefined, { next: { tags: ['siteSettings'] } })
+}
+
+const L3 = '{ en, fr, pl }'
+const IMG = '{ ..., alt { en, fr, pl } }'
+
+/** Fetch the Home Page Content singleton. */
+export async function getHomePage(): Promise<SanityHomePage | null> {
+  return client.fetch(`*[_type == "homePage"] | order(_updatedAt desc)[0] {
+    heroWelcome ${L3}, heroSubtitle ${L3}, heroDescription ${L3}, heroJoinLabel ${L3}, heroPartnerLabel ${L3},
+    heroImage ${IMG}, statsImage ${IMG},
+    partnersTitle ${L3}, partnersCta ${L3},
+    initiativesTitle ${L3}, initiativesSubtitle ${L3}, initiativesCta ${L3}, initiativesJoinButton ${L3},
+    teamTitle ${L3}, teamSubtitle ${L3}, teamJoinText ${L3}, teamJoinButton ${L3},
+    testimonialsTitle ${L3}, testimonialsSubtitle ${L3}, testimonialsShareText ${L3}, testimonialsJoinButton ${L3},
+    moments[] ${IMG},
+    faqTitle ${L3}, faqSubtitle ${L3},
+    newsletterTitle ${L3}, newsletterDescription ${L3}, newsletterButton ${L3},
+    contactTitle ${L3}, contactSubtitle ${L3},
+    joinPanelTitle ${L3}, joinPanelDescription ${L3}, joinPanelButton ${L3}, joinPanelImage ${IMG}
+  }`, undefined, { next: { tags: ['homePage'] } })
+}
+
+/** Fetch active FAQ entries. */
+export async function getFaqs(): Promise<SanityFaq[]> {
+  return client.fetch(`*[_type == "faq" && status == "active"] | order(order asc, question.en asc) {
+    _id,
+    question ${L3},
+    answer ${L3}
+  }`, undefined, { next: { tags: ['faq'] } })
+}
+
+export interface SanityPartnersPage {
+  heroLabel?: L; heroTitle?: L; heroSubtitle?: L; heroCta?: L
+  heroImage?: SanityImageWithAlt | null
+  valueTitle?: L
+  valueItems?: { title?: L; description?: L }[]
+  scopeTitle?: L; scopeSubtitle?: L
+  scopeItems?: { text?: L }[]
+  communityTitle?: L; disciplines?: L
+  stats?: { value?: string; label?: L }[]
+  ctaTitle?: L; ctaSubtitle?: L; ctaButton?: L; ctaEmailText?: L
+}
+
+/** Fetch the Partners Page singleton. */
+export async function getPartnersPage(): Promise<SanityPartnersPage | null> {
+  return client.fetch(`*[_type == "partnersPage"] | order(_updatedAt desc)[0] {
+    heroLabel ${L3}, heroTitle ${L3}, heroSubtitle ${L3}, heroCta ${L3}, heroImage ${IMG},
+    valueTitle ${L3}, valueItems[] { title ${L3}, description ${L3} },
+    scopeTitle ${L3}, scopeSubtitle ${L3}, scopeItems[] { text ${L3} },
+    communityTitle ${L3}, disciplines ${L3}, stats[] { value, label ${L3} },
+    ctaTitle ${L3}, ctaSubtitle ${L3}, ctaButton ${L3}, ctaEmailText ${L3}
+  }`, undefined, { next: { tags: ['partnersPage'] } })
 }

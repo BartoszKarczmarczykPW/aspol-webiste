@@ -39,17 +39,23 @@ export default function AddToCalendarButton({ event, className = "", label = "Ad
     };
 
     const variants = {
-        default: "bg-aspol-navy/5 hover:bg-aspol-navy/10 text-aspol-navy",
-        glass: "bg-white/10 hover:bg-white/20 text-white backdrop-blur-md border border-white/10 shadow-lg",
-        outline: "border border-gray-200 hover:border-aspol-navy text-gray-600 hover:text-aspol-navy"
+        default: "bg-aspol-mist hover:bg-aspol-line text-aspol-dark",
+        glass: "bg-white/15 hover:bg-white text-white hover:text-aspol-navy",
+        outline: "ring-1 ring-aspol-line hover:bg-aspol-navy hover:text-white hover:ring-aspol-navy text-aspol-dark",
     };
+
+    const iconOnly = !label;
 
     return (
         <button
+            type="button"
             onClick={handleGoogleClick}
-            className={`inline-flex items-center gap-2 px-4 py-2 font-bold rounded-xl transition-all duration-300 text-sm ${variants[variant]} ${className}`}
+            aria-label={iconOnly ? "Add to Google Calendar" : undefined}
+            className={`inline-flex items-center justify-center gap-2 rounded-full font-display font-bold transition-colors duration-300 text-sm ${
+                iconOnly ? "size-14" : "min-h-14 px-6"
+            } ${variants[variant]} ${className}`}
         >
-            <CalendarIcon size={16} />
+            <CalendarIcon size={18} aria-hidden="true" />
             {label}
         </button>
     );

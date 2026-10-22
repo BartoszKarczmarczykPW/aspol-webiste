@@ -1,5 +1,6 @@
 import { defineType, defineField, defineArrayMember } from 'sanity'
 import { InfoOutlineIcon } from '@sanity/icons'
+import { imageWithAlt } from './_fields'
 
 const aboutSection = defineType({
   name: 'aboutSection',
@@ -89,6 +90,7 @@ const aboutSection = defineType({
               ],
               validation: (rule) => rule.required(),
             }),
+            imageWithAlt('image', 'Panel photo (optional)', 'Used as the background of the first (lead) feature panel. Leave empty for the default photo.'),
             defineField({
               name: 'link',
               title: 'Link (optional)',

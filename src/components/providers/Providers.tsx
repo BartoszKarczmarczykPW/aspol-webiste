@@ -2,6 +2,7 @@
 
 import { ReactNode } from "react";
 import { LanguageProvider } from "@/contexts/LanguageContext";
+import { SiteContentProvider } from "@/contexts/SiteContentContext";
 
 interface ProvidersProps {
   children: ReactNode;
@@ -10,7 +11,7 @@ interface ProvidersProps {
 export default function Providers({ children }: ProvidersProps) {
   return (
     <LanguageProvider>
-      {children}
+      <SiteContentProvider>{children}</SiteContentProvider>
     </LanguageProvider>
   );
 }

@@ -750,9 +750,9 @@ export default function PPFRegistration() {
   return (
     <section className="min-h-screen relative overflow-hidden">
       {/* ── HERO AREA ── */}
-      <div className="relative bg-aspol-dark overflow-hidden">
+      <div className="on-dark relative bg-aspol-navy overflow-hidden [border-radius:0_0_50%_50%/0_0_clamp(40px,7vw,110px)_clamp(40px,7vw,110px)]">
         {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-linear-to-br from-aspol-dark via-aspol-navy/80 to-aspol-dark" />
+        <div className="absolute inset-0 bg-aspol-navy" />
         <div className="absolute inset-0 opacity-20" style={{ backgroundImage: "radial-gradient(circle at 30% 40%, rgba(144, 12, 21, 0.5), transparent 60%), radial-gradient(circle at 70% 80%, rgba(20, 61, 115, 0.5), transparent 60%)" }} />
         {/* Subtle grid pattern */}
         <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)", backgroundSize: "60px 60px" }} />
@@ -770,17 +770,17 @@ export default function PPFRegistration() {
 
           {/* Title */}
           <div className={`transition-all duration-700 delay-200 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
-            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight font-heading mb-4">
+            <h1 className="display text-[clamp(2.5rem,7.4vw,6.75rem)] mb-4">
               <span className="text-white">{tr.title}</span>
               <br />
-              <span className="text-aspol-red">{tr.year}</span>
+              <span className="text-transparent [-webkit-text-stroke:2px_#fff]">{tr.year}</span>
             </h1>
-            <p className="text-lg sm:text-xl text-white/50 font-medium mb-2">{tr.subtitle}</p>
+            <p className="text-lg sm:text-xl text-white/85 font-medium mb-2">{tr.subtitle}</p>
           </div>
 
           {/* Description */}
           <div className={`transition-all duration-700 delay-300 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
-            <p className="text-base sm:text-lg text-white/40 max-w-2xl mx-auto mt-6 leading-relaxed">
+            <p className="text-base sm:text-lg text-white/80 max-w-2xl mx-auto mt-6 leading-relaxed">
               {tr.heroDesc}
             </p>
           </div>

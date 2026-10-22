@@ -54,15 +54,15 @@ export default function CalendarWidget({ events, className = "" }: CalendarWidge
                 <div key={d} className="relative h-8 md:h-10 flex items-center justify-center">
                     <div
                         className={`
-                            w-7 h-7 md:w-8 md:h-8 flex items-center justify-center rounded-full text-xs md:text-sm font-medium transition-all
-                            ${isToday ? 'bg-aspol-red text-white' : ''}
-                            ${hasEvent ? 'bg-blue-50 text-aspol-navy font-bold border border-blue-100 hover:bg-aspol-navy hover:text-white cursor-pointer' : 'text-gray-500'}
+                            size-9 md:size-10 flex items-center justify-center rounded-full text-sm font-medium transition-colors
+                            ${isToday ? 'ring-2 ring-aspol-red text-aspol-dark font-bold' : ''}
+                            ${hasEvent ? 'bg-aspol-navy text-white font-bold' : 'text-aspol-ink-soft'}
                         `}
                         title={hasEvent ? "Event this day" : ""}
                     >
                         {d}
                         {hasEvent && !isToday && (
-                            <span className="absolute bottom-1 w-1 h-1 bg-aspol-red rounded-full" />
+                            <span className="absolute bottom-0.5 size-1.5 rounded-full bg-aspol-red" />
                         )}
                     </div>
                 </div>
@@ -73,17 +73,17 @@ export default function CalendarWidget({ events, className = "" }: CalendarWidge
     };
 
     return (
-        <div className={`bg-white rounded-3xl shadow-lg border border-gray-100 p-6 ${className}`}>
+        <div className={`rounded-[2rem] bg-aspol-white p-6 sm:p-10 ${className}`}>
             {/* Header */}
             <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-bold text-aspol-navy font-serif">
+                <h3 className="display display-sm">
                     {monthNames[month]} {year}
                 </h3>
                 <div className="flex gap-2">
-                    <button onClick={prevMonth} className="p-1 hover:bg-gray-100 rounded-full transition-colors text-gray-500">
+                    <button type="button" onClick={prevMonth} aria-label="Previous month" className="grid size-11 place-items-center rounded-full bg-aspol-mist text-aspol-dark transition-colors hover:bg-aspol-navy hover:text-white">
                         <ChevronLeft size={20} />
                     </button>
-                    <button onClick={nextMonth} className="p-1 hover:bg-gray-100 rounded-full transition-colors text-gray-500">
+                    <button type="button" onClick={nextMonth} aria-label="Next month" className="grid size-11 place-items-center rounded-full bg-aspol-mist text-aspol-dark transition-colors hover:bg-aspol-navy hover:text-white">
                         <ChevronRight size={20} />
                     </button>
                 </div>
@@ -92,7 +92,7 @@ export default function CalendarWidget({ events, className = "" }: CalendarWidge
             {/* Weekdays */}
             <div className="grid grid-cols-7 mb-2 text-center">
                 {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map(day => (
-                    <div key={day} className="text-xs font-bold text-gray-400 uppercase tracking-wider">
+                    <div key={day} className="font-display text-xs font-bold text-aspol-ink-soft">
                         {day}
                     </div>
                 ))}
@@ -104,8 +104,8 @@ export default function CalendarWidget({ events, className = "" }: CalendarWidge
             </div>
 
             {/* Legend / Info */}
-            <div className="mt-6 pt-4 border-t border-gray-50 text-xs text-center text-gray-400">
-                <span className="inline-block w-2 h-2 rounded-full bg-aspol-red mr-2" />
+            <div className="mt-6 flex items-center justify-center gap-2 border-t border-aspol-line pt-5 text-sm text-aspol-ink-soft">
+                <span className="inline-block size-2.5 rounded-full bg-aspol-navy" />
                 Event scheduled
             </div>
         </div>

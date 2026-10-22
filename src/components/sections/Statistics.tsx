@@ -1,14 +1,17 @@
 "use client";
 
-import { memo, useState, useEffect, useRef } from 'react';
+import { memo, useState, useEffect, useRef } from "react";
+import Image from "next/image";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useSiteContent } from "@/contexts/SiteContentContext";
 import { useInView } from "@/hooks/useInView";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useSanityData } from "@/hooks/useSanityData";
 import { StatItemProps } from "@/types";
 import { getStatistics } from "@/lib/sanity";
+import { PHOTOS } from "@/lib/photos";
 
-function StatItem({ end, label, suffix = "", duration = 2000 }: StatItemProps) {
+function StatItem({ end, label, suffix = "", duration = 2200 }: StatItemProps) {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
   const isVisible = useInView(ref, 0.3);
@@ -43,16 +46,17 @@ function StatItem({ end, label, suffix = "", duration = 2000 }: StatItemProps) {
   }, [isVisible, end, duration, prefersReducedMotion]);
 
   return (
-    <div ref={ref} className="text-center p-6">
-      <div className="flex flex-col items-center">
-        <div className="text-5xl sm:text-6xl md:text-7xl font-bold bg-clip-text text-transparent bg-linear-to-b from-white to-blue-200 mb-2 font-heading tracking-tight">
-          {count}{suffix}
-        </div>
-        <div className="h-1 w-12 bg-red-500 rounded-full mb-4 opacity-80"></div>
-        <p className="text-blue-100 font-medium text-sm sm:text-base uppercase tracking-wider">
-          {label}
-        </p>
+    <div ref={ref} className="flex flex-col justify-between gap-6 border-t border-white/25 pt-6 sm:min-h-52">
+      <div
+        className="display text-[clamp(3.5rem,8vw,7.5rem)] leading-[0.85] tabular-nums"
+        aria-label={`${end}${suffix}`}
+      >
+        <span aria-hidden="true">
+          {count}
+          {suffix}
+        </span>
       </div>
+      <p className="max-w-[18ch] font-display text-base font-bold leading-tight text-white/85 sm:text-lg">{label}</p>
     </div>
   );
 }
@@ -80,6 +84,8 @@ const FALLBACK_ITEMS: readonly StatDataItem[] = [
 
 const Statistics = memo(function Statistics() {
   const { language } = useLanguage();
+  const { home, image } = useSiteContent();
+  const statsImg = image(home.statsImage, 1600);
 
   const currentLabels = FALLBACK_LABELS[language] || FALLBACK_LABELS.en;
 
@@ -95,34 +101,43 @@ const Statistics = memo(function Statistics() {
   const resolvedItems = !loading && items.length > 0 ? items : FALLBACK_ITEMS;
 
   return (
-    <section className="py-16 px-6 bg-aspol-white" aria-label="Key statistics">
-      <div className="max-w-7xl mx-auto bg-aspol-dark rounded-xl shadow-xl shadow-aspol-navy/10 overflow-hidden relative border border-aspol-navy/20">
+    <section
+      className="on-dark dome-top relative overflow-hidden bg-aspol-dark pb-20 text-white sm:pb-28"
+      aria-label="Key statistics"
+    >
+      {/* Textural photograph, desaturated and sunk into the navy */}
+      <Image
+        src={statsImg?.src ?? PHOTOS.hallAudience.src}
+        alt=""
+        fill
+        sizes="100vw"
+        loading="lazy"
+        className="object-cover opacity-[0.16] mix-blend-luminosity"
+        aria-hidden="true"
+      />
+      <div className="absolute inset-0 bg-linear-to-b from-aspol-dark via-transparent to-aspol-dark" aria-hidden="true" />
+
+      <div className="container-x relative">
         <h2 className="sr-only">ASPOL in Numbers</h2>
+        <ul className="grid grid-cols-2 gap-x-6 gap-y-12 lg:grid-cols-4 lg:gap-x-10">
+          {resolvedItems.map((item, index) => {
+            const label = item.label
+              ? item.label[language] || item.label.en || ""
+              : index === 0
+                ? currentLabels.members
+                : index === 1
+                  ? currentLabels.events
+                  : index === 2
+                    ? currentLabels.forums
+                    : currentLabels.years;
 
-        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl mix-blend-overlay -translate-y-1/2 translate-x-1/2" aria-hidden="true"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-red-500/10 rounded-full blur-3xl mix-blend-overlay translate-y-1/2 -translate-x-1/2" aria-hidden="true"></div>
-
-        <div className="relative z-10 py-12 sm:py-16 px-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 divide-y sm:divide-y-0 sm:divide-x divide-white/10">
-            {resolvedItems.map((item, index) => {
-              const label = item.label
-                ? item.label[language] || item.label.en || ""
-                : index === 0 ? currentLabels.members
-                : index === 1 ? currentLabels.events
-                : index === 2 ? currentLabels.forums
-                : currentLabels.years;
-
-              return (
-                <StatItem
-                  key={`stat-${index}`}
-                  end={item.value}
-                  label={label}
-                  suffix={item.suffix || ""}
-                />
-              );
-            })}
-          </div>
-        </div>
+            return (
+              <li key={`stat-${index}`}>
+                <StatItem end={item.value} label={label} suffix={item.suffix || ""} />
+              </li>
+            );
+          })}
+        </ul>
       </div>
     </section>
   );

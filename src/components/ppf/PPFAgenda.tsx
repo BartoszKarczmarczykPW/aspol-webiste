@@ -363,8 +363,8 @@ function TimelineSection({
 
       <header className="relative mb-8 sm:mb-10">
         <p className="text-xs tracking-[0.24em] uppercase text-white/55">{dayLabel}</p>
-        <h3 className="mt-2 text-5xl sm:text-6xl font-bold italic text-white font-heading leading-none">{dayTitle}</h3>
-        <p className="mt-2 text-4xl sm:text-5xl font-semibold text-aspol-red leading-none">{dayDate}</p>
+        <h3 className="mt-2 text-5xl sm:text-6xl display text-white leading-none">{dayTitle}</h3>
+        <p className="mt-2 text-4xl sm:text-5xl font-semibold text-white/70 leading-none">{dayDate}</p>
         <p className="mt-3 text-sm sm:text-base text-white/80">{dayLocation}</p>
       </header>
 
@@ -412,7 +412,7 @@ export default function PPFAgenda({ language }: { language: string }) {
     <div id="ppf-agenda" className="max-w-7xl mx-auto px-4 sm:px-6 pt-14 sm:pt-16 pb-16 sm:pb-20">
       <header className="mb-8 sm:mb-10">
         <p className="text-xs sm:text-sm uppercase tracking-[0.2em] text-aspol-dark/50">PPF 2026</p>
-        <h2 className="mt-3 text-4xl sm:text-5xl md:text-6xl font-bold italic text-aspol-dark font-heading">{tr.sectionTitle}</h2>
+        <h2 className="mt-3 text-4xl sm:text-5xl md:text-6xl display text-aspol-dark">{tr.sectionTitle}</h2>
         <p className="mt-3 text-lg sm:text-xl text-aspol-dark/70">{tr.sectionLead}</p>
       </header>
 
@@ -470,7 +470,7 @@ export default function PPFAgenda({ language }: { language: string }) {
 
       <section className="mt-10 sm:mt-12 rounded-3xl border border-gray-200 bg-gray-100 px-5 py-8 sm:px-8 sm:py-10">
         <header>
-          <h3 className="text-3xl sm:text-4xl font-bold italic text-aspol-navy font-heading">{tr.panels.title}</h3>
+          <h3 className="text-3xl sm:text-4xl display text-aspol-navy">{tr.panels.title}</h3>
           <p className="mt-2 text-aspol-navy/80">{tr.panels.subtitle}</p>
         </header>
 

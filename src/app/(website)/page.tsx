@@ -13,7 +13,7 @@ const Contact = dynamic(() => import("@/components/sections/Contact"));
 
 export default function Home() {
     return (
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen bg-aspol-white">
             <Hero />
             <PartnersLogos />
             <About />

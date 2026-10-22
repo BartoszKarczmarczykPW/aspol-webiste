@@ -24,7 +24,7 @@ export async function generateMetadata({
 
   const title = `${event.title} | ASPOL`;
   const description = event.shortDescription;
-  const image = event.image || "/og-image.svg";
+  const image = event.image || "/og-image.png";
   const url = `/events/${slug}`;
 
   return {

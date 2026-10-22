@@ -1,9 +1,12 @@
 import { MetadataRoute } from 'next';
 import { blogPosts } from '@/data/blogPosts';
 import { eventsData } from '@/data/eventsData';
+import { universityGuides } from '@/data/universityGuides';
+import { getPosts } from '@/lib/sanity';
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://aspol.fr';
+const baseUrl = 'https://aspol.fr';
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Current date at build time — Next.js regenerates this on each build
   // so static routes always reflect the latest deployment date.
   const buildDate = new Date();
@@ -15,6 +18,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/events',
     '/partners',
     '/pathway',
+    '/ppf',
     '/legal-notice',
     '/privacy-policy',
     '/terms-of-use',
@@ -25,15 +29,35 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: route === '' ? 1 : 0.8,
   }));
 
-  // Dynamic Blog routes (EN is default)
-  const blogRoutes = blogPosts.en.map((post) => ({
-    url: `${baseUrl}/blog/${post.id}`,
-    lastModified: new Date(post.date), // Assuming date string is parseable or just use new Date()
-    changeFrequency: 'weekly' as const,
+  // University guides (statically generated pages under /pathway)
+  const guideRoutes = Object.keys(universityGuides).map((slug) => ({
+    url: `${baseUrl}/pathway/${slug}`,
+    lastModified: buildDate,
+    changeFrequency: 'monthly' as const,
     priority: 0.7,
   }));
 
-  // Dynamic Event routes (EN is default)
+  // Blog articles come from Sanity (that is what /blog/[slug] renders). If Sanity
+  // cannot be reached at build time, fall back to the bundled list so the sitemap never breaks.
+  let blogRoutes: MetadataRoute.Sitemap;
+  try {
+    const posts = await getPosts();
+    blogRoutes = posts.map((post) => ({
+      url: `${baseUrl}/blog/${post.slug.current}`,
+      lastModified: new Date(post.publishedAt),
+      changeFrequency: 'weekly' as const,
+      priority: 0.7,
+    }));
+  } catch {
+    blogRoutes = blogPosts.en.map((post) => ({
+      url: `${baseUrl}/blog/${post.id}`,
+      lastModified: new Date(post.date),
+      changeFrequency: 'weekly' as const,
+      priority: 0.7,
+    }));
+  }
+
+  // Event detail pages (rendered from the bundled events list)
   const eventRoutes = eventsData.en.map((event) => ({
     url: `${baseUrl}/events/${event.id}`,
     lastModified: buildDate,
@@ -41,5 +65,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [...routes, ...blogRoutes, ...eventRoutes];
+  return [...routes, ...guideRoutes, ...blogRoutes, ...eventRoutes];
 }

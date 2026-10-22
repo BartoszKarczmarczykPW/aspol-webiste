@@ -1,5 +1,13 @@
 import type { Metadata } from "next";
 
+/** Default social-share card (1200x630 PNG; social crawlers do not render SVG). */
+export const DEFAULT_OG_IMAGE = {
+  url: "/og-image.png",
+  width: 1200,
+  height: 630,
+  alt: "ASPOL - Building bridges between Poland and France",
+};
+
 type LanguageCode = "en" | "fr" | "pl";
 
 const SUPPORTED_LANGUAGES: LanguageCode[] = ["en", "fr", "pl"];

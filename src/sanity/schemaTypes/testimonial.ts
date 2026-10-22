@@ -1,5 +1,6 @@
 import { defineType, defineField } from 'sanity'
 import { CommentIcon } from '@sanity/icons'
+import { imageWithAlt } from './_fields'
 
 const testimonial = defineType({
   name: 'testimonial',
@@ -35,6 +36,7 @@ const testimonial = defineType({
       ],
       validation: (rule) => rule.required(),
     }),
+    imageWithAlt('photo', 'Photo (optional)', 'Shown as a round portrait. Without a photo the initials are shown.'),
     defineField({
       name: 'year',
       title: 'Year',

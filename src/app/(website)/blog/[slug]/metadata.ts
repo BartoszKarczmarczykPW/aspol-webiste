@@ -30,15 +30,16 @@ export async function generateMetadata({
     };
   }
 
-  const title = getLocalizedValue(post.title, "en") || "Polish Paris Forum";
+  const baseTitle = getLocalizedValue(post.title, "en") || "Polish Paris Forum";
+  const title = `${baseTitle} | Polish Paris Forum | ASPOL`;
   const description =
     getLocalizedValue(post.excerpt, "en") ||
     "Conference news, highlights, and insights from the Polish Paris Forum.";
-  const image = post.imageUrl || "/og-image.svg";
+  const image = post.imageUrl || "/og-image.png";
   const url = `/blog/${slug}`;
 
   return {
-    title,
+    title: { absolute: title },
     description,
     alternates: getAlternates(url),
     openGraph: {

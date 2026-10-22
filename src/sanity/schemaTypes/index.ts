@@ -10,6 +10,10 @@ import initiative from './initiative'
 import testimonial from './testimonial'
 import contactMessage from './contactMessage'
 import newsletterSignup from './newsletterSignup'
+import siteSettings from './siteSettings'
+import homePage from './homePage'
+import faq from './faq'
+import partnersPage from './partnersPage'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -24,5 +28,9 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     testimonial,
     contactMessage,
     newsletterSignup,
+    siteSettings,
+    homePage,
+    faq,
+    partnersPage,
   ],
 }

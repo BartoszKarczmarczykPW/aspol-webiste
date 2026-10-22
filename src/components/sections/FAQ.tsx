@@ -2,7 +2,12 @@
 
 import { useState, useMemo } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useSiteContent } from "@/contexts/SiteContentContext";
+import { useSanityData } from "@/hooks/useSanityData";
+import { getFaqs } from "@/lib/sanity";
 import { FAQItem } from "@/types";
+import Reveal from "@/components/ui/Reveal";
+import Pill from "@/components/ui/Pill";
 
 const FAQS: Readonly<Record<string, FAQItem[]>> = {
   en: [
@@ -87,10 +92,24 @@ const FAQS: Readonly<Record<string, FAQItem[]>> = {
 
 export default function FAQ() {
   const { language } = useLanguage();
+  const { home, text } = useSiteContent();
+
+  // FAQ entries come from Sanity when any are published; otherwise the built-in list is used.
+  const { data: cmsFaqs } = useSanityData<FAQItem[] | null>(
+    async () => {
+      const data = await getFaqs();
+      if (!Array.isArray(data) || data.length === 0) return null;
+      return data.map((f) => ({
+        question: f.question?.[language] || f.question?.en || "",
+        answer: f.answer?.[language] || f.answer?.en || "",
+      }));
+    },
+    { fallback: null, deps: [language] },
+  );
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const currentFAQs = FAQS[language] || FAQS.en;
+  const currentFAQs: readonly FAQItem[] = cmsFaqs || FAQS[language] || FAQS.en;
 
   // Filter FAQs based on search query
   const filteredFAQs = useMemo(() => {
@@ -108,168 +127,167 @@ export default function FAQ() {
     setOpenIndex(openIndex === index ? null : index);
   };
 
+  const heading =
+    language === "fr" ? "Questions Fréquentes" : language === "pl" ? "Najczęściej Zadawane Pytania" : "Frequently Asked Questions";
+  const subheading =
+    language === "fr"
+      ? "Trouvez des réponses aux questions courantes sur ASPOL"
+      : language === "pl"
+        ? "Znajdź odpowiedzi na najczęstsze pytania dotyczące ASPOL"
+        : "Find answers to common questions about ASPOL";
+  const searchPlaceholder =
+    language === "en" ? "Search questions..." : language === "fr" ? "Rechercher des questions..." : "Szukaj pytań...";
+  const searchLabel = language === "en" ? "Search FAQ" : language === "fr" ? "Rechercher FAQ" : "Wyszukaj FAQ";
+
   return (
-    <section className="py-16 sm:py-24 px-4 sm:px-6 bg-gray-50 relative overflow-hidden" aria-label={language === "en" ? "Frequently asked questions" : language === "fr" ? "Questions fréquentes" : "Najczęściej zadawane pytania"}>
-        {/* Background blobs */}
-        <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[500px] h-[500px] bg-blue-100 rounded-full blur-3xl opacity-50 mix-blend-multiply pointer-events-none"></div>
-        <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-red-100 rounded-full blur-3xl opacity-50 mix-blend-multiply pointer-events-none"></div>
+    <section
+      className="section-pad dome-gap relative overflow-hidden bg-aspol-white text-aspol-dark"
+      aria-label={language === "en" ? "Frequently asked questions" : language === "fr" ? "Questions fréquentes" : "Najczęściej zadawane pytania"}
+    >
+      <div className="container-x grid gap-12 lg:grid-cols-12 lg:gap-16">
+        {/* Left: heading + search (sticks while the list scrolls on desktop) */}
+        <div className="lg:col-span-5">
+          <div className="lg:sticky lg:top-32">
+            <Reveal as="h2" className="display text-[clamp(2.1rem,4.4vw,4.25rem)] [overflow-wrap:anywhere]" text={text(home.faqTitle, heading)} />
+            <p className="mt-6 max-w-[40ch] text-base leading-relaxed text-aspol-ink-soft sm:text-lg">{text(home.faqSubtitle, subheading)}</p>
 
-      <div className="max-w-4xl mx-auto relative z-10">
-        <div className="text-center mb-16 sm:mb-20">
-          <span className="inline-block py-1 px-3 rounded-full bg-gray-100 border border-gray-200 text-gray-600 text-xs font-bold tracking-widest uppercase mb-4">
-             {language === "en" ? "Help Center" : language === "fr" ? "Centre d'aide" : "Centrum pomocy"}
-          </span>
-          <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 mb-6 tracking-tight">
-            {language === "en" && "Frequently Asked Questions"}
-            {language === "fr" && "Questions Fréquentes"}
-            {language === "pl" && "Najczęściej Zadawane Pytania"}
-          </h2>
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            {language === "en" && "Find answers to common questions about ASPOL"}
-            {language === "fr" && "Trouvez des réponses aux questions courantes sur ASPOL"}
-            {language === "pl" && "Znajdź odpowiedzi na najczęstsze pytania dotyczące ASPOL"}
-          </p>
-
-          {/* Search Box */}
-          <div className="max-w-2xl mx-auto mt-10">
-            <div className="relative group">
-                <div className="absolute inset-0 bg-red-500 rounded-full blur opacity-20 group-hover:opacity-40 transition-opacity duration-300"></div>
+            <div className="relative mt-8 max-w-md">
+              <svg
+                className="pointer-events-none absolute left-5 top-1/2 size-5 -translate-y-1/2 text-aspol-navy"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder={
-                  language === "en" ? "Search questions..." :
-                  language === "fr" ? "Rechercher des questions..." :
-                  "Szukaj pytań..."
-                }
-                className="relative w-full px-8 py-5 pl-14 text-lg bg-white border border-gray-200 rounded-full shadow-lg placeholder-gray-400 text-gray-900 focus:border-red-500 focus:ring-4 focus:ring-red-500/10 focus:outline-none transition-all duration-300"
-                aria-label={
-                  language === "en" ? "Search FAQ" :
-                  language === "fr" ? "Rechercher FAQ" :
-                  "Wyszukaj FAQ"
-                }
+                placeholder={searchPlaceholder}
+                className="w-full rounded-full bg-aspol-mist py-4 pl-13 pr-14 text-base text-aspol-dark placeholder:text-aspol-ink-soft/70 transition-shadow focus:shadow-[inset_0_0_0_2px_var(--color-aspol-blue)] focus:outline-none"
+                aria-label={searchLabel}
               />
-              <svg
-                className="absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-400 group-focus-within:text-red-500 transition-colors z-10"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
               {searchQuery && (
                 <button
+                  type="button"
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 z-10 p-1 hover:bg-gray-100 rounded-full transition-colors"
+                  className="absolute right-2 top-1/2 grid size-10 -translate-y-1/2 place-items-center rounded-full text-aspol-navy transition-colors hover:bg-aspol-line"
                   aria-label="Clear search"
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
               )}
             </div>
+
+            {searchQuery && (
+              <p className="mt-4 text-sm font-medium text-aspol-ink-soft" role="status">
+                {filteredFAQs.length} {language === "en" ? "result(s) found" : language === "fr" ? "résultat(s) trouvé(s)" : "znaleziono wynik(ów)"}
+              </p>
+            )}
+
+            <div className="mt-10 hidden lg:block">
+              <p className="mb-4 text-base text-aspol-ink-soft">
+                {language === "en" && "Still have questions?"}
+                {language === "fr" && "Vous avez encore des questions?"}
+                {language === "pl" && "Masz jeszcze pytania?"}
+              </p>
+              <Pill href="#contact" variant="dark">
+                {language === "en" && "Contact Us"}
+                {language === "fr" && "Contactez-Nous"}
+                {language === "pl" && "Skontaktuj się z Nami"}
+              </Pill>
+            </div>
           </div>
         </div>
 
-        {/* Results info */}
-        {searchQuery && (
-          <div className="mb-8 text-center text-gray-500 font-medium animate-fade-in">
-            {filteredFAQs.length} {language === "en" ? "result(s) found" : language === "fr" ? "résultat(s) trouvé(s)" : "znaleziono wynik(ów)"}
-          </div>
-        )}
-
-        {filteredFAQs.length === 0 ? (
-          <div className="text-center py-16 bg-white rounded-3xl border border-gray-100 shadow-sm">
-            <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
-                <svg className="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+        {/* Right: accordion */}
+        <div className="lg:col-span-7">
+          {filteredFAQs.length === 0 ? (
+            <div className="rounded-[2rem] bg-aspol-mist p-10 text-center">
+              <p className="display display-sm mb-2">
+                {language === "en" && "No results found"}
+                {language === "fr" && "Aucun résultat trouvé"}
+                {language === "pl" && "Nie znaleziono wyników"}
+              </p>
+              <p className="text-aspol-ink-soft">
+                {language === "en" && "Try adjusting your search terms"}
+                {language === "fr" && "Essayez de modifier vos termes de recherche"}
+                {language === "pl" && "Spróbuj zmienić słowa kluczowe"}
+              </p>
             </div>
-            <p className="text-xl text-gray-900 font-medium mb-2">
-              {language === "en" && "No results found"}
-              {language === "fr" && "Aucun résultat trouvé"}
-              {language === "pl" && "Nie znaleziono wyników"}
-            </p>
-             <p className="text-gray-500">
-              {language === "en" && "Try adjusting your search terms"}
-              {language === "fr" && "Essayez de modifier vos termes de recherche"}
-              {language === "pl" && "Spróbuj zmienić słowa kluczowe"}
-            </p>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {filteredFAQs.map((faq, index) => (
-            <div
-              key={index}
-              className="group bg-white rounded-2xl border border-gray-200 hover:border-red-200 transition-all duration-300 hover:shadow-lg hover:shadow-red-500/5 overflow-hidden"
-            >
-              <button
-                onClick={() => toggleFAQ(index)}
-                className="w-full px-8 py-6 flex items-center justify-between text-left transition-colors"
-                aria-expanded={openIndex === index}
-                aria-controls={`faq-panel-${index}`}
-                id={`faq-button-${index}`}
-              >
-                <span className={`text-lg font-bold transition-colors pr-8 ${openIndex === index ? 'text-red-700' : 'text-gray-900 group-hover:text-red-700'}`}>
-                  {faq.question}
-                </span>
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${openIndex === index ? 'bg-red-100 rotate-180' : 'bg-gray-100 group-hover:bg-red-50'}`}>
-                    <svg
-                    className={`w-5 h-5 transition-colors ${openIndex === index ? 'text-red-600' : 'text-gray-500 group-hover:text-red-600'}`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
+          ) : (
+            <ul className="border-b border-aspol-line">
+              {filteredFAQs.map((faq, index) => {
+                const open = openIndex === index;
+                return (
+                  <li key={index} className="group border-t border-aspol-line">
+                    <h3>
+                      <button
+                        type="button"
+                        onClick={() => toggleFAQ(index)}
+                        className="flex w-full items-center justify-between gap-6 py-6 text-left sm:py-8"
+                        aria-expanded={open}
+                        aria-controls={`faq-panel-${index}`}
+                        id={`faq-button-${index}`}
+                      >
+                        <span
+                          className={`font-display text-xl font-bold leading-tight transition-colors duration-300 sm:text-2xl ${
+                            open ? "text-aspol-blue" : "text-aspol-dark group-hover:text-aspol-blue"
+                          }`}
+                        >
+                          {faq.question}
+                        </span>
+                        <span
+                          className={`relative grid size-11 shrink-0 place-items-center rounded-full transition-colors duration-500 ${
+                            open ? "bg-aspol-navy text-white" : "bg-aspol-mist text-aspol-dark group-hover:bg-aspol-line"
+                          }`}
+                          aria-hidden="true"
+                        >
+                          <span className="absolute h-0.5 w-4 rounded bg-current" />
+                          <span
+                            className={`absolute h-4 w-0.5 rounded bg-current transition-transform duration-500 ease-(--ease-out-expo) ${
+                              open ? "scale-y-0" : "scale-y-100"
+                            }`}
+                          />
+                        </span>
+                      </button>
+                    </h3>
+                    <div
+                      id={`faq-panel-${index}`}
+                      role="region"
+                      aria-labelledby={`faq-button-${index}`}
+                      aria-hidden={!open}
+                      inert={!open ? true : undefined}
+                      className={`grid transition-[grid-template-rows,opacity] duration-600 ease-(--ease-out-expo) ${
+                        open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                      }`}
                     >
-                    <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 9l-7 7-7-7"
-                    />
-                    </svg>
-                </div>
-              </button>
-              <div
-                id={`faq-panel-${index}`}
-                role="region"
-                aria-labelledby={`faq-button-${index}`}
-                aria-hidden={openIndex !== index}
-                inert={openIndex !== index ? true : undefined}
-                className={`overflow-hidden transition-all duration-500 ease-in-out ${
-                  openIndex === index ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-                }`}
-              >
-                <div className="px-8 pb-8 pt-0">
-                  <div className="w-full h-px bg-gray-100 mb-6"></div>
-                  <p className="text-gray-600 leading-relaxed text-lg">{faq.answer}</p>
-                </div>
-              </div>
-            </div>
-            ))}
-          </div>
-        )}
+                      <div className="overflow-hidden">
+                        <p className="max-w-[62ch] pb-8 text-base leading-relaxed text-aspol-ink-soft sm:text-lg">{faq.answer}</p>
+                      </div>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
 
-        <div className="mt-12 text-center">
-          <p className="text-gray-600 mb-4">
-            {language === "en" && "Still have questions?"}
-            {language === "fr" && "Vous avez encore des questions?"}
-            {language === "pl" && "Masz jeszcze pytania?"}
-          </p>
-          <a
-            href="#contact"
-            className="inline-block px-8 py-3 bg-red-600 text-white font-medium rounded-full hover:bg-red-700 transition-all duration-200 hover:scale-105"
-          >
-            {language === "en" && "Contact Us"}
-            {language === "fr" && "Contactez-Nous"}
-            {language === "pl" && "Skontaktuj się z Nami"}
-          </a>
+          <div className="mt-10 lg:hidden">
+            <p className="mb-4 text-base text-aspol-ink-soft">
+              {language === "en" && "Still have questions?"}
+              {language === "fr" && "Vous avez encore des questions?"}
+              {language === "pl" && "Masz jeszcze pytania?"}
+            </p>
+            <Pill href="#contact" variant="dark">
+              {language === "en" && "Contact Us"}
+              {language === "fr" && "Contactez-Nous"}
+              {language === "pl" && "Skontaktuj się z Nami"}
+            </Pill>
+          </div>
         </div>
       </div>
     </section>

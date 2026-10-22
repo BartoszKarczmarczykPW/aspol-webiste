@@ -1,13 +1,21 @@
 "use client";
 
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import Image from "next/image";
+import Reveal from "@/components/ui/Reveal";
+import Pill from "@/components/ui/Pill";
+import { PHOTOS, photoAlt, type PhotoKey } from "@/lib/photos";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useSiteContent } from "@/contexts/SiteContentContext";
 import { Testimonial } from "@/types";
 import { useSanityData } from "@/hooks/useSanityData";
-import { getTestimonials } from "@/lib/sanity";
+import { getTestimonials, type SanityImageWithAlt } from "@/lib/sanity";
+import type { ResolvedImage } from "@/contexts/SiteContentContext";
+
+type TestimonialWithPhoto = Testimonial & { photo?: SanityImageWithAlt | null };
 
 interface SanityTestimonial {
+  photo?: SanityImageWithAlt | null;
   name: string;
   role?: { en?: string; fr?: string; pl?: string };
   text?: { en?: string; fr?: string; pl?: string };
@@ -133,13 +141,14 @@ const TESTIMONIALS: Readonly<Record<string, Testimonial[]>> = {
 
 const Testimonials = memo(function Testimonials() {
   const { language } = useLanguage();
+  const { home, text, image, joinUrl } = useSiteContent();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const touchStartX = useRef<number>(0);
   const touchEndX = useRef<number>(0);
   const autoPlayTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const { data: cmsTestimonials } = useSanityData<Testimonial[] | null>(
+  const { data: cmsTestimonials } = useSanityData<TestimonialWithPhoto[] | null>(
     async () => {
       const data = await getTestimonials();
       if (!Array.isArray(data) || data.length === 0) return null;
@@ -148,12 +157,13 @@ const Testimonials = memo(function Testimonials() {
         role: item.role?.[language] || item.role?.en || "",
         text: item.text?.[language] || item.text?.en || "",
         year: String(item.year || ""),
+        photo: item.photo ?? null,
       }));
     },
     { fallback: null, deps: [language] },
   );
 
-  const currentTestimonials = cmsTestimonials || TESTIMONIALS[language] || TESTIMONIALS.en;
+  const currentTestimonials: TestimonialWithPhoto[] = cmsTestimonials || TESTIMONIALS[language] || TESTIMONIALS.en;
 
   // Defensive: derive safe index inline to prevent crash before useEffect fires
   const safeIndex = currentTestimonials.length > 0
@@ -224,120 +234,158 @@ const Testimonials = memo(function Testimonials() {
     }
   };
 
+  const quoteName = currentItem?.name || "";
+  const initials = quoteName
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join("")
+    .toUpperCase();
+
+  const heading =
+    language === "fr" ? "Ce Que Disent Nos Membres" : language === "pl" ? "Co Mówią Nasi Członkowie" : "What Our Members Say";
+  const subheading =
+    language === "fr"
+      ? "Écoutez des étudiants qui ont trouvé leur communauté avec ASPOL"
+      : language === "pl"
+        ? "Posłuchaj studentów, którzy znaleźli swoją społeczność z ASPOL"
+        : "Hear from students who found their community with ASPOL";
+  const carouselLabel =
+    language === "en" ? "Member testimonials" : language === "fr" ? "Témoignages des membres" : "Opinie członków";
+  const memberSince = language === "fr" ? "Membre depuis" : language === "pl" ? "Członek od" : "Member since";
+
+  const cmsMoments = (home.moments ?? []).map((m) => image(m, 900)).filter((m): m is ResolvedImage => !!m);
+  const defaultMoments: PhotoKey[] = ["smilingPair", "sunsetGroup", "violinPiano", "salonGroup", "singer", "sunsetFriends"];
+  const moments = cmsMoments.length
+    ? cmsMoments.map((m) => ({ key: m.src, src: m.src, alt: m.alt }))
+    : defaultMoments.map((k) => ({ key: k, src: PHOTOS[k].src, alt: photoAlt(k, language) }));
+  const portrait = image(currentItem?.photo, 600);
+
   return (
-    <section className="py-16 px-6 bg-white" aria-label={language === "en" ? "Member testimonials" : language === "fr" ? "Témoignages des membres" : "Opinie członków"}>
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
-            {language === "en" && "What Our Members Say"}
-            {language === "fr" && "Ce Que Disent Nos Membres"}
-            {language === "pl" && "Co Mówią Nasi Członkowie"}
-          </h2>
-          <p className="text-xl text-gray-600">
-            {language === "en" && "Hear from students who found their community with ASPOL"}
-            {language === "fr" && "Écoutez des étudiants qui ont trouvé leur communauté avec ASPOL"}
-            {language === "pl" && "Posłuchaj studentów, którzy znaleźli swoją społeczność z ASPOL"}
-          </p>
+    <section
+      className="on-dark dome-top relative overflow-hidden bg-aspol-navy pb-20 text-white sm:pb-28"
+      aria-label={carouselLabel}
+    >
+      <div className="container-x">
+        <div className="grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-12">
+          <Reveal as="h2" className="display display-lg lg:col-span-8" text={text(home.testimonialsTitle, heading)} />
+          <p className="max-w-[40ch] text-base leading-relaxed text-white/85 sm:text-lg lg:col-span-4">{text(home.testimonialsSubtitle, subheading)}</p>
         </div>
 
         <div
-          className="relative"
+          className="relative mt-12 sm:mt-16"
           role="region"
           aria-roledescription="carousel"
-          aria-label={language === "en" ? "Member testimonials" : language === "fr" ? "T\u00e9moignages des membres" : "Opinie cz\u0142onk\u00f3w"}
+          aria-label={carouselLabel}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
         >
-          {/* Testimonial Card */}
-          <div aria-live="polite" aria-atomic="true" className="bg-gray-50 rounded-3xl p-8 md:p-12 shadow-lg min-h-75 flex flex-col justify-between touch-pan-y transition-all duration-300 hover:shadow-xl">
-            <div>
-              <svg className="w-12 h-12 text-red-600 mb-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-              </svg>
-              <p className="text-xl md:text-2xl text-gray-700 leading-relaxed mb-8 italic">
-                &quot;{currentItem?.text}&quot;
-              </p>
-            </div>
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="font-bold text-gray-900 text-lg">
-                  {currentItem?.name}
-                </p>
-                <p className="text-gray-600">
-                  {currentItem?.role}
-                </p>
-                <p className="text-sm text-gray-500 mt-1">
-                  {language === "en" && "Member since"}
-                  {language === "fr" && "Membre depuis"}
-                  {language === "pl" && "Członek od"} {currentItem?.year}
-                </p>
+          <div className="rounded-[2rem] bg-aspol-dark p-7 sm:p-12 lg:p-16">
+            <div
+              aria-live="polite"
+              aria-atomic="true"
+              key={safeIndex}
+              className="quote-in grid min-h-80 touch-pan-y gap-8 lg:grid-cols-[auto_1fr] lg:gap-16"
+            >
+              <div
+                className="relative grid size-24 shrink-0 place-items-center overflow-hidden rounded-full bg-aspol-white font-display text-3xl font-extrabold text-aspol-navy sm:size-32 sm:text-4xl lg:size-56 lg:text-7xl"
+                aria-hidden="true"
+              >
+                {portrait ? <Image src={portrait.src} alt={portrait.alt || quoteName} fill sizes="224px" className="object-cover" /> : initials}
+              </div>
+              <div className="flex flex-col justify-between gap-8">
+                <blockquote>
+                  <p className="font-display text-[1.3rem] font-bold leading-[1.22] sm:text-3xl lg:text-4xl">
+                    &ldquo;{currentItem?.text}&rdquo;
+                  </p>
+                </blockquote>
+                <div>
+                  <p className="display display-sm">{currentItem?.name}</p>
+                  <p className="mt-1.5 text-base text-white/80">{currentItem?.role}</p>
+                  {currentItem?.year && (
+                    <p className="mt-0.5 text-sm text-white/60">
+                      {memberSince} {currentItem.year}
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Navigation Buttons */}
-          <div className="flex items-center justify-center gap-4 mt-8">
+          {/* Controls */}
+          <div className="mt-6 flex items-center gap-3 sm:gap-5">
             <button
+              type="button"
               onClick={prevSlide}
-              className="p-3 rounded-full bg-gray-200 hover:bg-red-600 hover:text-white transition-colors"
+              className="grid size-12 shrink-0 place-items-center rounded-full bg-white text-aspol-navy transition-transform duration-300 hover:-translate-x-0.5 active:scale-95"
               aria-label="Previous testimonial"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              <svg className="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.4} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
 
-            {/* Dots Indicator */}
-            <div className="flex gap-2">
+            <div className="flex flex-1 items-center gap-1.5">
               {currentTestimonials.map((_, index) => (
                 <button
                   key={index}
+                  type="button"
                   onClick={() => goToSlide(index)}
-                  className="w-11 h-11 rounded-full flex items-center justify-center touch-manipulation"
+                  className="group flex h-11 min-w-0 flex-1 items-center touch-manipulation"
                   aria-label={`Go to testimonial ${index + 1}`}
                   aria-current={index === safeIndex ? "true" : undefined}
                 >
                   <span
-                    className={`h-3 rounded-full transition-all ${index === safeIndex
-                      ? "bg-red-600 w-8"
-                      : "bg-gray-300 hover:bg-gray-400 w-3"
-                      }`}
+                    className={`block h-1 w-full rounded-full transition-colors duration-500 ${
+                      index === safeIndex ? "bg-white" : "bg-white/30 group-hover:bg-white/60"
+                    }`}
                   />
                 </button>
               ))}
             </div>
 
             <button
+              type="button"
               onClick={nextSlide}
-              className="p-3 rounded-full bg-gray-200 hover:bg-red-600 hover:text-white transition-colors"
+              className="grid size-12 shrink-0 place-items-center rounded-full bg-white text-aspol-navy transition-transform duration-300 hover:translate-x-0.5 active:scale-95"
               aria-label="Next testimonial"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              <svg className="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.4} d="M9 5l7 7-7 7" />
               </svg>
             </button>
           </div>
         </div>
+      </div>
 
-        {/* Join CTA */}
-        <div className="text-center mt-12">
-          <p className="text-gray-600 mb-4 text-lg">
-            {language === "en" && "Want to share your story?"}
-            {language === "fr" && "Envie de partager votre histoire?"}
-            {language === "pl" && "Chcesz podzielić się swoją historią?"}
-          </p>
-          <a
-            href="https://docs.google.com/forms/d/e/1FAIpQLSebv4I-YbT98Y732JaGTqTfxDYpeGQAxUHybgzntkyai_VEwg/viewform"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block px-8 py-3 bg-red-600 text-white font-medium rounded-full hover:bg-red-700 transition-all duration-200 hover:scale-105"
-          >
-            {language === "en" && "Join ASPOL Today"}
-            {language === "fr" && "Rejoignez ASPOL Aujourd'hui"}
-            {language === "pl" && "Dołącz do ASPOL Dziś"}
-          </a>
-        </div>
+      {/* Moments from our events: horizontally scrolling photo strip */}
+      <ul
+        className="no-scrollbar mt-16 flex snap-x gap-4 overflow-x-auto px-[max(1rem,4vw)] pb-2 sm:mt-24"
+        aria-label={language === "fr" ? "Moments de nos événements" : language === "pl" ? "Chwile z naszych wydarzeń" : "Moments from our events"}
+      >
+        {moments.map((m) => (
+          <li key={m.key} className="photo-card relative aspect-4/5 w-[68vw] max-w-80 shrink-0 snap-start overflow-hidden rounded-[2rem] bg-aspol-dark sm:w-72">
+            <Image
+              src={m.src}
+              alt={m.alt}
+              fill
+              sizes="(min-width: 640px) 288px, 68vw"
+              loading="lazy"
+              className="object-cover"
+            />
+          </li>
+        ))}
+      </ul>
+
+      <div className="container-x mt-16 flex flex-col items-start justify-between gap-6 sm:mt-24 sm:flex-row sm:items-center">
+        <p className="display display-md max-w-[24ch]">
+          {text(home.testimonialsShareText, language === "fr" ? "Envie de partager votre histoire?" : language === "pl" ? "Chcesz podzielić się swoją historią?" : "Want to share your story?")}
+        </p>
+        <Pill href={joinUrl} target="_blank" rel="noopener noreferrer">
+          {text(home.testimonialsJoinButton, language === "fr" ? "Rejoignez ASPOL Aujourd'hui" : language === "pl" ? "Dołącz do ASPOL Dziś" : "Join ASPOL Today")}
+        </Pill>
       </div>
     </section>
   );

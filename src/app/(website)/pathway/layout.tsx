@@ -1,13 +1,18 @@
 import type { Metadata } from "next";
+import { DEFAULT_OG_IMAGE, getAlternates } from "@/lib/seo";
 
 export const metadata: Metadata = {
     title: "Pathway to French Universities",
     description: "Explore study opportunities at France's most prestigious universities. Get free mentoring, university guides, and support from ASPOL for your academic journey in France.",
+    alternates: getAlternates("/pathway"),
     openGraph: {
+        url: "/pathway",
+        images: [DEFAULT_OG_IMAGE],
         title: "Pathway to French Universities | ASPOL",
         description: "Free mentoring and comprehensive guides for Polish students applying to French universities like Sciences Po, HEC Paris, and École Polytechnique.",
         type: "website",
     },
+    twitter: { card: "summary_large_image", images: [DEFAULT_OG_IMAGE.url] },
     keywords: ["study in France", "French universities", "Sciences Po", "HEC Paris", "École Polytechnique", "Polish students", "study abroad", "mentoring program"],
 };
 

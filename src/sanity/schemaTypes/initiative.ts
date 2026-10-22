@@ -1,5 +1,6 @@
 import { defineType, defineField } from 'sanity'
 import { SparklesIcon } from '@sanity/icons'
+import { imageWithAlt } from './_fields'
 
 const initiative = defineType({
   name: 'initiative',
@@ -53,6 +54,14 @@ const initiative = defineType({
         layout: 'radio',
       },
       validation: (rule) => rule.required(),
+    }),
+    imageWithAlt('image', 'Card photo', 'Optional. Leave empty to use the built-in event photo for this initiative.'),
+    defineField({
+      name: 'link',
+      title: 'Learn-more link (optional)',
+      type: 'url',
+      description: 'If set, the card shows a "Learn more" button pointing here. Internal paths like /events are not accepted; use the full URL.',
+      validation: (rule) => rule.uri({ scheme: ['http', 'https'] }),
     }),
     defineField({
       name: 'featured',

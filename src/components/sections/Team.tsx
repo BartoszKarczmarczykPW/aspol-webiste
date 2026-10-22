@@ -1,12 +1,12 @@
 "use client";
 
-import { memo, useRef } from 'react';
-import type { MouseEvent } from "react";
+import { memo } from "react";
 import Image from "next/image";
 import HackerText from "../ui/HackerText";
+import Reveal from "@/components/ui/Reveal";
+import Pill from "@/components/ui/Pill";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useInView } from "@/hooks/useInView";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { useSiteContent } from "@/contexts/SiteContentContext";
 import { useSanityData } from "@/hooks/useSanityData";
 import { TeamMember } from "@/types";
 import { getTeamMembers } from "@/lib/sanity";
@@ -46,28 +46,7 @@ interface MappedTeamMember {
 
 const Team = memo(function Team() {
   const { t, language } = useLanguage();
-  const sectionRef = useRef<HTMLElement>(null);
-  const isVisible = useInView(sectionRef);
-  const prefersReducedMotion = useReducedMotion();
-
-  const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
-    if (prefersReducedMotion) return;
-    const card = e.currentTarget;
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const rotateX = (y - rect.height / 2) / 10;
-    const rotateY = (rect.width / 2 - x) / 10;
-
-    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
-    card.style.transition = 'transform 0.1s ease-out';
-  };
-
-  const handleMouseLeave = (e: MouseEvent<HTMLDivElement>) => {
-    const card = e.currentTarget;
-    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
-    card.style.transition = 'transform 0.5s ease-out';
-  };
+  const { settings, home, text, joinUrl } = useSiteContent();
 
   const fallbackBoardMembers: TeamMember[] = [
     {
@@ -165,7 +144,7 @@ const Team = memo(function Team() {
         role: member.role?.[language] || member.role?.en || "",
         linkedin: member.linkedin || null,
         photoUrl: member.photo
-          ? urlFor(member.photo).width(320).height(320).fit("crop").url()
+          ? urlFor(member.photo).width(640).height(800).fit("crop").url()
           : LEGACY_PHOTO_MAP[member.name] || "/default-avatar.svg",
         lqip: member.photo?.asset?.metadata?.lqip,
       }));
@@ -173,137 +152,79 @@ const Team = memo(function Team() {
     { fallback: [], deps: [language] },
   );
 
-  const membersToRender = boardMembers.length > 0
-    ? boardMembers
-    : fallbackBoardMembers.map((member) => ({
-      name: member.name,
-      role: member.role,
-      photoUrl: member.photo,
-      linkedin: member.linkedin,
-      lqip: undefined,
-    }));
+  const membersToRender: MappedTeamMember[] =
+    boardMembers.length > 0
+      ? boardMembers
+      : fallbackBoardMembers.map((member) => ({
+          name: member.name,
+          role: member.role,
+          photoUrl: member.photo,
+          linkedin: member.linkedin,
+          lqip: undefined,
+        }));
 
   return (
     <section
-      ref={sectionRef}
       id="team"
-      className="py-16 px-6 bg-white relative overflow-hidden"
+      className="section-pad dome-gap relative overflow-hidden bg-aspol-mist text-aspol-dark"
       aria-label={language === "en" ? "Our team" : language === "fr" ? "Notre équipe" : "Nasz zespół"}
     >
-      {/* Background Grid Pattern */}
-      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-size-[32px_32px] mask-[radial-gradient(ellipse_60%_60%_at_50%_0%,#000_70%,transparent_100%)]"></div>
-      </div>
-
-      {/* Ambient Depth Blobs - Professional & Subtle */}
-      <div className="absolute top-0 right-0 w-125 h-125 bg-aspol-navy/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" aria-hidden="true"></div>
-
-      <div className="max-w-7xl mx-auto relative z-10">
-        <div
-          className={`text-center mb-16 px-2 transition-all duration-1000 ${isVisible
-            ? "opacity-100 translate-y-0"
-            : "opacity-0 translate-y-10"
-            }`}
-        >
-          <span className="inline-block px-4 py-1.5 mb-4 text-xs font-semibold tracking-wider text-aspol-navy uppercase bg-aspol-navy/5 rounded-full border border-aspol-navy/10">
-            {t.nav.about}
-          </span>
-          <h2 className="text-4xl sm:text-5xl font-bold mb-4 sm:mb-6 text-aspol-dark">
-            {t.team.title}
-          </h2>
-          <p className="text-gray-600 text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed">
-            {t.team.subtitle}
+      <div className="container-x">
+        <div className="grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-12">
+          <Reveal as="h2" className="display display-lg lg:col-span-7" text={text(home.teamTitle, t.team.title)} />
+          <p className="max-w-[48ch] text-base leading-relaxed text-aspol-ink-soft sm:text-lg lg:col-span-5">
+            {text(home.teamSubtitle, t.team.subtitle)}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <ul className="mt-12 grid grid-cols-2 gap-x-4 gap-y-10 sm:mt-16 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4">
           {membersToRender.map((member, index) => (
-            <div
-              key={index}
-              className={`bg-white rounded-3xl p-8 shadow-lg hover:shadow-xl transition-all duration-500 border border-gray-100/50 ${isVisible
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-10"
-                }`}
-              style={{
-                transitionDelay: `${index * 100}ms`,
-              }}
-              onMouseMove={handleMouseMove}
-              onMouseLeave={handleMouseLeave}
-            >
-              <div className="flex flex-col items-center text-center">
-                <div className="relative w-32 h-32 sm:w-40 sm:h-40 mb-6 group">
-                  <div className="absolute inset-0 bg-linear-to-br from-red-100 to-blue-100 rounded-full rotate-6 scale-95 group-hover:rotate-12 transition-transform duration-500"></div>
-                  <Image
-                    src={member.photoUrl}
-                    alt={`${member.name}, ${member.role} of ASPOL`}
-                    fill
-                    className="rounded-full object-cover relative z-10 border-4 border-white shadow-sm"
-                    sizes="(max-width: 640px) 128px, 160px"
-                    loading="lazy"
-                    placeholder={member.lqip ? "blur" : "empty"}
-                    blurDataURL={member.lqip}
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = '/default-avatar.svg';
-                    }}
-                  />
-                </div>
-                <h3 className="text-2xl font-bold mb-2 text-gray-900 group-hover:text-red-700 transition-colors">
-                  {member.name === "Bartosz Karczmarczyk" ? (
-                    <HackerText text={member.name} />
-                  ) : (
-                    member.name
-                  )}
-                </h3>
-                <p className="text-red-600 font-medium mb-3 text-sm tracking-wide uppercase">
-                  {member.role}
-                </p>
-
-                <div className="w-12 h-0.5 bg-gray-100 mb-4"></div>
-
-                <div className="flex items-center justify-center gap-2 text-gray-500 text-xs">
-                  <span className="font-medium text-gray-400">{t.team.board} 2026/27</span>
-                  {member.linkedin && (
-                    <>
-                      <span className="text-gray-300">•</span>
-                      <a
-                        href={member.linkedin}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-gray-400 hover:text-[#0077b5] transition-colors duration-200"
-                        aria-label={`${member.name}'s LinkedIn profile`}
-                      >
-                        <svg
-                          className="w-4 h-4"
-                          fill="currentColor"
-                          viewBox="0 0 24 24"
-                          xmlns="http://www.w3.org/2000/svg"
-                          aria-hidden="true"
-                        >
-                          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                        </svg>
-                      </a>
-                    </>
-                  )}
-                </div>
+            <li key={`${member.name}-${index}`} className="group">
+              <div className="photo-card relative aspect-4/5 overflow-hidden rounded-[1.75rem] bg-aspol-line transition-[border-radius] duration-700 ease-(--ease-out-expo) group-hover:rounded-[3rem]">
+                <Image
+                  src={member.photoUrl}
+                  alt={`${member.name}, ${member.role} of ASPOL`}
+                  fill
+                  className="object-cover object-[50%_20%]"
+                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                  loading="lazy"
+                  placeholder={member.lqip ? "blur" : "empty"}
+                  blurDataURL={member.lqip}
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = "/default-avatar.svg";
+                  }}
+                />
+                {member.linkedin && (
+                  <a
+                    href={member.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="absolute bottom-3 right-3 grid size-11 place-items-center rounded-full bg-aspol-white text-aspol-dark transition-colors duration-300 hover:bg-aspol-navy hover:text-white"
+                    aria-label={`${member.name}'s LinkedIn profile`}
+                  >
+                    <svg className="size-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                    </svg>
+                  </a>
+                )}
               </div>
-            </div>
+              <h3 className="display display-sm mt-4 text-[1.0625rem] sm:text-[length:clamp(1.25rem,2vw,1.625rem)]">
+                {member.name === "Bartosz Karczmarczyk" ? <HackerText text={member.name} /> : member.name}
+              </h3>
+              <p className="mt-1.5 text-sm font-semibold text-aspol-red sm:text-base">{member.role}</p>
+              <p className="mt-0.5 text-sm text-aspol-ink-soft">
+                {t.team.board} {settings.boardSeason || "2026/27"}
+              </p>
+            </li>
           ))}
-        </div>
+        </ul>
 
-        <div className="mt-20 text-center">
-          <p className="text-gray-500 mb-6 font-medium">{t.team.joinTeam}</p>
-          <a
-            href="https://docs.google.com/forms/d/e/1FAIpQLSebv4I-YbT98Y732JaGTqTfxDYpeGQAxUHybgzntkyai_VEwg/viewform"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center px-8 py-4 bg-red-600 text-white font-semibold rounded-full hover:bg-red-700 transition-all duration-300 hover:scale-105 shadow-lg shadow-red-600/20"
-          >
-            {t.team.becomeVolunteer}
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2 -mr-1" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-              <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
-            </svg>
-          </a>
+        <div className="mt-16 flex flex-col items-start justify-between gap-6 sm:mt-24 sm:flex-row sm:items-center">
+          <p className="display display-md max-w-[24ch]">{text(home.teamJoinText, t.team.joinTeam)}</p>
+          <Pill href={joinUrl} target="_blank" rel="noopener noreferrer" variant="red">
+            {text(home.teamJoinButton, t.team.becomeVolunteer)}
+          </Pill>
         </div>
       </div>
     </section>

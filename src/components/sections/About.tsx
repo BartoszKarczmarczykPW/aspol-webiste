@@ -1,12 +1,14 @@
 "use client";
 
-import { useRef } from "react";
-import { useLanguage } from "@/contexts/LanguageContext";
-import SpotlightCard from "@/components/ui/cards/SpotlightCard";
-import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-import { useSanityData } from "@/hooks/useSanityData";
+import Image from "next/image";
 import Link from "next/link";
-import { getAboutSection } from "@/lib/sanity";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useSiteContent } from "@/contexts/SiteContentContext";
+import { useSanityData } from "@/hooks/useSanityData";
+import { getAboutSection, type SanityImageWithAlt } from "@/lib/sanity";
+import { PHOTOS, photoAlt } from "@/lib/photos";
+import Reveal from "@/components/ui/Reveal";
+import { PillFace } from "@/components/ui/Pill";
 import { GraduationIcon } from "@/components/icons/GraduationIcon";
 import { UsersIcon } from "@/components/icons/UsersIcon";
 import { RocketIcon } from "@/components/icons/RocketIcon";
@@ -19,6 +21,7 @@ interface LocalizedString {
 }
 
 interface AboutFeature {
+  image?: SanityImageWithAlt | null;
   icon?: string;
   order?: number;
   link?: string;
@@ -34,154 +37,130 @@ interface AboutSectionData {
   features?: AboutFeature[];
 }
 
+/** Tone cycle for the secondary panels: tints/shades of the brand palette. */
+const TONES = [
+  "bg-aspol-dark text-white",
+  "bg-aspol-mist text-aspol-dark",
+  "bg-aspol-navy text-white",
+] as const;
+
+const SECONDARY_ICONS = [UsersIcon, RocketIcon, GlobeIcon];
+
+const normalizeLink = (value?: string) => {
+  if (!value) return "/pathway";
+  if (value === "/" || value === "https://aspol.fr" || value === "https://www.aspol.fr") return "/pathway";
+  if (value.startsWith("http")) {
+    try {
+      return new URL(value).pathname || "/pathway";
+    } catch {
+      return "/pathway";
+    }
+  }
+  return value;
+};
+
 export default function About() {
-  const sectionRef = useRef<HTMLDivElement>(null);
   const { t, language } = useLanguage();
+  const { image } = useSiteContent();
 
-  const { data: aboutData } = useSanityData<AboutSectionData | null>(
-    getAboutSection,
-    { fallback: null },
-  );
+  const { data: aboutData } = useSanityData<AboutSectionData | null>(getAboutSection, { fallback: null });
 
-  useScrollAnimation(sectionRef);
+  const pick = (value?: LocalizedString) => value?.[language] || value?.en || "";
+
+  const fallbackFeatures: AboutFeature[] = t.about.features.map((feature) => ({
+    icon: feature.icon,
+    title: { en: feature.title, fr: feature.title, pl: feature.title },
+    description: { en: feature.description, fr: feature.description, pl: feature.description },
+  }));
+
+  const features: AboutFeature[] = aboutData?.features?.length
+    ? [...aboutData.features].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+    : fallbackFeatures;
+
+  const [pathway, ...secondary] = features;
+  const leadImg = image(pathway?.image);
+  const heading = aboutData?.title?.[language] || t.about.title;
+  const eyebrow = aboutData?.eyebrow?.[language] || "Our Mission";
+  const subtitle = aboutData?.subtitle?.[language] || t.about.subtitle;
+  const description = aboutData?.description?.[language] || t.about.description;
 
   return (
-    <section id="about" ref={sectionRef} className="relative py-16 sm:py-20 px-4 sm:px-6 bg-transparent overflow-hidden" aria-label={language === "en" ? "About ASPOL" : language === "fr" ? "À propos d'ASPOL" : "O ASPOL"}>
-
-      <div className="max-w-7xl mx-auto relative z-10">
-        {/* Section Header */}
-        <div className="text-center mb-16 sm:mb-20 fade-in-element opacity-0">
-          <span className="inline-block px-4 py-1.5 mb-4 text-xs font-semibold tracking-wider text-aspol-navy uppercase bg-aspol-navy/5 rounded-full border border-aspol-navy/10 backdrop-blur-sm">
-            {aboutData?.eyebrow?.[language] || "Our Mission"}
-          </span>
-          <h2 className="text-4xl sm:text-5xl font-bold text-aspol-dark mb-6 sm:mb-8 px-2 tracking-tight">
-            {aboutData?.title?.[language] || t.about.title}
-          </h2>
-          <p className="text-lg sm:text-xl text-aspol-navy/80 max-w-3xl mx-auto mb-3 sm:mb-4 px-2 font-medium">
-            {aboutData?.subtitle?.[language] || t.about.subtitle}
-          </p>
-          <p className="text-base sm:text-lg text-gray-700 max-w-4xl mx-auto leading-relaxed px-2">
-            {aboutData?.description?.[language] || t.about.description}
-          </p>
-
-
-        </div>
-
-        {/* Features Layout */}
-        <div className="space-y-8">
-          {(() => {
-            type AboutFeature = {
-              icon?: string;
-              order?: number;
-              link?: string;
-              title?: { en?: string; fr?: string; pl?: string };
-              description?: { en?: string; fr?: string; pl?: string };
-            };
-
-            const fallbackFeatures: AboutFeature[] = t.about.features.map((feature) => ({
-              icon: feature.icon,
-              title: { en: feature.title, fr: feature.title, pl: feature.title },
-              description: { en: feature.description, fr: feature.description, pl: feature.description },
-            }));
-
-            const features: AboutFeature[] = aboutData?.features?.length
-              ? [...aboutData.features].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
-              : fallbackFeatures;
-
-            const pathwayFeature = features[0];
-            if (!pathwayFeature) return null;
-
-            const title = pathwayFeature.title?.[language] || pathwayFeature.title?.en || "";
-            const description = pathwayFeature.description?.[language] || pathwayFeature.description?.en || "";
-            const rawLink = pathwayFeature.link;
-            const normalizeLink = (value?: string) => {
-              if (!value) return "/pathway";
-              if (value === "/" || value === "https://aspol.fr" || value === "https://www.aspol.fr") {
-                return "/pathway";
-              }
-              if (value.startsWith("http")) {
-                try {
-                  const url = new URL(value);
-                  return url.pathname || "/pathway";
-                } catch {
-                  return "/pathway";
-                }
-              }
-              return value;
-            };
-            const link = normalizeLink(rawLink);
-
-            return (
-              <Link href={link} className="block group">
-                <SpotlightCard className="fade-in-element opacity-0 p-1 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 relative overflow-hidden border-2 border-aspol-red/10 hover:border-aspol-red/30">
-                  <div className="flex flex-col md:flex-row items-center p-6 md:p-8 gap-6 md:gap-8 h-full relative">
-                    {/* Icon */}
-                    <div className="w-16 h-16 md:w-20 md:h-20 shrink-0 bg-linear-to-br from-red-600 to-red-500 rounded-2xl flex items-center justify-center text-white shadow-lg group-hover:scale-105 transition-transform duration-300">
-                      <GraduationIcon className="w-8 h-8 md:w-10 md:h-10" />
-                    </div>
-
-                    {/* Content */}
-                    <div className="text-center md:text-left flex-1">
-                      <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-2 group-hover:text-aspol-red transition-colors">
-                        {title}
-                      </h3>
-                      <p className="text-sm md:text-base text-gray-600 leading-relaxed max-w-2xl">
-                        {description}
-                      </p>
-                      <div className="mt-3 inline-flex items-center text-aspol-red font-bold text-base group-hover:translate-x-2 transition-transform">
-                        {t.about.pathwayButton || "Learn More"} <span className="ml-2 text-lg">→</span>
-                      </div>
-                    </div>
-
-                    {/* Decorative Arrow */}
-                    <div className="hidden md:block absolute right-8 top-1/2 -translate-y-1/2 text-aspol-red/10 group-hover:text-aspol-red/20 transition-colors">
-                      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
-                    </div>
-                  </div>
-                </SpotlightCard>
-              </Link>
-            );
-          })()}
-
-          {/* Secondary Features Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {(aboutData?.features?.length
-              ? [...aboutData.features].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)).slice(1)
-              : t.about.features.slice(1).map((feature) => ({
-                icon: feature.icon,
-                title: { en: feature.title, fr: feature.title, pl: feature.title },
-                description: { en: feature.description, fr: feature.description, pl: feature.description },
-              }))).map((feature, index) => {
-              const icons = [
-                <UsersIcon key="1" className="w-12 h-12" />,
-                <RocketIcon key="2" className="w-12 h-12" />,
-                <GlobeIcon key="3" className="w-12 h-12" />
-              ];
-
-              return (
-                <SpotlightCard
-                  key={index}
-                  className="fade-in-element opacity-0 p-1 sm:p-1 hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group"
-                >
-                  <div className="flex flex-col items-center text-center p-5 sm:p-7 h-full w-full">
-                    {/* Icon */}
-                    <div className="w-14 h-14 sm:w-16 sm:h-16 bg-linear-to-br from-red-600 to-red-500 rounded-xl flex items-center justify-center mb-4 text-white group-hover:scale-110 transition-transform duration-300 relative z-10 shadow-md">
-                      {icons[index]}
-                    </div>
-                    <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 sm:mb-3 relative z-10 group-hover:text-red-700 transition-colors">
-                      {feature.title?.[language] || feature.title?.en || ""}
-                    </h3>
-                    <p className="text-sm sm:text-base text-gray-600 leading-relaxed relative z-10">
-                      {feature.description?.[language] || feature.description?.en || ""}
-                    </p>
-                  </div>
-                </SpotlightCard>
-              );
-            })}
+    <section
+      id="about"
+      className="section-pad dome-gap relative overflow-hidden bg-aspol-white text-aspol-dark"
+      aria-label={language === "en" ? "About ASPOL" : language === "fr" ? "À propos d'ASPOL" : "O ASPOL"}
+    >
+      <div className="container-x">
+        {/* Header: big statement left, supporting copy right */}
+        <div className="grid gap-10 lg:grid-cols-12 lg:gap-12">
+          <div className="lg:col-span-7">
+            <p className="mb-6 flex items-center gap-4 font-display text-sm font-bold tracking-wide text-aspol-navy">
+              <span className="h-px w-12 bg-aspol-navy/40" aria-hidden="true" />
+              {eyebrow}
+            </p>
+            <Reveal as="h2" className="display display-lg" text={heading} />
+          </div>
+          <div className="flex flex-col justify-end gap-5 lg:col-span-5">
+            <p className="font-display text-xl font-bold leading-snug text-aspol-navy sm:text-2xl">{subtitle}</p>
+            <p className="max-w-[60ch] text-base leading-relaxed text-aspol-ink-soft sm:text-lg">{description}</p>
           </div>
         </div>
+
+        {/* Lead feature: wide photographic panel linking to the Pathway guide */}
+        {pathway && (
+          <Link
+            href={normalizeLink(pathway.link)}
+            className="group photo-card relative mt-14 block overflow-hidden rounded-[2rem] bg-aspol-dark text-white transition-[border-radius] duration-700 ease-(--ease-out-expo) hover:rounded-[3.5rem] sm:mt-20"
+          >
+            <Image
+              src={leadImg?.src ?? PHOTOS.terraceDay.src}
+              alt={leadImg?.alt || photoAlt("terraceDay", language)}
+              width={PHOTOS.terraceDay.width}
+              height={PHOTOS.terraceDay.height}
+              sizes="(min-width: 1408px) 1312px, 100vw"
+              className="absolute inset-0 size-full object-cover object-[50%_30%]"
+            />
+            <div className="absolute inset-0 bg-linear-to-t from-aspol-dark via-aspol-dark/55 to-aspol-dark/10" aria-hidden="true" />
+            <div className="relative flex min-h-[26rem] flex-col justify-end gap-6 p-7 sm:min-h-[32rem] sm:p-12 lg:min-h-[36rem]">
+              <span className="grid size-14 place-items-center rounded-full bg-white text-aspol-red" aria-hidden="true">
+                <GraduationIcon className="size-7" />
+              </span>
+              <div className="max-w-2xl">
+                <h3 className="display display-md">{pick(pathway.title)}</h3>
+                <p className="mt-4 text-base leading-relaxed text-white/85 sm:text-lg">{pick(pathway.description)}</p>
+              </div>
+              <PillFace className="self-start">{t.about.pathwayButton || "Learn More"}</PillFace>
+            </div>
+          </Link>
+        )}
+
+        {/* Remaining features: any count, auto-fitting columns */}
+        {secondary.length > 0 && (
+          <ul className="mt-5 grid gap-5 [grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr))]">
+            {secondary.map((feature, index) => {
+              const Icon = SECONDARY_ICONS[index % SECONDARY_ICONS.length];
+              const tone = TONES[index % TONES.length];
+              return (
+                <li
+                  key={index}
+                  className={`group flex min-h-72 flex-col justify-between gap-10 rounded-[2rem] p-7 transition-[border-radius] duration-700 ease-(--ease-out-expo) hover:rounded-[3.25rem] sm:p-9 ${tone}`}
+                >
+                  <span
+                    className="grid size-14 place-items-center rounded-full bg-white/15 transition-transform duration-500 ease-(--ease-out-expo) group-hover:scale-110 group-hover:-rotate-12"
+                    aria-hidden="true"
+                  >
+                    <Icon className="size-7" />
+                  </span>
+                  <div>
+                    <h3 className="display display-sm">{pick(feature.title)}</h3>
+                    <p className="mt-3 text-base leading-relaxed opacity-85">{pick(feature.description)}</p>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        )}
       </div>
     </section>
   );
 }
-
