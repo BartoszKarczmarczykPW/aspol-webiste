@@ -4,6 +4,7 @@ import Providers from "@/components/providers/Providers";
 import StructuredData from "@/components/seo/StructuredData";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import CookieBanner from "@/components/layout/CookieBanner";
 import { getAlternates } from "@/lib/seo";
 import { getPrefetch } from "@/lib/prefetch";
 
@@ -94,6 +95,7 @@ export default async function RootLayout({
             {children}
           </main>
           <Footer />
+          <CookieBanner />
         </Providers>
       </body>
     </html>

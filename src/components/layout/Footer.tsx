@@ -8,6 +8,7 @@ import { FacebookIcon } from "@/components/icons/FacebookIcon";
 import { InstagramIcon } from "@/components/icons/InstagramIcon";
 import { LinkedInIcon } from "@/components/icons/LinkedInIcon";
 import { trackEvent } from "@/lib/analytics";
+import { openCookieSettings } from "@/lib/consent";
 import Pill from "@/components/ui/Pill";
 import Reveal from "@/components/ui/Reveal";
 
@@ -135,6 +136,12 @@ export default function Footer() {
                   {t.footer.terms}
                   <span className={linkUnderline} aria-hidden="true" />
                 </Link>
+              </li>
+              <li>
+                <button type="button" onClick={openCookieSettings} className={`${linkClass} cursor-pointer text-left`}>
+                  {t.footer.cookies}
+                  <span className={linkUnderline} aria-hidden="true" />
+                </button>
               </li>
             </ul>
           </nav>

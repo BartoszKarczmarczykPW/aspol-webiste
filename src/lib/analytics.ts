@@ -1,5 +1,7 @@
 "use client";
 
+import { hasOptionalConsent } from "@/lib/consent";
+
 type EventProperties = Record<string, string | number | boolean | null | undefined>;
 
 declare global {
@@ -13,6 +15,8 @@ declare global {
 
 export function trackEvent(eventName: string, properties: EventProperties = {}) {
   if (typeof window === "undefined") return;
+  // Analytics only runs after the visitor accepts optional cookies.
+  if (!hasOptionalConsent()) return;
 
   try {
     if (typeof window.gtag === "function") {

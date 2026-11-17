@@ -554,6 +554,7 @@ export const translations = {
       terms: "Terms of Use",
       follow: "Follow Us",
       rights: "All rights reserved.",
+      cookies: "Cookie settings",
     },
     notFound: {
       title: "Page Not Found",
@@ -1132,6 +1133,7 @@ export const translations = {
       terms: "Conditions d'Utilisation",
       follow: "Suivez-Nous",
       rights: "Tous droits réservés.",
+      cookies: "Paramètres des cookies",
     },
     notFound: {
       title: "Page introuvable",
@@ -1710,6 +1712,7 @@ export const translations = {
       terms: "Warunki Użytkowania",
       follow: "Śledź Nas",
       rights: "Wszelkie prawa zastrzeżone.",
+      cookies: "Ustawienia cookies",
     },
     notFound: {
       title: "Nie znaleziono strony",
