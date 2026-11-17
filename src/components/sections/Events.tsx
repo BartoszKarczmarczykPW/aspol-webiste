@@ -1,6 +1,8 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useSiteContent } from "@/contexts/SiteContentContext";
 import SocialShare from "@/components/ui/SocialShare";
@@ -10,6 +12,7 @@ import { useSanityData } from "@/hooks/useSanityData";
 import { usePrefetch } from "@/contexts/SanityPrefetchContext";
 import { getInitiatives, type SanityImageWithAlt } from "@/lib/sanity";
 import { PHOTOS, photoAlt, type PhotoKey } from "@/lib/photos";
+import { MENTEE_FORM_URL } from "@/lib/mentoring";
 
 interface LocalizedString {
   en?: string;
@@ -54,18 +57,37 @@ const PHOTO_BY_ICON: Record<string, PhotoKey> = {
 };
 const SPARE_PHOTOS: PhotoKey[] = ["sofaGroup", "violinPiano", "salonGroup"];
 
+/** External links open in a new tab; internal ones (e.g. /initiatives) stay in place. */
+const linkTarget = (href: string) => (href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {});
+
 function IconFor({ icon, className }: { icon: string; className?: string }) {
   if (icon === "mentoring") return <MentoringIcon className={className} />;
   if (icon === "community") return <UsersIcon className={className} />;
   return <ForumIcon className={className} />;
 }
 
-export default function Events() {
+interface EventsProps {
+  /** On /initiatives the block sits under the page's own heading: no title, intro or closing CTA. */
+  embedded?: boolean;
+}
+
+export default function Events({ embedded = false }: EventsProps) {
   const { t, language } = useLanguage();
   const { home, text, image, joinUrl } = useSiteContent();
   const learnMore = language === "fr" ? "En savoir plus" : language === "pl" ? "Dowiedz się więcej" : "Learn more";
+  const learnMoreAll =
+    language === "fr" ? "En savoir plus sur nos initiatives" : language === "pl" ? "Dowiedz się więcej o naszych inicjatywach" : "Learn more about our initiatives";
+  const learnMoreMentoring =
+    language === "fr"
+      ? "En savoir plus sur le programme de mentorat"
+      : language === "pl"
+        ? "Dowiedz się więcej o Programie Mentoringowym"
+        : "Learn more about the Mentoring Programme";
+
+  const applyMentee = language === "fr" ? "Candidater comme Mentee" : language === "pl" ? "Aplikuj jako Mentee" : "Apply as a Mentee";
 
   const prefetch = usePrefetch();
+  const menteeUrl = prefetch.initiativesPage?.menteeFormUrl || MENTEE_FORM_URL;
   const { data: initiativesData } = useSanityData<SanityInitiative[]>(
     async () => {
       const data = await getInitiatives();
@@ -115,20 +137,22 @@ export default function Events() {
   return (
     <section
       id="events"
-      className="section-pad relative overflow-hidden bg-aspol-white text-aspol-dark"
+      className={`${embedded ? "" : "section-pad"} relative overflow-hidden bg-aspol-white text-aspol-dark`}
       aria-label={language === "en" ? "Our initiatives" : language === "fr" ? "Nos initiatives" : "Nasze inicjatywy"}
     >
-      <div className="container-x">
-        <div className="grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-12">
-          <Reveal as="h2" className="display display-lg lg:col-span-7" text={text(home.initiativesTitle, t.events.title)} />
-          <p className="max-w-[48ch] text-base leading-relaxed text-aspol-ink-soft sm:text-lg lg:col-span-5">
-            {text(home.initiativesSubtitle, t.events.subtitle)}
-          </p>
-        </div>
+      <div className={embedded ? "" : "container-x"}>
+        {!embedded && (
+          <div className="grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-12">
+            <Reveal as="h2" className="display display-lg lg:col-span-7" text={text(home.initiativesTitle, t.events.title)} />
+            <p className="max-w-[48ch] text-base leading-relaxed text-aspol-ink-soft sm:text-lg lg:col-span-5">
+              {text(home.initiativesSubtitle, t.events.subtitle)}
+            </p>
+          </div>
+        )}
 
         {/* Featured initiative: blue text panel + photograph */}
         {featured && (
-          <article className="photo-card group mt-12 grid overflow-hidden rounded-[2rem] bg-aspol-navy text-white transition-[border-radius] duration-700 ease-(--ease-out-expo) hover:rounded-[3.5rem] sm:mt-16 lg:grid-cols-[1fr_1.05fr]">
+          <article className={`photo-card group ${embedded ? "" : "mt-12 sm:mt-16"} grid overflow-hidden rounded-[2rem] bg-aspol-navy text-white transition-[border-radius] duration-700 ease-(--ease-out-expo) hover:rounded-[3.5rem] lg:grid-cols-[1fr_1.05fr]`}>
             <div className="on-dark flex flex-col justify-between gap-12 p-7 sm:p-12">
               <div className="flex flex-wrap items-center gap-3">
                 <span className="grid size-14 place-items-center rounded-full bg-white text-aspol-blue" aria-hidden="true">
@@ -143,11 +167,18 @@ export default function Events() {
                 <p className="mt-5 max-w-[52ch] text-base leading-relaxed text-white/85 sm:text-lg">
                   {featured.data.description}
                 </p>
-                {featured.link && (
-                  <div className="mt-6">
-                    <Pill href={featured.link} target="_blank" rel="noopener noreferrer">
-                      {learnMore}
-                    </Pill>
+                {(featured.link || featured.icon === "mentoring") && (
+                  <div className="mt-6 flex flex-wrap gap-3">
+                    {featured.icon === "mentoring" && (
+                      <Pill href={menteeUrl} target="_blank" rel="noopener noreferrer" variant="red">
+                        {applyMentee}
+                      </Pill>
+                    )}
+                    {featured.link && (
+                      <Pill href={featured.link} {...linkTarget(featured.link)}>
+                        {learnMore}
+                      </Pill>
+                    )}
                   </div>
                 )}
               </div>
@@ -198,9 +229,9 @@ export default function Events() {
                     </div>
                     <h3 className="display display-sm">{initiative.data.title}</h3>
                     <p className="text-base leading-relaxed text-white/85">{initiative.data.description}</p>
-                    {initiative.link && (
-                      <Pill href={initiative.link} target="_blank" rel="noopener noreferrer" className="self-start">
-                        {learnMore}
+                    {initiative.icon === "mentoring" && (
+                      <Pill href={menteeUrl} target="_blank" rel="noopener noreferrer" variant="red" className="self-start">
+                        {applyMentee}
                       </Pill>
                     )}
                     <div className="w-fit rounded-full bg-aspol-white px-3 py-1.5">
@@ -217,13 +248,36 @@ export default function Events() {
           </ul>
         )}
 
+        {/* One full-width "learn more" bar under the cards (replaces the per-card buttons) */}
+        <Link
+          href={embedded ? "#mentoring" : "/initiatives"}
+          className="group mt-5 flex items-center justify-between gap-6 rounded-[2rem] bg-aspol-dark py-3 pl-7 pr-3 sm:rounded-full text-white transition-colors duration-500 hover:bg-aspol-navy sm:pl-10"
+        >
+          <span className="font-display text-base font-extrabold uppercase tracking-[0.04em] sm:text-xl">
+            {embedded ? learnMoreMentoring : learnMoreAll}
+          </span>
+          <span
+            className="grid size-12 shrink-0 place-items-center rounded-full bg-white text-aspol-dark transition-transform duration-500 ease-(--ease-out-expo) group-hover:translate-x-1 sm:size-14"
+            aria-hidden="true"
+          >
+            <ArrowRight className="size-5 sm:size-6" />
+          </span>
+        </Link>
+
         {/* Bottom CTA */}
-        <div className="mt-14 flex flex-col items-start justify-between gap-6 sm:mt-20 sm:flex-row sm:items-center">
-          <p className="display display-md max-w-[24ch]">{text(home.initiativesCta, t.events.cta)}</p>
-          <Pill href={joinUrl} target="_blank" rel="noopener noreferrer" variant="red">
-            {text(home.initiativesJoinButton, t.events.joinButton)}
-          </Pill>
-        </div>
+        {!embedded && (
+          <div className="mt-14 flex flex-col items-start justify-between gap-6 sm:mt-20 sm:flex-row sm:items-center">
+            <p className="display display-md max-w-[24ch]">{text(home.initiativesCta, t.events.cta)}</p>
+            <div className="flex flex-wrap gap-3">
+              <Pill href={joinUrl} target="_blank" rel="noopener noreferrer" variant="red">
+                {text(home.initiativesJoinButton, t.events.joinButton)}
+              </Pill>
+              <Pill href={menteeUrl} target="_blank" rel="noopener noreferrer" variant="dark">
+                {applyMentee}
+              </Pill>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

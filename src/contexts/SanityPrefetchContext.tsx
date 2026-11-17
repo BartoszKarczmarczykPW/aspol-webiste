@@ -6,6 +6,7 @@ import type {
   SanityFaq,
   SanityHomePage,
   SanityInitiative,
+  SanityInitiativesPage,
   SanityPartner,
   SanitySiteSettings,
   SanityTeamMember,
@@ -28,6 +29,7 @@ export interface Prefetch {
   faqs?: SanityFaq[] | null;
   settings?: SanitySiteSettings | null;
   home?: SanityHomePage | null;
+  initiativesPage?: SanityInitiativesPage | null;
 }
 
 const PrefetchContext = createContext<Prefetch>({});

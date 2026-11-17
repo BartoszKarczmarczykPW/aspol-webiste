@@ -451,3 +451,67 @@ export async function getPartnersPage(): Promise<SanityPartnersPage | null> {
     ctaTitle ${L3}, ctaSubtitle ${L3}, ctaButton ${L3}, ctaEmailText ${L3}
   }`, undefined, { next: { revalidate: 300, tags: ['partnersPage'] } })
 }
+
+/* ------------------------------------------------------------------ */
+/*  Initiatives page (mentoring, webinars) and resources               */
+/* ------------------------------------------------------------------ */
+
+export interface SanityWebinar {
+  _key: string
+  title?: L
+  date?: string
+  durationMinutes?: number
+  description?: L
+  link?: string
+}
+
+export interface SanityInitiativesPage {
+  mentoringImage?: SanityImageWithAlt | null
+  menteeFormUrl?: string
+  mentorFormUrl?: string
+  webinarsIntro?: L
+  webinars?: SanityWebinar[]
+  resourcesIntro?: L
+}
+
+export interface SanityResource {
+  _id: string
+  title?: L
+  description?: L
+  author?: string
+  slug?: string | null
+  /** The PDF, rendered inside the page by the viewer. */
+  fileUrl?: string | null
+  allowDownload?: boolean | null
+}
+
+/** Fetch the Initiatives Page singleton. */
+export async function getInitiativesPage(): Promise<SanityInitiativesPage | null> {
+  return client.fetch(`*[_type == "initiativesPage"] | order(_updatedAt desc)[0] {
+    mentoringImage ${IMG}, menteeFormUrl, mentorFormUrl,
+    webinarsIntro ${L3},
+    webinars[] { _key, title ${L3}, date, durationMinutes, description ${L3}, link },
+    resourcesIntro ${L3}
+  }`, undefined, { next: { revalidate: 300, tags: ['initiativesPage'] } })
+}
+
+const RESOURCE_FIELDS = `
+    _id,
+    title ${L3},
+    description ${L3},
+    author,
+    "slug": slug.current,
+    "fileUrl": file.asset->url,
+    allowDownload`
+
+/** Fetch active resources (guides) that have a PDF. */
+export async function getResources(): Promise<SanityResource[]> {
+  return client.fetch(`*[_type == "resource" && status == "active" && defined(file.asset)] | order(order asc, title.en asc) {${RESOURCE_FIELDS}
+  }`, undefined, { next: { revalidate: 300, tags: ['resources'] } })
+}
+
+/** Fetch one active resource by its slug (or document id, for guides saved without a slug). */
+export async function getResource(slug: string): Promise<SanityResource | null> {
+  return client.fetch(`*[_type == "resource" && status == "active" && defined(file.asset) && (slug.current == $slug || _id == $slug)][0] {${RESOURCE_FIELDS}
+  }`, { slug }, { next: { revalidate: 300, tags: ['resources'] } })
+}

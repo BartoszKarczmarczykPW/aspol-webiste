@@ -3,6 +3,13 @@
 import React, { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Event } from "@/types";
+import { useLanguage } from "@/contexts/LanguageContext";
+
+const LABELS = {
+    en: { locale: "en-GB", prev: "Previous month", next: "Next month", hasEvent: "Event this day", legend: "Event scheduled" },
+    fr: { locale: "fr-FR", prev: "Mois précédent", next: "Mois suivant", hasEvent: "Événement ce jour-là", legend: "Événement prévu" },
+    pl: { locale: "pl-PL", prev: "Poprzedni miesiąc", next: "Następny miesiąc", hasEvent: "Wydarzenie tego dnia", legend: "Zaplanowane wydarzenie" },
+} as const;
 
 interface CalendarWidgetProps {
     events: Event[];
@@ -10,15 +17,21 @@ interface CalendarWidgetProps {
 }
 
 export default function CalendarWidget({ events, className = "" }: CalendarWidgetProps) {
+    const { language } = useLanguage();
+    const L = LABELS[language];
     const [currentDate, setCurrentDate] = useState(new Date());
 
     const daysInMonth = (year: number, month: number) => new Date(year, month + 1, 0).getDate();
     const firstDayOfMonth = (year: number, month: number) => new Date(year, month, 1).getDay();
 
-    const monthNames = [
-        "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
-    ];
+    // Month and weekday names in the selected language (1 Jan 2023 was a Sunday).
+    const monthTitle = (y: number, m: number) => {
+        const s = new Intl.DateTimeFormat(L.locale, { month: "long", year: "numeric" }).format(new Date(y, m, 1));
+        return s.charAt(0).toUpperCase() + s.slice(1);
+    };
+    const weekdays = Array.from({ length: 7 }, (_, i) =>
+        new Intl.DateTimeFormat(L.locale, { weekday: "short" }).format(new Date(2023, 0, 1 + i)).replace(".", "").slice(0, 2)
+    );
 
     const prevMonth = () => {
         setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
@@ -58,7 +71,7 @@ export default function CalendarWidget({ events, className = "" }: CalendarWidge
                             ${isToday ? 'ring-2 ring-aspol-red text-aspol-dark font-bold' : ''}
                             ${hasEvent ? 'bg-aspol-navy text-white font-bold' : 'text-aspol-ink-soft'}
                         `}
-                        title={hasEvent ? "Event this day" : ""}
+                        title={hasEvent ? L.hasEvent : ""}
                     >
                         {d}
                         {hasEvent && !isToday && (
@@ -77,13 +90,13 @@ export default function CalendarWidget({ events, className = "" }: CalendarWidge
             {/* Header */}
             <div className="flex items-center justify-between mb-6">
                 <h3 className="display display-sm">
-                    {monthNames[month]} {year}
+                    {monthTitle(year, month)}
                 </h3>
                 <div className="flex gap-2">
-                    <button type="button" onClick={prevMonth} aria-label="Previous month" className="grid size-11 place-items-center rounded-full bg-aspol-mist text-aspol-dark transition-colors hover:bg-aspol-navy hover:text-white">
+                    <button type="button" onClick={prevMonth} aria-label={L.prev} className="grid size-11 place-items-center rounded-full bg-aspol-mist text-aspol-dark transition-colors hover:bg-aspol-navy hover:text-white">
                         <ChevronLeft size={20} />
                     </button>
-                    <button type="button" onClick={nextMonth} aria-label="Next month" className="grid size-11 place-items-center rounded-full bg-aspol-mist text-aspol-dark transition-colors hover:bg-aspol-navy hover:text-white">
+                    <button type="button" onClick={nextMonth} aria-label={L.next} className="grid size-11 place-items-center rounded-full bg-aspol-mist text-aspol-dark transition-colors hover:bg-aspol-navy hover:text-white">
                         <ChevronRight size={20} />
                     </button>
                 </div>
@@ -91,7 +104,7 @@ export default function CalendarWidget({ events, className = "" }: CalendarWidge
 
             {/* Weekdays */}
             <div className="grid grid-cols-7 mb-2 text-center">
-                {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map(day => (
+                {weekdays.map(day => (
                     <div key={day} className="font-display text-xs font-bold text-aspol-ink-soft">
                         {day}
                     </div>
@@ -106,7 +119,7 @@ export default function CalendarWidget({ events, className = "" }: CalendarWidge
             {/* Legend / Info */}
             <div className="mt-6 flex items-center justify-center gap-2 border-t border-aspol-line pt-5 text-sm text-aspol-ink-soft">
                 <span className="inline-block size-2.5 rounded-full bg-aspol-navy" />
-                Event scheduled
+                {L.legend}
             </div>
         </div>
     );

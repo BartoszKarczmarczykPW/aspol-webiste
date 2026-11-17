@@ -5,6 +5,8 @@ import { notFound } from 'next/navigation';
 import { universityGuides } from '@/data/universityGuides';
 import UniversityGuideContent from '@/components/pathway/UniversityGuideContent';
 
+export const revalidate = 86400;
+
 interface PageProps {
     params: Promise<{ slug: string }>;
 }
@@ -17,7 +19,9 @@ export default async function UniversityGuidePage({ params }: PageProps) {
         notFound();
     }
 
-    return <UniversityGuideContent guide={guide} />;
+    // Today (Paris) decides which deadlines are shown as passed; the page regenerates daily.
+    const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Paris" }).format(new Date());
+    return <UniversityGuideContent guide={guide} today={today} />;
 }
 
 export async function generateStaticParams() {
@@ -31,9 +35,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const guide = universityGuides[slug];
     if (!guide) return { title: 'Guide not found', robots: { index: false, follow: false } };
 
-    const title = `Study at ${guide.name}: admissions guide for Polish students`;
     const fullTitle = `Study at ${guide.name}: admissions guide | ASPOL`;
-    const description = `Admissions requirements, programmes and practical tips for Polish students applying to ${guide.name} in France, written by students for students.`;
+    const description = `${guide.name}: programmes open to Polish students, 2027 admission deadlines, requirements and tuition, checked against official sources.`;
     const url = `/pathway/${slug}`;
 
     return {

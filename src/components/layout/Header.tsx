@@ -24,6 +24,7 @@ export default function Header() {
   const links = [
     { href: "/#about", label: t.nav.about },
     { href: "/#team", label: t.nav.team },
+    { href: "/initiatives", label: t.nav.initiatives },
     { href: "/events", label: t.nav.events },
     { href: "/blog", label: t.nav.blog || "Blog" },
     { href: "/partners", label: t.nav.partners || "Partners" },
@@ -140,12 +141,12 @@ export default function Header() {
         </Link>
 
         {/* Desktop links */}
-        <ul className="hidden items-center gap-1 xl:flex">
+        <ul className="hidden items-center gap-0 xl:flex 2xl:gap-1">
           {links.map((link) => (
             <li key={link.href}>
               <Link
                 href={link.href}
-                className="nav-link relative block rounded-full px-3.5 py-2 font-display text-[0.8rem] font-extrabold uppercase tracking-[0.04em] whitespace-nowrap text-aspol-dark transition-colors duration-300 hover:text-aspol-red"
+                className="nav-link relative block rounded-full px-2 py-2 2xl:px-3.5 font-display text-[0.75rem] 2xl:text-[0.8rem] font-extrabold uppercase tracking-[0.04em] whitespace-nowrap text-aspol-dark transition-colors duration-300 hover:text-aspol-red"
               >
                 {link.label}
               </Link>
@@ -182,7 +183,7 @@ export default function Header() {
             target="_blank"
             rel="noopener noreferrer"
             variant="dark"
-            className="hidden sm:inline-flex"
+            className="hidden whitespace-nowrap sm:inline-flex"
             onClick={() => trackEvent("join_click", { source: "header_desktop" })}
           >
             {t.nav.join}

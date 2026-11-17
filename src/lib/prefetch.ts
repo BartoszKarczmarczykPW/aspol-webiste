@@ -3,6 +3,7 @@ import {
   getFaqs,
   getHomePage,
   getInitiatives,
+  getInitiativesPage,
   getPartners,
   getSiteSettings,
   getStatistics,
@@ -19,7 +20,7 @@ import type { Prefetch } from "@/contexts/SanityPrefetchContext";
 export async function getPrefetch(): Promise<Prefetch> {
   const safe = <T,>(promise: Promise<T>) => promise.catch(() => undefined);
 
-  const [team, partners, about, statistics, initiatives, testimonials, faqs, settings, home] = await Promise.all([
+  const [team, partners, about, statistics, initiatives, testimonials, faqs, settings, home, initiativesPage] = await Promise.all([
     safe(getTeamMembers()),
     safe(getPartners()),
     safe(getAboutSection()),
@@ -29,6 +30,7 @@ export async function getPrefetch(): Promise<Prefetch> {
     safe(getFaqs()),
     safe(getSiteSettings()),
     safe(getHomePage()),
+    safe(getInitiativesPage()),
   ]);
 
   return {
@@ -43,5 +45,6 @@ export async function getPrefetch(): Promise<Prefetch> {
     faqs,
     settings,
     home,
+    initiativesPage,
   };
 }

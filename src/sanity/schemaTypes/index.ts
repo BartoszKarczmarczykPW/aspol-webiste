@@ -14,6 +14,8 @@ import siteSettings from './siteSettings'
 import homePage from './homePage'
 import faq from './faq'
 import partnersPage from './partnersPage'
+import initiativesPage from './initiativesPage'
+import resource from './resource'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -32,5 +34,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     homePage,
     faq,
     partnersPage,
+    initiativesPage,
+    resource,
   ],
 }

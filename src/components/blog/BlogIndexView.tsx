@@ -373,7 +373,7 @@ export default function BlogIndexView({ initialPosts = null }: { initialPosts?: 
             </PageHero>
 
             {/* ── POSTS SECTION ────────────────────────────────────────── */}
-            <section className="section-pad">
+            <section className="section-pad dome-gap">
                 <div className="container-x">
                     <div className="mb-10 grid gap-8 md:mb-14 lg:grid-cols-12 lg:items-end lg:gap-12">
                         <Reveal as="h2" className="display display-lg lg:col-span-6" text={t.postsSection} />

@@ -82,6 +82,12 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/initiatives" className={linkClass}>
+                  {t.nav.initiatives}
+                  <span className={linkUnderline} aria-hidden="true" />
+                </Link>
+              </li>
+              <li>
                 <Link href="/events" className={linkClass}>
                   {t.nav.events}
                   <span className={linkUnderline} aria-hidden="true" />

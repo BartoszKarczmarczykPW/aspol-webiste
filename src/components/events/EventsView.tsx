@@ -163,6 +163,7 @@ function EventCard({ event, t, formatDate, formatTime, language, featured = fals
  */
 const LABELS = {
     en: {
+        badge: "ASPOL Events",
         title: "Events Calendar",
         subtitle: "Curated experiences for the Polish community in France.",
         upcoming: "Upcoming",
@@ -184,6 +185,7 @@ const LABELS = {
         heroCardCtaSecondary: "Contact us",
     },
     fr: {
+        badge: "Événements ASPOL",
         title: "Calendrier des Événements",
         subtitle: "Des expériences sélectionnées pour la communauté polonaise en France.",
         upcoming: "À venir",
@@ -205,6 +207,7 @@ const LABELS = {
         heroCardCtaSecondary: "Contactez-nous",
     },
     pl: {
+        badge: "Wydarzenia ASPOL",
         title: "Kalendarz Wydarzeń",
         subtitle: "Wyjątkowe doświadczenia dla polskiej społeczności we Francji.",
         upcoming: "Nadchodzące",
@@ -298,7 +301,7 @@ export default function EventsView({ initialEvents = null }: { initialEvents?: S
 
             {/* Hero: shared PageHero, with the original "Meet ASPOL live" card over a photograph */}
             <PageHero
-                badge="ASPOL Events"
+                badge={t.badge}
                 title={t.title}
                 subtitle={t.subtitle}
                 actions={
@@ -359,7 +362,7 @@ export default function EventsView({ initialEvents = null }: { initialEvents?: S
             </div>
 
             {/* Events Grid */}
-            <section id="events-panel" role="tabpanel" className="section-pad pt-10 sm:pt-14">
+            <section id="events-panel" role="tabpanel" className={`section-pad pt-10 sm:pt-14 ${filter === "upcoming" ? "" : "dome-gap"}`}>
                 <div className="container-x">
                     <Reveal
                         key={`heading-${filter}`}
@@ -405,7 +408,7 @@ export default function EventsView({ initialEvents = null }: { initialEvents?: S
 
             {/* Calendar */}
             {filter === "upcoming" && (
-                <section className="section-pad bg-aspol-mist">
+                <section className="section-pad dome-gap bg-aspol-mist">
                     <div className="container-x grid gap-10 lg:grid-cols-12 lg:items-start lg:gap-14">
                         <div className="lg:col-span-5">
                             <p className="mb-6 flex items-center gap-4 font-display text-sm font-bold tracking-wide text-aspol-navy">

@@ -1,6 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
+
+const LABELS = {
+  en: { share: "Share:", shareOn: "Share on", copy: "Copy link", copied: "Link copied", copyFailed: "Copy failed", unable: "Unable to copy link" },
+  fr: { share: "Partager :", shareOn: "Partager sur", copy: "Copier le lien", copied: "Lien copié", copyFailed: "Échec de la copie", unable: "Impossible de copier le lien" },
+  pl: { share: "Udostępnij:", shareOn: "Udostępnij na", copy: "Kopiuj link", copied: "Link skopiowany", copyFailed: "Nie udało się skopiować", unable: "Nie udało się skopiować linku" },
+} as const;
 
 interface SocialShareProps {
   url?: string;
@@ -13,6 +20,8 @@ export default function SocialShare({
   title = "ASPOL - Association des Étudiants Polonais en France",
   description = "Join the community of Polish students in France"
 }: SocialShareProps) {
+  const { language } = useLanguage();
+  const L = LABELS[language];
   const [copied, setCopied] = useState(false);
   const [copyError, setCopyError] = useState<string | null>(null);
 
@@ -35,7 +44,7 @@ export default function SocialShare({
       setCopyError(null);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      setCopyError("Unable to copy link");
+      setCopyError(L.unable);
       setTimeout(() => setCopyError(null), 2000);
     }
   };
@@ -46,15 +55,15 @@ export default function SocialShare({
 
   return (
     <div className="flex items-center gap-2">
-      <span className="text-sm text-gray-600 font-medium mr-2">Share:</span>
+      <span className="text-sm text-gray-600 font-medium mr-2">{L.share}</span>
       <span className="sr-only" role="status" aria-live="polite" aria-atomic="true">
-        {copied ? "Link copied" : copyError ? "Copy failed" : ""}
+        {copied ? L.copied : copyError ? L.copyFailed : ""}
       </span>
       
       {/* Facebook */}
       <button
         onClick={() => handleShare('facebook', shareLinks.facebook)}
-        aria-label="Share on Facebook"
+        aria-label={`${L.shareOn} Facebook`}
         className="p-2 rounded-full bg-gray-100 hover:bg-blue-600 hover:text-white transition-colors duration-200 group"
       >
         <svg className="w-5 h-5 text-gray-600 group-hover:text-white transition-colors" fill="currentColor" viewBox="0 0 24 24">
@@ -65,7 +74,7 @@ export default function SocialShare({
       {/* Twitter */}
       <button
         onClick={() => handleShare('twitter', shareLinks.twitter)}
-        aria-label="Share on Twitter"
+        aria-label={`${L.shareOn} X (Twitter)`}
         className="p-2 rounded-full bg-gray-100 hover:bg-black hover:text-white transition-colors duration-200 group"
       >
         <svg className="w-5 h-5 text-gray-600 group-hover:text-white transition-colors" fill="currentColor" viewBox="0 0 24 24">
@@ -76,7 +85,7 @@ export default function SocialShare({
       {/* LinkedIn */}
       <button
         onClick={() => handleShare('linkedin', shareLinks.linkedin)}
-        aria-label="Share on LinkedIn"
+        aria-label={`${L.shareOn} LinkedIn`}
         className="p-2 rounded-full bg-gray-100 hover:bg-blue-700 hover:text-white transition-colors duration-200 group"
       >
         <svg className="w-5 h-5 text-gray-600 group-hover:text-white transition-colors" fill="currentColor" viewBox="0 0 24 24">
@@ -87,7 +96,7 @@ export default function SocialShare({
       {/* WhatsApp */}
       <button
         onClick={() => handleShare('whatsapp', shareLinks.whatsapp)}
-        aria-label="Share on WhatsApp"
+        aria-label={`${L.shareOn} WhatsApp`}
         className="p-2 rounded-full bg-gray-100 hover:bg-green-500 hover:text-white transition-colors duration-200 group"
       >
         <svg className="w-5 h-5 text-gray-600 group-hover:text-white transition-colors" fill="currentColor" viewBox="0 0 24 24">
@@ -98,7 +107,7 @@ export default function SocialShare({
       {/* Copy Link */}
       <button
         onClick={copyToClipboard}
-        aria-label="Copy link"
+        aria-label={L.copy}
         className="p-2 rounded-full bg-gray-100 hover:bg-red-600 hover:text-white transition-colors duration-200 group relative"
       >
         {copied ? (

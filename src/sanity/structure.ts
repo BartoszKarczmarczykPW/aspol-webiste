@@ -14,6 +14,9 @@ export const structure: StructureResolver = (S) =>
       S.listItem()
         .title('Partners Page')
         .child(S.document().schemaType('partnersPage').documentId('partnersPage').title('Partners Page')),
+      S.listItem()
+        .title('Initiatives Page (mentoring & webinars)')
+        .child(S.document().schemaType('initiativesPage').documentId('initiativesPage').title('Initiatives Page')),
       S.divider(),
       S.listItem()
         .title('About Section')
@@ -21,6 +24,9 @@ export const structure: StructureResolver = (S) =>
       S.listItem()
         .title('Initiatives')
         .child(S.documentTypeList('initiative').title('Initiatives')),
+      S.listItem()
+        .title('Resources (guides)')
+        .child(S.documentTypeList('resource').title('Resources')),
       S.listItem()
         .title('Team Members')
         .child(S.documentTypeList('teamMember').title('Team Members')),
@@ -57,6 +63,8 @@ export const structure: StructureResolver = (S) =>
           item.getId() !== 'homePage' &&
           item.getId() !== 'faq' &&
           item.getId() !== 'partnersPage' &&
+          item.getId() !== 'initiativesPage' &&
+          item.getId() !== 'resource' &&
           item.getId() !== 'partner' &&
           item.getId() !== 'statistics' &&
           item.getId() !== 'teamMember' &&

@@ -65,6 +65,7 @@ const CONTENT = {
                 { value: "20%", label: "Sorbonne & Polytechnic" },
                 { value: "15%", label: "Other Grand Écoles" },
             ],
+            disciplinesLabel: "Core Disciplines:",
             disciplines: "Law • Finance • International Relations • Engineering"
         },
         cta: {
@@ -124,6 +125,7 @@ const CONTENT = {
                 { value: "20%", label: "Sorbonne & Polytechnique" },
                 { value: "15%", label: "Autres Grandes Écoles" },
             ],
+            disciplinesLabel: "Disciplines principales :",
             disciplines: "Droit • Finance • Relations Internationales • Ingénierie"
         },
         cta: {
@@ -183,6 +185,7 @@ const CONTENT = {
                 { value: "20%", label: "Sorbonne & Politechnika" },
                 { value: "15%", label: "Inne Grandes Écoles" },
             ],
+            disciplinesLabel: "Główne kierunki:",
             disciplines: "Prawo • Finanse • Stosunki Międzynarodowe • Inżynieria"
         },
         cta: {
@@ -318,7 +321,11 @@ export default function PartnersPage() {
                             ))}
                         </ul>
                         <p className="mt-6 text-sm text-aspol-ink-soft">
-                            * Custom arrangements available upon request for strategic partners.
+                            {language === "fr"
+                                ? "* Des formules sur mesure sont possibles pour les partenaires stratégiques."
+                                : language === "pl"
+                                  ? "* Dla partnerów strategicznych możliwe są indywidualne warunki współpracy."
+                                  : "* Custom arrangements available upon request for strategic partners."}
                         </p>
                     </div>
                 </div>
@@ -330,7 +337,7 @@ export default function PartnersPage() {
                     <div className="grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-12">
                         <Reveal as="h2" className="display display-lg lg:col-span-7" text={pageContent.demographics.title} />
                         <div className="lg:col-span-5">
-                            <p className="font-display text-sm font-bold text-white/70">Core Disciplines:</p>
+                            <p className="font-display text-sm font-bold text-white/70">{d.demographics.disciplinesLabel}</p>
                             <p className="mt-1 font-display text-xl font-bold leading-snug sm:text-2xl">{pageContent.demographics.disciplines}</p>
                         </div>
                     </div>
@@ -346,7 +353,7 @@ export default function PartnersPage() {
             </section>
 
             {/* CTA */}
-            <section className="section-pad">
+            <section className="section-pad dome-gap">
                 <div className="container-x">
                     <div className="on-dark relative overflow-hidden rounded-[2rem] bg-aspol-red p-8 text-white sm:p-14 lg:p-20">
                         <Reveal as="h2" className="display display-lg max-w-[16ch]" text={pageContent.cta.title} />
